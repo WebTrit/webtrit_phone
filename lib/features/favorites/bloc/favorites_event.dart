@@ -11,6 +11,15 @@ class FavoritesStarted extends FavoritesEvent {
   const FavoritesStarted();
 }
 
+/// Ask the address book behind the favourites for a fresh copy.
+///
+/// The list itself is watched, so it needs no prompting to redraw - this is
+/// about the remote side, which otherwise only arrives on the polling interval
+/// or when connectivity returns.
+class FavoritesRefreshed extends FavoritesEvent {
+  const FavoritesRefreshed();
+}
+
 class FavoritesRemoved extends FavoritesEvent {
   const FavoritesRemoved({required this.favorite});
 

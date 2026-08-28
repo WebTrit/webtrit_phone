@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -60,6 +61,18 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
       final scrolledAway = position > scrolledThreshold;
       if (this.scrolledAway != scrolledAway) setState(() => this.scrolledAway = scrolledAway);
     });
+  }
+
+  /// Ask the backend for the newest call records.
+  ///
+  /// The list is served from the local database and filled by a worker on a
+  /// poll, so a pull is about the worker rather than the list: it goes and
+  /// fetches, and the records arrive through the same stream the list already
+  /// watches.
+  Future<void> _refresh() async {
+    final worker = context.readOrNull<CdrsSyncWorker>();
+    if (worker == null) return;
+    await worker.forceSync(null);
   }
 
   void scrollToTop() {
@@ -130,106 +143,113 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                     return ScrollToTopOverlay(
                       scrolledAway: scrolledAway,
                       onScrollToTop: scrollToTop,
-                      child: ListView.builder(
-                        controller: scrollController,
-                        // TODO: migrate to scrollCacheExtent (deprecated after Flutter 3.41.0-0.0.pre)
-                        // ignore: deprecated_member_use
-                        cacheExtent: 500,
-                        shrinkWrap: true,
-                        itemCount: state.records.length + 1,
-                        itemBuilder: (context, index) {
-                          final historyIndicatorPosition = state.records.length;
-                          if (index == historyIndicatorPosition) return HistoryFetchIndicator(state.fetchingHistory);
-                          final cdr = state.records[index];
-                          final participant = cdr.participant;
-                          final participantNumber = cdr.participantNumber;
+                      // The list runs behind the app bar, so the spinner takes
+                      // the same inset the first row does or it is drawn out of
+                      // sight behind it.
+                      child: RefreshIndicator(
+                        onRefresh: _refresh,
+                        edgeOffset: MediaQuery.of(context).padding.top,
+                        child: ListView.builder(
+                          controller: scrollController,
+                          // TODO: migrate to scrollCacheExtent (deprecated after Flutter 3.41.0-0.0.pre)
+                          // ignore: deprecated_member_use
+                          cacheExtent: 500,
+                          shrinkWrap: true,
+                          itemCount: state.records.length + 1,
+                          itemBuilder: (context, index) {
+                            final historyIndicatorPosition = state.records.length;
+                            if (index == historyIndicatorPosition) return HistoryFetchIndicator(state.fetchingHistory);
+                            final cdr = state.records[index];
+                            final participant = cdr.participant;
+                            final participantNumber = cdr.participantNumber;
 
-                          return FadeIn(
-                            child: SizedBox(
-                              key: Key(cdr.callId.toString()),
-                              child: ContactInfoBuilder(
-                                source: ContactSourcePhone(participantNumber ?? participant),
-                                builder: (context, contact) {
-                                  final contactSourceId = contact?.sourceId;
-                                  final contactSmsNumbers = contact?.smsNumbers ?? [];
-                                  final canSendSms = contactSmsNumbers.contains(participantNumber);
+                            return FadeIn(
+                              child: SizedBox(
+                                key: Key(cdr.callId.toString()),
+                                child: ContactInfoBuilder(
+                                  source: ContactSourcePhone(participantNumber ?? participant),
+                                  builder: (context, contact) {
+                                    final contactSourceId = contact?.sourceId;
+                                    final contactSmsNumbers = contact?.smsNumbers ?? [];
+                                    final canSendSms = contactSmsNumbers.contains(participantNumber);
 
-                                  return CdrTile(
-                                    cdr: cdr,
-                                    contact: contact,
-                                    callNumbers: callNumbers,
-                                    onTap: transfer
-                                        ? (participantNumber != null
-                                              ? () => submitTransfer(destination: participantNumber)
-                                              : null)
-                                        : () => _toggleExpanded(cdr.callId),
-                                    expanded: !transfer && _expandedCallId == cdr.callId,
-                                    onDialPressed: !transfer && participantNumber != null
-                                        ? () => _callController.createCall(
-                                            destination: participantNumber,
-                                            displayName: contact?.maybeName,
-                                          )
-                                        : null,
-                                    onAudioCallPressed: participantNumber != null
-                                        ? () => _callController.createCall(
-                                            destination: participantNumber,
-                                            displayName: contact?.maybeName,
-                                            video: false,
-                                          )
-                                        : null,
-                                    onVideoCallPressed: participantNumber != null && widget.videoEnabled
-                                        ? () => _callController.createCall(
-                                            destination: participantNumber,
-                                            displayName: contact?.maybeName,
-                                            video: true,
-                                          )
-                                        : null,
-                                    onTransferPressed:
-                                        participantNumber != null && widget.transferEnabled && hasActiveCall
-                                        ? () {
-                                            submitTransfer(destination: participantNumber);
-                                          }
-                                        : null,
-                                    onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
-                                        ? () {
-                                            openChat(contactSourceId!);
-                                          }
-                                        : null,
-                                    onSendSmsPressed:
-                                        participantNumber != null &&
-                                            widget.smssEnabled &&
-                                            userSmsNumbers.isNotEmpty &&
-                                            canSendSms
-                                        ? () {
-                                            sendSms(
-                                              userSmsNumbers: userSmsNumbers,
-                                              contactPhoneNumber: participantNumber,
-                                              contactSourceId: contactSourceId,
-                                            );
-                                          }
-                                        : null,
-                                    onViewContactPressed: contact != null
-                                        ? () {
-                                            openContact(contactId: contact.id);
-                                          }
-                                        : null,
-                                    onCallLogPressed: participantNumber != null
-                                        ? () => openCallLog(number: participantNumber)
-                                        : null,
-                                    onCallFrom: participantNumber != null
-                                        ? (fromNumber) => _callController.createCall(
-                                            destination: participantNumber,
-                                            displayName: contact?.maybeName,
-                                            fromNumber: fromNumber,
-                                            video: false,
-                                          )
-                                        : null,
-                                  );
-                                },
+                                    return CdrTile(
+                                      cdr: cdr,
+                                      contact: contact,
+                                      callNumbers: callNumbers,
+                                      onTap: transfer
+                                          ? (participantNumber != null
+                                                ? () => submitTransfer(destination: participantNumber)
+                                                : null)
+                                          : () => _toggleExpanded(cdr.callId),
+                                      expanded: !transfer && _expandedCallId == cdr.callId,
+                                      onDialPressed: !transfer && participantNumber != null
+                                          ? () => _callController.createCall(
+                                              destination: participantNumber,
+                                              displayName: contact?.maybeName,
+                                            )
+                                          : null,
+                                      onAudioCallPressed: participantNumber != null
+                                          ? () => _callController.createCall(
+                                              destination: participantNumber,
+                                              displayName: contact?.maybeName,
+                                              video: false,
+                                            )
+                                          : null,
+                                      onVideoCallPressed: participantNumber != null && widget.videoEnabled
+                                          ? () => _callController.createCall(
+                                              destination: participantNumber,
+                                              displayName: contact?.maybeName,
+                                              video: true,
+                                            )
+                                          : null,
+                                      onTransferPressed:
+                                          participantNumber != null && widget.transferEnabled && hasActiveCall
+                                          ? () {
+                                              submitTransfer(destination: participantNumber);
+                                            }
+                                          : null,
+                                      onChatPressed: widget.chatsEnabled && (contact?.canMessage == true)
+                                          ? () {
+                                              openChat(contactSourceId!);
+                                            }
+                                          : null,
+                                      onSendSmsPressed:
+                                          participantNumber != null &&
+                                              widget.smssEnabled &&
+                                              userSmsNumbers.isNotEmpty &&
+                                              canSendSms
+                                          ? () {
+                                              sendSms(
+                                                userSmsNumbers: userSmsNumbers,
+                                                contactPhoneNumber: participantNumber,
+                                                contactSourceId: contactSourceId,
+                                              );
+                                            }
+                                          : null,
+                                      onViewContactPressed: contact != null
+                                          ? () {
+                                              openContact(contactId: contact.id);
+                                            }
+                                          : null,
+                                      onCallLogPressed: participantNumber != null
+                                          ? () => openCallLog(number: participantNumber)
+                                          : null,
+                                      onCallFrom: participantNumber != null
+                                          ? (fromNumber) => _callController.createCall(
+                                              destination: participantNumber,
+                                              displayName: contact?.maybeName,
+                                              fromNumber: fromNumber,
+                                              video: false,
+                                            )
+                                          : null,
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     );
                   },

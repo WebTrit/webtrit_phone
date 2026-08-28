@@ -60,15 +60,33 @@ Watch for this on any screen under `ThemedScaffold`: it turns
 image background, so a list that is fine on a flat theme needs the same offset
 on a branded one.
 
+## Favourites
+
+`lib/features/favorites/widgets/favorites_list.dart`
+
+Pulling calls `FavoritesRepository.refresh()` through a `FavoritesRefreshed`
+event. The list is watched from the database and redraws on its own, so the
+pull is about the remote side, which otherwise only arrives on the polling
+interval or when connectivity returns. The spinner follows a `refreshing` flag
+on the bloc state rather than the list: a fetch that finds nothing new changes
+no list, and a spinner waiting on one would never stop.
+
+The gesture is off while rows are being rearranged - both start with a drag
+downwards, and pulling the top row would refresh instead of picking it up.
+
 ## Recent calls
 
 `lib/features/cdrs/view/recent_cdrs_screen.dart` (backend reports the
 `callhistory` capability) and `lib/features/recents/view/recents_screen.dart`
 (it does not).
 
-Neither screen can be refreshed by hand. The list is served from the local
-database, which `CdrsSyncWorker` fills on a ten-second poll; scrolling to the
-bottom pulls older pages through `CdrsListCubit.fetchHistory()`.
+The call-record screen pulls to refresh: it asks `CdrsSyncWorker.forceSync()`
+to go and fetch, and the records arrive through the stream the list already
+watches. Scrolling to the bottom still pulls older pages through
+`CdrsListCubit.fetchHistory()`.
+
+The other one cannot be refreshed by hand and has nothing to refresh from: its
+list is the local call log, written by the app itself and watched live.
 
 ## Voicemail
 

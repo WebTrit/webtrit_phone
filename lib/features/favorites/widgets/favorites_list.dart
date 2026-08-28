@@ -120,6 +120,15 @@ class _FavoritesListState extends State<FavoritesList> {
     context.read<FavoritesBloc>().add(FavoritesRemoved(favorite: favorite));
   }
 
+  Future<void> _refresh() async {
+    final bloc = context.read<FavoritesBloc>();
+    bloc.add(const FavoritesRefreshed());
+    // Held until the bloc says the fetch is done rather than until the list
+    // changes: a fetch that finds nothing new changes nothing, and a spinner
+    // waiting on the list would never stop.
+    await bloc.stream.firstWhere((state) => !state.refreshing);
+  }
+
   void reorder({required List<FavoriteWithContact> favorites, required int oldIndex, required int newIndex}) {
     var targetIndex = newIndex;
     if (targetIndex > oldIndex) {
@@ -158,104 +167,115 @@ class _FavoritesListState extends State<FavoritesList> {
                 return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                   builder: (context, callRoutingState) {
                     return SizedBox.expand(
-                      child: ReorderableListView.builder(
-                        padding: EdgeInsets.only(top: widget.topPadding ?? MediaQuery.of(context).padding.top),
-                        itemCount: favorites.length,
-                        // TODO: migrate to onReorderItem (deprecated after Flutter 3.41.0-0.0.pre)
-                        // ignore: deprecated_member_use
-                        onReorder: (oldIndex, newIndex) =>
-                            reorder(favorites: favorites, oldIndex: oldIndex, newIndex: newIndex),
-                        onReorderStart: widget.onReorderStart,
-                        onReorderEnd: widget.onReorderEnd,
-                        buildDefaultDragHandles: false,
-                        itemBuilder: (context, index) {
-                          final favorite = favorites[index].favorite;
-                          final contact = favorites[index].contact;
+                      // Not while rows are being rearranged: both start with a
+                      // drag downwards, and pulling on the top row would ask
+                      // for a refresh instead of picking the row up.
+                      child: RefreshIndicator(
+                        onRefresh: _refresh,
+                        notificationPredicate: (_) => !widget.reorderMode,
+                        // The list runs behind the app bar, so the spinner
+                        // takes the same inset the first row does or it is
+                        // drawn out of sight behind it.
+                        edgeOffset: widget.topPadding ?? MediaQuery.of(context).padding.top,
+                        child: ReorderableListView.builder(
+                          padding: EdgeInsets.only(top: widget.topPadding ?? MediaQuery.of(context).padding.top),
+                          itemCount: favorites.length,
+                          // TODO: migrate to onReorderItem (deprecated after Flutter 3.41.0-0.0.pre)
+                          // ignore: deprecated_member_use
+                          onReorder: (oldIndex, newIndex) =>
+                              reorder(favorites: favorites, oldIndex: oldIndex, newIndex: newIndex),
+                          onReorderStart: widget.onReorderStart,
+                          onReorderEnd: widget.onReorderEnd,
+                          buildDefaultDragHandles: false,
+                          itemBuilder: (context, index) {
+                            final favorite = favorites[index].favorite;
+                            final contact = favorites[index].contact;
 
-                          final contactSourceId = contact?.sourceId;
-                          final contactSmsNumbers = contact?.smsNumbers ?? [];
-                          final canSendSms = contactSmsNumbers.contains(favorite.number);
+                            final contactSourceId = contact?.sourceId;
+                            final contactSmsNumbers = contact?.smsNumbers ?? [];
+                            final canSendSms = contactSmsNumbers.contains(favorite.number);
 
-                          return ReorderableDragStartListener(
-                            key: ValueKey('${favorite.number}_${favorite.sourceType.name}_$index'),
-                            index: index,
-                            enabled: widget.reorderMode,
-                            child: Row(
-                              children: [
-                                if (widget.reorderMode) ...[SizedBox(width: 4), const Icon(Icons.drag_handle)],
-                                Expanded(
-                                  child: FavoriteTile(
-                                    gesturesEnabled: !widget.reorderMode,
-                                    favorite: favorite,
-                                    contact: contact,
-                                    callNumbers: callRoutingState?.allNumbers ?? [],
-                                    onTap: blingTransferInitiated
-                                        ? () => submitTransfer(destination: favorite.number)
-                                        : () => _toggleExpanded('${favorite.number}_${favorite.sourceType.name}'),
-                                    expanded:
-                                        !blingTransferInitiated &&
-                                        !widget.reorderMode &&
-                                        _expandedFavoriteId == '${favorite.number}_${favorite.sourceType.name}',
-                                    onDialPressed: blingTransferInitiated
-                                        ? null
-                                        : () {
-                                            _callController.createCall(
-                                              destination: favorite.number,
-                                              displayName: contact?.maybeName ?? favorite.number,
-                                            );
-                                          },
-                                    onAudioCallPressed: () {
-                                      _callController.createCall(
+                            return ReorderableDragStartListener(
+                              key: ValueKey('${favorite.number}_${favorite.sourceType.name}_$index'),
+                              index: index,
+                              enabled: widget.reorderMode,
+                              child: Row(
+                                children: [
+                                  if (widget.reorderMode) ...[SizedBox(width: 4), const Icon(Icons.drag_handle)],
+                                  Expanded(
+                                    child: FavoriteTile(
+                                      gesturesEnabled: !widget.reorderMode,
+                                      favorite: favorite,
+                                      contact: contact,
+                                      callNumbers: callRoutingState?.allNumbers ?? [],
+                                      onTap: blingTransferInitiated
+                                          ? () => submitTransfer(destination: favorite.number)
+                                          : () => _toggleExpanded('${favorite.number}_${favorite.sourceType.name}'),
+                                      expanded:
+                                          !blingTransferInitiated &&
+                                          !widget.reorderMode &&
+                                          _expandedFavoriteId == '${favorite.number}_${favorite.sourceType.name}',
+                                      onDialPressed: blingTransferInitiated
+                                          ? null
+                                          : () {
+                                              _callController.createCall(
+                                                destination: favorite.number,
+                                                displayName: contact?.maybeName ?? favorite.number,
+                                              );
+                                            },
+                                      onAudioCallPressed: () {
+                                        _callController.createCall(
+                                          destination: favorite.number,
+                                          displayName: contact?.maybeName ?? favorite.number,
+                                          video: false,
+                                        );
+                                      },
+                                      onVideoCallPressed: widget.videoEnabled
+                                          ? () {
+                                              _callController.createCall(
+                                                destination: favorite.number,
+                                                displayName: contact?.maybeName ?? favorite.number,
+                                                video: true,
+                                              );
+                                            }
+                                          : null,
+                                      onTransferPressed: widget.transferEnabled && hasActiveCall
+                                          ? () {
+                                              submitTransfer(destination: favorite.number);
+                                            }
+                                          : null,
+                                      onChatPressed: widget.chatsEnabled && contact?.canMessage == true
+                                          ? () {
+                                              openChat(contactSourceId!);
+                                            }
+                                          : null,
+                                      onSendSmsPressed: widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
+                                          ? () {
+                                              sendSms(
+                                                userSmsNumbers: userSmsNumbers,
+                                                contactPhoneNumber: favorite.number,
+                                                contactSourceId: contactSourceId,
+                                              );
+                                            }
+                                          : null,
+                                      onViewContactPressed: contact != null
+                                          ? () => openContact(contactId: contact.id)
+                                          : null,
+                                      onCallLogPressed: () => openCallLog(number: favorite.number),
+                                      onDelete: () => delete(favorite: favorite),
+                                      onCallFrom: (fromNumber) => _callController.createCall(
                                         destination: favorite.number,
                                         displayName: contact?.maybeName ?? favorite.number,
+                                        fromNumber: fromNumber,
                                         video: false,
-                                      );
-                                    },
-                                    onVideoCallPressed: widget.videoEnabled
-                                        ? () {
-                                            _callController.createCall(
-                                              destination: favorite.number,
-                                              displayName: contact?.maybeName ?? favorite.number,
-                                              video: true,
-                                            );
-                                          }
-                                        : null,
-                                    onTransferPressed: widget.transferEnabled && hasActiveCall
-                                        ? () {
-                                            submitTransfer(destination: favorite.number);
-                                          }
-                                        : null,
-                                    onChatPressed: widget.chatsEnabled && contact?.canMessage == true
-                                        ? () {
-                                            openChat(contactSourceId!);
-                                          }
-                                        : null,
-                                    onSendSmsPressed: widget.smssEnabled && userSmsNumbers.isNotEmpty && canSendSms
-                                        ? () {
-                                            sendSms(
-                                              userSmsNumbers: userSmsNumbers,
-                                              contactPhoneNumber: favorite.number,
-                                              contactSourceId: contactSourceId,
-                                            );
-                                          }
-                                        : null,
-                                    onViewContactPressed: contact != null
-                                        ? () => openContact(contactId: contact.id)
-                                        : null,
-                                    onCallLogPressed: () => openCallLog(number: favorite.number),
-                                    onDelete: () => delete(favorite: favorite),
-                                    onCallFrom: (fromNumber) => _callController.createCall(
-                                      destination: favorite.number,
-                                      displayName: contact?.maybeName ?? favorite.number,
-                                      fromNumber: fromNumber,
-                                      video: false,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     );
                   },
