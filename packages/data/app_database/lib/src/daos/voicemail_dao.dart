@@ -32,6 +32,22 @@ class VoicemailDao extends DatabaseAccessor<AppDatabase> with _$VoicemailDaoMixi
 
   Stream<List<VoicemailData>> watchAllVoicemails() => select(voicemailTable).watch();
 
+  /// Watches how many voicemails are still unread.
+  ///
+  /// Counted in the database, over the voicemail table alone. A caller that
+  /// needs only the number must not hold [watchVoicemailsWithContacts] open:
+  /// that query joins the contact tables, so drift re-runs it - collapsing its
+  /// rows and rebuilding the whole list - on any write to those tables, to
+  /// answer a question about none of it.
+  Stream<int> watchUnreadVoicemailsCount() {
+    final unread = voicemailTable.id.count();
+    final query = selectOnly(voicemailTable)
+      ..addColumns([unread])
+      ..where(voicemailTable.seen.equals(false));
+
+    return query.map((row) => row.read(unread) ?? 0).watchSingle();
+  }
+
   Stream<VoicemailData?> watchVoicemailById(String id) {
     return (select(voicemailTable)..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
   }
