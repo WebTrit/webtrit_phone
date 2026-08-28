@@ -189,20 +189,20 @@ class SettingsScreen extends StatelessWidget {
                                   onTap: () => _onItemTap(context, item),
                                 ),
                             ] else if (item.flavor == SettingsFlavor.voicemail) ...[
-                              SettingsTile(
-                                title: context.parseL10n(item.titleL10n),
-                                icon: item.icon,
-                                iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
-                                trailing: state.unreadVoicemailCount > 0
-                                    ? CountBadge(count: state.unreadVoicemailCount, size: 32)
-                                    : null,
-                                trailingLabel: state.unreadVoicemailCount > 0
-                                    ? context.l10n.common_SemanticsValue_unreadCount(state.unreadVoicemailCount)
-                                    : null,
-                                textStyle: effectiveStyle?.itemTextStyle,
-                                showSeparator: showSeparators,
-                                separatorColor: effectiveStyle?.separatorColor,
-                                onTap: () => _onItemTap(context, item),
+                              UnreadVoicemailCountBuilder(
+                                builder: (context, unreadCount) => SettingsTile(
+                                  title: context.parseL10n(item.titleL10n),
+                                  icon: item.icon,
+                                  iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                                  trailing: unreadCount > 0 ? CountBadge(count: unreadCount, size: 32) : null,
+                                  trailingLabel: unreadCount > 0
+                                      ? context.l10n.common_SemanticsValue_unreadCount(unreadCount)
+                                      : null,
+                                  textStyle: effectiveStyle?.itemTextStyle,
+                                  showSeparator: showSeparators,
+                                  separatorColor: effectiveStyle?.separatorColor,
+                                  onTap: () => _onItemTap(context, item),
+                                ),
                               ),
                             ] else
                               SettingsTile(

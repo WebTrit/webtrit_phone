@@ -305,16 +305,17 @@ class VoicemailRepositoryImpl
 
   /// Watches the number of voicemails that are currently marked as unread.
   ///
-  /// This stream emits a new integer value every time the underlying voicemail list changes,
-  /// including changes to the `status` of individual voicemails.
+  /// Emits a new value whenever a voicemail is added, removed, or has its seen
+  /// flag changed.
   ///
-  /// It internally depends on [watchVoicemails], and transforms the emitted list into a count
-  /// of voicemails where `status` is not [ReadStatus.read].
-  ///
-  /// Returns a broadcast [Stream<int>] that can be safely listened to by multiple subscribers.
+  /// Counted in the database rather than derived from [watchVoicemails]: that
+  /// list carries the contact each voicemail resolves to, so a caller holding
+  /// it open for the whole session - the unread counter behind a badge does -
+  /// would have the contact join re-run for it on every contacts write. The
+  /// two agree because a voicemail's read status is exactly its `seen` flag.
   @override
   Stream<int> watchUnreadVoicemailsCount() {
-    return watchVoicemails().map((list) => list.where((v) => !v.status.isRead).length);
+    return _appDatabase.voicemailDao.watchUnreadVoicemailsCount();
   }
 
   /// Watches the list of voicemails currently stored in the local database.
