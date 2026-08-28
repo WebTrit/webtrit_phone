@@ -1,14 +1,27 @@
 # ===========================
-# Include Shared Makefile Logic
+# Building this application
 # ===========================
-
-TOOLS_MAKEFILE := makefile.shared
-
-ifeq (,$(wildcard $(TOOLS_MAKEFILE)))
-$(shell curl -sSL https://raw.githubusercontent.com/WebTrit/webtrit_phone_tools/refs/heads/main/Makefile.shared -o $(TOOLS_MAKEFILE))
-endif
-
-include $(TOOLS_MAKEFILE)
+#
+# Not from here. A build runs from webtrit_phone_builder, which fetches the
+# shared build logic at the revision it was told to and passes this directory
+# in:
+#
+#   cd ../webtrit_phone_builder && make build-apk phone_project_path=../webtrit_phone
+#
+# Locally, melos does it without either:
+#
+#   melos run build:apk        melos run start:android
+#
+# and resolves the flavor with tool/scripts/android_flavor.sh, which holds the
+# same rule the shared logic held.
+#
+# This file used to include that shared logic, downloading it over the network
+# while make parsed the file. Two things were wrong with that. The download was
+# hard-coded to `main`, so a build frozen to an old track thawed here - and
+# this file is parsed during a release build, because the resource generators
+# below are run by the tools CLI with `make` in this directory. And the targets
+# it brought were declared below without being defined here, so reading this
+# file did not say where they came from.
 
 # Variables
 DART_DEFINE_FILE = --dart-define-from-file=dart_define.json
@@ -86,7 +99,7 @@ ANDROID_12_SPLASH_IMAGE ?= tool/assets/native_splash/image.png
 SPLASH_IMAGE ?= tool/assets/native_splash/image.png
 
 # Rules
-.PHONY: run build configure configure-demo configure-classic build-ios build-apk build-appbundle clean-git generate-package-config rename-package generate-launcher-icons generate-native-splash generate-assets
+.PHONY: configure configure-demo configure-classic clean-git generate-package-config rename-package generate-launcher-icons generate-native-splash generate-assets
 
 ## Configure application resources
 configure:
@@ -172,10 +185,6 @@ clean-git:
 sync-run-configs:
 	mkdir -p .idea/runConfigurations
 	cp tool/run/*.xml .idea/runConfigurations/
-
-# DEPRECATED: use `melos run start`
-run-core:
-	$(MAKE) -f makefile.shared run
 
 # ===========================
 #  Copilot Workspace Helpers
