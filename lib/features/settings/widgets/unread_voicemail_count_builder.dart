@@ -18,9 +18,11 @@ class UnreadVoicemailCountBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // `watch` is enough to follow the count: BlocProvider subscribes to the
+    // cubit and marks its dependents on every emission, so a BlocBuilder on
+    // top of this would only subscribe a second time to the same stream.
     final unreadVoicemails = context.watch<VoicemailUnreadCubit?>();
-    if (unreadVoicemails == null) return builder(context, 0);
 
-    return BlocBuilder<VoicemailUnreadCubit, int>(bloc: unreadVoicemails, builder: builder);
+    return builder(context, unreadVoicemails?.state ?? 0);
   }
 }
