@@ -184,6 +184,7 @@ dev_dependencies:
       path: l10n_mapper_generator
   melos: ^7.8.0
   mocktail: ^1.0.5
+  package_rename: ^1.8.0
   # patrol is provisioned only for integration-test builds (see tool/scripts/*),
   # NOT committed here: patrol.podspec weak-links XCTest and Flutter does not strip
   # dev dependencies from iOS release builds (flutter/flutter#163874), so shipping it
@@ -485,14 +486,21 @@ melos:
         - icons:generate
         - splash:generate
 
+    package:rename:
+      description: >
+        Apply the package name and app name from tool/configs/package_rename_config.yaml,
+        which webtrit_phone_tools writes during configurator:generate.
+      run: dart run package_rename --path=tool/configs/package_rename_config.yaml
+
     # ===========================
     # Configurator - melos run configurator:generate
     # ===========================
 
     configurator:generate:
       description: >
-        Fetch resources from configurator backend, generate app assets, and run
-        flutterfire configure for all platforms. Reads APP_ID and CONFIGURATOR_TOKEN from .env file.
+        Fetch this brand from the configurator backend, generate the app's icons, splash and
+        identifiers from it, and run flutterfire configure for all platforms.
+        Reads APP_ID and CONFIGURATOR_TOKEN from .env file.
       run: |
         set -eo pipefail
         [ -f .env ] || { echo "ERROR: .env not found. Copy .env.example to .env and fill in your credentials." >&2; exit 1; }
@@ -514,6 +522,12 @@ melos:
           --token="${CONFIGURATOR_TOKEN:?CONFIGURATOR_TOKEN not found in .env}"
         phone_tools \
           configurator-generate
+        # This project's own generators, the same three the build workflow asks
+        # for. The rename goes last: the icons and the splash are written into
+        # the platform folders it then rewrites.
+        dart run melos run icons:generate
+        dart run melos run splash:generate
+        dart run melos run package:rename
         phone_tools \
           configurator-setup \
           --platform ios \
