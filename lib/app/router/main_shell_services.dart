@@ -63,14 +63,14 @@ class MainShellServices extends StatelessWidget {
   /// Current registrations:
   /// - [UserRepository]: polled every 10 seconds to keep user data up to date.
   /// - [SystemInfoRepository]: polled every 5 minutes to refresh system information.
-  /// - [VoicemailRepository]: polled every 5 minutes, but only if the voicemail feature is enabled
-  ///   in [FeatureAccess.settingsConfig].
+  /// - [VoicemailRepository]: polled every 5 minutes, but only if voicemail runs for this session
+  ///   ([FeatureAccess.voicemailAvailable]) - whichever placement offers it.
   ///
   /// This method centralizes the polling configuration, so changes in polling logic or intervals
   /// can be made here without touching the [Provider] or [PollingService] setup.
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
-    final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
+    final isVoicemailsEnabled = featureAccess.voicemailAvailable;
     final supportsExtensions = featureAccess.coreSupport.supportsExtensions;
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
     final favoritesRepository = context.read<FavoritesRepository>();
@@ -120,13 +120,13 @@ class MainShellServices extends StatelessWidget {
   /// - a [Suspendable] listener to be suspended automatically when connectivity is lost.
   ///
   /// Current registrations:
-  /// - [VoicemailRepository]: refreshed when going online, but only if the voicemail feature
-  ///   is enabled in [FeatureAccess.settingsConfig].
+  /// - [VoicemailRepository]: refreshed when going online, but only if voicemail runs for this
+  ///   session ([FeatureAccess.voicemailAvailable]) - whichever placement offers it.
   ///
   /// This method centralizes the connectivity recovery configuration, so changes in
   /// registration logic can be made here without touching the [Provider] or service setup.
   List<ConnectivityRecoveryRegistration> _connectivityRecoveryRegistrations(BuildContext context) {
-    final isVoicemailsEnabled = context.read<FeatureAccess>().settingsConfig.voicemailsEnabled;
+    final isVoicemailsEnabled = context.read<FeatureAccess>().voicemailAvailable;
 
     return [if (isVoicemailsEnabled) ConnectivityRecoveryRegistration.refreshable(context.read<VoicemailRepository>())];
   }

@@ -180,7 +180,7 @@ class MainShellRepositories extends StatelessWidget {
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
-            final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
+            final isVoicemailsEnabled = featureAccess.voicemailAvailable;
 
             if (isVoicemailsEnabled) {
               return VoicemailRepositoryImpl(
@@ -259,7 +259,7 @@ class MainShellRepositories extends StatelessWidget {
 
             return AppCacheManager(
               sections: [
-                if (!kIsWeb && featureAccess.settingsConfig.voicemailsEnabled)
+                if (!kIsWeb && featureAccess.voicemailAvailable)
                   VoicemailCacheSection(
                     mediaCacheBasePath: appPath.mediaCacheBasePath,
                     temporaryPath: appPath.temporaryPath,
