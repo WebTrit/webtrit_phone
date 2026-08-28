@@ -76,6 +76,12 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
           );
         } else if (shown.isNotEmpty) {
           return RefreshIndicator(
+            // The list runs behind the app bar, so without this the spinner
+            // settles forty points from the top of the SCREEN - a bar's height
+            // out of sight, and a pull looks like it did nothing. The inset the
+            // screen already applied to the body is the one figure both this
+            // and the first row are placed by, so they cannot drift apart.
+            edgeOffset: MediaQuery.of(context).padding.top,
             onRefresh: _refreshContacts,
             child: ListView.builder(
               itemCount: shown.length,

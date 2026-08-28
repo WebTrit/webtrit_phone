@@ -1,7 +1,7 @@
 # Refreshing data by hand
 
 How a user asks a list in the app to fetch again, screen by screen.
-Last reviewed: 2026-08-19.
+Last reviewed: 2026-08-28.
 
 The rule: refreshing is a pull on the list. A screen that can be refreshed
 carries no refresh control in its app bar.
@@ -48,6 +48,17 @@ scroll, so the gesture does nothing there. The external tab offers a text
 button in its empty state instead. The local tab also has states where a fetch
 is not the answer at all (contacts permission denied, contacts agreement not
 accepted) - they lead to the settings or to the agreement.
+
+Both lists sit behind a translucent app bar, so - as on the account screen -
+the indicator carries an `edgeOffset`, or the spinner is drawn behind the bar
+and the pull looks like it did nothing. It takes the top padding `Scaffold`
+gives the body, which is what the first row is placed by too, so the spinner
+and the list it belongs to cannot drift apart.
+
+Watch for this on any screen under `ThemedScaffold`: it turns
+`extendBodyBehindAppBar` on by itself when the theme carries a gradient or an
+image background, so a list that is fine on a flat theme needs the same offset
+on a branded one.
 
 ## Recent calls
 
