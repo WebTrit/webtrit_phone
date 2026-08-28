@@ -80,15 +80,16 @@ This ensures compatibility with older builds that don’t support flavors.
 ### Build APK with both features enabled:
 
 ```sh
-make build-apk
+melos run build:apk
 ```
 
 ### Run the app on a device with the computed flavors:
 
 ```sh
-make run-apk
+melos run start:android
 ```
 
 > ⚠️ In development environments (e.g., IntelliJ IDEA), you must manually specify the combined flavor (e.g.,
-`deeplinkssmsReceiver`) in your run configuration or use `make run` directly.
+`deeplinkssmsReceiver`) in your run configuration. The melos scripts resolve it with
+`tool/scripts/android_flavor.sh`.
 > 📄 For more details on how the build system works, see  [build](build.md)..md.
