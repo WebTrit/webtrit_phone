@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:webtrit_phone/features/settings/features/voicemail/widgets/playback_button.dart';
+import 'package:webtrit_phone/features/voicemail/widgets/playback_button.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 
 void main() {

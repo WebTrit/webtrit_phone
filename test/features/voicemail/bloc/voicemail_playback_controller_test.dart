@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'package:webtrit_phone/features/settings/features/voicemail/bloc/voicemail_playback_controller.dart';
+import 'package:webtrit_phone/features/voicemail/bloc/voicemail_playback_controller.dart';
 
 class _MockAudioPlayer extends Mock implements AudioPlayer {}
 

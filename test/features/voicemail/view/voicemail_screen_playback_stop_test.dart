@@ -11,9 +11,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/features/settings/features/voicemail/bloc/bloc.dart';
-import 'package:webtrit_phone/features/settings/features/voicemail/models/models.dart';
-import 'package:webtrit_phone/features/settings/features/voicemail/view/voicemail_screen.dart';
+import 'package:webtrit_phone/features/voicemail/bloc/bloc.dart';
+import 'package:webtrit_phone/features/voicemail/models/models.dart';
+import 'package:webtrit_phone/features/voicemail/view/voicemail_screen.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
 import 'package:webtrit_phone/utils/view_params/presence_view_params.dart';
