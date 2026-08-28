@@ -98,6 +98,21 @@ class FeatureAccess extends Equatable {
   /// by [supportedConfig] and [coreSupport].
   final FeatureOverrides overrides;
 
+  /// Whether voicemail runs for this session: the core advertises it, and the
+  /// configuration offers it somewhere.
+  ///
+  /// Voicemail is placed by configuration, and a deployment may offer it from
+  /// the settings list, from the bottom menu, or from both. Behind every
+  /// placement is one data layer - one repository, one poll, one media cache -
+  /// so what to run is asked here rather than of any single placement: a
+  /// deployment that drops the settings row must not take the data layer, and
+  /// with it every other placement, down with it.
+  ///
+  /// The core capability is restated here rather than left to the placements:
+  /// gating once, at the top, is what keeps the answer right however a
+  /// placement is configured.
+  bool get voicemailAvailable => coreSupport.supportsVoicemail && settingsConfig.voicemailsEnabled;
+
   static FeatureAccess create(
     AppConfig appConfig,
     List<EmbeddedResource> embeddedResources,
@@ -750,7 +765,7 @@ class FeatureChecker {
 
   bool _resolve(FeatureFlag feature) {
     return switch (feature) {
-      FeatureFlag.voicemail => _access.settingsConfig.voicemailsEnabled,
+      FeatureFlag.voicemail => _access.voicemailAvailable,
     };
   }
 }
