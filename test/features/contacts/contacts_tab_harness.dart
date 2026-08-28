@@ -106,9 +106,9 @@ class ContactsTabHarness {
           child: CallControllerScope(
             controller: CallController(callBloc: callBloc),
             child: PresenceViewParams(
-              hybridPresenceSupport: false,
-              blfViaSipSupport: false,
-              presenceViaSipSupport: false,
+              directPresenceEnabled: false,
+              dialogsOverSipEnabled: false,
+              presenceOverSipEnabled: false,
               child: behindAppBarOfHeight == null ? Scaffold(body: tab) : _behindAppBar(tab, behindAppBarOfHeight),
             ),
           ),

@@ -49,7 +49,7 @@ class AvatarStatusBadge extends StatelessWidget {
       builder: (context, constraints) {
         final size = constraints.biggest.shortestSide;
 
-        if (presenceParams.hybridPresenceSupport) {
+        if (presenceParams.anyPresenceEnabled) {
           final presenceInfo = this.presenceInfo;
           if (presenceInfo == null) return const SizedBox.shrink();
 

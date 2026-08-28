@@ -55,7 +55,7 @@ class RecentTile extends StatelessWidget {
     final contact = recent.contact;
     final callNumber = callLogEntry.number;
 
-    final name = switch (presenceParams.hybridPresenceSupport) {
+    final name = switch (presenceParams.anyPresenceEnabled) {
       true => '${recent.name} ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
       false => recent.name,
     };

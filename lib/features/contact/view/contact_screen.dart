@@ -91,30 +91,14 @@ class _ContactScreenState extends State<ContactScreen> {
 
                 return BlocBuilder<CallRoutingCubit, CallRoutingState?>(
                   builder: (context, callRoutingState) {
-                    final showPresenceInfo =
-                        presenceParams.hybridPresenceSupport &&
-                        contact.sourceType == ContactSourceType.external &&
-                        presenseInfo.isNotEmpty;
+                    final isExt = contact.sourceType == ContactSourceType.external;
 
-                    final showDialogsInfo =
-                        presenceParams.hybridPresenceSupport &&
-                        presenceParams.blfViaSipSupport &&
-                        contact.sourceType == ContactSourceType.external &&
-                        dialogInfo.isNotEmpty;
+                    final showPresenceInfo = presenceParams.anyPresenceEnabled && isExt && presenseInfo.isNotEmpty;
+                    final showDialogsInfo = presenceParams.dialogsOverSipEnabled && isExt && dialogInfo.isNotEmpty;
 
-                    final bool dialogSipSubAvaliable =
-                        contact.sourceType == ContactSourceType.external &&
-                        presenceParams.hybridPresenceSupport &&
-                        presenceParams.blfViaSipSupport;
-
-                    final bool presenceSipSubAvaliable =
-                        contact.sourceType == ContactSourceType.external &&
-                        presenceParams.hybridPresenceSupport &&
-                        presenceParams.presenceViaSipSupport;
-
-                    final bool sipSubsAvailable = dialogSipSubAvaliable || presenceSipSubAvaliable;
-
-                    final bool showOptionsSection = sipSubsAvailable; // && yourNextOptionFeature
+                    final bool presenceSipSubAvaliable = presenceParams.presenceOverSipEnabled;
+                    final bool dialogSipSubAvaliable = presenceParams.dialogsOverSipEnabled;
+                    final bool anySipSubsSupport = isExt && dialogSipSubAvaliable || presenceSipSubAvaliable;
 
                     return Scaffold(
                       appBar: AppBar(
@@ -187,7 +171,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               ),
                             if (showPresenceInfo) ...[const Divider(), PresenceInfoView(presenceInfo: presenseInfo)],
                             if (showDialogsInfo) ...[const Divider(), DialogsInfoView(dialogInfo: dialogInfo)],
-                            if (showOptionsSection) ...[
+                            if (anySipSubsSupport) ...[
                               const Divider(),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

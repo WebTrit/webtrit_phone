@@ -9,7 +9,7 @@ class FeatureOverrides extends Equatable {
   const FeatureOverrides({
     this.isVideoCallEnabled,
     this.isSystemNotificationsEnabled,
-    this.hybridPresenceSupport,
+    this.enabled,
     this.isVoicemailEnabled,
     this.isCallHistoryEnabled,
     this.callPullVideoStrategy,
@@ -21,7 +21,7 @@ class FeatureOverrides extends Equatable {
 
   final bool? isVideoCallEnabled;
   final bool? isSystemNotificationsEnabled;
-  final bool? hybridPresenceSupport;
+  final bool? enabled;
   final bool? isVoicemailEnabled;
   final bool? isCallHistoryEnabled;
 
@@ -36,7 +36,7 @@ class FeatureOverrides extends Equatable {
   FeatureOverrides copyWith({
     bool? isVideoCallEnabled,
     bool? isSystemNotificationsEnabled,
-    bool? hybridPresenceSupport,
+    bool? enabled,
     bool? isVoicemailEnabled,
     bool? isCallHistoryEnabled,
     CallPullVideoStrategy? callPullVideoStrategy,
@@ -48,7 +48,7 @@ class FeatureOverrides extends Equatable {
     return FeatureOverrides(
       isVideoCallEnabled: isVideoCallEnabled ?? this.isVideoCallEnabled,
       isSystemNotificationsEnabled: isSystemNotificationsEnabled ?? this.isSystemNotificationsEnabled,
-      hybridPresenceSupport: hybridPresenceSupport ?? this.hybridPresenceSupport,
+      enabled: enabled ?? this.enabled,
       isVoicemailEnabled: isVoicemailEnabled ?? this.isVoicemailEnabled,
       isCallHistoryEnabled: isCallHistoryEnabled ?? this.isCallHistoryEnabled,
       callPullVideoStrategy: callPullVideoStrategy ?? this.callPullVideoStrategy,
@@ -63,7 +63,7 @@ class FeatureOverrides extends Equatable {
   List<Object?> get props => [
     isVideoCallEnabled,
     isSystemNotificationsEnabled,
-    hybridPresenceSupport,
+    enabled,
     isVoicemailEnabled,
     isCallHistoryEnabled,
     callPullVideoStrategy,
@@ -107,7 +107,7 @@ abstract final class FeatureOverridesFactory {
     return FeatureOverrides(
       isVideoCallEnabled: snapshot.getBool(videoCallEnabledKey),
       isSystemNotificationsEnabled: snapshot.getBool(systemNotificationsEnabledKey),
-      hybridPresenceSupport: snapshot.getBool(hybridPresenceEnabledKey),
+      enabled: snapshot.getBool(hybridPresenceEnabledKey),
       isVoicemailEnabled: snapshot.getBool(voicemailEnabledKey),
       isCallHistoryEnabled: snapshot.getBool(callHistoryEnabledKey),
       callPullVideoStrategy: callPullVideoStrategy,

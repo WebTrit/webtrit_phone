@@ -83,7 +83,7 @@ class MainShellRepositories extends StatelessWidget {
               localDataSource: localDataSource,
               remoteDataSource: remoteDataSource,
               connectivityService: context.read<ConnectivityService>(),
-              remoteSyncEnabled: featureAccess.sipPresenceConfig.subsSyncEnabled,
+              remoteSyncEnabled: featureAccess.presenceConfig.subsSyncEnabled,
             );
           },
         ),

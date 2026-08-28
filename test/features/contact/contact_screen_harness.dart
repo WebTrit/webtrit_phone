@@ -92,6 +92,7 @@ class ContactScreenHarness {
   Future<void> pump(
     WidgetTester tester, {
     required Contact contact,
+    bool directPresenceEnabled = false,
     bool presenceViaSip = false,
     bool dialogsViaSip = false,
     bool enableTileSms = true,
@@ -115,9 +116,9 @@ class ContactScreenHarness {
           child: CallControllerScope(
             controller: CallController(callBloc: callBloc),
             child: PresenceViewParams(
-              hybridPresenceSupport: presenceViaSip || dialogsViaSip,
-              blfViaSipSupport: dialogsViaSip,
-              presenceViaSipSupport: presenceViaSip,
+              directPresenceEnabled: directPresenceEnabled,
+              dialogsOverSipEnabled: dialogsViaSip,
+              presenceOverSipEnabled: presenceViaSip,
               child: ContactScreen(
                 enableAppBarChat: true,
                 enableTileFavorite: true,

@@ -45,6 +45,9 @@ class Contact extends Equatable {
   final String? sourceId;
 
   /// SIP Registered status
+  /// Derived from portabilling api
+  /// You may wonder why is always true, then check active sessions using our new feature "Sessions tracking"
+  /// and revoke stale sessions via Settings -> Sessions > Logout all
   final bool? registered;
 
   /// User account registered status

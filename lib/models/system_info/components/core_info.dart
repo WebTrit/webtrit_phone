@@ -33,9 +33,16 @@ class CoreInfo with EquatableMixin {
     return verifyVersionStr('>=0.25.0-alpha.2 <2.0.0');
   }
 
-  bool get hybridPresenceAware {
-    // Hybrid presence was was added in 0.28.0-alpha.1
+  bool get supportsHybridPresence {
+    // Hybrid presence was was introduced in 0.28.0-alpha.1
+    // Dont mess with older implementations, just drop them due to incompatibility.
     return verifyVersionStr('>=0.28.0-alpha.1 <2.0.0');
+  }
+
+  bool get directPresenceConfigurable {
+    // Starting from 0.36.0-alpha.1 direct presence became configurable
+    // but previously from 0.28.0-alpha.1 till 0.36.0-alpha.1 direct presence was always on
+    return verifyVersionStr('>=0.36.0-alpha.1 <2.0.0');
   }
 
   bool get supportsSessionTracking {

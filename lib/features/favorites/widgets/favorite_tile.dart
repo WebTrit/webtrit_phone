@@ -50,7 +50,7 @@ class FavoriteTile extends StatelessWidget {
     final presenceParams = PresenceViewParams.of(context);
 
     final name = contact?.maybeName ?? favorite.number;
-    final title = switch (presenceParams.hybridPresenceSupport) {
+    final title = switch (presenceParams.anyPresenceEnabled) {
       true => '$name ${contact?.presenceInfo.primaryStatusIcon ?? ''}',
       false => name,
     };

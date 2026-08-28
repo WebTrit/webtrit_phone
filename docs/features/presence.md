@@ -55,7 +55,7 @@ build it via `AvatarStatusBadge.maybe(...)`, which returns `null` (no badge
 mounted) when there is no status data at all. The badge sizes and anchors
 itself via `lib/utils/badge_layout.dart` as an
 `avatar diameter * sizeFactor` square, and decides which bottom-right badge
-renders by `PresenceViewParams.hybridPresenceSupport` - the two are
+renders by `PresenceViewParams.enabled` - the two are
 mutually exclusive. The top-left smart-contact indicator is still drawn by
 `LeadingAvatar` itself:
 
@@ -198,9 +198,9 @@ provided by the main shell from `FeatureAccess.sipPresenceConfig`
 (`lib/app/router/main_shell.dart`); the mapping lives in
 `SipPresenceMapper.map` (`lib/data/feature_access.dart`):
 
-- `hybridPresenceSupport` = app config `supported` contains hybrid presence
+- `enabled` = app config `supported` contains hybrid presence
   AND the core reports `hybridPresenceAware`;
-- `presenceViaSipSupport` additionally requires the adapter's
+- `presenceOverSipEnabled` additionally requires the adapter's
   `supportsSipPresence`;
 - `dialogsViaSipBlfSupport` additionally requires `supportsSipDialogs`.
 
@@ -217,7 +217,7 @@ periodic send is driven from `CallBloc`.
 ## Test coverage
 
 `test/widgets/avatar_status_badge_test.dart` pins the badge contract: which
-generation renders under `hybridPresenceSupport`, the default 0.2/0.5 sizes,
+generation renders under `enabled`, the default 0.2/0.5 sizes,
 the legacy dot colors, the mark's centre sitting on the avatar's edge with
 the glyph inside it, and the no-data cases (including
 `AvatarStatusBadge.maybe` returning `null`).

@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 class PresenceViewParams extends InheritedWidget {
   const PresenceViewParams({
-    required this.hybridPresenceSupport,
-    required this.blfViaSipSupport,
-    required this.presenceViaSipSupport,
+    required this.directPresenceEnabled,
+    required this.presenceOverSipEnabled,
+    required this.dialogsOverSipEnabled,
     required super.child,
     super.key,
   });
 
-  final bool hybridPresenceSupport;
-  final bool blfViaSipSupport;
-  final bool presenceViaSipSupport;
+  final bool directPresenceEnabled;
+  final bool presenceOverSipEnabled;
+  final bool dialogsOverSipEnabled;
+
+  bool get anyPresenceEnabled => directPresenceEnabled || presenceOverSipEnabled;
 
   static PresenceViewParams of(BuildContext context) {
     final result = context.dependOnInheritedWidgetOfExactType<PresenceViewParams>();
@@ -23,8 +25,8 @@ class PresenceViewParams extends InheritedWidget {
 
   @override
   bool updateShouldNotify(PresenceViewParams oldWidget) {
-    return hybridPresenceSupport != oldWidget.hybridPresenceSupport ||
-        blfViaSipSupport != oldWidget.blfViaSipSupport ||
-        presenceViaSipSupport != oldWidget.presenceViaSipSupport;
+    return directPresenceEnabled != oldWidget.directPresenceEnabled ||
+        presenceOverSipEnabled != oldWidget.presenceOverSipEnabled ||
+        dialogsOverSipEnabled != oldWidget.dialogsOverSipEnabled;
   }
 }

@@ -8,15 +8,15 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
-  Widget buildTestable(Widget child, {bool blfViaSipSupport = false}) {
+  Widget buildTestable(Widget child, {bool dialogsOverSipEnabled = false}) {
     return MaterialApp(
       locale: const Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: PresenceViewParams(
-        hybridPresenceSupport: false,
-        blfViaSipSupport: blfViaSipSupport,
-        presenceViaSipSupport: false,
+        directPresenceEnabled: false,
+        dialogsOverSipEnabled: dialogsOverSipEnabled,
+        presenceOverSipEnabled: false,
         child: Scaffold(body: child),
       ),
     );
@@ -201,7 +201,7 @@ void main() {
       await tester.pumpWidget(
         buildTestable(
           ContactTile(displayName: 'John Doe', dialogInfo: [dialog(DialogState.early)]),
-          blfViaSipSupport: true,
+          dialogsOverSipEnabled: true,
         ),
       );
       await tester.pumpAndSettle();
@@ -213,7 +213,7 @@ void main() {
       await tester.pumpWidget(
         buildTestable(
           ContactTile(displayName: 'John Doe', dialogInfo: [dialog(DialogState.confirmed)]),
-          blfViaSipSupport: true,
+          dialogsOverSipEnabled: true,
         ),
       );
       await tester.pumpAndSettle();
@@ -225,7 +225,7 @@ void main() {
       await tester.pumpWidget(
         buildTestable(
           ContactTile(displayName: 'John Doe', dialogInfo: [dialog(DialogState.early), dialog(DialogState.confirmed)]),
-          blfViaSipSupport: true,
+          dialogsOverSipEnabled: true,
         ),
       );
       await tester.pumpAndSettle();

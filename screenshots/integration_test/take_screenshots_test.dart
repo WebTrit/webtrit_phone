@@ -50,9 +50,9 @@ void main() {
       final wrappedWidget = MultiProvider(
         providers: appContext.providers,
         child: PresenceViewParams(
-          hybridPresenceSupport: true,
-          blfViaSipSupport: true,
-          presenceViaSipSupport: true,
+          directPresenceEnabled: true,
+          presenceOverSipEnabled: true,
+          dialogsOverSipEnabled: true,
           child: innerWidget,
         ),
       );

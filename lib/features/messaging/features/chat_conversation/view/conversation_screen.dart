@@ -173,11 +173,11 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
       source: ContactSourceId(ContactSourceType.external, participant),
       builder: (context, contact) {
         final colorScheme = Theme.of(context).colorScheme;
-        final hybridPresenceSupport = PresenceViewParams.of(context).hybridPresenceSupport;
+        final anyPresenceEnabled = PresenceViewParams.of(context).anyPresenceEnabled;
         const nameTextStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold);
         const noteTextStyle = TextStyle(fontSize: 10);
 
-        return switch ((hybridPresenceSupport, contact)) {
+        return switch ((anyPresenceEnabled, contact)) {
           (_, null) => Text(
             context.l10n.messaging_ParticipantName_unknown,
             maxLines: 1,

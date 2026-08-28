@@ -96,7 +96,7 @@ class AppStartupCrashlyticsContext extends CrashlyticsAppContext {
     setKeys({
       FeatureOverridesFactory.videoCallEnabledKey: overrides.isVideoCallEnabled ?? 'unset',
       FeatureOverridesFactory.systemNotificationsEnabledKey: overrides.isSystemNotificationsEnabled ?? 'unset',
-      FeatureOverridesFactory.hybridPresenceEnabledKey: overrides.hybridPresenceSupport ?? 'unset',
+      FeatureOverridesFactory.hybridPresenceEnabledKey: overrides.enabled ?? 'unset',
       FeatureOverridesFactory.voicemailEnabledKey: overrides.isVoicemailEnabled ?? 'unset',
       FeatureOverridesFactory.callHistoryEnabledKey: overrides.isCallHistoryEnabled ?? 'unset',
       FeatureOverridesFactory.callPullVideoStrategyKey: overrides.callPullVideoStrategy?.name ?? 'unset',

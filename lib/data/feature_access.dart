@@ -59,7 +59,7 @@ class FeatureAccess extends Equatable {
     this.contactsConfig,
     this.termsConfig,
     this.systemNotificationsConfig,
-    this.sipPresenceConfig,
+    this.presenceConfig,
     this.supportedConfig,
     this.localizationConfig,
     this.coreSupport,
@@ -76,7 +76,7 @@ class FeatureAccess extends Equatable {
   final ContactsConfig contactsConfig;
   final TermsConfig termsConfig;
   final SystemNotificationsConfig systemNotificationsConfig;
-  final SipPresenceConfig sipPresenceConfig;
+  final PresenceConfig presenceConfig;
   final LoggingConfig loggingConfig;
 
   /// Locales the app exposes for selection and auto-resolution, resolved from
@@ -160,7 +160,7 @@ class FeatureAccess extends Equatable {
     contactsConfig,
     termsConfig,
     systemNotificationsConfig,
-    sipPresenceConfig,
+    presenceConfig,
     loggingConfig,
     supportedConfig,
     localizationConfig,
@@ -597,20 +597,30 @@ abstract final class SystemNotificationsMapper {
 /// Mapper responsible for evaluating SIP presence support based on config and core capabilities.
 abstract final class SipPresenceMapper {
   /// Maps [CoreSupport] and [AppConfig] to [SipPresenceConfig].
-  static SipPresenceConfig map(WebtritSystemInfo? systemInfo, AppConfig appConfig, FeatureOverrides featureOverrides) {
+  static PresenceConfig map(WebtritSystemInfo? systemInfo, AppConfig appConfig, FeatureOverrides featureOverrides) {
+    // App capabilities
     final appSupportsBase = appConfig.supported.whereType<SupportedHybridPresence>().isNotEmpty;
-    final appSupports = featureOverrides.hybridPresenceSupport ?? appSupportsBase;
+    final appSupports = featureOverrides.enabled ?? appSupportsBase;
 
-    final backendSupports = systemInfo?.core.hybridPresenceAware ?? false;
+    if (!appSupports) return PresenceConfig.empty();
 
-    final isSupported = appSupports && backendSupports;
-    final withBlfViaSip = isSupported && (systemInfo?.adapter?.supportsSipDialogs ?? false);
-    final withpresenceViaSip = isSupported && (systemInfo?.adapter?.supportsSipPresence ?? false);
+    // Core capabilities
+    final coreSupports = systemInfo?.core.supportsHybridPresence ?? false;
+    final directPresenceConfigurable = systemInfo?.core.directPresenceConfigurable ?? false;
 
-    return SipPresenceConfig(
-      hybridPresenceSupport: isSupported,
-      dialogsViaSipBlfSupport: withBlfViaSip,
-      presenceViaSipSupport: withpresenceViaSip,
+    if (!coreSupports) return PresenceConfig.empty();
+
+    /// Flags derived from addonmart that customers can enable or disable.
+    final presenceDirectEnabled = directPresenceConfigurable
+        ? (systemInfo?.adapter?.supportsDirectPresence ?? false)
+        : true;
+    final presenceOverSipEnabled = (systemInfo?.adapter?.supportsPresenceOverSip ?? false);
+    final dialogsOverSipEnabled = (systemInfo?.adapter?.supportsDialogsOverSip ?? false);
+
+    return PresenceConfig(
+      directPresenceEnabled: presenceDirectEnabled,
+      presenceOverSipEnabled: presenceOverSipEnabled,
+      dialogsOverSipEnabled: dialogsOverSipEnabled,
     );
   }
 }

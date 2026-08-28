@@ -15,9 +15,11 @@ class AdapterInfo with EquatableMixin {
   @override
   bool get stringify => true;
 
-  bool get supportsSipPresence => supported?.contains(kSipPresenceFeatureFlag) ?? false;
+  bool get supportsDirectPresence => supported?.contains(kDirectPresenceFeatureFlag) ?? false;
 
-  bool get supportsSipDialogs => supported?.contains(kSipDialogsFeatureFlag) ?? false;
+  bool get supportsPresenceOverSip => supported?.contains(kSipPresenceFeatureFlag) ?? false;
+
+  bool get supportsDialogsOverSip => supported?.contains(kSipDialogsFeatureFlag) ?? false;
 
   /// Raw OTP login identifiers advertised by the backend adapter under
   /// `custom.otp_login_identifiers` (e.g. `phone_number`, `email`).

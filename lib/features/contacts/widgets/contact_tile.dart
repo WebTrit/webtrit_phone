@@ -70,7 +70,7 @@ class ContactTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenceParams = PresenceViewParams.of(context);
 
-    final title = switch (presenceParams.hybridPresenceSupport) {
+    final title = switch (presenceParams.anyPresenceEnabled) {
       true => '$displayName ${presenceInfo?.primaryStatusIcon ?? ''}',
       false => displayName,
     };
@@ -79,7 +79,7 @@ class ContactTile extends StatelessWidget {
 
     final establishedCall = (dialogInfo ?? const <DialogInfo>[]).established;
 
-    if (presenceParams.blfViaSipSupport && establishedCall != null) {
+    if (presenceParams.dialogsOverSipEnabled && establishedCall != null) {
       final dialog = establishedCall;
 
       String? destination;
@@ -98,7 +98,7 @@ class ContactTile extends StatelessWidget {
 
     final presenceNote = (presenceInfo ?? []).primaryNote;
 
-    if (subName == null && presenceParams.hybridPresenceSupport && presenceNote != null && presenceNote.isNotEmpty) {
+    if (subName == null && presenceParams.anyPresenceEnabled && presenceNote != null && presenceNote.isNotEmpty) {
       subName = presenceNote;
     }
 
