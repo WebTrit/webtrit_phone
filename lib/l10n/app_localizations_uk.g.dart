@@ -574,9 +574,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contactsSourceLocal => 'Ваш телефон';
 
   @override
-  String get contacts_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
-
-  @override
   String get contacts_DialogsInfoView_title => 'Інформація про дзвінки (BLF):';
 
   @override
@@ -1015,9 +1012,6 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
-
-  @override
   String formatPhone(String style, String main, String ext) {
     String _temp0 = intl.Intl.selectLogic(style, {
       'full': '$main (розш: $ext)',
@@ -1330,6 +1324,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get main_BottomNavigationBarItemLabel_chats => 'Чати';
+
+  @override
+  String get main_Text_blindTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
   String get main_BottomNavigationBarItemLabel_contacts => 'Контакти';
@@ -2129,9 +2126,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String recents_snackBar_deleted(String name) {
     return '$name видалено';
   }
-
-  @override
-  String get recents_Text_blingTransferInitiated => 'Безумовне переведення дзвінка';
 
   @override
   String get recentsVisibilityFilter_all => 'Всі';

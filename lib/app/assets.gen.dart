@@ -35,6 +35,16 @@ class $AssetsCertificatesGen {
   List<String> get values => [credentials];
 }
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/.gitkeep
+  String get aGitkeep => 'assets/fonts/.gitkeep';
+
+  /// List of all assets
+  List<String> get values => [aGitkeep];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
@@ -132,6 +142,7 @@ class Assets {
 
   static const $AssetsCallkeepGen callkeep = $AssetsCallkeepGen();
   static const $AssetsCertificatesGen certificates = $AssetsCertificatesGen();
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLoginGen login = $AssetsLoginGen();
   static const $AssetsRingtonesGen ringtones = $AssetsRingtonesGen();

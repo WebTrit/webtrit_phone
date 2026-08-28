@@ -292,16 +292,6 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
           }
         },
       ),
-      bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
-        buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-        builder: (context, callState) {
-          if (callState.isBlingTransferInitiated) {
-            return TransferBottomNavigationBar(context.l10n.recents_Text_blingTransferInitiated);
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
-      ),
     );
   }
 }

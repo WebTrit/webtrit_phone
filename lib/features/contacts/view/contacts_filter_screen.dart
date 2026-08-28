@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -254,16 +253,6 @@ class _ContactsFilterScreenState extends State<ContactsFilterScreen> {
               );
             },
           ),
-        ),
-        bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
-          buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-          builder: (context, callState) {
-            if (callState.isBlingTransferInitiated) {
-              return TransferBottomNavigationBar(context.l10n.contacts_Text_blingTransferInitiated);
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
         ),
       ),
     );

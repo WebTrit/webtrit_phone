@@ -217,8 +217,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'contactsSourceFavorites' => contactsSourceFavorites,
       'contactsSourceExternal' => contactsSourceExternal,
       'contactsSourceLocal' => contactsSourceLocal,
-      'contacts_Text_blingTransferInitiated' =>
-        contacts_Text_blingTransferInitiated,
       'contacts_DialogsInfoView_title' => contacts_DialogsInfoView_title,
       'contacts_ContactScreen_options' => contacts_ContactScreen_options,
       'contacts_ContactScreen_presenceViaSip' =>
@@ -453,8 +451,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'favorites_SemanticsLabel_reorderDone' =>
         favorites_SemanticsLabel_reorderDone,
       'favorites_SemanticsLabel_reorder' => favorites_SemanticsLabel_reorder,
-      'favorites_Text_blingTransferInitiated' =>
-        favorites_Text_blingTransferInitiated,
       'locale_default' => locale_default,
       'locale_en' => locale_en,
       'locale_it' => locale_it,
@@ -585,6 +581,7 @@ extension AppLocalizationsExtension on AppLocalizations {
         logRecordsConsole_PopupMenuItem_clear,
       'main_BottomNavigationBarItemLabel_chats' =>
         main_BottomNavigationBarItemLabel_chats,
+      'main_Text_blindTransferInitiated' => main_Text_blindTransferInitiated,
       'main_BottomNavigationBarItemLabel_contacts' =>
         main_BottomNavigationBarItemLabel_contacts,
       'main_BottomNavigationBarItemLabel_favorites' =>
@@ -942,8 +939,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'recents_DeleteConfirmDialog_title' => recents_DeleteConfirmDialog_title,
       'recents_HistoryTile_missedCallText' =>
         recents_HistoryTile_missedCallText,
-      'recents_Text_blingTransferInitiated' =>
-        recents_Text_blingTransferInitiated,
       'recentsVisibilityFilter_all' => recentsVisibilityFilter_all,
       'recentsVisibilityFilter_all_preposit' =>
         recentsVisibilityFilter_all_preposit,

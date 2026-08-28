@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webtrit_phone/app/keys.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:webtrit_phone/features/call/call.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../favorites.dart';
@@ -80,16 +76,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           smssEnabled: widget.smssEnabled,
           cdrsEnabled: widget.cdrsEnabled,
         ),
-      ),
-      bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
-        buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-        builder: (context, callState) {
-          if (callState.isBlingTransferInitiated) {
-            return TransferBottomNavigationBar(context.l10n.favorites_Text_blingTransferInitiated);
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
       ),
     );
   }

@@ -518,8 +518,6 @@
   "@contactsSourceExternal": {},
   "contactsSourceLocal": "Your phone",
   "@contactsSourceLocal": {},
-  "contacts_Text_blingTransferInitiated": "Performing blind transfer",
-  "@contacts_Text_blingTransferInitiated": {},
   "contacts_DialogsInfoView_title": "Calls information (BLF):",
   "@contacts_DialogsInfoView_title": {},
   "contacts_ContactTile_inCall": "In call: {destination}",
@@ -885,8 +883,6 @@
       }
     }
   },
-  "favorites_Text_blingTransferInitiated": "Performing blind transfer",
-  "@favorites_Text_blingTransferInitiated": {},
   "formatPhone": "{style, select, full{{main} (ext: {ext})} simple{{main}} only_ext{ext: {ext}} empty{No phone number} other{{main}}}",
   "@formatPhone": {
     "description": "Formats phone number based on presence of main number and extension, covering four scenarios: both, main only, extension only, and neither.",
@@ -1194,6 +1190,8 @@
   "@logRecordsConsole_PopupMenuItem_clear": {},
   "main_BottomNavigationBarItemLabel_chats": "Chats",
   "@main_BottomNavigationBarItemLabel_chats": {},
+  "main_Text_blindTransferInitiated": "Performing blind transfer",
+  "@main_Text_blindTransferInitiated": {},
   "main_BottomNavigationBarItemLabel_contacts": "Contacts",
   "@main_BottomNavigationBarItemLabel_contacts": {},
   "main_BottomNavigationBarItemLabel_favorites": "Favorites",
@@ -1860,8 +1858,6 @@
       }
     }
   },
-  "recents_Text_blingTransferInitiated": "Performing blind transfer",
-  "@recents_Text_blingTransferInitiated": {},
   "recentsVisibilityFilter_all": "All",
   "@recentsVisibilityFilter_all": {},
   "recentsVisibilityFilter_all_preposit": "all",
