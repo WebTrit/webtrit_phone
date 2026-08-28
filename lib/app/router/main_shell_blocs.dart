@@ -221,7 +221,7 @@ class MainShellBlocs extends StatelessWidget {
               // TODO(Serdun): these per-feature capability flags keep growing as
               // individual constructor args; inject a single capabilities/config
               // struct (e.g. CallCapabilitiesConfig) instead of one bool each.
-              sendPresenceSettings: featureAccess.sipPresenceConfig.hybridPresenceSupport,
+              sendPresenceSettings: featureAccess.presenceConfig.anyPresenceEnabled,
               callPullVideoStrategy: featureAccess.callConfig.capabilities.callPullVideoStrategy,
               peerMessageSupported: featureAccess.callConfig.capabilities.isPeerMessageEnabled,
               onCallEnded: () => cdrsSyncWorker?.forceSync(const Duration(seconds: 1)),

@@ -51,9 +51,9 @@ void main() {
         // The avatar reads presence params from the tree, and the row is laid
         // out for a phone-sized surface.
         body: PresenceViewParams(
-          hybridPresenceSupport: false,
-          blfViaSipSupport: false,
-          presenceViaSipSupport: false,
+          directPresenceEnabled: false,
+          dialogsOverSipEnabled: false,
+          presenceOverSipEnabled: false,
           child: MultiProvider(
             providers: [
               ChangeNotifierProvider<VoicemailPlaybackController>.value(value: controller),

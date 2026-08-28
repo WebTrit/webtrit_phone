@@ -45,9 +45,9 @@ StackRouter _router() {
 }
 
 Widget _presence(Widget child) => PresenceViewParams(
-  hybridPresenceSupport: false,
-  blfViaSipSupport: false,
-  presenceViaSipSupport: false,
+  directPresenceEnabled: false,
+  dialogsOverSipEnabled: false,
+  presenceOverSipEnabled: false,
   child: child,
 );
 

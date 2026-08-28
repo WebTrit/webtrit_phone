@@ -93,10 +93,10 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
     return ContactInfoBuilder(
       source: ContactSourceId(ContactSourceType.external, participant.userId),
       builder: (context, contact) {
-        final hybridPresenceSupport = PresenceViewParams.of(context).hybridPresenceSupport;
+        final anyPresenceEnabled = PresenceViewParams.of(context).anyPresenceEnabled;
         final text = switch (contact) {
           null => context.l10n.messaging_ParticipantName_unknown,
-          _ => switch (hybridPresenceSupport) {
+          _ => switch (anyPresenceEnabled) {
             true => '${contact.displayTitle} ${contact.presenceInfo.primaryStatusIcon ?? ''}',
             false => contact.displayTitle,
           },

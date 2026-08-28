@@ -1,20 +1,31 @@
 import 'package:equatable/equatable.dart';
 
-class SipPresenceConfig extends Equatable {
-  const SipPresenceConfig({
-    required this.hybridPresenceSupport,
-    required this.dialogsViaSipBlfSupport,
-    required this.presenceViaSipSupport,
+class PresenceConfig extends Equatable {
+  const PresenceConfig({
+    required this.directPresenceEnabled,
+    required this.presenceOverSipEnabled,
+    required this.dialogsOverSipEnabled,
   });
 
-  final bool hybridPresenceSupport;
+  final bool directPresenceEnabled;
 
-  final bool dialogsViaSipBlfSupport;
+  final bool presenceOverSipEnabled;
 
-  final bool presenceViaSipSupport;
+  final bool dialogsOverSipEnabled;
 
-  bool get subsSyncEnabled => hybridPresenceSupport && (dialogsViaSipBlfSupport || presenceViaSipSupport);
+  // bool get subsSyncEnabled => enabled && (dialogsOverSipEnabled || presenceOverSipEnabled);
+  bool get subsSyncEnabled => dialogsOverSipEnabled || presenceOverSipEnabled;
+
+  bool get anyPresenceEnabled => directPresenceEnabled || presenceOverSipEnabled;
 
   @override
-  List<Object?> get props => [hybridPresenceSupport, dialogsViaSipBlfSupport, presenceViaSipSupport];
+  List<Object?> get props => [directPresenceEnabled, presenceOverSipEnabled, dialogsOverSipEnabled];
+
+  factory PresenceConfig.empty() {
+    return const PresenceConfig(
+      directPresenceEnabled: false,
+      presenceOverSipEnabled: false,
+      dialogsOverSipEnabled: false,
+    );
+  }
 }

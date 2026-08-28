@@ -87,9 +87,9 @@ void main() {
           ChangeNotifierProvider<VoicemailPlaybackController>.value(value: controller),
         ],
         child: const PresenceViewParams(
-          hybridPresenceSupport: false,
-          blfViaSipSupport: false,
-          presenceViaSipSupport: false,
+          directPresenceEnabled: false,
+          dialogsOverSipEnabled: false,
+          presenceOverSipEnabled: false,
           child: VoicemailScreen(),
         ),
       ),

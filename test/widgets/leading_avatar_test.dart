@@ -112,9 +112,9 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: PresenceViewParams(
-              hybridPresenceSupport: false,
-              blfViaSipSupport: false,
-              presenceViaSipSupport: false,
+              directPresenceEnabled: false,
+              dialogsOverSipEnabled: false,
+              presenceOverSipEnabled: false,
               child: Center(
                 child: LeadingAvatar(
                   username: 'John Doe',

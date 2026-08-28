@@ -33,9 +33,9 @@ void main() {
       // settings from the tree, the way the app supplies them around the call.
       home: Scaffold(
         body: PresenceViewParams(
-          hybridPresenceSupport: false,
-          blfViaSipSupport: false,
-          presenceViaSipSupport: false,
+          directPresenceEnabled: false,
+          dialogsOverSipEnabled: false,
+          presenceOverSipEnabled: false,
           child: child,
         ),
       ),

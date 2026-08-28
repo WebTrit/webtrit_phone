@@ -178,13 +178,13 @@ class _MainShellState extends State<MainShell> {
             /// the nested [AutoRouter], with a [MainShellNavigatorObserver] attached.
             child: Builder(
               builder: (context) {
-                final sipPresenceFeature = _sessionFeatureAccess.sipPresenceConfig;
+                final sipPresenceFeature = _sessionFeatureAccess.presenceConfig;
                 return CallControllerScope(
                   controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
                   child: PresenceViewParams(
-                    hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
-                    blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
-                    presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
+                    directPresenceEnabled: sipPresenceFeature.directPresenceEnabled,
+                    presenceOverSipEnabled: sipPresenceFeature.presenceOverSipEnabled,
+                    dialogsOverSipEnabled: sipPresenceFeature.dialogsOverSipEnabled,
                     child: CallConfigSynchronizer(
                       child: CallShell(
                         child: MessagingShell(

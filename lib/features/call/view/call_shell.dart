@@ -151,9 +151,6 @@ class _CallShellState extends State<CallShell> {
       return;
     }
 
-    final viewSource = PresenceViewParams.of(context).hybridPresenceSupport;
-    final blfViaSipSupport = PresenceViewParams.of(context).blfViaSipSupport;
-    final presenceViaSipSupport = PresenceViewParams.of(context).presenceViaSipSupport;
     final callBloc = context.read<CallBloc>();
     final contactResolver = context.read<ContactResolver>();
 
@@ -174,9 +171,9 @@ class _CallShellState extends State<CallShell> {
           final orientation = MediaQuery.of(context).orientation;
 
           return PresenceViewParams(
-            hybridPresenceSupport: viewSource,
-            blfViaSipSupport: blfViaSipSupport,
-            presenceViaSipSupport: presenceViaSipSupport,
+            directPresenceEnabled: PresenceViewParams.of(context).directPresenceEnabled,
+            presenceOverSipEnabled: PresenceViewParams.of(context).presenceOverSipEnabled,
+            dialogsOverSipEnabled: PresenceViewParams.of(context).dialogsOverSipEnabled,
             child: CallActiveThumbnail(
               activeCall: activeCall,
               orientation: orientation,

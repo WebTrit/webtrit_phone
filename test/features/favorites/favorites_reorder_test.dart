@@ -107,9 +107,9 @@ void main() {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: PresenceViewParams(
-              hybridPresenceSupport: false,
-              blfViaSipSupport: false,
-              presenceViaSipSupport: false,
+              directPresenceEnabled: false,
+              dialogsOverSipEnabled: false,
+              presenceOverSipEnabled: false,
               child: MultiBlocProvider(
                 providers: [
                   BlocProvider<FavoritesBloc>.value(value: favoritesBloc),

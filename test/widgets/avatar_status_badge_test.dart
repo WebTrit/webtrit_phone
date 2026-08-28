@@ -20,7 +20,7 @@ void main() {
   /// the four copies of it went stale together the last time it changed.
   const markFactor = 0.4;
 
-  Widget wrap(Widget badge, {required bool hybridPresenceSupport}) {
+  Widget wrap(Widget badge, {required bool enabled}) {
     return MaterialApp(
       locale: const Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -43,9 +43,9 @@ void main() {
       ),
       home: Scaffold(
         body: PresenceViewParams(
-          hybridPresenceSupport: hybridPresenceSupport,
-          blfViaSipSupport: false,
-          presenceViaSipSupport: false,
+          directPresenceEnabled: enabled,
+          dialogsOverSipEnabled: false,
+          presenceOverSipEnabled: false,
           child: Center(
             child: SizedBox(
               width: diameter,
@@ -105,7 +105,7 @@ void main() {
 
   group('AvatarStatusBadge without hybrid presence', () {
     testWidgets('draws the registration dot at the presence-mark size, ringed', (tester) async {
-      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), hybridPresenceSupport: false));
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), enabled: false));
 
       final dot = dotOf(tester);
       final decoration = dot.decoration! as BoxDecoration;
@@ -118,7 +118,7 @@ void main() {
     });
 
     testWidgets('sits the registration dot on the avatar edge', (tester) async {
-      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), hybridPresenceSupport: false));
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), enabled: false));
 
       final dot = tester.getRect(find.byWidget(dotOf(tester)));
       final avatar = tester.getRect(find.byType(AvatarStatusBadge));
@@ -128,13 +128,13 @@ void main() {
     });
 
     testWidgets('colors the dot by registration state', (tester) async {
-      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: false), hybridPresenceSupport: false));
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: false), enabled: false));
 
       expect((dotOf(tester).decoration! as BoxDecoration).color, unregisteredColor);
     });
 
     testWidgets('shows nothing without registration data', (tester) async {
-      await tester.pumpWidget(wrap(const AvatarStatusBadge(), hybridPresenceSupport: false));
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(), enabled: false));
 
       expect(find.descendant(of: find.byType(AvatarStatusBadge), matching: find.byType(Container)), findsNothing);
       expect(find.byType(SipPresenceIndicator), findsNothing);
@@ -155,9 +155,7 @@ void main() {
 
   group('AvatarStatusBadge with hybrid presence', () {
     testWidgets('shows the presence indicator at the hybrid size', (tester) async {
-      await tester.pumpWidget(
-        wrap(AvatarStatusBadge(presenceInfo: [presence(available: true)]), hybridPresenceSupport: true),
-      );
+      await tester.pumpWidget(wrap(AvatarStatusBadge(presenceInfo: [presence(available: true)]), enabled: true));
 
       expect(find.byType(SipPresenceIndicator), findsOneWidget);
       expect(
@@ -174,7 +172,7 @@ void main() {
               presence(available: true, activities: const [PresenceActivity.busy]),
             ],
           ),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -199,7 +197,7 @@ void main() {
     });
 
     testWidgets('ignores registration data', (tester) async {
-      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), hybridPresenceSupport: true));
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), enabled: true));
 
       expect(find.descendant(of: find.byType(AvatarStatusBadge), matching: find.byType(Container)), findsNothing);
       expect(find.byType(SipPresenceIndicator), findsNothing);
@@ -215,7 +213,7 @@ void main() {
               presence(available: true, activities: const [PresenceActivity.doNotDisturb]),
             ],
           ),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -230,7 +228,7 @@ void main() {
               presence(available: true, activities: const [PresenceActivity.busy]),
             ],
           ),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -245,7 +243,7 @@ void main() {
               presence(available: true, activities: const [PresenceActivity.vacation]),
             ],
           ),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -257,7 +255,7 @@ void main() {
         await tester.pumpWidget(
           wrap(
             AvatarStatusBadge(presenceInfo: [presence(available: true)], dialogInfo: [dialog(state)]),
-            hybridPresenceSupport: true,
+            enabled: true,
           ),
         );
 
@@ -273,7 +271,7 @@ void main() {
               presence(available: true, activities: const [PresenceActivity.onThePhone]),
             ],
           ),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -281,9 +279,7 @@ void main() {
     });
 
     testWidgets('an unreachable contact stays unavailable', (tester) async {
-      await tester.pumpWidget(
-        wrap(AvatarStatusBadge(presenceInfo: [presence(available: false)]), hybridPresenceSupport: true),
-      );
+      await tester.pumpWidget(wrap(AvatarStatusBadge(presenceInfo: [presence(available: false)]), enabled: true));
 
       expect(markColor(tester), unavailableColor);
     });
@@ -296,7 +292,7 @@ void main() {
               presence(available: false, activities: const [PresenceActivity.doNotDisturb]),
             ],
           ),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -309,7 +305,7 @@ void main() {
       await tester.pumpWidget(
         wrap(
           AvatarStatusBadge(presenceInfo: [presence(available: true)], dialogInfo: [dialog(DialogState.confirmed)]),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -320,7 +316,7 @@ void main() {
       await tester.pumpWidget(
         wrap(
           AvatarStatusBadge(presenceInfo: [presence(available: true)], dialogInfo: [dialog(DialogState.early)]),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -336,7 +332,7 @@ void main() {
               presence(available: true, activities: const [PresenceActivity.vacation]),
             ],
           ),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -351,7 +347,7 @@ void main() {
               presence(available: true, activities: const [PresenceActivity.doNotDisturb]),
             ],
           ),
-          hybridPresenceSupport: true,
+          enabled: true,
         ),
       );
 
@@ -360,33 +356,29 @@ void main() {
     });
 
     testWidgets('a plain contact is announced as available or not', (tester) async {
-      await tester.pumpWidget(
-        wrap(AvatarStatusBadge(presenceInfo: [presence(available: true)]), hybridPresenceSupport: true),
-      );
+      await tester.pumpWidget(wrap(AvatarStatusBadge(presenceInfo: [presence(available: true)]), enabled: true));
       expect(find.bySemanticsLabel('Available'), findsOneWidget);
 
-      await tester.pumpWidget(
-        wrap(AvatarStatusBadge(presenceInfo: [presence(available: false)]), hybridPresenceSupport: true),
-      );
+      await tester.pumpWidget(wrap(AvatarStatusBadge(presenceInfo: [presence(available: false)]), enabled: true));
       expect(find.bySemanticsLabel('Unavailable'), findsOneWidget);
     });
   });
 
   group('the legacy registration dot says its state out loud', () {
     testWidgets('a registered contact is announced as registered', (tester) async {
-      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), hybridPresenceSupport: false));
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: true), enabled: false));
 
       expect(find.bySemanticsLabel('Registered'), findsOneWidget);
     });
 
     testWidgets('an unregistered contact is announced as not registered', (tester) async {
-      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: false), hybridPresenceSupport: false));
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(registered: false), enabled: false));
 
       expect(find.bySemanticsLabel('Not registered'), findsOneWidget);
     });
 
     testWidgets('nothing is announced when there is no registration data', (tester) async {
-      await tester.pumpWidget(wrap(const AvatarStatusBadge(), hybridPresenceSupport: false));
+      await tester.pumpWidget(wrap(const AvatarStatusBadge(), enabled: false));
 
       expect(find.bySemanticsLabel('Registered'), findsNothing);
       expect(find.bySemanticsLabel('Not registered'), findsNothing);
