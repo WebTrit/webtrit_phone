@@ -393,8 +393,10 @@ melos:
       run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:ios:config:
-      description: Configure Xcode project without building.
-      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only
+      description: >-
+        Configure the Xcode project without building it. Set FLUTTER_FLAGS for extra flags
+        (e.g. --build-name, --build-number, --no-codesign).
+      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only ${FLUTTER_FLAGS:-}
 
     browserstack:upload:
       description: >-
