@@ -11,6 +11,7 @@ import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dar
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
 import 'package:webtrit_phone/features/session_status/session_status.dart';
+import 'package:webtrit_phone/features/voicemail/cubits/cubits.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -189,20 +190,20 @@ class SettingsScreen extends StatelessWidget {
                                   onTap: () => _onItemTap(context, item),
                                 ),
                             ] else if (item.flavor == SettingsFlavor.voicemail) ...[
-                              SettingsTile(
-                                title: context.parseL10n(item.titleL10n),
-                                icon: item.icon,
-                                iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
-                                trailing: state.unreadVoicemailCount > 0
-                                    ? CountBadge(count: state.unreadVoicemailCount, size: 32)
-                                    : null,
-                                trailingLabel: state.unreadVoicemailCount > 0
-                                    ? context.l10n.common_SemanticsValue_unreadCount(state.unreadVoicemailCount)
-                                    : null,
-                                textStyle: effectiveStyle?.itemTextStyle,
-                                showSeparator: showSeparators,
-                                separatorColor: effectiveStyle?.separatorColor,
-                                onTap: () => _onItemTap(context, item),
+                              _WithUnreadVoicemailCount(
+                                builder: (context, unreadCount) => SettingsTile(
+                                  title: context.parseL10n(item.titleL10n),
+                                  icon: item.icon,
+                                  iconColor: item.iconColor ?? effectiveStyle?.leadingIconsColor,
+                                  trailing: unreadCount > 0 ? CountBadge(count: unreadCount, size: 32) : null,
+                                  trailingLabel: unreadCount > 0
+                                      ? context.l10n.common_SemanticsValue_unreadCount(unreadCount)
+                                      : null,
+                                  textStyle: effectiveStyle?.itemTextStyle,
+                                  showSeparator: showSeparators,
+                                  separatorColor: effectiveStyle?.separatorColor,
+                                  onTap: () => _onItemTap(context, item),
+                                ),
                               ),
                             ] else
                               SettingsTile(
@@ -308,5 +309,25 @@ class SettingsScreen extends StatelessWidget {
     if (deleteAccount == true) {
       settingsBloc.add(const SettingsAccountDeleted());
     }
+  }
+}
+
+/// Builds its child with the number of voicemails waiting.
+///
+/// The badge is an ornament, so a host that shows this screen outside a
+/// session - the screenshot previews - provides no counter and gets a row
+/// without one rather than a missing-provider error. Same reasoning, and the
+/// same nullable read, as the messaging badge on the navigation bar.
+class _WithUnreadVoicemailCount extends StatelessWidget {
+  const _WithUnreadVoicemailCount({required this.builder});
+
+  final Widget Function(BuildContext context, int unreadCount) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    final unreadVoicemails = context.watch<VoicemailUnreadCubit?>();
+    if (unreadVoicemails == null) return builder(context, 0);
+
+    return BlocBuilder<VoicemailUnreadCubit, int>(bloc: unreadVoicemails, builder: builder);
   }
 }

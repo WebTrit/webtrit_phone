@@ -262,6 +262,14 @@ class MainShellBlocs extends StatelessWidget {
           },
         ),
         BlocProvider(create: (_) => ChatsForwardingCubit()),
+        // Eager: the counter is what a badge reads, and a badge that starts
+        // counting only once someone opens the screen it sits on is of no use
+        // there. The messaging counter beside it is read by the navigation bar
+        // on the first frame, so it is eager in effect already.
+        BlocProvider<VoicemailUnreadCubit>(
+          lazy: false,
+          create: (context) => VoicemailUnreadCubit(repository: context.read<VoicemailRepository>())..init(),
+        ),
       ],
       child: Builder(
         builder: (context) {
