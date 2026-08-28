@@ -15,7 +15,15 @@ import '../bloc/bloc.dart';
 import '../widgets/widgets.dart';
 
 class VoicemailScreen extends StatefulWidget {
-  const VoicemailScreen({super.key});
+  const VoicemailScreen({super.key, this.title});
+
+  /// The title a host that owns the header supplies.
+  ///
+  /// A main-screen tab hands its own - the app name - and gets the bar every
+  /// tab carries, with the controls the whole session needs. The settings
+  /// sub-screen hands none: it keeps this screen's own name and the back
+  /// button that leads out of it.
+  final Widget? title;
 
   @override
   State<VoicemailScreen> createState() => _VoicemailScreenState();
@@ -28,50 +36,58 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
       listenWhen: (previous, current) => previous.items != current.items,
       listener: _stopPlaybackOfRemovedVoicemail,
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(context.l10n.voicemail_Widget_screenTitle),
-            actions: [
-              if (context.read<AppCacheManager>().sections.isNotEmpty)
+        final isTab = widget.title != null;
+
+        final actions = <Widget>[
+          // Clearing the cache is a settings errand, and from the settings
+          // sub-screen it is one step away. Offered from a main-screen tab the
+          // same button would throw the user across into the settings branch,
+          // so the tab does without it - the screen it opens is still reachable
+          // from settings, where it belongs.
+          if (!isTab && context.read<AppCacheManager>().sections.isNotEmpty)
+            IconButton(
+              icon: const Icon(Icons.storage),
+              tooltip: context.l10n.cacheManagement_Widget_screenTitle,
+              onPressed: _onOpenCacheManagement,
+            ),
+          // The button names itself, so in selection mode it says how much
+          // it would delete as part of that name - a count of its own would
+          // become a second, nameless stop next to it. The badge draws the
+          // number and stays silent.
+          SemanticAction(
+            label: state.isMultipleVoicemailsSelection
+                ? '${context.l10n.voicemail_Label_delete}, '
+                      '${context.l10n.common_SemanticsValue_selectedCount(state.selectedVoicemailsIds.length)}'
+                : context.l10n.voicemail_Label_delete,
+            child: Stack(
+              alignment: AlignmentDirectional.topCenter,
+              children: [
                 IconButton(
-                  icon: const Icon(Icons.storage),
-                  tooltip: context.l10n.cacheManagement_Widget_screenTitle,
-                  onPressed: _onOpenCacheManagement,
+                  icon: const Icon(Icons.delete),
+                  onPressed: state.items.isNotEmpty
+                      ? () => state.isMultipleVoicemailsSelection
+                            ? _onDeleteSelectedVoicemails()
+                            : _onDeleteAllVoicemails()
+                      : null,
                 ),
-              // The button names itself, so in selection mode it says how much
-              // it would delete as part of that name - a count of its own would
-              // become a second, nameless stop next to it. The badge draws the
-              // number and stays silent.
-              SemanticAction(
-                label: state.isMultipleVoicemailsSelection
-                    ? '${context.l10n.voicemail_Label_delete}, '
-                          '${context.l10n.common_SemanticsValue_selectedCount(state.selectedVoicemailsIds.length)}'
-                    : context.l10n.voicemail_Label_delete,
-                child: Stack(
-                  alignment: AlignmentDirectional.topCenter,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: state.items.isNotEmpty
-                          ? () => state.isMultipleVoicemailsSelection
-                                ? _onDeleteSelectedVoicemails()
-                                : _onDeleteAllVoicemails()
-                          : null,
-                    ),
-                    if (state.isMultipleVoicemailsSelection)
-                      CountBadge(
-                        count: state.selectedVoicemailsIds.length,
-                        size: 16,
-                        // The count belongs to a destructive action, not to the
-                        // accent every other badge carries.
-                        color: Theme.of(context).colorScheme.error,
-                        onColor: Theme.of(context).colorScheme.onError,
-                      ),
-                  ],
-                ),
-              ),
-            ],
+                if (state.isMultipleVoicemailsSelection)
+                  CountBadge(
+                    count: state.selectedVoicemailsIds.length,
+                    size: 16,
+                    // The count belongs to a destructive action, not to the
+                    // accent every other badge carries.
+                    color: Theme.of(context).colorScheme.error,
+                    onColor: Theme.of(context).colorScheme.onError,
+                  ),
+              ],
+            ),
           ),
+        ];
+
+        return Scaffold(
+          appBar: isTab
+              ? MainAppBar(title: widget.title, context: context, actions: actions)
+              : AppBar(title: Text(context.l10n.voicemail_Widget_screenTitle), actions: actions),
           body: Builder(
             builder: (context) {
               // Check if the feature is not supported
@@ -99,6 +115,9 @@ class _VoicemailScreenState extends State<VoicemailScreen> {
                       items: state.items,
                       selectedVoicemailsIds: state.selectedVoicemailsIds,
                       isMultipleVoicemailsSelection: state.isMultipleVoicemailsSelection,
+                      // The main screen draws its navigation bar over the tab
+                      // body, so the last row needs room to clear it.
+                      bottomInset: isTab ? kBottomNavigationBarHeight + MediaQuery.of(context).padding.bottom : 0,
                     ),
                 ],
               );
@@ -166,11 +185,15 @@ class VoicemailListView extends StatelessWidget {
     required this.items,
     required this.selectedVoicemailsIds,
     required this.isMultipleVoicemailsSelection,
+    this.bottomInset = 0,
   });
 
   final List<Voicemail> items;
   final List<String> selectedVoicemailsIds;
   final bool isMultipleVoicemailsSelection;
+
+  /// Room left under the last row for whatever the host draws over the body.
+  final double bottomInset;
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +201,7 @@ class VoicemailListView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return ListView.separated(
+      padding: EdgeInsets.only(bottom: bottomInset),
       itemCount: items.length,
       separatorBuilder: (_, _) => Divider(color: colorScheme.surfaceContainerHigh, height: 1),
       itemBuilder: (context, index) {

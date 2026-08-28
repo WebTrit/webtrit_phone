@@ -15,10 +15,18 @@ import '../utils/utils.dart';
 
 import 'voicemail_screen.dart';
 
-@RoutePage()
-class VoicemailScreenPage extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const VoicemailScreenPage();
+/// Everything the voicemail screen needs, for either of the places it is
+/// offered from: the settings list and the bottom menu.
+///
+/// Built per entry point rather than for the session: the cubit's state is the
+/// screen's - what it is loading, what failed, what is selected - and the
+/// playback controller stops the audio when the screen it belongs to goes away.
+/// The count behind a badge is a separate, session-scoped thing.
+class VoicemailScreenHost extends StatelessWidget {
+  const VoicemailScreenHost({super.key, this.title});
+
+  /// Handed on to [VoicemailScreen]; see its `title`.
+  final Widget? title;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,16 @@ class VoicemailScreenPage extends StatelessWidget {
         Provider<VoicemailScreenContext>(create: (_) => screenContext),
         ChangeNotifierProvider(create: (_) => VoicemailPlaybackController()),
       ],
-      child: const VoicemailScreen(),
+      child: VoicemailScreen(title: title),
     );
   }
+}
+
+@RoutePage()
+class VoicemailScreenPage extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
+  const VoicemailScreenPage();
+
+  @override
+  Widget build(BuildContext context) => const VoicemailScreenHost();
 }
