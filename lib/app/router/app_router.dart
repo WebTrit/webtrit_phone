@@ -239,6 +239,16 @@ class AppRouter extends RootStackRouter {
                 // Embedded flavors
                 AutoRoute(page: EmbeddedTabPageRoute.page, path: 'embedded/:id', usesPathAsKey: true),
                 AutoRoute(page: ConversationsScreenPageRoute.page, path: MainFlavor.messaging.name),
+                AutoRoute(
+                  page: VoicemailTabPageRoute.page,
+                  path: MainFlavor.voicemail.name,
+                  guards: [
+                    FeatureGuard(
+                      shouldAllow: () => _featureChecker.isEnabled(FeatureFlag.voicemail),
+                      onDenied: UndefinedScreenPageRoute(undefinedType: UndefinedType.stackScreenNotSupported),
+                    ),
+                  ],
+                ),
               ],
             ),
             AutoRoute(page: ChatConversationScreenPageRoute.page, path: 'chat_conversation'),
@@ -484,6 +494,7 @@ class AppRouter extends RootStackRouter {
               FavoritesBottomMenuTab() => const FavoritesRouterPageRoute(),
               KeypadBottomMenuTab() => const KeypadScreenPageRoute(),
               MessagingBottomMenuTab() => const ConversationsScreenPageRoute(),
+              VoicemailBottomMenuTab() => const VoicemailTabPageRoute(),
             },
           ],
         ),

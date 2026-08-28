@@ -182,7 +182,7 @@ The configuration is parsed into `BottomMenuTabScheme` union variants depending 
 |-------------|----------|---------|--------------------------------------------------------------------------------------------------------------|
 | `enabled`   | `bool`   | `true`  | Whether the tab is visible and active in the UI.                                                             |
 | `initial`   | `bool`   | `false` | Whether the tab should be selected by default at startup.                                                    |
-| `type`      | `string` | —       | Defines which tab variant to render (`favorites`, `recents`, `contacts`, `keypad`, `messaging`, `embedded`). |
+| `type`      | `string` | —       | Defines which tab variant to render (`favorites`, `recents`, `contacts`, `keypad`, `messaging`, `voicemail`, `embedded`). |
 | `titleL10n` | `string` | —       | Localization key for the tab title.                                                                          |
 | `icon`      | `string` | —       | Material icon codepoint (hex string).                                                                        |
 
@@ -305,6 +305,26 @@ Messaging or chat tab.
   "icon": "0xe155"
 }
 ```
+
+### **VoicemailTabScheme**
+
+Voicemail list as a section of its own.
+
+```json
+{
+  "type": "voicemail",
+  "enabled": true,
+  "titleL10n": "main_BottomNavigationBarItemLabel_voicemail",
+  "icon": "0xe0b7"
+}
+```
+
+Shown only when the server advertises the `voicemail` capability in system-info; a configured tab
+is dropped from the menu on a core without it, the way a contacts tab with no usable source is.
+
+This tab and the `voicemail` item of the settings list are configured independently: a deployment
+may offer voicemail from either, from both, or from neither. Both lead to the same screen and share
+one local store, so what is read in one place is read in the other.
 
 ### **EmbeddedTabScheme**
 

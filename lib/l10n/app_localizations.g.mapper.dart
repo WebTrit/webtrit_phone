@@ -593,6 +593,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         main_BottomNavigationBarItemLabel_keypad,
       'main_BottomNavigationBarItemLabel_recents' =>
         main_BottomNavigationBarItemLabel_recents,
+      'main_BottomNavigationBarItemLabel_voicemail' =>
+        main_BottomNavigationBarItemLabel_voicemail,
       'main_CompatibilityIssueDialogActions_logout' =>
         main_CompatibilityIssueDialogActions_logout,
       'main_CompatibilityIssueDialogActions_update' =>

@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/features/voicemail/models/voicemail_screen_context.dart';
+import 'package:webtrit_phone/features/voicemail/view/voicemail_screen.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -264,6 +267,23 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
             connectivityRecoveryStrategyBuilder: () => NoneConnectivityRecoveryStrategy(),
             pageInjectionStrategyBuilder: () => DefaultPayloadInjectionStrategy(),
           ),
+        );
+      case MainFlavor.voicemail:
+        // The same provider set the standalone voicemail preview builds; the
+        // tiles resolve the playback controller through it.
+        return MultiProvider(
+          providers: [
+            Provider<VoicemailScreenContext>(
+              create: (_) => VoicemailScreenContext(
+                mediaCacheBasePath: '/tmp/screenshots_cache',
+                dateFormat: DateFormat.yMMMd().add_Hm(),
+                mediaHeaders: const {},
+              ),
+            ),
+            BlocProvider<VoicemailCubit>(create: (_) => MockVoicemailCubit.withItems()),
+            ChangeNotifierProvider(create: (_) => VoicemailPlaybackController()),
+          ],
+          child: VoicemailScreen(title: widget.title),
         );
       case MainFlavor.messaging:
         return MultiBlocProvider(

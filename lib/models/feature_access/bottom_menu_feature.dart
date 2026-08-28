@@ -107,6 +107,19 @@ final class RecentsBottomMenuTab extends BottomMenuTab {
   List<Object?> get props => [...super.props, supportsCallHistory];
 }
 
+final class VoicemailBottomMenuTab extends BottomMenuTab {
+  const VoicemailBottomMenuTab({
+    required super.enabled,
+    required super.initial,
+    required super.titleL10n,
+    required super.icon,
+    super.data,
+  });
+
+  @override
+  MainFlavor get flavor => MainFlavor.voicemail;
+}
+
 final class ContactsBottomMenuTab extends BottomMenuTab {
   static const unifiedSegment = 'unified';
 

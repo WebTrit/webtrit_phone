@@ -111,7 +111,9 @@ class FeatureAccess extends Equatable {
   /// The core capability is restated here rather than left to the placements:
   /// gating once, at the top, is what keeps the answer right however a
   /// placement is configured.
-  bool get voicemailAvailable => coreSupport.supportsVoicemail && settingsConfig.voicemailsEnabled;
+  bool get voicemailAvailable =>
+      coreSupport.supportsVoicemail &&
+      (settingsConfig.voicemailsEnabled || bottomMenuConfig.getTabEnabled<VoicemailBottomMenuTab>() != null);
 
   static FeatureAccess create(
     AppConfig appConfig,
@@ -256,6 +258,9 @@ abstract final class BottomMenuMapper {
         .where((tab) => tab.enabled)
         .map((tab) => _createBottomMenuTab(tab, embeddedConfig, coreSupport, overrides))
         .where((tab) => !(tab is ContactsBottomMenuTab && tab.contactSourceTypes.isEmpty))
+        // A section the server cannot fill would draw an entry that leads to a
+        // screen saying the feature is unavailable - worse than no entry.
+        .where((tab) => !(tab is VoicemailBottomMenuTab && !coreSupport.supportsVoicemail))
         // Two entries of one identity would render with one widget key and
         // bring the bar down with a duplicate-key crash. A config that
         // repeats a section keeps only its first entry, every property of
@@ -325,6 +330,12 @@ abstract final class BottomMenuMapper {
         icon: tab.icon.toIconData(),
       ),
       messaging: (enabled, initial, titleL10n, icon) => MessagingBottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+      ),
+      voicemail: (enabled, initial, titleL10n, icon) => VoicemailBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,

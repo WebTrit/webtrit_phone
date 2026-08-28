@@ -516,6 +516,14 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
   }) = MessagingTabScheme;
 
   @JsonSerializable(explicitToJson: true)
+  const factory BottomMenuTabScheme.voicemail({
+    @Default(true) bool enabled,
+    @Default(false) bool initial,
+    required String titleL10n,
+    required String icon,
+  }) = VoicemailTabScheme;
+
+  @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.embedded({
     @Default(true) bool enabled,
     @Default(false) bool initial,

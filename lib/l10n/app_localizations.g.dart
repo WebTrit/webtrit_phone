@@ -2392,6 +2392,12 @@ abstract class AppLocalizations {
   /// **'Recents'**
   String get main_BottomNavigationBarItemLabel_recents;
 
+  /// No description provided for @main_BottomNavigationBarItemLabel_voicemail.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail'**
+  String get main_BottomNavigationBarItemLabel_voicemail;
+
   /// No description provided for @main_CompatibilityIssueDialogActions_logout.
   ///
   /// In en, this message translates to:
