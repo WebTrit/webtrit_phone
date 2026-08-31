@@ -24,8 +24,7 @@ sealed class SupportedFeature with _$SupportedFeature {
   const factory SupportedFeature.themeMode({
     @Default(ThemeModeConfig.system) ThemeModeConfig mode,
     @Default('themeMode') String type,
-  }) =
-      SupportedThemeMode;
+  }) = SupportedThemeMode;
 
   const factory SupportedFeature.videoCall({@Default(true) bool enabled, @Default('videoCall') String type}) =
       SupportedVideoCall;
@@ -47,10 +46,8 @@ sealed class SupportedFeature with _$SupportedFeature {
     @Default('systemNotifications') String type,
   }) = SupportedSystemNotifications;
 
-  const factory SupportedFeature.hybridPresence({
-    @Default(true) bool enabled,
-    @Default('hybridPresence') String type,
-  }) = SupportedHybridPresence;
+  const factory SupportedFeature.hybridPresence({@Default(true) bool enabled, @Default('hybridPresence') String type}) =
+      SupportedHybridPresence;
 
   /// Call Pull video handling. [videoStrategy] selects how the pull of a video
   /// call is handled; parsed by the app into a CallPullVideoStrategy. Defaults to

@@ -15,6 +15,7 @@ import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 /// carry the same word the decoder dispatches on.
 void main() {
   _typesMatchTheWire();
+  _theEmbeddedIdIsAString();
 
   group('what the decoder makes of what the encoder wrote', () {
     test('a background comes back as the variant it says it is', () {
@@ -136,6 +137,48 @@ void _typesMatchTheWire() {
         final icon = IconDataConfig.fromJson({'codePoint': written});
         expect(icon.toJson()['codePoint'], written);
       }
+    });
+  });
+}
+
+/// An embedded resource is named by a string, and only by a string.
+///
+/// It used to be either: `JsonConverter<String, Object?>` read a number as
+/// readily, and the Firestore data behind the old backend is half and half -
+/// 75 numbers against 76 strings, counted. The schema could only describe that
+/// as "any shape", which says nothing.
+///
+/// The frozen track still serves those themes. This one starts at 1.16.5, so
+/// the shape is settled here: a string, said once and said truthfully.
+void _theEmbeddedIdIsAString() {
+  group('an embedded resource id', () {
+    Map<String, Object?> tab(Object? id) => {
+      'type': 'embedded',
+      'titleL10n': 'a',
+      'icon': 'b',
+      'embeddedResourceId': id,
+    };
+
+    test('reads a string', () {
+      final decoded = BottomMenuTabScheme.fromJson(tab('privacy-policy')) as EmbeddedTabScheme;
+
+      expect(decoded.embeddedResourceId, 'privacy-policy');
+    });
+
+    test('refuses a number rather than reading one', () {
+      // The converter that accepted this is gone. A theme carrying a number is
+      // served by the frozen track, and one that reaches here is a mistake
+      // worth seeing rather than one to paper over.
+      expect(() => BottomMenuTabScheme.fromJson(tab(4)), throwsA(isA<TypeError>()));
+    });
+
+    test('and the schema says string, not any shape', () {
+      final defs = AppConfig.jsonSchema[r'$defs']! as Map<String, Object?>;
+      final schema = defs['EmbeddedTabScheme']! as Map<String, Object?>;
+      final properties = schema['properties']! as Map<String, Object?>;
+      final id = properties['embeddedResourceId']! as Map<String, Object?>;
+
+      expect(id['type'], 'string');
     });
   });
 }

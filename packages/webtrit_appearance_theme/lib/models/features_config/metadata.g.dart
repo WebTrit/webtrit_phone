@@ -6,13 +6,10 @@ part of 'metadata.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Metadata _$MetadataFromJson(Map<String, dynamic> json) => Metadata(
-  attributes: json['attributes'] as Map<String, dynamic>? ?? const {},
-);
+Metadata _$MetadataFromJson(Map<String, dynamic> json) =>
+    Metadata(attributes: json['attributes'] as Map<String, dynamic>? ?? const {});
 
-Map<String, dynamic> _$MetadataToJson(Metadata instance) => <String, dynamic>{
-  'attributes': instance.attributes,
-};
+Map<String, dynamic> _$MetadataToJson(Metadata instance) => <String, dynamic>{'attributes': instance.attributes};
 
 const _$MetadataJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -21,8 +18,7 @@ const _$MetadataJsonSchema = {
     'attributes': {
       'type': 'object',
       'additionalProperties': {'type': 'object'},
-      'description':
-          'A map storing arbitrary key-value pairs for contextual or configuration data.',
+      'description': 'A map storing arbitrary key-value pairs for contextual or configuration data.',
       'default': {},
     },
   },

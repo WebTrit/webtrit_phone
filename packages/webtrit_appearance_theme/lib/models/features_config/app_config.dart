@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:webtrit_appearance_theme/converters/converters.dart';
-
 import 'supported_feature.dart';
 
 part 'app_config.freezed.dart';
@@ -552,7 +550,7 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @Default(false) bool initial,
     required String titleL10n,
     required String icon,
-    @IntToStringConverter() required String embeddedResourceId,
+    required String embeddedResourceId,
     @Default('embedded') String type,
   }) = EmbeddedTabScheme;
 
@@ -655,9 +653,7 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
     // Optional hex color string for the icon (e.g., '#RRGGBB'). Consider moving to UI config.
     this.iconColor,
 
-    /// TODO: Migration workaround - accepts both int and string IDs.
-    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
-    @IntToStringOptionalConverter() this.embeddedResourceId,
+    this.embeddedResourceId,
   });
 
   @override
@@ -676,7 +672,6 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
   final String? iconColor;
 
   @override
-  @IntToStringOptionalConverter()
   final String? embeddedResourceId;
 
   factory AppConfigSettingsItem.fromJson(Map<String, Object?> json) => _$AppConfigSettingsItemFromJson(json);
