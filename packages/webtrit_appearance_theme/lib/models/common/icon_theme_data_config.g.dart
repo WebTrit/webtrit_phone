@@ -35,6 +35,77 @@ Map<String, dynamic> _$IconThemeDataConfigToJson(
   'applyTextScaling': instance.applyTextScaling,
 };
 
+const _$_IconThemeDataConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'size': {'type': 'number', 'description': 'The default size for icons.'},
+    'fill': {
+      'type': 'number',
+      'description':
+          'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+    },
+    'weight': {
+      'type': 'number',
+      'description':
+          'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+    },
+    'grade': {
+      'type': 'number',
+      'description': 'The default grade for icons.\nUseful for variable fonts.',
+    },
+    'opticalSize': {
+      'type': 'number',
+      'description':
+          'The default optical size for icons.\nUseful for variable fonts.',
+    },
+    'color': {
+      'type': 'string',
+      'description': 'The default color for icons (hex string).',
+    },
+    'opacity': {
+      'type': 'number',
+      'description':
+          'An opacity to apply to both explicit and default icon colors.',
+    },
+    'shadows': {
+      'type': 'array',
+      'items': {r'$ref': r'#/$defs/ShadowConfig'},
+    },
+    'applyTextScaling': {
+      'type': 'boolean',
+      'description': 'Whether to apply text scaling to the icons.',
+    },
+  },
+  r'$defs': {
+    'OffsetConfig': {
+      'type': 'object',
+      'properties': {
+        'dx': {'type': 'number', 'default': 0.0},
+        'dy': {'type': 'number', 'default': 0.0},
+      },
+    },
+    'ShadowConfig': {
+      'type': 'object',
+      'properties': {
+        'color': {
+          'type': 'string',
+          'description': 'Color of the shadow (hex string).',
+        },
+        'offset': {
+          r'$ref': r'#/$defs/OffsetConfig',
+          'description': 'The displacement of the shadow.',
+        },
+        'blurRadius': {
+          'type': 'number',
+          'description': 'The blur radius of the shadow.',
+          'default': 0.0,
+        },
+      },
+    },
+  },
+};
+
 _ShadowConfig _$ShadowConfigFromJson(Map<String, dynamic> json) =>
     _ShadowConfig(
       color: json['color'] as String?,
@@ -51,6 +122,35 @@ Map<String, dynamic> _$ShadowConfigToJson(_ShadowConfig instance) =>
       'blurRadius': instance.blurRadius,
     };
 
+const _$_ShadowConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'color': {
+      'type': 'string',
+      'description': 'Color of the shadow (hex string).',
+    },
+    'offset': {
+      r'$ref': r'#/$defs/OffsetConfig',
+      'description': 'The displacement of the shadow.',
+    },
+    'blurRadius': {
+      'type': 'number',
+      'description': 'The blur radius of the shadow.',
+      'default': 0.0,
+    },
+  },
+  r'$defs': {
+    'OffsetConfig': {
+      'type': 'object',
+      'properties': {
+        'dx': {'type': 'number', 'default': 0.0},
+        'dy': {'type': 'number', 'default': 0.0},
+      },
+    },
+  },
+};
+
 _OffsetConfig _$OffsetConfigFromJson(Map<String, dynamic> json) =>
     _OffsetConfig(
       dx: (json['dx'] as num?)?.toDouble() ?? 0.0,
@@ -59,3 +159,12 @@ _OffsetConfig _$OffsetConfigFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$OffsetConfigToJson(_OffsetConfig instance) =>
     <String, dynamic>{'dx': instance.dx, 'dy': instance.dy};
+
+const _$_OffsetConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'dx': {'type': 'number', 'default': 0.0},
+    'dy': {'type': 'number', 'default': 0.0},
+  },
+};

@@ -21,3 +21,14 @@ Map<String, dynamic> _$IconDataConfigToJson(IconDataConfig instance) =>
       'fontFamily': instance.fontFamily,
       'matchTextDirection': instance.matchTextDirection,
     };
+
+const _$IconDataConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'codePoint': {'type': 'integer'},
+    'fontFamily': {'type': 'string', 'default': 'MaterialIcons'},
+    'matchTextDirection': {'type': 'boolean', 'default': false},
+  },
+  'required': ['codePoint'],
+};

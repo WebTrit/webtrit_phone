@@ -21,3 +21,22 @@ Map<String, dynamic> _$BlurredSurfaceConfigToJson(
   'sigmaX': instance.sigmaX,
   'sigmaY': instance.sigmaY,
 };
+
+const _$_BlurredSurfaceConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'color': {
+      'type': 'string',
+      'description': 'Overlay color (hex string, e.g. `#000000`).',
+    },
+    'sigmaX': {
+      'type': 'number',
+      'description': 'Horizontal gaussian blur sigma.',
+    },
+    'sigmaY': {
+      'type': 'number',
+      'description': 'Vertical gaussian blur sigma.',
+    },
+  },
+};

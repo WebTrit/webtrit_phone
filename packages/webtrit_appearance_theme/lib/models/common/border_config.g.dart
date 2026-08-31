@@ -24,6 +24,31 @@ Map<String, dynamic> _$BorderConfigToJson(_BorderConfig instance) =>
       'borderWidth': instance.borderWidth,
     };
 
+const _$_BorderConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'type': {
+      'enum': ['underline', 'outline', 'none'],
+      'description':
+          'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
+      'default': 'underline',
+    },
+    'borderRadius': {
+      'type': 'number',
+      'description': 'Corner radius for outline borders.',
+    },
+    'borderColor': {
+      'type': 'string',
+      'description': 'Border color (hex string, e.g. `#000000`).',
+    },
+    'borderWidth': {
+      'type': 'number',
+      'description': 'Stroke width of the border.',
+    },
+  },
+};
+
 const _$BorderTypeConfigEnumMap = {
   BorderTypeConfig.underline: 'underline',
   BorderTypeConfig.outline: 'outline',

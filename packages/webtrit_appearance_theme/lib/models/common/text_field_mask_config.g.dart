@@ -15,3 +15,20 @@ MaskConfig _$MaskConfigFromJson(Map<String, dynamic> json) => MaskConfig(
 
 Map<String, dynamic> _$MaskConfigToJson(MaskConfig instance) =>
     <String, dynamic>{'pattern': instance.pattern, 'filter': instance.filter};
+
+const _$MaskConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'pattern': {
+      'type': 'string',
+      'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"',
+    },
+    'filter': {
+      'type': 'object',
+      'additionalProperties': {'type': 'string'},
+      'description':
+          'Regex filter map, e.g. {"#": "[0-9]"}\nNote: Values are regex strings, need to be converted to RegExp in UI code.',
+    },
+  },
+};

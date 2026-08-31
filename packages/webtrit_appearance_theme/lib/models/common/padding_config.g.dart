@@ -21,3 +21,30 @@ Map<String, dynamic> _$PaddingConfigToJson(PaddingConfig instance) =>
       'right': instance.right,
       'bottom': instance.bottom,
     };
+
+const _$PaddingConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'left': {
+      'type': 'number',
+      'description': 'Left padding value.',
+      'default': 0.0,
+    },
+    'top': {
+      'type': 'number',
+      'description': 'Top padding value.',
+      'default': 0.0,
+    },
+    'right': {
+      'type': 'number',
+      'description': 'Right padding value.',
+      'default': 0.0,
+    },
+    'bottom': {
+      'type': 'number',
+      'description': 'Bottom padding value.',
+      'default': 0.0,
+    },
+  },
+};

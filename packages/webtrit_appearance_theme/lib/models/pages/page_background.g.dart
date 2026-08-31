@@ -16,6 +16,16 @@ Map<String, dynamic> _$PageBackgroundSolidToJson(
   PageBackgroundSolid instance,
 ) => <String, dynamic>{'color': instance.color, 'type': instance.$type};
 
+const _$PageBackgroundSolidJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'color': {'type': 'string'},
+    'type': {'type': 'string'},
+  },
+  'required': ['color'],
+};
+
 PageBackgroundGradient _$PageBackgroundGradientFromJson(
   Map<String, dynamic> json,
 ) => PageBackgroundGradient(
@@ -44,6 +54,28 @@ Map<String, dynamic> _$PageBackgroundGradientToJson(
   'type': instance.$type,
 };
 
+const _$PageBackgroundGradientJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'colors': {
+      'type': 'array',
+      'items': {'type': 'string'},
+    },
+    'stops': {
+      'type': 'array',
+      'items': {'type': 'number'},
+      'default': [0.0, 1.0],
+    },
+    'beginX': {'type': 'number', 'default': 0.0},
+    'beginY': {'type': 'number', 'default': 0.0},
+    'endX': {'type': 'number', 'default': 1.0},
+    'endY': {'type': 'number', 'default': 1.0},
+    'type': {'type': 'string'},
+  },
+  'required': ['colors'],
+};
+
 PageBackgroundImage _$PageBackgroundImageFromJson(Map<String, dynamic> json) =>
     PageBackgroundImage(
       imageUrl: json['imageUrl'] as String,
@@ -61,6 +93,29 @@ Map<String, dynamic> _$PageBackgroundImageToJson(
   'fit': _$BoxFitConfigEnumMap[instance.fit]!,
   'opacity': instance.opacity,
   'type': instance.$type,
+};
+
+const _$PageBackgroundImageJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'imageUrl': {'type': 'string'},
+    'fit': {
+      'enum': [
+        'fill',
+        'contain',
+        'cover',
+        'fitWidth',
+        'fitHeight',
+        'none',
+        'scaleDown',
+      ],
+      'default': 'cover',
+    },
+    'opacity': {'type': 'number', 'default': 1.0},
+    'type': {'type': 'string'},
+  },
+  'required': ['imageUrl'],
 };
 
 const _$BoxFitConfigEnumMap = {

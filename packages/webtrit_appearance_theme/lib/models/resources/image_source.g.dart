@@ -27,6 +27,104 @@ Map<String, dynamic> _$ImageSourceToJson(ImageSource instance) =>
       'metadata': instance.metadata.toJson(),
     };
 
+const _$ImageSourceJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'id': {
+      'type': 'string',
+      'description': 'Backend asset ID (unique identifier in storage).',
+    },
+    'uri': {
+      'type': 'string',
+      'description': 'Unified URI pointing to the resource.',
+    },
+    r'$ref': {
+      'type': 'string',
+      'description': 'Semantic type of reference (default = "asset").',
+      'default': 'asset',
+    },
+    'render': {
+      r'$ref': r'#/$defs/ImageRenderSpec',
+      'description': 'Rendering specification (scale, padding, etc.).',
+    },
+    'metadata': {
+      r'$ref': r'#/$defs/Metadata',
+      'description': 'Freeform metadata for CLI or pipeline tools.',
+    },
+  },
+  r'$defs': {
+    'PaddingConfig': {
+      'type': 'object',
+      'properties': {
+        'left': {
+          'type': 'number',
+          'description': 'Left padding value.',
+          'default': 0.0,
+        },
+        'top': {
+          'type': 'number',
+          'description': 'Top padding value.',
+          'default': 0.0,
+        },
+        'right': {
+          'type': 'number',
+          'description': 'Right padding value.',
+          'default': 0.0,
+        },
+        'bottom': {
+          'type': 'number',
+          'description': 'Bottom padding value.',
+          'default': 0.0,
+        },
+      },
+    },
+    'ImageRenderSpec': {
+      'type': 'object',
+      'properties': {
+        'scale': {'type': 'number'},
+        'padding': {r'$ref': r'#/$defs/PaddingConfig'},
+        'alignment': {
+          'enum': [
+            'topLeft',
+            'topCenter',
+            'topRight',
+            'centerLeft',
+            'center',
+            'centerRight',
+            'bottomLeft',
+            'bottomCenter',
+            'bottomRight',
+          ],
+        },
+        'fit': {
+          'enum': [
+            'fill',
+            'contain',
+            'cover',
+            'fitWidth',
+            'fitHeight',
+            'none',
+            'scaleDown',
+          ],
+        },
+      },
+    },
+    'Metadata': {
+      'type': 'object',
+      'properties': {
+        'attributes': {
+          'type': 'object',
+          'additionalProperties': {'type': 'object'},
+          'description':
+              'A map storing arbitrary key-value pairs for contextual or configuration data.',
+          'default': {},
+        },
+      },
+    },
+  },
+};
+
 ImageRenderSpec _$ImageRenderSpecFromJson(Map<String, dynamic> json) =>
     ImageRenderSpec(
       scale: (json['scale'] as num?)?.toDouble(),
@@ -52,6 +150,66 @@ Map<String, dynamic> _$ImageRenderSpecToJson(ImageRenderSpec instance) =>
       'alignment': _$AlignmentConfigEnumMap[instance.alignment],
       'fit': _$BoxFitConfigEnumMap[instance.fit],
     };
+
+const _$ImageRenderSpecJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'scale': {'type': 'number'},
+    'padding': {r'$ref': r'#/$defs/PaddingConfig'},
+    'alignment': {
+      'enum': [
+        'topLeft',
+        'topCenter',
+        'topRight',
+        'centerLeft',
+        'center',
+        'centerRight',
+        'bottomLeft',
+        'bottomCenter',
+        'bottomRight',
+      ],
+    },
+    'fit': {
+      'enum': [
+        'fill',
+        'contain',
+        'cover',
+        'fitWidth',
+        'fitHeight',
+        'none',
+        'scaleDown',
+      ],
+    },
+  },
+  r'$defs': {
+    'PaddingConfig': {
+      'type': 'object',
+      'properties': {
+        'left': {
+          'type': 'number',
+          'description': 'Left padding value.',
+          'default': 0.0,
+        },
+        'top': {
+          'type': 'number',
+          'description': 'Top padding value.',
+          'default': 0.0,
+        },
+        'right': {
+          'type': 'number',
+          'description': 'Right padding value.',
+          'default': 0.0,
+        },
+        'bottom': {
+          'type': 'number',
+          'description': 'Bottom padding value.',
+          'default': 0.0,
+        },
+      },
+    },
+  },
+};
 
 const _$AlignmentConfigEnumMap = {
   AlignmentConfig.topLeft: 'topLeft',
