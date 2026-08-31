@@ -38,11 +38,7 @@ const _$EmbeddedResourceJsonSchema = {
   'properties': {
     'id': {'type': 'string', 'description': 'Unique identifier for this resource.'},
     'uri': {'type': 'string', 'description': 'The URI that points to the embedded resource.'},
-    'type': {
-      'enum': ['terms', 'unknown'],
-      'description': 'The type of the resource (e.g., web, file, etc.).',
-      'default': 'unknown',
-    },
+    'type': {'type': 'object', 'description': 'The type of the resource (e.g., web, file, etc.).'},
     'attributes': {
       'type': 'object',
       'additionalProperties': {'type': 'object'},

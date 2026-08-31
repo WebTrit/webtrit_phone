@@ -377,10 +377,9 @@ const _$ThemeWidgetConfigJsonSchema = {
       'type': 'object',
       'properties': {
         'type': {
-          'enum': ['underline', 'outline', 'none'],
+          'type': 'object',
           'description':
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
-          'default': 'underline',
         },
         'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
         'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},
@@ -399,18 +398,10 @@ const _$ThemeWidgetConfigJsonSchema = {
         'labelPadding': {r'$ref': r'#/$defs/PaddingConfig'},
         'labelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
         'unselectedLabelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
-        'indicatorSize': {
-          'enum': ['tab', 'label'],
-        },
-        'tabAlignment': {
-          'enum': ['start', 'startOffset', 'fill', 'center'],
-        },
-        'indicatorAnimation': {
-          'enum': ['linear', 'elastic'],
-        },
-        'splashFactory': {
-          'enum': ['noSplash', 'inkRipple', 'inkSparkle'],
-        },
+        'indicatorSize': {'type': 'object'},
+        'tabAlignment': {'type': 'object'},
+        'indicatorAnimation': {'type': 'object'},
+        'splashFactory': {'type': 'object'},
         'indicatorBorder': {r'$ref': r'#/$defs/BorderConfig'},
       },
     },
@@ -427,22 +418,8 @@ const _$ThemeWidgetConfigJsonSchema = {
       'properties': {
         'scale': {'type': 'number'},
         'padding': {r'$ref': r'#/$defs/PaddingConfig'},
-        'alignment': {
-          'enum': [
-            'topLeft',
-            'topCenter',
-            'topRight',
-            'centerLeft',
-            'center',
-            'centerRight',
-            'bottomLeft',
-            'bottomCenter',
-            'bottomRight',
-          ],
-        },
-        'fit': {
-          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
-        },
+        'alignment': {'type': 'object'},
+        'fit': {'type': 'object'},
       },
     },
     'Metadata': {
@@ -1247,10 +1224,9 @@ const _$BarWidgetConfigJsonSchema = {
       'type': 'object',
       'properties': {
         'type': {
-          'enum': ['underline', 'outline', 'none'],
+          'type': 'object',
           'description':
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
-          'default': 'underline',
         },
         'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
         'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},
@@ -1269,18 +1245,10 @@ const _$BarWidgetConfigJsonSchema = {
         'labelPadding': {r'$ref': r'#/$defs/PaddingConfig'},
         'labelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
         'unselectedLabelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
-        'indicatorSize': {
-          'enum': ['tab', 'label'],
-        },
-        'tabAlignment': {
-          'enum': ['start', 'startOffset', 'fill', 'center'],
-        },
-        'indicatorAnimation': {
-          'enum': ['linear', 'elastic'],
-        },
-        'splashFactory': {
-          'enum': ['noSplash', 'inkRipple', 'inkSparkle'],
-        },
+        'indicatorSize': {'type': 'object'},
+        'tabAlignment': {'type': 'object'},
+        'indicatorAnimation': {'type': 'object'},
+        'splashFactory': {'type': 'object'},
         'indicatorBorder': {r'$ref': r'#/$defs/BorderConfig'},
       },
     },
@@ -1523,22 +1491,8 @@ const _$ImageAssetsConfigJsonSchema = {
       'properties': {
         'scale': {'type': 'number'},
         'padding': {r'$ref': r'#/$defs/PaddingConfig'},
-        'alignment': {
-          'enum': [
-            'topLeft',
-            'topCenter',
-            'topRight',
-            'centerLeft',
-            'center',
-            'centerRight',
-            'bottomLeft',
-            'bottomCenter',
-            'bottomRight',
-          ],
-        },
-        'fit': {
-          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
-        },
+        'alignment': {'type': 'object'},
+        'fit': {'type': 'object'},
       },
     },
     'Metadata': {
@@ -1789,22 +1743,8 @@ const _$ImageAssetConfigJsonSchema = {
       'properties': {
         'scale': {'type': 'number'},
         'padding': {r'$ref': r'#/$defs/PaddingConfig'},
-        'alignment': {
-          'enum': [
-            'topLeft',
-            'topCenter',
-            'topRight',
-            'centerLeft',
-            'center',
-            'centerRight',
-            'bottomLeft',
-            'bottomCenter',
-            'bottomRight',
-          ],
-        },
-        'fit': {
-          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
-        },
+        'alignment': {'type': 'object'},
+        'fit': {'type': 'object'},
       },
     },
     'Metadata': {
@@ -2625,18 +2565,10 @@ const _$TabBarConfigJsonSchema = {
     'labelPadding': {r'$ref': r'#/$defs/PaddingConfig'},
     'labelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
     'unselectedLabelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
-    'indicatorSize': {
-      'enum': ['tab', 'label'],
-    },
-    'tabAlignment': {
-      'enum': ['start', 'startOffset', 'fill', 'center'],
-    },
-    'indicatorAnimation': {
-      'enum': ['linear', 'elastic'],
-    },
-    'splashFactory': {
-      'enum': ['noSplash', 'inkRipple', 'inkSparkle'],
-    },
+    'indicatorSize': {'type': 'object'},
+    'tabAlignment': {'type': 'object'},
+    'indicatorAnimation': {'type': 'object'},
+    'splashFactory': {'type': 'object'},
     'indicatorBorder': {r'$ref': r'#/$defs/BorderConfig'},
   },
   r'$defs': {
@@ -2712,10 +2644,9 @@ const _$TabBarConfigJsonSchema = {
       'type': 'object',
       'properties': {
         'type': {
-          'enum': ['underline', 'outline', 'none'],
+          'type': 'object',
           'description':
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
-          'default': 'underline',
         },
         'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
         'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},

@@ -20,10 +20,7 @@ const _$SupportedThemeModeJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
   'type': 'object',
   'properties': {
-    'mode': {
-      'enum': ['system', 'light', 'dark'],
-      'default': 'system',
-    },
+    'mode': {'type': 'object'},
     'type': {'type': 'string', 'description': 'The discriminator. Always `themeMode`.', 'default': 'themeMode'},
   },
 };

@@ -87,11 +87,7 @@ const _$PageBackgroundImageJsonSchema = {
   'type': 'object',
   'properties': {
     'imageUrl': {'type': 'string'},
-    'fit': {
-      'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
-      'description': 'How the image is fitted into the page.',
-      'default': 'cover',
-    },
+    'fit': {'type': 'object', 'description': 'How the image is fitted into the page.'},
     'opacity': {'type': 'number', 'default': 1.0},
     'type': {'type': 'string', 'description': 'The discriminator. Always `image`.', 'default': 'image'},
   },

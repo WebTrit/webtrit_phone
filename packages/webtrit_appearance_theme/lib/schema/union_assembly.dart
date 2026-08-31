@@ -58,3 +58,69 @@ Object? _pointSelfRefsAt(Object? node, String variant) {
   }
   return node;
 }
+
+/// An enum-typed property: the values it may take, and where its default is
+/// written.
+class EnumProperty {
+  const EnumProperty(this.values, this.defaultsOf);
+
+  /// The enum's values, in declaration order. Their JSON spelling is
+  /// [Enum.name] - no enum in this package renames one with `@JsonValue`.
+  final List<Enum> values;
+
+  /// `toJson` of an instance built with nothing but its required arguments.
+  ///
+  /// The default is read back off that rather than repeated here, so the
+  /// constructor stays the one place a default is written and no table can
+  /// drift from it.
+  final Map<String, Object?> Function() defaultsOf;
+}
+
+/// Returns [root] with each enum-typed property in [enums] stating its values.
+///
+/// json_serializable has no branch for an enum: `_getPropertySchema` falls
+/// through to the complex-type case, the element is not a `ClassElement`, and the
+/// property comes out as a bare `{"type": "object"}` - no value list, no default,
+/// nothing a reader could build a chooser from.
+///
+/// [enums] maps a type's name - [rootName] for the root's own object, a `$defs`
+/// entry otherwise - to its enum properties. Whatever the generator did write for
+/// the property is kept, its `description` included.
+Map<String, Object?> assembleEnums(
+  Map<String, Object?> root,
+  String rootName,
+  Map<String, Map<String, EnumProperty>> enums,
+) {
+  final defs = <String, Object?>{...?root[r'$defs'] as Map<String, Object?>?};
+  var rootProperties = root['properties'] as Map<String, Object?>?;
+
+  enums.forEach((typeName, properties) {
+    final owner = typeName == rootName ? rootProperties : (defs[typeName] as Map<String, Object?>?)?['properties'];
+    if (owner is! Map<String, Object?>) {
+      throw StateError('$typeName is named as carrying an enum property but the schema does not describe it');
+    }
+
+    final described = <String, Object?>{...owner};
+    properties.forEach((name, property) {
+      final generated = described[name];
+      if (generated is! Map<String, Object?>) {
+        throw StateError('$typeName.$name is named as an enum property but the schema does not describe it');
+      }
+      final fallback = property.defaultsOf()[name];
+      described[name] = <String, Object?>{
+        'enum': [for (final value in property.values) value.name],
+        for (final entry in generated.entries)
+          if (entry.key != 'type') entry.key: entry.value,
+        'default': ?fallback,
+      };
+    });
+
+    if (typeName == rootName) {
+      rootProperties = described;
+    } else {
+      defs[typeName] = <String, Object?>{...defs[typeName]! as Map<String, Object?>, 'properties': described};
+    }
+  });
+
+  return <String, Object?>{...root, 'properties': ?rootProperties, if (defs.isNotEmpty) r'$defs': defs};
+}

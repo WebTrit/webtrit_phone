@@ -157,19 +157,6 @@ dependencies:
       url: https://github.com/WebTrit/flutter-webrtc.git
       ref: main_ext_rebase_11.08.26
 
-
-# Temporary: json_serializable's JSON-schema generator crashes on any field whose
-# default is a non-empty collection (it hands raw `DartObject` entries to
-# `jsonLiteralAsDart`). The fork carries the fix; drop this override once it is
-# merged upstream and released.
-# https://github.com/SERDUN/json_serializable.dart/tree/fix/json-schema-collection-defaults
-dependency_overrides:
-  json_serializable:
-    git:
-      url: https://github.com/SERDUN/json_serializable.dart.git
-      path: json_serializable
-      ref: fix/json-schema-collection-defaults
-
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -186,7 +173,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_native_splash: ^2.4.7
   freezed: ^3.2.5
-  json_serializable: ^6.14.0
+  json_serializable: ^6.14.1
   # TODO: temporary fork pin. Switch back to a pub.dev version constraint once
   # analyzer 8.3-14 compatibility is published upstream
   # (SERDUN/l10n_mapper#1 -> kwado-tech/l10n_mapper).
