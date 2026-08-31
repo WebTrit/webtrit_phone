@@ -168,6 +168,11 @@ class MainShellBlocs extends StatelessWidget {
             final cdrsSyncWorker = context.readOrNull<CdrsSyncWorker>();
 
             final peerConnectionManager = PeerConnectionManager(
+              // The deployment's own STUN/TURN servers, resolved per connection so
+              // a renewed TURN credential is picked up without rebuilding the bloc.
+              factory: DefaultPeerConnectionFactory(
+                iceServersResolver: context.read<IceServersRepository>().resolveIceServers,
+              ),
               retrieveTimeout: kPeerConnectionRetrieveTimeout,
               monitorCheckInterval: monitorInterval,
               monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],

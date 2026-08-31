@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/features/settings/features/diagnostic/bloc/network_tester_cubit.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 class _MockConnectivity extends Mock implements Connectivity {}
@@ -255,6 +256,67 @@ void main() {
 
         firstController.close();
         secondController.close();
+        await cubit.close();
+      });
+    });
+
+    group('ice servers', () {
+      test('gathers with the servers the resolver returns', () async {
+        final gatherController = StreamController<CandidateInfo>(sync: true);
+        when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+            .thenAnswer((_) => gatherController.stream);
+        when(() => connectivity.checkConnectivity()).thenAnswer((_) async => [ConnectivityResult.wifi]);
+
+        const bundled = [
+          {
+            'urls': ['turn:host:3478?transport=udp'],
+            'username': 'user',
+            'credential': 'secret',
+          },
+        ];
+        final cubit = NetworkTesterCubit(
+          iceChecker: iceChecker,
+          connectivity: connectivity,
+          iceServersResolver: () async => bundled,
+        );
+        await Future<void>.delayed(Duration.zero);
+
+        verify(() => iceChecker.gatherCandidates(iceServers: bundled)).called(1);
+
+        await gatherController.close();
+        await cubit.close();
+      });
+
+      test('falls back to the public STUN server when the resolver yields nothing', () async {
+        final gatherController = StreamController<CandidateInfo>(sync: true);
+        when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+            .thenAnswer((_) => gatherController.stream);
+        when(() => connectivity.checkConnectivity()).thenAnswer((_) async => [ConnectivityResult.wifi]);
+
+        final cubit = NetworkTesterCubit(
+          iceChecker: iceChecker,
+          connectivity: connectivity,
+          iceServersResolver: () async => const [],
+        );
+        await Future<void>.delayed(Duration.zero);
+
+        verify(() => iceChecker.gatherCandidates(iceServers: kFallbackRtcIceServers)).called(1);
+
+        await gatherController.close();
+        await cubit.close();
+      });
+
+      test('uses the public STUN server when no resolver is given', () async {
+        final gatherController = StreamController<CandidateInfo>(sync: true);
+        when(() => iceChecker.gatherCandidates(iceServers: any(named: 'iceServers')))
+            .thenAnswer((_) => gatherController.stream);
+
+        final cubit = buildCubit(initialNetworks: [ConnectivityResult.wifi]);
+        await Future<void>.delayed(Duration.zero);
+
+        verify(() => iceChecker.gatherCandidates(iceServers: kFallbackRtcIceServers)).called(1);
+
+        await gatherController.close();
         await cubit.close();
       });
     });
