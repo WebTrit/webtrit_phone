@@ -207,7 +207,7 @@ case _:
 /// @nodoc
 mixin _$CoreInfo {
 
- Version get version;
+ Version get version; bool? get iceServersConfigured;
 /// Create a copy of CoreInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -218,16 +218,16 @@ $CoreInfoCopyWith<CoreInfo> get copyWith => _$CoreInfoCopyWithImpl<CoreInfo>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CoreInfo&&(identical(other.version, version) || other.version == version));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CoreInfo&&(identical(other.version, version) || other.version == version)&&(identical(other.iceServersConfigured, iceServersConfigured) || other.iceServersConfigured == iceServersConfigured));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,version);
+int get hashCode => Object.hash(runtimeType,version,iceServersConfigured);
 
 @override
 String toString() {
-  return 'CoreInfo(version: $version)';
+  return 'CoreInfo(version: $version, iceServersConfigured: $iceServersConfigured)';
 }
 
 
@@ -238,7 +238,7 @@ abstract mixin class $CoreInfoCopyWith<$Res>  {
   factory $CoreInfoCopyWith(CoreInfo value, $Res Function(CoreInfo) _then) = _$CoreInfoCopyWithImpl;
 @useResult
 $Res call({
-@VersionConverter() Version version
+@VersionConverter() Version version, bool? iceServersConfigured
 });
 
 
@@ -255,10 +255,11 @@ class _$CoreInfoCopyWithImpl<$Res>
 
 /// Create a copy of CoreInfo
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? version = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? version = null,Object? iceServersConfigured = freezed,}) {
   return _then(CoreInfo(
 version: null == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
-as Version,
+as Version,iceServersConfigured: freezed == iceServersConfigured ? _self.iceServersConfigured : iceServersConfigured // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
