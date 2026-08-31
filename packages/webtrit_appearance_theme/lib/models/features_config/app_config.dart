@@ -454,12 +454,26 @@ enum ContactsLayoutScheme {
 sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
   const BottomMenuTabScheme._();
 
+  /// The discriminator, declared rather than left to freezed.
+  ///
+  /// Freezed writes a `$type` of its own and puts the value in the
+  /// constructor's initialiser list, where the schema generator cannot see it:
+  /// the parameter default it reads is `null`. Declared here it is an ordinary
+  /// field with an ordinary default, so the generated schema states
+  /// `{'type': 'string', 'default': 'solid'}` and no hand-written map has to
+  /// repeat it.
+  ///
+  /// The wire is unchanged - the key is the union key, and freezed drops its
+  /// own `$type` for a variant that declares one. What it costs is a parameter
+  /// on every `when` and `map` callback, which is spelt `_` because inside a
+  /// branch the value is the branch.
   @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.favorites({
     @Default(true) bool enabled,
     @Default(false) bool initial,
     required String titleL10n,
     required String icon,
+    @Default('favorites') String type,
   }) = FavoritesTabScheme;
 
   @JsonSerializable(explicitToJson: true)
@@ -473,6 +487,7 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     // Reads the `supportsCallHistory` key and falls back to the legacy `useCdrs`
     // key so existing configs keep their value.
     @JsonKey(readValue: _readRecentsSupportsCallHistory) @Default(true) bool supportsCallHistory,
+    @Default('recents') String type,
   }) = RecentsTabScheme;
 
   @JsonSerializable(explicitToJson: true)
@@ -501,6 +516,7 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     /// the unified one; on by default, because a deployment picking that
     /// arrangement is picking the one favourites live in.
     @Default(true) bool favorites,
+    @Default('contacts') String type,
   }) = ContactsTabScheme;
 
   @JsonSerializable(explicitToJson: true)
@@ -509,6 +525,7 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @Default(false) bool initial,
     required String titleL10n,
     required String icon,
+    @Default('keypad') String type,
   }) = KeypadTabScheme;
 
   @JsonSerializable(explicitToJson: true)
@@ -517,6 +534,7 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @Default(false) bool initial,
     required String titleL10n,
     required String icon,
+    @Default('messaging') String type,
   }) = MessagingTabScheme;
 
   @JsonSerializable(explicitToJson: true)
@@ -525,6 +543,7 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     @Default(false) bool initial,
     required String titleL10n,
     required String icon,
+    @Default('voicemail') String type,
   }) = VoicemailTabScheme;
 
   @JsonSerializable(explicitToJson: true)
@@ -534,6 +553,7 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
     required String titleL10n,
     required String icon,
     @IntToStringConverter() required String embeddedResourceId,
+    @Default('embedded') String type,
   }) = EmbeddedTabScheme;
 
   factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => _$BottomMenuTabSchemeFromJson(json);

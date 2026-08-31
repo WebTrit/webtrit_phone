@@ -2884,7 +2884,7 @@ BottomMenuTabScheme _$BottomMenuTabSchemeFromJson(
 /// @nodoc
 mixin _$BottomMenuTabScheme {
 
- bool get enabled; bool get initial; String get titleL10n; String get icon;
+ bool get enabled; bool get initial; String get titleL10n; String get icon; String get type;
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2897,16 +2897,16 @@ $BottomMenuTabSchemeCopyWith<BottomMenuTabScheme> get copyWith => _$BottomMenuTa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BottomMenuTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BottomMenuTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon)';
+  return 'BottomMenuTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
 }
 
 
@@ -2917,7 +2917,7 @@ abstract mixin class $BottomMenuTabSchemeCopyWith<$Res>  {
   factory $BottomMenuTabSchemeCopyWith(BottomMenuTabScheme value, $Res Function(BottomMenuTabScheme) _then) = _$BottomMenuTabSchemeCopyWithImpl;
 @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon
+ bool enabled, bool initial, String titleL10n, String icon, String type
 });
 
 
@@ -2934,12 +2934,13 @@ class _$BottomMenuTabSchemeCopyWithImpl<$Res>
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
   return _then(_self.copyWith(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -3040,16 +3041,16 @@ return embedded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  favorites,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory)?  recents,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites)?  contacts,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  keypad,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  messaging,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  voicemail,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId)?  embedded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  favorites,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)?  recents,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)?  contacts,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  keypad,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  messaging,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  voicemail,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId,  String type)?  embedded,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case FavoritesTabScheme() when favorites != null:
-return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case RecentsTabScheme() when recents != null:
-return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory);case ContactsTabScheme() when contacts != null:
-return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes,_that.layout,_that.favorites);case KeypadTabScheme() when keypad != null:
-return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case MessagingTabScheme() when messaging != null:
-return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case VoicemailTabScheme() when voicemail != null:
-return voicemail(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case EmbeddedTabScheme() when embedded != null:
-return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.embeddedResourceId);case _:
+return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case RecentsTabScheme() when recents != null:
+return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory,_that.type);case ContactsTabScheme() when contacts != null:
+return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes,_that.layout,_that.favorites,_that.type);case KeypadTabScheme() when keypad != null:
+return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case MessagingTabScheme() when messaging != null:
+return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case VoicemailTabScheme() when voicemail != null:
+return voicemail(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case EmbeddedTabScheme() when embedded != null:
+return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.embeddedResourceId,_that.type);case _:
   return orElse();
 
 }
@@ -3067,16 +3068,16 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  favorites,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory)  recents,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites)  contacts,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  keypad,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  messaging,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon)  voicemail,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId)  embedded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  favorites,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)  recents,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)  contacts,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  keypad,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  messaging,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  voicemail,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId,  String type)  embedded,}) {final _that = this;
 switch (_that) {
 case FavoritesTabScheme():
-return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case RecentsTabScheme():
-return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory);case ContactsTabScheme():
-return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes,_that.layout,_that.favorites);case KeypadTabScheme():
-return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case MessagingTabScheme():
-return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case VoicemailTabScheme():
-return voicemail(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case EmbeddedTabScheme():
-return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.embeddedResourceId);}
+return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case RecentsTabScheme():
+return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory,_that.type);case ContactsTabScheme():
+return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes,_that.layout,_that.favorites,_that.type);case KeypadTabScheme():
+return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case MessagingTabScheme():
+return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case VoicemailTabScheme():
+return voicemail(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case EmbeddedTabScheme():
+return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.embeddedResourceId,_that.type);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -3090,16 +3091,16 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  favorites,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory)?  recents,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites)?  contacts,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  keypad,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  messaging,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon)?  voicemail,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId)?  embedded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  favorites,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)?  recents,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)?  contacts,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  keypad,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  messaging,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  voicemail,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId,  String type)?  embedded,}) {final _that = this;
 switch (_that) {
 case FavoritesTabScheme() when favorites != null:
-return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case RecentsTabScheme() when recents != null:
-return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory);case ContactsTabScheme() when contacts != null:
-return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes,_that.layout,_that.favorites);case KeypadTabScheme() when keypad != null:
-return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case MessagingTabScheme() when messaging != null:
-return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case VoicemailTabScheme() when voicemail != null:
-return voicemail(_that.enabled,_that.initial,_that.titleL10n,_that.icon);case EmbeddedTabScheme() when embedded != null:
-return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.embeddedResourceId);case _:
+return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case RecentsTabScheme() when recents != null:
+return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory,_that.type);case ContactsTabScheme() when contacts != null:
+return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes,_that.layout,_that.favorites,_that.type);case KeypadTabScheme() when keypad != null:
+return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case MessagingTabScheme() when messaging != null:
+return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case VoicemailTabScheme() when voicemail != null:
+return voicemail(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case EmbeddedTabScheme() when embedded != null:
+return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.embeddedResourceId,_that.type);case _:
   return null;
 
 }
@@ -3111,17 +3112,14 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 
 @JsonSerializable(explicitToJson: true)
 class FavoritesTabScheme extends BottomMenuTabScheme {
-  const FavoritesTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, final  String? $type}): $type = $type ?? 'favorites',super._();
+  const FavoritesTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, this.type = 'favorites'}): super._();
   factory FavoritesTabScheme.fromJson(Map<String, dynamic> json) => _$FavoritesTabSchemeFromJson(json);
 
 @override@JsonKey() final  bool enabled;
 @override@JsonKey() final  bool initial;
 @override final  String titleL10n;
 @override final  String icon;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
@@ -3136,16 +3134,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoritesTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoritesTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.favorites(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon)';
+  return 'BottomMenuTabScheme.favorites(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
 }
 
 
@@ -3156,7 +3154,7 @@ abstract mixin class $FavoritesTabSchemeCopyWith<$Res> implements $BottomMenuTab
   factory $FavoritesTabSchemeCopyWith(FavoritesTabScheme value, $Res Function(FavoritesTabScheme) _then) = _$FavoritesTabSchemeCopyWithImpl;
 @override @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon
+ bool enabled, bool initial, String titleL10n, String icon, String type
 });
 
 
@@ -3173,12 +3171,13 @@ class _$FavoritesTabSchemeCopyWithImpl<$Res>
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
   return _then(FavoritesTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -3190,7 +3189,7 @@ as String,
 
 @JsonSerializable(explicitToJson: true)
 class RecentsTabScheme extends BottomMenuTabScheme {
-  const RecentsTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, @JsonKey(readValue: _readRecentsSupportsCallHistory) this.supportsCallHistory = true, final  String? $type}): $type = $type ?? 'recents',super._();
+  const RecentsTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, @JsonKey(readValue: _readRecentsSupportsCallHistory) this.supportsCallHistory = true, this.type = 'recents'}): super._();
   factory RecentsTabScheme.fromJson(Map<String, dynamic> json) => _$RecentsTabSchemeFromJson(json);
 
 @override@JsonKey() final  bool enabled;
@@ -3202,10 +3201,7 @@ class RecentsTabScheme extends BottomMenuTabScheme {
 // Reads the `supportsCallHistory` key and falls back to the legacy `useCdrs`
 // key so existing configs keep their value.
 @JsonKey(readValue: _readRecentsSupportsCallHistory) final  bool supportsCallHistory;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
@@ -3220,16 +3216,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecentsTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.supportsCallHistory, supportsCallHistory) || other.supportsCallHistory == supportsCallHistory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RecentsTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.supportsCallHistory, supportsCallHistory) || other.supportsCallHistory == supportsCallHistory)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,supportsCallHistory);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,supportsCallHistory,type);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.recents(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, supportsCallHistory: $supportsCallHistory)';
+  return 'BottomMenuTabScheme.recents(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, supportsCallHistory: $supportsCallHistory, type: $type)';
 }
 
 
@@ -3240,7 +3236,7 @@ abstract mixin class $RecentsTabSchemeCopyWith<$Res> implements $BottomMenuTabSc
   factory $RecentsTabSchemeCopyWith(RecentsTabScheme value, $Res Function(RecentsTabScheme) _then) = _$RecentsTabSchemeCopyWithImpl;
 @override @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon,@JsonKey(readValue: _readRecentsSupportsCallHistory) bool supportsCallHistory
+ bool enabled, bool initial, String titleL10n, String icon,@JsonKey(readValue: _readRecentsSupportsCallHistory) bool supportsCallHistory, String type
 });
 
 
@@ -3257,14 +3253,15 @@ class _$RecentsTabSchemeCopyWithImpl<$Res>
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? supportsCallHistory = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? supportsCallHistory = null,Object? type = null,}) {
   return _then(RecentsTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,supportsCallHistory: null == supportsCallHistory ? _self.supportsCallHistory : supportsCallHistory // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -3275,7 +3272,7 @@ as bool,
 
 @JsonSerializable(explicitToJson: true)
 class ContactsTabScheme extends BottomMenuTabScheme {
-  const ContactsTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, final  List<String> contactSourceTypes = const <String>[], @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed) this.layout = ContactsLayoutScheme.tabbed, this.favorites = true, final  String? $type}): _contactSourceTypes = contactSourceTypes,$type = $type ?? 'contacts',super._();
+  const ContactsTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, final  List<String> contactSourceTypes = const <String>[], @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed) this.layout = ContactsLayoutScheme.tabbed, this.favorites = true, this.type = 'contacts'}): _contactSourceTypes = contactSourceTypes,super._();
   factory ContactsTabScheme.fromJson(Map<String, dynamic> json) => _$ContactsTabSchemeFromJson(json);
 
 @override@JsonKey() final  bool enabled;
@@ -3304,10 +3301,7 @@ class ContactsTabScheme extends BottomMenuTabScheme {
 /// the unified one; on by default, because a deployment picking that
 /// arrangement is picking the one favourites live in.
 @JsonKey() final  bool favorites;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
@@ -3322,16 +3316,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactsTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other._contactSourceTypes, _contactSourceTypes)&&(identical(other.layout, layout) || other.layout == layout)&&(identical(other.favorites, favorites) || other.favorites == favorites));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactsTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other._contactSourceTypes, _contactSourceTypes)&&(identical(other.layout, layout) || other.layout == layout)&&(identical(other.favorites, favorites) || other.favorites == favorites)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,const DeepCollectionEquality().hash(_contactSourceTypes),layout,favorites);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,const DeepCollectionEquality().hash(_contactSourceTypes),layout,favorites,type);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.contacts(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, contactSourceTypes: $contactSourceTypes, layout: $layout, favorites: $favorites)';
+  return 'BottomMenuTabScheme.contacts(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, contactSourceTypes: $contactSourceTypes, layout: $layout, favorites: $favorites, type: $type)';
 }
 
 
@@ -3342,7 +3336,7 @@ abstract mixin class $ContactsTabSchemeCopyWith<$Res> implements $BottomMenuTabS
   factory $ContactsTabSchemeCopyWith(ContactsTabScheme value, $Res Function(ContactsTabScheme) _then) = _$ContactsTabSchemeCopyWithImpl;
 @override @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon, List<String> contactSourceTypes,@JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed) ContactsLayoutScheme layout, bool favorites
+ bool enabled, bool initial, String titleL10n, String icon, List<String> contactSourceTypes,@JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed) ContactsLayoutScheme layout, bool favorites, String type
 });
 
 
@@ -3359,7 +3353,7 @@ class _$ContactsTabSchemeCopyWithImpl<$Res>
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? contactSourceTypes = null,Object? layout = null,Object? favorites = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? contactSourceTypes = null,Object? layout = null,Object? favorites = null,Object? type = null,}) {
   return _then(ContactsTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
@@ -3368,7 +3362,8 @@ as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non
 as String,contactSourceTypes: null == contactSourceTypes ? _self._contactSourceTypes : contactSourceTypes // ignore: cast_nullable_to_non_nullable
 as List<String>,layout: null == layout ? _self.layout : layout // ignore: cast_nullable_to_non_nullable
 as ContactsLayoutScheme,favorites: null == favorites ? _self.favorites : favorites // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -3379,17 +3374,14 @@ as bool,
 
 @JsonSerializable(explicitToJson: true)
 class KeypadTabScheme extends BottomMenuTabScheme {
-  const KeypadTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, final  String? $type}): $type = $type ?? 'keypad',super._();
+  const KeypadTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, this.type = 'keypad'}): super._();
   factory KeypadTabScheme.fromJson(Map<String, dynamic> json) => _$KeypadTabSchemeFromJson(json);
 
 @override@JsonKey() final  bool enabled;
 @override@JsonKey() final  bool initial;
 @override final  String titleL10n;
 @override final  String icon;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
@@ -3404,16 +3396,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is KeypadTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KeypadTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.keypad(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon)';
+  return 'BottomMenuTabScheme.keypad(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
 }
 
 
@@ -3424,7 +3416,7 @@ abstract mixin class $KeypadTabSchemeCopyWith<$Res> implements $BottomMenuTabSch
   factory $KeypadTabSchemeCopyWith(KeypadTabScheme value, $Res Function(KeypadTabScheme) _then) = _$KeypadTabSchemeCopyWithImpl;
 @override @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon
+ bool enabled, bool initial, String titleL10n, String icon, String type
 });
 
 
@@ -3441,12 +3433,13 @@ class _$KeypadTabSchemeCopyWithImpl<$Res>
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
   return _then(KeypadTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -3458,17 +3451,14 @@ as String,
 
 @JsonSerializable(explicitToJson: true)
 class MessagingTabScheme extends BottomMenuTabScheme {
-  const MessagingTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, final  String? $type}): $type = $type ?? 'messaging',super._();
+  const MessagingTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, this.type = 'messaging'}): super._();
   factory MessagingTabScheme.fromJson(Map<String, dynamic> json) => _$MessagingTabSchemeFromJson(json);
 
 @override@JsonKey() final  bool enabled;
 @override@JsonKey() final  bool initial;
 @override final  String titleL10n;
 @override final  String icon;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
@@ -3483,16 +3473,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessagingTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessagingTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.messaging(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon)';
+  return 'BottomMenuTabScheme.messaging(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
 }
 
 
@@ -3503,7 +3493,7 @@ abstract mixin class $MessagingTabSchemeCopyWith<$Res> implements $BottomMenuTab
   factory $MessagingTabSchemeCopyWith(MessagingTabScheme value, $Res Function(MessagingTabScheme) _then) = _$MessagingTabSchemeCopyWithImpl;
 @override @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon
+ bool enabled, bool initial, String titleL10n, String icon, String type
 });
 
 
@@ -3520,12 +3510,13 @@ class _$MessagingTabSchemeCopyWithImpl<$Res>
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
   return _then(MessagingTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -3537,17 +3528,14 @@ as String,
 
 @JsonSerializable(explicitToJson: true)
 class VoicemailTabScheme extends BottomMenuTabScheme {
-  const VoicemailTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, final  String? $type}): $type = $type ?? 'voicemail',super._();
+  const VoicemailTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, this.type = 'voicemail'}): super._();
   factory VoicemailTabScheme.fromJson(Map<String, dynamic> json) => _$VoicemailTabSchemeFromJson(json);
 
 @override@JsonKey() final  bool enabled;
 @override@JsonKey() final  bool initial;
 @override final  String titleL10n;
 @override final  String icon;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
@@ -3562,16 +3550,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoicemailTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoicemailTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.voicemail(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon)';
+  return 'BottomMenuTabScheme.voicemail(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
 }
 
 
@@ -3582,7 +3570,7 @@ abstract mixin class $VoicemailTabSchemeCopyWith<$Res> implements $BottomMenuTab
   factory $VoicemailTabSchemeCopyWith(VoicemailTabScheme value, $Res Function(VoicemailTabScheme) _then) = _$VoicemailTabSchemeCopyWithImpl;
 @override @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon
+ bool enabled, bool initial, String titleL10n, String icon, String type
 });
 
 
@@ -3599,12 +3587,13 @@ class _$VoicemailTabSchemeCopyWithImpl<$Res>
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
   return _then(VoicemailTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -3616,7 +3605,7 @@ as String,
 
 @JsonSerializable(explicitToJson: true)
 class EmbeddedTabScheme extends BottomMenuTabScheme {
-  const EmbeddedTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, @IntToStringConverter() required this.embeddedResourceId, final  String? $type}): $type = $type ?? 'embedded',super._();
+  const EmbeddedTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, @IntToStringConverter() required this.embeddedResourceId, this.type = 'embedded'}): super._();
   factory EmbeddedTabScheme.fromJson(Map<String, dynamic> json) => _$EmbeddedTabSchemeFromJson(json);
 
 @override@JsonKey() final  bool enabled;
@@ -3624,10 +3613,7 @@ class EmbeddedTabScheme extends BottomMenuTabScheme {
 @override final  String titleL10n;
 @override final  String icon;
 @IntToStringConverter() final  String embeddedResourceId;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
@@ -3642,16 +3628,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EmbeddedTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.embeddedResourceId, embeddedResourceId) || other.embeddedResourceId == embeddedResourceId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EmbeddedTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.embeddedResourceId, embeddedResourceId) || other.embeddedResourceId == embeddedResourceId)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,embeddedResourceId);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,embeddedResourceId,type);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.embedded(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, embeddedResourceId: $embeddedResourceId)';
+  return 'BottomMenuTabScheme.embedded(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, embeddedResourceId: $embeddedResourceId, type: $type)';
 }
 
 
@@ -3662,7 +3648,7 @@ abstract mixin class $EmbeddedTabSchemeCopyWith<$Res> implements $BottomMenuTabS
   factory $EmbeddedTabSchemeCopyWith(EmbeddedTabScheme value, $Res Function(EmbeddedTabScheme) _then) = _$EmbeddedTabSchemeCopyWithImpl;
 @override @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon,@IntToStringConverter() String embeddedResourceId
+ bool enabled, bool initial, String titleL10n, String icon,@IntToStringConverter() String embeddedResourceId, String type
 });
 
 
@@ -3679,13 +3665,14 @@ class _$EmbeddedTabSchemeCopyWithImpl<$Res>
 
 /// Create a copy of BottomMenuTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? embeddedResourceId = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? embeddedResourceId = null,Object? type = null,}) {
   return _then(EmbeddedTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,embeddedResourceId: null == embeddedResourceId ? _self.embeddedResourceId : embeddedResourceId // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

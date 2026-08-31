@@ -643,7 +643,7 @@ const _$ThemeWidgetConfigJsonSchema = {
           'type': 'string',
           'description': 'Unified URI pointing to the resource.',
         },
-        r'$ref': {
+        'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
           'default': 'asset',
@@ -2199,7 +2199,7 @@ const _$ImageAssetsConfigJsonSchema = {
           'type': 'string',
           'description': 'Unified URI pointing to the resource.',
         },
-        r'$ref': {
+        'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
           'default': 'asset',
@@ -2592,7 +2592,7 @@ const _$ImageAssetConfigJsonSchema = {
           'type': 'string',
           'description': 'Unified URI pointing to the resource.',
         },
-        r'$ref': {
+        'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
           'default': 'asset',

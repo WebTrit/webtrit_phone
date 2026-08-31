@@ -723,7 +723,7 @@ const _$ThemeSettingsJsonSchema = {
           'type': 'string',
           'description': 'Unified URI pointing to the resource.',
         },
-        r'$ref': {
+        'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
           'default': 'asset',
@@ -1076,7 +1076,7 @@ const _$ThemeSettingsJsonSchema = {
       'type': 'object',
       'properties': {
         'color': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'solid'},
       },
       'required': ['color'],
     },
@@ -1096,7 +1096,7 @@ const _$ThemeSettingsJsonSchema = {
         'beginY': {'type': 'number', 'default': 0.0},
         'endX': {'type': 'number', 'default': 1.0},
         'endY': {'type': 'number', 'default': 1.0},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'gradient'},
       },
       'required': ['colors'],
     },
@@ -1117,7 +1117,7 @@ const _$ThemeSettingsJsonSchema = {
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'image'},
       },
       'required': ['imageUrl'],
     },

@@ -164,7 +164,7 @@ const _$AppConfigJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'favorites'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -176,7 +176,7 @@ const _$AppConfigJsonSchema = {
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
         'supportsCallHistory': {'type': 'boolean', 'default': true},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'recents'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -204,7 +204,7 @@ const _$AppConfigJsonSchema = {
               "Whether the favourites are one of the lists the chooser offers.\n\nThe list behind that entry is the favourites section's own - the same\nrows, in the order a person arranged them - not this section's list\nnarrowed down. Read only where the arrangement has a chooser, which is\nthe unified one; on by default, because a deployment picking that\narrangement is picking the one favourites live in.",
           'default': true,
         },
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'contacts'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -215,7 +215,7 @@ const _$AppConfigJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'keypad'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -226,7 +226,7 @@ const _$AppConfigJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'messaging'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -237,7 +237,7 @@ const _$AppConfigJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'voicemail'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -249,7 +249,7 @@ const _$AppConfigJsonSchema = {
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
         'embeddedResourceId': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'embedded'},
       },
       'required': ['titleL10n', 'icon', 'embeddedResourceId'],
     },
@@ -449,14 +449,14 @@ const _$AppConfigJsonSchema = {
           'enum': ['system', 'light', 'dark'],
           'default': 'system',
         },
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'themeMode'},
       },
     },
     'SupportedVideoCall': {
       'type': 'object',
       'properties': {
         'enabled': {'type': 'boolean', 'default': true},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'videoCall'},
       },
     },
     'SupportedLoggingConfig': {
@@ -465,28 +465,28 @@ const _$AppConfigJsonSchema = {
         'logLevel': {'type': 'string', 'default': 'INFO'},
         'checkIntervalSec': {'type': 'integer', 'default': 15},
         'anonymizationEnabled': {'type': 'boolean', 'default': true},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'loggingConfig'},
       },
     },
     'SupportedSystemNotifications': {
       'type': 'object',
       'properties': {
         'enabled': {'type': 'boolean', 'default': true},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'systemNotifications'},
       },
     },
     'SupportedHybridPresence': {
       'type': 'object',
       'properties': {
         'enabled': {'type': 'boolean', 'default': true},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'hybridPresence'},
       },
     },
     'SupportedCallPull': {
       'type': 'object',
       'properties': {
         'videoStrategy': {'type': 'string', 'default': 'softMute'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'callPull'},
       },
     },
   },
@@ -879,7 +879,7 @@ const _$AppConfigMainJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'favorites'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -891,7 +891,7 @@ const _$AppConfigMainJsonSchema = {
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
         'supportsCallHistory': {'type': 'boolean', 'default': true},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'recents'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -919,7 +919,7 @@ const _$AppConfigMainJsonSchema = {
               "Whether the favourites are one of the lists the chooser offers.\n\nThe list behind that entry is the favourites section's own - the same\nrows, in the order a person arranged them - not this section's list\nnarrowed down. Read only where the arrangement has a chooser, which is\nthe unified one; on by default, because a deployment picking that\narrangement is picking the one favourites live in.",
           'default': true,
         },
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'contacts'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -930,7 +930,7 @@ const _$AppConfigMainJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'keypad'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -941,7 +941,7 @@ const _$AppConfigMainJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'messaging'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -952,7 +952,7 @@ const _$AppConfigMainJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'voicemail'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -964,7 +964,7 @@ const _$AppConfigMainJsonSchema = {
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
         'embeddedResourceId': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'embedded'},
       },
       'required': ['titleL10n', 'icon', 'embeddedResourceId'],
     },
@@ -1031,7 +1031,7 @@ const _$AppConfigBottomMenuJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'favorites'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -1043,7 +1043,7 @@ const _$AppConfigBottomMenuJsonSchema = {
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
         'supportsCallHistory': {'type': 'boolean', 'default': true},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'recents'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -1071,7 +1071,7 @@ const _$AppConfigBottomMenuJsonSchema = {
               "Whether the favourites are one of the lists the chooser offers.\n\nThe list behind that entry is the favourites section's own - the same\nrows, in the order a person arranged them - not this section's list\nnarrowed down. Read only where the arrangement has a chooser, which is\nthe unified one; on by default, because a deployment picking that\narrangement is picking the one favourites live in.",
           'default': true,
         },
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'contacts'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -1082,7 +1082,7 @@ const _$AppConfigBottomMenuJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'keypad'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -1093,7 +1093,7 @@ const _$AppConfigBottomMenuJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'messaging'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -1104,7 +1104,7 @@ const _$AppConfigBottomMenuJsonSchema = {
         'initial': {'type': 'boolean', 'default': false},
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'voicemail'},
       },
       'required': ['titleL10n', 'icon'],
     },
@@ -1116,7 +1116,7 @@ const _$AppConfigBottomMenuJsonSchema = {
         'titleL10n': {'type': 'string'},
         'icon': {'type': 'string'},
         'embeddedResourceId': {'type': 'string'},
-        'type': {'type': 'string'},
+        'type': {'type': 'string', 'default': 'embedded'},
       },
       'required': ['titleL10n', 'icon', 'embeddedResourceId'],
     },
@@ -1884,7 +1884,7 @@ FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'favorites',
     );
 
 Map<String, dynamic> _$FavoritesTabSchemeToJson(FavoritesTabScheme instance) =>
@@ -1893,7 +1893,7 @@ Map<String, dynamic> _$FavoritesTabSchemeToJson(FavoritesTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 const _$FavoritesTabSchemeJsonSchema = {
@@ -1904,7 +1904,7 @@ const _$FavoritesTabSchemeJsonSchema = {
     'initial': {'type': 'boolean', 'default': false},
     'titleL10n': {'type': 'string'},
     'icon': {'type': 'string'},
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'favorites'},
   },
   'required': ['titleL10n', 'icon'],
 };
@@ -1919,7 +1919,7 @@ RecentsTabScheme _$RecentsTabSchemeFromJson(Map<String, dynamic> json) =>
           _readRecentsSupportsCallHistory(json, 'supportsCallHistory')
               as bool? ??
           true,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'recents',
     );
 
 Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
@@ -1929,7 +1929,7 @@ Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
       'supportsCallHistory': instance.supportsCallHistory,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 const _$RecentsTabSchemeJsonSchema = {
@@ -1941,7 +1941,7 @@ const _$RecentsTabSchemeJsonSchema = {
     'titleL10n': {'type': 'string'},
     'icon': {'type': 'string'},
     'supportsCallHistory': {'type': 'boolean', 'default': true},
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'recents'},
   },
   'required': ['titleL10n', 'icon'],
 };
@@ -1965,7 +1965,7 @@ ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
           ) ??
           ContactsLayoutScheme.tabbed,
       favorites: json['favorites'] as bool? ?? true,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'contacts',
     );
 
 Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
@@ -1977,7 +1977,7 @@ Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
       'contactSourceTypes': instance.contactSourceTypes,
       'layout': _$ContactsLayoutSchemeEnumMap[instance.layout]!,
       'favorites': instance.favorites,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 const _$ContactsTabSchemeJsonSchema = {
@@ -2005,7 +2005,7 @@ const _$ContactsTabSchemeJsonSchema = {
           "Whether the favourites are one of the lists the chooser offers.\n\nThe list behind that entry is the favourites section's own - the same\nrows, in the order a person arranged them - not this section's list\nnarrowed down. Read only where the arrangement has a chooser, which is\nthe unified one; on by default, because a deployment picking that\narrangement is picking the one favourites live in.",
       'default': true,
     },
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'contacts'},
   },
   'required': ['titleL10n', 'icon'],
 };
@@ -2021,7 +2021,7 @@ KeypadTabScheme _$KeypadTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'keypad',
     );
 
 Map<String, dynamic> _$KeypadTabSchemeToJson(KeypadTabScheme instance) =>
@@ -2030,7 +2030,7 @@ Map<String, dynamic> _$KeypadTabSchemeToJson(KeypadTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 const _$KeypadTabSchemeJsonSchema = {
@@ -2041,7 +2041,7 @@ const _$KeypadTabSchemeJsonSchema = {
     'initial': {'type': 'boolean', 'default': false},
     'titleL10n': {'type': 'string'},
     'icon': {'type': 'string'},
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'keypad'},
   },
   'required': ['titleL10n', 'icon'],
 };
@@ -2052,7 +2052,7 @@ MessagingTabScheme _$MessagingTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'messaging',
     );
 
 Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
@@ -2061,7 +2061,7 @@ Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 const _$MessagingTabSchemeJsonSchema = {
@@ -2072,7 +2072,7 @@ const _$MessagingTabSchemeJsonSchema = {
     'initial': {'type': 'boolean', 'default': false},
     'titleL10n': {'type': 'string'},
     'icon': {'type': 'string'},
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'messaging'},
   },
   'required': ['titleL10n', 'icon'],
 };
@@ -2083,7 +2083,7 @@ VoicemailTabScheme _$VoicemailTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'voicemail',
     );
 
 Map<String, dynamic> _$VoicemailTabSchemeToJson(VoicemailTabScheme instance) =>
@@ -2092,7 +2092,7 @@ Map<String, dynamic> _$VoicemailTabSchemeToJson(VoicemailTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 const _$VoicemailTabSchemeJsonSchema = {
@@ -2103,7 +2103,7 @@ const _$VoicemailTabSchemeJsonSchema = {
     'initial': {'type': 'boolean', 'default': false},
     'titleL10n': {'type': 'string'},
     'icon': {'type': 'string'},
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'voicemail'},
   },
   'required': ['titleL10n', 'icon'],
 };
@@ -2117,7 +2117,7 @@ EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
       embeddedResourceId: const IntToStringConverter().fromJson(
         json['embeddedResourceId'],
       ),
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'embedded',
     );
 
 Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
@@ -2129,7 +2129,7 @@ Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
       'embeddedResourceId': const IntToStringConverter().toJson(
         instance.embeddedResourceId,
       ),
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 const _$EmbeddedTabSchemeJsonSchema = {
@@ -2141,7 +2141,7 @@ const _$EmbeddedTabSchemeJsonSchema = {
     'titleL10n': {'type': 'string'},
     'icon': {'type': 'string'},
     'embeddedResourceId': {'type': 'string'},
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'embedded'},
   },
   'required': ['titleL10n', 'icon', 'embeddedResourceId'],
 };

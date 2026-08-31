@@ -54,7 +54,12 @@ SupportedFeature _$SupportedFeatureFromJson(
 /// @nodoc
 mixin _$SupportedFeature {
 
-
+ String get type;
+/// Create a copy of SupportedFeature
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SupportedFeatureCopyWith<SupportedFeature> get copyWith => _$SupportedFeatureCopyWithImpl<SupportedFeature>(this as SupportedFeature, _$identity);
 
   /// Serializes this SupportedFeature to a JSON map.
   Map<String, dynamic> toJson();
@@ -62,24 +67,50 @@ mixin _$SupportedFeature {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedFeature);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedFeature&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,type);
 
 @override
 String toString() {
-  return 'SupportedFeature()';
+  return 'SupportedFeature(type: $type)';
 }
 
 
 }
 
 /// @nodoc
-class $SupportedFeatureCopyWith<$Res>  {
-$SupportedFeatureCopyWith(SupportedFeature _, $Res Function(SupportedFeature) __);
+abstract mixin class $SupportedFeatureCopyWith<$Res>  {
+  factory $SupportedFeatureCopyWith(SupportedFeature value, $Res Function(SupportedFeature) _then) = _$SupportedFeatureCopyWithImpl;
+@useResult
+$Res call({
+ String type
+});
+
+
+
+
+}
+/// @nodoc
+class _$SupportedFeatureCopyWithImpl<$Res>
+    implements $SupportedFeatureCopyWith<$Res> {
+  _$SupportedFeatureCopyWithImpl(this._self, this._then);
+
+  final SupportedFeature _self;
+  final $Res Function(SupportedFeature) _then;
+
+/// Create a copy of SupportedFeature
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? type = null,}) {
+  return _then(_self.copyWith(
+type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
 }
 
 
@@ -173,15 +204,15 @@ return callPull(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode)?  themeMode,TResult Function( bool enabled)?  videoCall,TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult Function( bool enabled)?  systemNotifications,TResult Function( bool enabled)?  hybridPresence,TResult Function( String videoStrategy)?  callPull,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( ThemeModeConfig mode,  String type)?  themeMode,TResult Function( bool enabled,  String type)?  videoCall,TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled,  String type)?  loggingConfig,TResult Function( bool enabled,  String type)?  systemNotifications,TResult Function( bool enabled,  String type)?  hybridPresence,TResult Function( String videoStrategy,  String type)?  callPull,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
-return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
-return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications() when systemNotifications != null:
-return systemNotifications(_that.enabled);case SupportedHybridPresence() when hybridPresence != null:
-return hybridPresence(_that.enabled);case SupportedCallPull() when callPull != null:
-return callPull(_that.videoStrategy);case _:
+return themeMode(_that.mode,_that.type);case SupportedVideoCall() when videoCall != null:
+return videoCall(_that.enabled,_that.type);case SupportedLoggingConfig() when loggingConfig != null:
+return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled,_that.type);case SupportedSystemNotifications() when systemNotifications != null:
+return systemNotifications(_that.enabled,_that.type);case SupportedHybridPresence() when hybridPresence != null:
+return hybridPresence(_that.enabled,_that.type);case SupportedCallPull() when callPull != null:
+return callPull(_that.videoStrategy,_that.type);case _:
   return orElse();
 
 }
@@ -199,15 +230,15 @@ return callPull(_that.videoStrategy);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode)  themeMode,required TResult Function( bool enabled)  videoCall,required TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)  loggingConfig,required TResult Function( bool enabled)  systemNotifications,required TResult Function( bool enabled)  hybridPresence,required TResult Function( String videoStrategy)  callPull,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( ThemeModeConfig mode,  String type)  themeMode,required TResult Function( bool enabled,  String type)  videoCall,required TResult Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled,  String type)  loggingConfig,required TResult Function( bool enabled,  String type)  systemNotifications,required TResult Function( bool enabled,  String type)  hybridPresence,required TResult Function( String videoStrategy,  String type)  callPull,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode():
-return themeMode(_that.mode);case SupportedVideoCall():
-return videoCall(_that.enabled);case SupportedLoggingConfig():
-return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications():
-return systemNotifications(_that.enabled);case SupportedHybridPresence():
-return hybridPresence(_that.enabled);case SupportedCallPull():
-return callPull(_that.videoStrategy);}
+return themeMode(_that.mode,_that.type);case SupportedVideoCall():
+return videoCall(_that.enabled,_that.type);case SupportedLoggingConfig():
+return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled,_that.type);case SupportedSystemNotifications():
+return systemNotifications(_that.enabled,_that.type);case SupportedHybridPresence():
+return hybridPresence(_that.enabled,_that.type);case SupportedCallPull():
+return callPull(_that.videoStrategy,_that.type);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -221,15 +252,15 @@ return callPull(_that.videoStrategy);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode)?  themeMode,TResult? Function( bool enabled)?  videoCall,TResult? Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled)?  loggingConfig,TResult? Function( bool enabled)?  systemNotifications,TResult? Function( bool enabled)?  hybridPresence,TResult? Function( String videoStrategy)?  callPull,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( ThemeModeConfig mode,  String type)?  themeMode,TResult? Function( bool enabled,  String type)?  videoCall,TResult? Function( String logLevel,  int checkIntervalSec,  bool anonymizationEnabled,  String type)?  loggingConfig,TResult? Function( bool enabled,  String type)?  systemNotifications,TResult? Function( bool enabled,  String type)?  hybridPresence,TResult? Function( String videoStrategy,  String type)?  callPull,}) {final _that = this;
 switch (_that) {
 case SupportedThemeMode() when themeMode != null:
-return themeMode(_that.mode);case SupportedVideoCall() when videoCall != null:
-return videoCall(_that.enabled);case SupportedLoggingConfig() when loggingConfig != null:
-return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled);case SupportedSystemNotifications() when systemNotifications != null:
-return systemNotifications(_that.enabled);case SupportedHybridPresence() when hybridPresence != null:
-return hybridPresence(_that.enabled);case SupportedCallPull() when callPull != null:
-return callPull(_that.videoStrategy);case _:
+return themeMode(_that.mode,_that.type);case SupportedVideoCall() when videoCall != null:
+return videoCall(_that.enabled,_that.type);case SupportedLoggingConfig() when loggingConfig != null:
+return loggingConfig(_that.logLevel,_that.checkIntervalSec,_that.anonymizationEnabled,_that.type);case SupportedSystemNotifications() when systemNotifications != null:
+return systemNotifications(_that.enabled,_that.type);case SupportedHybridPresence() when hybridPresence != null:
+return hybridPresence(_that.enabled,_that.type);case SupportedCallPull() when callPull != null:
+return callPull(_that.videoStrategy,_that.type);case _:
   return null;
 
 }
@@ -241,18 +272,15 @@ return callPull(_that.videoStrategy);case _:
 @JsonSerializable()
 
 class SupportedThemeMode implements SupportedFeature {
-  const SupportedThemeMode({this.mode = ThemeModeConfig.system, final  String? $type}): $type = $type ?? 'themeMode';
+  const SupportedThemeMode({this.mode = ThemeModeConfig.system, this.type = 'themeMode'});
   factory SupportedThemeMode.fromJson(Map<String, dynamic> json) => _$SupportedThemeModeFromJson(json);
 
 @JsonKey() final  ThemeModeConfig mode;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $SupportedThemeModeCopyWith<SupportedThemeMode> get copyWith => _$SupportedThemeModeCopyWithImpl<SupportedThemeMode>(this, _$identity);
 
@@ -263,16 +291,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedThemeMode&&(identical(other.mode, mode) || other.mode == mode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedThemeMode&&(identical(other.mode, mode) || other.mode == mode)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,mode);
+int get hashCode => Object.hash(runtimeType,mode,type);
 
 @override
 String toString() {
-  return 'SupportedFeature.themeMode(mode: $mode)';
+  return 'SupportedFeature.themeMode(mode: $mode, type: $type)';
 }
 
 
@@ -281,9 +309,9 @@ String toString() {
 /// @nodoc
 abstract mixin class $SupportedThemeModeCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
   factory $SupportedThemeModeCopyWith(SupportedThemeMode value, $Res Function(SupportedThemeMode) _then) = _$SupportedThemeModeCopyWithImpl;
-@useResult
+@override @useResult
 $Res call({
- ThemeModeConfig mode
+ ThemeModeConfig mode, String type
 });
 
 
@@ -300,10 +328,11 @@ class _$SupportedThemeModeCopyWithImpl<$Res>
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? mode = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? mode = null,Object? type = null,}) {
   return _then(SupportedThemeMode(
 mode: null == mode ? _self.mode : mode // ignore: cast_nullable_to_non_nullable
-as ThemeModeConfig,
+as ThemeModeConfig,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -314,18 +343,15 @@ as ThemeModeConfig,
 @JsonSerializable()
 
 class SupportedVideoCall implements SupportedFeature {
-  const SupportedVideoCall({this.enabled = true, final  String? $type}): $type = $type ?? 'videoCall';
+  const SupportedVideoCall({this.enabled = true, this.type = 'videoCall'});
   factory SupportedVideoCall.fromJson(Map<String, dynamic> json) => _$SupportedVideoCallFromJson(json);
 
 @JsonKey() final  bool enabled;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $SupportedVideoCallCopyWith<SupportedVideoCall> get copyWith => _$SupportedVideoCallCopyWithImpl<SupportedVideoCall>(this, _$identity);
 
@@ -336,16 +362,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedVideoCall&&(identical(other.enabled, enabled) || other.enabled == enabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedVideoCall&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled);
+int get hashCode => Object.hash(runtimeType,enabled,type);
 
 @override
 String toString() {
-  return 'SupportedFeature.videoCall(enabled: $enabled)';
+  return 'SupportedFeature.videoCall(enabled: $enabled, type: $type)';
 }
 
 
@@ -354,9 +380,9 @@ String toString() {
 /// @nodoc
 abstract mixin class $SupportedVideoCallCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
   factory $SupportedVideoCallCopyWith(SupportedVideoCall value, $Res Function(SupportedVideoCall) _then) = _$SupportedVideoCallCopyWithImpl;
-@useResult
+@override @useResult
 $Res call({
- bool enabled
+ bool enabled, String type
 });
 
 
@@ -373,10 +399,11 @@ class _$SupportedVideoCallCopyWithImpl<$Res>
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? enabled = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? type = null,}) {
   return _then(SupportedVideoCall(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -387,20 +414,17 @@ as bool,
 @JsonSerializable()
 
 class SupportedLoggingConfig implements SupportedFeature {
-  const SupportedLoggingConfig({this.logLevel = 'INFO', this.checkIntervalSec = 15, this.anonymizationEnabled = true, final  String? $type}): $type = $type ?? 'loggingConfig';
+  const SupportedLoggingConfig({this.logLevel = 'INFO', this.checkIntervalSec = 15, this.anonymizationEnabled = true, this.type = 'loggingConfig'});
   factory SupportedLoggingConfig.fromJson(Map<String, dynamic> json) => _$SupportedLoggingConfigFromJson(json);
 
 @JsonKey() final  String logLevel;
 @JsonKey() final  int checkIntervalSec;
 @JsonKey() final  bool anonymizationEnabled;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $SupportedLoggingConfigCopyWith<SupportedLoggingConfig> get copyWith => _$SupportedLoggingConfigCopyWithImpl<SupportedLoggingConfig>(this, _$identity);
 
@@ -411,16 +435,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedLoggingConfig&&(identical(other.logLevel, logLevel) || other.logLevel == logLevel)&&(identical(other.checkIntervalSec, checkIntervalSec) || other.checkIntervalSec == checkIntervalSec)&&(identical(other.anonymizationEnabled, anonymizationEnabled) || other.anonymizationEnabled == anonymizationEnabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedLoggingConfig&&(identical(other.logLevel, logLevel) || other.logLevel == logLevel)&&(identical(other.checkIntervalSec, checkIntervalSec) || other.checkIntervalSec == checkIntervalSec)&&(identical(other.anonymizationEnabled, anonymizationEnabled) || other.anonymizationEnabled == anonymizationEnabled)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,logLevel,checkIntervalSec,anonymizationEnabled);
+int get hashCode => Object.hash(runtimeType,logLevel,checkIntervalSec,anonymizationEnabled,type);
 
 @override
 String toString() {
-  return 'SupportedFeature.loggingConfig(logLevel: $logLevel, checkIntervalSec: $checkIntervalSec, anonymizationEnabled: $anonymizationEnabled)';
+  return 'SupportedFeature.loggingConfig(logLevel: $logLevel, checkIntervalSec: $checkIntervalSec, anonymizationEnabled: $anonymizationEnabled, type: $type)';
 }
 
 
@@ -429,9 +453,9 @@ String toString() {
 /// @nodoc
 abstract mixin class $SupportedLoggingConfigCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
   factory $SupportedLoggingConfigCopyWith(SupportedLoggingConfig value, $Res Function(SupportedLoggingConfig) _then) = _$SupportedLoggingConfigCopyWithImpl;
-@useResult
+@override @useResult
 $Res call({
- String logLevel, int checkIntervalSec, bool anonymizationEnabled
+ String logLevel, int checkIntervalSec, bool anonymizationEnabled, String type
 });
 
 
@@ -448,12 +472,13 @@ class _$SupportedLoggingConfigCopyWithImpl<$Res>
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? logLevel = null,Object? checkIntervalSec = null,Object? anonymizationEnabled = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? logLevel = null,Object? checkIntervalSec = null,Object? anonymizationEnabled = null,Object? type = null,}) {
   return _then(SupportedLoggingConfig(
 logLevel: null == logLevel ? _self.logLevel : logLevel // ignore: cast_nullable_to_non_nullable
 as String,checkIntervalSec: null == checkIntervalSec ? _self.checkIntervalSec : checkIntervalSec // ignore: cast_nullable_to_non_nullable
 as int,anonymizationEnabled: null == anonymizationEnabled ? _self.anonymizationEnabled : anonymizationEnabled // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -464,18 +489,15 @@ as bool,
 @JsonSerializable()
 
 class SupportedSystemNotifications implements SupportedFeature {
-  const SupportedSystemNotifications({this.enabled = true, final  String? $type}): $type = $type ?? 'systemNotifications';
+  const SupportedSystemNotifications({this.enabled = true, this.type = 'systemNotifications'});
   factory SupportedSystemNotifications.fromJson(Map<String, dynamic> json) => _$SupportedSystemNotificationsFromJson(json);
 
 @JsonKey() final  bool enabled;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $SupportedSystemNotificationsCopyWith<SupportedSystemNotifications> get copyWith => _$SupportedSystemNotificationsCopyWithImpl<SupportedSystemNotifications>(this, _$identity);
 
@@ -486,16 +508,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedSystemNotifications&&(identical(other.enabled, enabled) || other.enabled == enabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedSystemNotifications&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled);
+int get hashCode => Object.hash(runtimeType,enabled,type);
 
 @override
 String toString() {
-  return 'SupportedFeature.systemNotifications(enabled: $enabled)';
+  return 'SupportedFeature.systemNotifications(enabled: $enabled, type: $type)';
 }
 
 
@@ -504,9 +526,9 @@ String toString() {
 /// @nodoc
 abstract mixin class $SupportedSystemNotificationsCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
   factory $SupportedSystemNotificationsCopyWith(SupportedSystemNotifications value, $Res Function(SupportedSystemNotifications) _then) = _$SupportedSystemNotificationsCopyWithImpl;
-@useResult
+@override @useResult
 $Res call({
- bool enabled
+ bool enabled, String type
 });
 
 
@@ -523,10 +545,11 @@ class _$SupportedSystemNotificationsCopyWithImpl<$Res>
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? enabled = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? type = null,}) {
   return _then(SupportedSystemNotifications(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -537,18 +560,15 @@ as bool,
 @JsonSerializable()
 
 class SupportedHybridPresence implements SupportedFeature {
-  const SupportedHybridPresence({this.enabled = true, final  String? $type}): $type = $type ?? 'hybridPresence';
+  const SupportedHybridPresence({this.enabled = true, this.type = 'hybridPresence'});
   factory SupportedHybridPresence.fromJson(Map<String, dynamic> json) => _$SupportedHybridPresenceFromJson(json);
 
 @JsonKey() final  bool enabled;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $SupportedHybridPresenceCopyWith<SupportedHybridPresence> get copyWith => _$SupportedHybridPresenceCopyWithImpl<SupportedHybridPresence>(this, _$identity);
 
@@ -559,16 +579,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedHybridPresence&&(identical(other.enabled, enabled) || other.enabled == enabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedHybridPresence&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled);
+int get hashCode => Object.hash(runtimeType,enabled,type);
 
 @override
 String toString() {
-  return 'SupportedFeature.hybridPresence(enabled: $enabled)';
+  return 'SupportedFeature.hybridPresence(enabled: $enabled, type: $type)';
 }
 
 
@@ -577,9 +597,9 @@ String toString() {
 /// @nodoc
 abstract mixin class $SupportedHybridPresenceCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
   factory $SupportedHybridPresenceCopyWith(SupportedHybridPresence value, $Res Function(SupportedHybridPresence) _then) = _$SupportedHybridPresenceCopyWithImpl;
-@useResult
+@override @useResult
 $Res call({
- bool enabled
+ bool enabled, String type
 });
 
 
@@ -596,10 +616,11 @@ class _$SupportedHybridPresenceCopyWithImpl<$Res>
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? enabled = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? type = null,}) {
   return _then(SupportedHybridPresence(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -610,18 +631,15 @@ as bool,
 @JsonSerializable()
 
 class SupportedCallPull implements SupportedFeature {
-  const SupportedCallPull({this.videoStrategy = 'softMute', final  String? $type}): $type = $type ?? 'callPull';
+  const SupportedCallPull({this.videoStrategy = 'softMute', this.type = 'callPull'});
   factory SupportedCallPull.fromJson(Map<String, dynamic> json) => _$SupportedCallPullFromJson(json);
 
 @JsonKey() final  String videoStrategy;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $SupportedCallPullCopyWith<SupportedCallPull> get copyWith => _$SupportedCallPullCopyWithImpl<SupportedCallPull>(this, _$identity);
 
@@ -632,16 +650,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedCallPull&&(identical(other.videoStrategy, videoStrategy) || other.videoStrategy == videoStrategy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SupportedCallPull&&(identical(other.videoStrategy, videoStrategy) || other.videoStrategy == videoStrategy)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,videoStrategy);
+int get hashCode => Object.hash(runtimeType,videoStrategy,type);
 
 @override
 String toString() {
-  return 'SupportedFeature.callPull(videoStrategy: $videoStrategy)';
+  return 'SupportedFeature.callPull(videoStrategy: $videoStrategy, type: $type)';
 }
 
 
@@ -650,9 +668,9 @@ String toString() {
 /// @nodoc
 abstract mixin class $SupportedCallPullCopyWith<$Res> implements $SupportedFeatureCopyWith<$Res> {
   factory $SupportedCallPullCopyWith(SupportedCallPull value, $Res Function(SupportedCallPull) _then) = _$SupportedCallPullCopyWithImpl;
-@useResult
+@override @useResult
 $Res call({
- String videoStrategy
+ String videoStrategy, String type
 });
 
 
@@ -669,9 +687,10 @@ class _$SupportedCallPullCopyWithImpl<$Res>
 
 /// Create a copy of SupportedFeature
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? videoStrategy = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? videoStrategy = null,Object? type = null,}) {
   return _then(SupportedCallPull(
 videoStrategy: null == videoStrategy ? _self.videoStrategy : videoStrategy // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

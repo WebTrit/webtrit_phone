@@ -9,19 +9,19 @@ part of 'page_background.dart';
 PageBackgroundSolid _$PageBackgroundSolidFromJson(Map<String, dynamic> json) =>
     PageBackgroundSolid(
       color: json['color'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'solid',
     );
 
 Map<String, dynamic> _$PageBackgroundSolidToJson(
   PageBackgroundSolid instance,
-) => <String, dynamic>{'color': instance.color, 'type': instance.$type};
+) => <String, dynamic>{'color': instance.color, 'type': instance.type};
 
 const _$PageBackgroundSolidJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
   'type': 'object',
   'properties': {
     'color': {'type': 'string'},
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'solid'},
   },
   'required': ['color'],
 };
@@ -39,7 +39,7 @@ PageBackgroundGradient _$PageBackgroundGradientFromJson(
   beginY: (json['beginY'] as num?)?.toDouble() ?? 0.0,
   endX: (json['endX'] as num?)?.toDouble() ?? 1.0,
   endY: (json['endY'] as num?)?.toDouble() ?? 1.0,
-  $type: json['type'] as String?,
+  type: json['type'] as String? ?? 'gradient',
 );
 
 Map<String, dynamic> _$PageBackgroundGradientToJson(
@@ -51,7 +51,7 @@ Map<String, dynamic> _$PageBackgroundGradientToJson(
   'beginY': instance.beginY,
   'endX': instance.endX,
   'endY': instance.endY,
-  'type': instance.$type,
+  'type': instance.type,
 };
 
 const _$PageBackgroundGradientJsonSchema = {
@@ -71,7 +71,7 @@ const _$PageBackgroundGradientJsonSchema = {
     'beginY': {'type': 'number', 'default': 0.0},
     'endX': {'type': 'number', 'default': 1.0},
     'endY': {'type': 'number', 'default': 1.0},
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'gradient'},
   },
   'required': ['colors'],
 };
@@ -83,7 +83,7 @@ PageBackgroundImage _$PageBackgroundImageFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$BoxFitConfigEnumMap, json['fit']) ??
           BoxFitConfig.cover,
       opacity: (json['opacity'] as num?)?.toDouble() ?? 1.0,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'image',
     );
 
 Map<String, dynamic> _$PageBackgroundImageToJson(
@@ -92,7 +92,7 @@ Map<String, dynamic> _$PageBackgroundImageToJson(
   'imageUrl': instance.imageUrl,
   'fit': _$BoxFitConfigEnumMap[instance.fit]!,
   'opacity': instance.opacity,
-  'type': instance.$type,
+  'type': instance.type,
 };
 
 const _$PageBackgroundImageJsonSchema = {
@@ -113,7 +113,7 @@ const _$PageBackgroundImageJsonSchema = {
       'default': 'cover',
     },
     'opacity': {'type': 'number', 'default': 1.0},
-    'type': {'type': 'string'},
+    'type': {'type': 'string', 'default': 'image'},
   },
   'required': ['imageUrl'],
 };
