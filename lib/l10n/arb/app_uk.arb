@@ -1176,6 +1176,8 @@
   "@main_BottomNavigationBarItemLabel_keypad": {},
   "main_BottomNavigationBarItemLabel_recents": "Останні",
   "@main_BottomNavigationBarItemLabel_recents": {},
+  "main_BottomNavigationBarItemLabel_voicemail": "Голосова пошта",
+  "@main_BottomNavigationBarItemLabel_voicemail": {},
   "main_CompatibilityIssueDialogActions_logout": "Вийти",
   "@main_CompatibilityIssueDialogActions_logout": {},
   "main_CompatibilityIssueDialogActions_update": "Оновити",

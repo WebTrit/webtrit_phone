@@ -30,9 +30,17 @@ void main() {
       icon: '0xe518',
     );
 
-    FeatureAccess access({required bool settingsRow, required List<String> flags}) {
+    FeatureAccess access({required bool settingsRow, required List<String> flags, bool bottomMenuTab = false}) {
       return FeatureAccess.create(
         AppConfig(
+          mainConfig: AppConfigMain(
+            bottomMenu: AppConfigBottomMenu(
+              tabs: [
+                if (bottomMenuTab) const BottomMenuTabScheme.voicemail(titleL10n: 'voicemail', icon: '0xe0b7'),
+                const BottomMenuTabScheme.keypad(titleL10n: 'keypad', icon: '0xe1ce'),
+              ],
+            ),
+          ),
           settingsConfig: AppConfigSettings(
             sections: [
               AppConfigSettingsSection(
@@ -77,6 +85,21 @@ void main() {
 
       expect(flavors, isNot(contains(SettingsFlavor.voicemail)));
       expect(featureAccess.coreSupport.supportsVoicemail, isTrue);
+    });
+
+    // The two placements are configured independently, and the data layer is
+    // one for both - so either of them alone has to keep it running.
+    test('the bottom-menu tab alone makes it available', () {
+      final featureAccess = access(settingsRow: false, bottomMenuTab: true, flags: [kVoicemailFeatureFlag]);
+
+      expect(featureAccess.settingsConfig.voicemailsEnabled, isFalse);
+      expect(featureAccess.voicemailAvailable, isTrue);
+    });
+
+    test('a core without voicemail keeps it unavailable however it is placed', () {
+      final featureAccess = access(settingsRow: true, bottomMenuTab: true, flags: const []);
+
+      expect(featureAccess.voicemailAvailable, isFalse);
     });
 
     test('the route guard follows availability, not the settings row', () {

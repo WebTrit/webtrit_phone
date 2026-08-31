@@ -24,6 +24,7 @@ void main() {
       ContactsRouterPageRoute.name,
       KeypadScreenPageRoute.name,
       ConversationsScreenPageRoute.name,
+      VoicemailTabPageRoute.name,
       EmbeddedTabPageRoute.name,
     ];
 

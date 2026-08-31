@@ -1341,6 +1341,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_recents => 'Останні';
 
   @override
+  String get main_BottomNavigationBarItemLabel_voicemail => 'Голосова пошта';
+
+  @override
   String get main_CompatibilityIssueDialogActions_logout => 'Вийти';
 
   @override

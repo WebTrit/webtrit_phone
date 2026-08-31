@@ -25,6 +25,35 @@ void main() {
     );
   }
 
+  group('BottomMenuMapper voicemail tab gated by the core capability', () {
+    BottomMenuConfig mapWithVoicemail({required bool enabled, required List<String> flags}) {
+      return mapTabs([
+        BottomMenuTabScheme.voicemail(enabled: enabled, titleL10n: 'voicemail', icon: '0xe0b7'),
+        const BottomMenuTabScheme.keypad(enabled: true, titleL10n: 'keypad', icon: '0xe1ce'),
+      ], flags: flags);
+    }
+
+    test('a configured tab on a core that advertises voicemail is offered', () {
+      final config = mapWithVoicemail(enabled: true, flags: [kVoicemailFeatureFlag]);
+
+      expect(config.getTabEnabled<VoicemailBottomMenuTab>(), isNotNull);
+    });
+
+    // A section the server cannot fill would lead to a screen saying so, which
+    // is worse than no entry - the same rule a sourceless contacts tab follows.
+    test('a core that does not advertise voicemail drops the tab from the menu', () {
+      final config = mapWithVoicemail(enabled: true, flags: const []);
+
+      expect(config.tabs.whereType<VoicemailBottomMenuTab>(), isEmpty);
+    });
+
+    test('a disabled tab is not offered even where the core advertises voicemail', () {
+      final config = mapWithVoicemail(enabled: false, flags: [kVoicemailFeatureFlag]);
+
+      expect(config.tabs.whereType<VoicemailBottomMenuTab>(), isEmpty);
+    });
+  });
+
   group('BottomMenuMapper recents call history gated by local flag AND callHistory capability', () {
     bool? resolvedSupportsCallHistory({required bool localFlag, required List<String> flags, bool? firebaseOverride}) {
       final config = mapTabs(

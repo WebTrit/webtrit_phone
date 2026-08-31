@@ -721,6 +721,24 @@ Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
       'type': instance.$type,
     };
 
+VoicemailTabScheme _$VoicemailTabSchemeFromJson(Map<String, dynamic> json) =>
+    VoicemailTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$VoicemailTabSchemeToJson(VoicemailTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.$type,
+    };
+
 EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
     EmbeddedTabScheme(
       enabled: json['enabled'] as bool? ?? true,
