@@ -13,7 +13,7 @@ import 'dart:io';
 
 import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 
-const _roots = <String, Map<String, Object?>>{
+final _roots = <String, Map<String, Object?>>{
   'ThemeSettings': ThemeSettings.jsonSchema,
   'AppConfig': AppConfig.jsonSchema,
   'EmbeddedResource': EmbeddedResource.jsonSchema,

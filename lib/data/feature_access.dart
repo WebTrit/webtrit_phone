@@ -292,8 +292,8 @@ abstract final class BottomMenuMapper {
     CoreSupport coreSupport,
     FeatureOverrides overrides,
   ) {
-    return tab.when(
-      favorites: (enabled, initial, titleL10n, icon, _) => FavoritesBottomMenuTab(
+    return switch (tab) {
+      FavoritesTabScheme() => FavoritesBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
@@ -302,59 +302,55 @@ abstract final class BottomMenuMapper {
       // Local flag (config) can be overridden by Firebase Remote Config, then gated by the core
       // capability: call history is shown only when the resolved local flag AND the server
       // callHistory capability are both true.
-      recents: (enabled, initial, titleL10n, icon, supportsCallHistory, _) => RecentsBottomMenuTab(
-        supportsCallHistory: (overrides.isCallHistoryEnabled ?? supportsCallHistory) && coreSupport.supportsCallHistory,
+      RecentsTabScheme() => RecentsBottomMenuTab(
+        supportsCallHistory:
+            (overrides.isCallHistoryEnabled ?? tab.supportsCallHistory) && coreSupport.supportsCallHistory,
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, layout, favorites, _) => ContactsBottomMenuTab(
+      ContactsTabScheme() => ContactsBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
-        layout: switch (layout) {
+        layout: switch (tab.layout) {
           ContactsLayoutScheme.tabbed => const ContactsTabbedLayout(),
-          ContactsLayoutScheme.unified => ContactsUnifiedLayout(favorites: favorites),
+          ContactsLayoutScheme.unified => ContactsUnifiedLayout(favorites: tab.favorites),
         },
-        contactSourceTypes: contactSourceTypes
+        contactSourceTypes: tab.contactSourceTypes
             .map((type) => ContactSourceType.values.byName(type))
             .where((type) => type != ContactSourceType.external || coreSupport.supportsExtensions)
             .toList(),
       ),
-      keypad: (enabled, initial, titleL10n, icon, _) => KeypadBottomMenuTab(
+      KeypadTabScheme() => KeypadBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      messaging: (enabled, initial, titleL10n, icon, _) => MessagingBottomMenuTab(
+      MessagingTabScheme() => MessagingBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      voicemail: (enabled, initial, titleL10n, icon, _) => VoicemailBottomMenuTab(
+      VoicemailTabScheme() => VoicemailBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      embedded: (enabled, initial, titleL10n, icon, embeddedId, _) {
-        final embeddedResource = embeddedConfig.embeddedResources.firstWhereOrNull(
-          (resource) => resource.id == embeddedId,
-        );
-        return EmbeddedBottomMenuTab(
-          id: embeddedId,
-          enabled: tab.enabled,
-          initial: tab.initial,
-          titleL10n: tab.titleL10n,
-          icon: tab.icon.toIconData(),
-          data: embeddedResource,
-        );
-      },
-    );
+      EmbeddedTabScheme() => EmbeddedBottomMenuTab(
+        id: tab.embeddedResourceId,
+        enabled: tab.enabled,
+        initial: tab.initial,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+        data: embeddedConfig.embeddedResources.firstWhereOrNull((resource) => resource.id == tab.embeddedResourceId),
+      ),
+    };
   }
 }
 
@@ -529,9 +525,7 @@ abstract final class CallMapper {
 abstract final class MessagingMapper {
   /// Maps configuration and core support to [MessagingConfig].
   static MessagingConfig map(AppConfig appConfig, CoreSupport coreSupport) {
-    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
-      (tab) => tab.maybeWhen(messaging: (enabled, _, _, _, _) => enabled, orElse: () => false),
-    );
+    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) => tab is MessagingTabScheme && tab.enabled);
 
     return MessagingConfig(
       coreSmsSupport: coreSupport.supportsSms,

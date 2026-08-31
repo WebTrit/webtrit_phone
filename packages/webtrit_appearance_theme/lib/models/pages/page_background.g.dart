@@ -18,8 +18,8 @@ const _$PageBackgroundSolidJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
   'type': 'object',
   'properties': {
-    'color': {'type': 'string'},
-    'type': {'type': 'string', 'default': 'solid'},
+    'color': {'type': 'string', 'description': 'The colour to fill with (hex string, e.g. `#3A6EA5`).'},
+    'type': {'type': 'string', 'description': 'The discriminator. Always `solid`.', 'default': 'solid'},
   },
   'required': ['color'],
 };
@@ -51,17 +51,19 @@ const _$PageBackgroundGradientJsonSchema = {
     'colors': {
       'type': 'array',
       'items': {'type': 'string'},
+      'description': 'The colours to run between (hex strings).',
     },
     'stops': {
       'type': 'array',
       'items': {'type': 'number'},
+      'description': 'Where each colour sits, `0.0` to `1.0`. Empty means an even spread.',
       'default': [],
     },
     'beginX': {'type': 'number', 'default': 0.0},
     'beginY': {'type': 'number', 'default': 0.0},
     'endX': {'type': 'number', 'default': 1.0},
     'endY': {'type': 'number', 'default': 1.0},
-    'type': {'type': 'string', 'default': 'gradient'},
+    'type': {'type': 'string', 'description': 'The discriminator. Always `gradient`.', 'default': 'gradient'},
   },
   'required': ['colors'],
 };
@@ -87,10 +89,11 @@ const _$PageBackgroundImageJsonSchema = {
     'imageUrl': {'type': 'string'},
     'fit': {
       'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
+      'description': 'How the image is fitted into the page.',
       'default': 'cover',
     },
     'opacity': {'type': 'number', 'default': 1.0},
-    'type': {'type': 'string', 'default': 'image'},
+    'type': {'type': 'string', 'description': 'The discriminator. Always `image`.', 'default': 'image'},
   },
   'required': ['imageUrl'],
 };

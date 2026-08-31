@@ -24,7 +24,7 @@ const _$SupportedThemeModeJsonSchema = {
       'enum': ['system', 'light', 'dark'],
       'default': 'system',
     },
-    'type': {'type': 'string', 'default': 'themeMode'},
+    'type': {'type': 'string', 'description': 'The discriminator. Always `themeMode`.', 'default': 'themeMode'},
   },
 };
 
@@ -47,7 +47,7 @@ const _$SupportedVideoCallJsonSchema = {
   'type': 'object',
   'properties': {
     'enabled': {'type': 'boolean', 'default': true},
-    'type': {'type': 'string', 'default': 'videoCall'},
+    'type': {'type': 'string', 'description': 'The discriminator. Always `videoCall`.', 'default': 'videoCall'},
   },
 };
 
@@ -69,10 +69,14 @@ const _$SupportedLoggingConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
   'type': 'object',
   'properties': {
-    'logLevel': {'type': 'string', 'default': 'INFO'},
-    'checkIntervalSec': {'type': 'integer', 'default': 15},
+    'logLevel': {'type': 'string', 'description': 'The application log level.', 'default': 'INFO'},
+    'checkIntervalSec': {
+      'type': 'integer',
+      'description': 'How often the RTP traffic monitor checks for traffic, in seconds.',
+      'default': 15,
+    },
     'anonymizationEnabled': {'type': 'boolean', 'default': true},
-    'type': {'type': 'string', 'default': 'loggingConfig'},
+    'type': {'type': 'string', 'description': 'The discriminator. Always `loggingConfig`.', 'default': 'loggingConfig'},
   },
 };
 
@@ -92,7 +96,11 @@ const _$SupportedSystemNotificationsJsonSchema = {
   'type': 'object',
   'properties': {
     'enabled': {'type': 'boolean', 'default': true},
-    'type': {'type': 'string', 'default': 'systemNotifications'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `systemNotifications`.',
+      'default': 'systemNotifications',
+    },
   },
 };
 
@@ -111,7 +119,11 @@ const _$SupportedHybridPresenceJsonSchema = {
   'type': 'object',
   'properties': {
     'enabled': {'type': 'boolean', 'default': true},
-    'type': {'type': 'string', 'default': 'hybridPresence'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `hybridPresence`.',
+      'default': 'hybridPresence',
+    },
   },
 };
 
@@ -129,7 +141,12 @@ const _$SupportedCallPullJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
   'type': 'object',
   'properties': {
-    'videoStrategy': {'type': 'string', 'default': 'softMute'},
-    'type': {'type': 'string', 'default': 'callPull'},
+    'videoStrategy': {
+      'type': 'string',
+      'description':
+          'Parsed by the app into a call-pull video strategy. `softMute` is the one\nthat needs no backend; the others are `hideVideo` and `mirror`.',
+      'default': 'softMute',
+    },
+    'type': {'type': 'string', 'description': 'The discriminator. Always `callPull`.', 'default': 'callPull'},
   },
 };

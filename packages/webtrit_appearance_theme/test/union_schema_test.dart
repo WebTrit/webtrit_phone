@@ -1,3 +1,4 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:test/test.dart';
 import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 
@@ -16,6 +17,7 @@ import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 void main() {
   _typesMatchTheWire();
   _theEmbeddedIdIsAString();
+  _aUnionOffersItsVariants();
 
   group('what the decoder makes of what the encoder wrote', () {
     test('a background comes back as the variant it says it is', () {
@@ -179,6 +181,93 @@ void _theEmbeddedIdIsAString() {
       final id = properties['embeddedResourceId']! as Map<String, Object?>;
 
       expect(id['type'], 'string');
+    });
+  });
+}
+
+/// A union is described as a `oneOf` over its variants.
+///
+/// The generator cannot write that: it describes a class from the fields the
+/// class declares, and a sealed union declares none. So the package supplies the
+/// one missing fact - which classes the union is made of - and `assembleUnions`
+/// does the rest. These tests are what keeps that list honest: every word the
+/// decoder dispatches on has to be a variant the schema offers, and the other way
+/// round.
+void _aUnionOffersItsVariants() {
+  group('what the schema offers for a union', () {
+    List<String> variantsOf(Map<String, Object?> root, String union) {
+      final defs = root[r'$defs']! as Map<String, Object?>;
+      final schema = defs[union]! as Map<String, Object?>;
+      final oneOf = schema['oneOf']! as List<Object?>;
+      return [for (final entry in oneOf) ((entry! as Map<String, Object?>)[r'$ref']! as String).split('/').last];
+    }
+
+    /// The discriminator values the schema states, read out of the variants the
+    /// union offers - which is how a consumer learns what to write.
+    Set<String> discriminatorsOf(Map<String, Object?> root, String union) {
+      final defs = root[r'$defs']! as Map<String, Object?>;
+      return {
+        for (final variant in variantsOf(root, union))
+          (((defs[variant]! as Map<String, Object?>)['properties']! as Map<String, Object?>)['type']!
+                  as Map<String, Object?>)['default']!
+              as String,
+      };
+    }
+
+    test('a background offers three, and every one of them is described', () {
+      expect(variantsOf(ThemeSettings.jsonSchema, 'PageBackground'), [
+        'PageBackgroundSolid',
+        'PageBackgroundGradient',
+        'PageBackgroundImage',
+      ]);
+
+      final defs = ThemeSettings.jsonSchema[r'$defs']! as Map<String, Object?>;
+      for (final variant in variantsOf(ThemeSettings.jsonSchema, 'PageBackground')) {
+        final schema = defs[variant]! as Map<String, Object?>;
+        expect(schema['properties'], isNotEmpty, reason: '$variant is offered but not described');
+      }
+    });
+
+    test('every word a background decoder takes is a variant it offers', () {
+      // Both directions. A variant added to the decoder and forgotten in the
+      // list drops out of the schema; one added to the list and forgotten in
+      // the decoder is offered and then refused.
+      final offered = discriminatorsOf(ThemeSettings.jsonSchema, 'PageBackground');
+
+      expect(offered, {'solid', 'gradient', 'image'});
+      for (final word in offered) {
+        expect(
+          () => PageBackground.fromJson({'type': word, 'color': '#000000', 'colors': <String>[], 'imageUrl': 'a'}),
+          returnsNormally,
+          reason: 'the schema offers "$word" but the decoder refuses it',
+        );
+      }
+    });
+
+    test('a supported feature and a bottom menu tab offer theirs too', () {
+      expect(discriminatorsOf(AppConfig.jsonSchema, 'SupportedFeature'), {
+        'themeMode',
+        'videoCall',
+        'loggingConfig',
+        'systemNotifications',
+        'hybridPresence',
+        'callPull',
+      });
+      expect(discriminatorsOf(AppConfig.jsonSchema, 'BottomMenuTabScheme'), {
+        'favorites',
+        'recents',
+        'contacts',
+        'keypad',
+        'messaging',
+        'voicemail',
+        'embedded',
+      });
+    });
+
+    test('an unknown word is refused rather than read as something else', () {
+      expect(() => PageBackground.fromJson({'type': 'video'}), throwsA(isA<CheckedFromJsonException>()));
+      expect(() => SupportedFeature.fromJson({'type': 'telepathy'}), throwsA(isA<CheckedFromJsonException>()));
+      expect(() => BottomMenuTabScheme.fromJson({'type': 'radio'}), throwsA(isA<CheckedFromJsonException>()));
     });
   });
 }
