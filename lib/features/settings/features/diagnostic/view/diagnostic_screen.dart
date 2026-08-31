@@ -50,12 +50,19 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> with WidgetsBinding
   Widget build(BuildContext context) {
     final androidTarget = PlatformInfo.isAndroid;
     final contactsAgreementStatus = context.watch<AppBloc>().state.contactsAgreementStatus;
+    // The system bar below the list, not the keyboard: this screen has no text
+    // field, so the keyboard inset this used to read was always zero and the
+    // padding below did nothing - the last row was drawn under the navigation
+    // bar. `padding` rather than `viewPadding` on purpose: with a keyboard up
+    // the scaffold already resizes the body, and the bar is covered anyway.
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     return BlocBuilder<DiagnosticCubit, DiagnosticState>(
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(leading: const AutoLeadingButton(), title: Text(context.l10n.diagnostic_AppBar_title)),
           body: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: bottomInset),
             child: Column(
               children: [
                 ListTile(
