@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/features/voicemail/widgets/voicemail_flavor_overlay.dart';
 import 'package:webtrit_phone/features/voicemail/models/voicemail_screen_context.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -95,7 +96,7 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
             return MainScreen(
               // The mock unread state below backs this the way the shell does
               // in the app.
-              decorateTabIcon: MessagingFlavorOverlay.forTab,
+              decorateTabIcon: composeTabIconDecorators([MessagingFlavorOverlay.forTab, VoicemailFlavorOverlay.forTab]),
               body: body,
               tabs: tabs,
               currentIndex: selectedIndex,
