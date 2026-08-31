@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$IconDataConfig {
 
- int get codePoint; String get fontFamily; bool get matchTextDirection;
+ String get codePoint; String get fontFamily; bool get matchTextDirection;
 /// Create a copy of IconDataConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $IconDataConfigCopyWith<$Res>  {
   factory $IconDataConfigCopyWith(IconDataConfig value, $Res Function(IconDataConfig) _then) = _$IconDataConfigCopyWithImpl;
 @useResult
 $Res call({
- int codePoint, String fontFamily, bool matchTextDirection
+ String codePoint, String fontFamily, bool matchTextDirection
 });
 
 
@@ -66,7 +66,7 @@ class _$IconDataConfigCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? codePoint = null,Object? fontFamily = null,Object? matchTextDirection = null,}) {
   return _then(IconDataConfig(
 codePoint: null == codePoint ? _self.codePoint : codePoint // ignore: cast_nullable_to_non_nullable
-as int,fontFamily: null == fontFamily ? _self.fontFamily : fontFamily // ignore: cast_nullable_to_non_nullable
+as String,fontFamily: null == fontFamily ? _self.fontFamily : fontFamily // ignore: cast_nullable_to_non_nullable
 as String,matchTextDirection: null == matchTextDirection ? _self.matchTextDirection : matchTextDirection // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

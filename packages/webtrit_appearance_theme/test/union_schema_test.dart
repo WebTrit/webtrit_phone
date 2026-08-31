@@ -14,6 +14,8 @@ import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 /// read back, and has to come back as itself. And the schema is checked to
 /// carry the same word the decoder dispatches on.
 void main() {
+  _typesMatchTheWire();
+
   group('what the decoder makes of what the encoder wrote', () {
     test('a background comes back as the variant it says it is', () {
       for (final background in <PageBackground>[
@@ -92,6 +94,47 @@ void main() {
           variant.value.toJson()['type'],
           reason: '${variant.key} disagrees with what it writes',
         );
+      }
+    });
+  });
+}
+
+/// A field's type is the type the JSON carries.
+///
+/// A `JsonConverter<T, S>` is the one way those two can differ, and the schema
+/// generator describes `T` - so a converted field is published as something the
+/// document never contains. `IconDataConfig.codePoint` was an `int` behind
+/// `JsonConverter<int, String>` and went out as `integer`, which every real
+/// icon fails.
+///
+/// The answer is not to teach the generator about converters. It is to have no
+/// converter: a field whose type is the wire's cannot describe itself wrongly.
+void _typesMatchTheWire() {
+  group('what a converted field used to claim', () {
+    test('an icon code point is a string, and says so', () {
+      const icon = IconDataConfig(codePoint: 'e491');
+
+      expect(icon.toJson()['codePoint'], isA<String>());
+
+      final defs = ThemeSettings.jsonSchema[r'$defs']! as Map<String, Object?>;
+      final schema = defs['IconDataConfig']! as Map<String, Object?>;
+      final properties = schema['properties']! as Map<String, Object?>;
+      final codePoint = properties['codePoint']! as Map<String, Object?>;
+
+      expect(codePoint['type'], 'string');
+    });
+
+    test('and still reads as a number where one is wanted', () {
+      // The parse moved to where the number is used. Both spellings are read,
+      // because a theme stored before this carried either.
+      expect(const IconDataConfig(codePoint: 'e491').codePointValue, 0xe491);
+      expect(const IconDataConfig(codePoint: '0xe491').codePointValue, 0xe491);
+    });
+
+    test('round-trips whatever was stored', () {
+      for (final written in ['e491', '0xe491']) {
+        final icon = IconDataConfig.fromJson({'codePoint': written});
+        expect(icon.toJson()['codePoint'], written);
       }
     });
   });

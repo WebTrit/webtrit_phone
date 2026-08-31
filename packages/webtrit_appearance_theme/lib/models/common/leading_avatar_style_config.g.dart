@@ -238,7 +238,10 @@ const _$LeadingAvatarStyleConfigJsonSchema = {
     'IconDataConfig': {
       'type': 'object',
       'properties': {
-        'codePoint': {'type': 'integer'},
+        'codePoint': {
+          'type': 'string',
+          'description': 'The code point in hex, e.g. `e491`.',
+        },
         'fontFamily': {'type': 'string', 'default': 'MaterialIcons'},
         'matchTextDirection': {'type': 'boolean', 'default': false},
       },
@@ -489,7 +492,10 @@ const _$SmartIndicatorStyleConfigJsonSchema = {
     'IconDataConfig': {
       'type': 'object',
       'properties': {
-        'codePoint': {'type': 'integer'},
+        'codePoint': {
+          'type': 'string',
+          'description': 'The code point in hex, e.g. `e491`.',
+        },
         'fontFamily': {'type': 'string', 'default': 'MaterialIcons'},
         'matchTextDirection': {'type': 'boolean', 'default': false},
       },
