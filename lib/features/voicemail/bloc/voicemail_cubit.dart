@@ -49,7 +49,7 @@ class VoicemailCubit extends Cubit<VoicemailState> {
     fetchVoicemails();
   }
 
-  void fetchVoicemails() async {
+  Future<void> fetchVoicemails() async {
     try {
       _safeEmit(state.copyWith(status: VoicemailStatus.loading, error: null));
       await _repository.fetchVoicemails();
