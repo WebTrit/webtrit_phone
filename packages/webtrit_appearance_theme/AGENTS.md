@@ -34,8 +34,12 @@ Sealed unions use `@Freezed(unionKey: 'type')` with discriminated JSON (e.g. `Bo
 
 Custom JSON converters in `lib/converters/`:
 
-- `HexCodePointConverter` — `0x####` hex strings to int codepoints
-- `IntToStringConverter` / `IntToStringOptionalConverter` — legacy migration shims
+- `UriConverter` — `Uri` to and from its string form
+
+Keep the list short. A converter makes the schema lie: json_serializable describes the field by
+its Dart type, not by the JSON the converter reads and writes, so a field that needs one is a
+field a validator will get wrong. Prefer a type that serialises as itself - which is why
+`IconDataConfig.codePoint` is a `String` and `embeddedResourceId` is a `String`.
 
 ## Adding a New DTO Property
 
@@ -104,16 +108,28 @@ Do this for roots only - a document somebody actually feeds to the app (`ThemeSe
 `AppConfig`, `EmbeddedResource`). Nested config types need nothing: they already appear in
 the root's `$defs` and are addressable as `#/$defs/<Type>`.
 
-**Temporary dependency override.** The released json_serializable cannot generate these
-schemas. It crashes (`Bad state: Should never get here - with DartObjectImpl`) on any field
-whose default is a non-empty collection - `AppConfig.signinOrder`, `formats`, `actions`,
-`sections` and `PageBackground.stops` all hit it - and the exception kills generation for the
-entire library, `fromJson`/`toJson` included. It also reads fields only, so a class written in
-the freezed shape (a factory redirecting to the class that holds the state) came out as an
-empty object, as did every union. The root `pubspec.yaml` therefore overrides json_serializable
-with a fork carrying both fixes
-([SERDUN/json_serializable.dart#1](https://github.com/SERDUN/json_serializable.dart/pull/1)).
-Drop the override once they land upstream and are released.
+**Temporary dependency override.** The root `pubspec.yaml` overrides json_serializable with a
+fork ([SERDUN/json_serializable.dart#1](https://github.com/SERDUN/json_serializable.dart/pull/1)).
+Two of the three reasons it was added are gone; what is left is written down here so nobody
+re-adds them.
+
+The released generator reads **fields off the source class**. That is the whole story, and it
+had three consequences:
+
+- a default that is a non-empty collection crashed it outright, killing generation for the
+  entire library - `fromJson`/`toJson` included, not only the schema. **Fixed in the package**:
+  no field carries one any more; the defaults are resolved when read.
+- a class written in the freezed factory shape (`const factory X(...) = _X`) has no fields of
+  its own, so it came out as `{"type": "object", "properties": {}}` - and, because nothing
+  traversed it, the types nested inside it never got a `$def` at all. **Fixed in the package**:
+  every non-union config type is now written with its state on the class itself.
+- a **union** hits the same wall and cannot be fixed here: freezed writes the variant classes,
+  so there is no source class on which to declare fields. On the released generator
+  `PageBackground`, `BottomMenuTabScheme` and `SupportedFeature` come out empty and their 16
+  variants disappear; enum-typed properties also degrade to `{"type": "object"}` (10 of them).
+
+Measured on 6.14.1 without the override: `ThemeSettings` 87 of 90 `$defs`, `AppConfig` 28 of 41.
+Drop the override once the union fix lands upstream and is released.
 
 **What the generated schema does not describe.** Coverage is complete - every JSON key the
 generated `toJson` writes appears in the schema (610 keys across 132 types, checked by
@@ -122,10 +138,11 @@ that the app will accept a theme:
 
 - nullability is not modelled, so an explicit `null` in a nullable field fails validation
   (the shipped `app.config.json` and both `original.widget.*.config.json` contain such nulls);
-- `JsonConverter` annotations are ignored, so `IconDataConfig.codePoint` is described as
-  `integer` although the JSON carries `"0xe497"`;
-- a union is a `oneOf` over its variants, but its discriminator (`type`) is described as a
-  plain string rather than pinned to each variant's value.
+- `JsonConverter` annotations are ignored, so a converted field is described by its Dart type
+  rather than by what the JSON actually carries;
+- a union is a `oneOf` over its variants and each variant's discriminator (`type`) carries its
+  value as a `default`, but it is a plain `string`, not a `const` - so validation alone will not
+  reject a variant tagged with another variant's name.
 
 ## Commands
 

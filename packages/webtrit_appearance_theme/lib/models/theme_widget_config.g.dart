@@ -2748,7 +2748,7 @@ const _$TabSplashFactoryConfigEnumMap = {
   TabSplashFactoryConfig.inkSparkle: 'inkSparkle',
 };
 
-_AppBarConfig _$AppBarConfigFromJson(Map<String, dynamic> json) => _AppBarConfig(
+AppBarConfig _$AppBarConfigFromJson(Map<String, dynamic> json) => AppBarConfig(
   primary: json['primary'] as bool? ?? true,
   showBackButton: json['showBackButton'] as bool? ?? true,
   backgroundColor: json['backgroundColor'] as String?,
@@ -2776,7 +2776,7 @@ _AppBarConfig _$AppBarConfigFromJson(Map<String, dynamic> json) => _AppBarConfig
       : OverlayStyleModel.fromJson(json['systemOverlayStyle'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$AppBarConfigToJson(_AppBarConfig instance) => <String, dynamic>{
+Map<String, dynamic> _$AppBarConfigToJson(AppBarConfig instance) => <String, dynamic>{
   'primary': instance.primary,
   'showBackButton': instance.showBackButton,
   'backgroundColor': instance.backgroundColor,
@@ -2789,14 +2789,14 @@ Map<String, dynamic> _$AppBarConfigToJson(_AppBarConfig instance) => <String, dy
   'leadingWidth': instance.leadingWidth,
   'toolbarHeight': instance.toolbarHeight,
   'centerTitle': instance.centerTitle,
-  'iconTheme': instance.iconTheme,
-  'actionsIconTheme': instance.actionsIconTheme,
-  'titleTextStyle': instance.titleTextStyle,
-  'toolbarTextStyle': instance.toolbarTextStyle,
-  'systemOverlayStyle': instance.systemOverlayStyle,
+  'iconTheme': instance.iconTheme?.toJson(),
+  'actionsIconTheme': instance.actionsIconTheme?.toJson(),
+  'titleTextStyle': instance.titleTextStyle?.toJson(),
+  'toolbarTextStyle': instance.toolbarTextStyle?.toJson(),
+  'systemOverlayStyle': instance.systemOverlayStyle?.toJson(),
 };
 
-const _$_AppBarConfigJsonSchema = {
+const _$AppBarConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
   'type': 'object',
   'properties': {

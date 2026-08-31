@@ -6,7 +6,7 @@ part of 'icon_theme_data_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_IconThemeDataConfig _$IconThemeDataConfigFromJson(Map<String, dynamic> json) => _IconThemeDataConfig(
+IconThemeDataConfig _$IconThemeDataConfigFromJson(Map<String, dynamic> json) => IconThemeDataConfig(
   size: (json['size'] as num?)?.toDouble(),
   fill: (json['fill'] as num?)?.toDouble(),
   weight: (json['weight'] as num?)?.toDouble(),
@@ -18,7 +18,7 @@ _IconThemeDataConfig _$IconThemeDataConfigFromJson(Map<String, dynamic> json) =>
   applyTextScaling: json['applyTextScaling'] as bool?,
 );
 
-Map<String, dynamic> _$IconThemeDataConfigToJson(_IconThemeDataConfig instance) => <String, dynamic>{
+Map<String, dynamic> _$IconThemeDataConfigToJson(IconThemeDataConfig instance) => <String, dynamic>{
   'size': instance.size,
   'fill': instance.fill,
   'weight': instance.weight,
@@ -30,7 +30,7 @@ Map<String, dynamic> _$IconThemeDataConfigToJson(_IconThemeDataConfig instance) 
   'applyTextScaling': instance.applyTextScaling,
 };
 
-const _$_IconThemeDataConfigJsonSchema = {
+const _$IconThemeDataConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
   'type': 'object',
   'properties': {
@@ -50,6 +50,7 @@ const _$_IconThemeDataConfigJsonSchema = {
     'shadows': {
       'type': 'array',
       'items': {r'$ref': r'#/$defs/ShadowConfig'},
+      'description': 'A list of shadows to apply to the icons.',
     },
     'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
   },
@@ -72,19 +73,19 @@ const _$_IconThemeDataConfigJsonSchema = {
   },
 };
 
-_ShadowConfig _$ShadowConfigFromJson(Map<String, dynamic> json) => _ShadowConfig(
+ShadowConfig _$ShadowConfigFromJson(Map<String, dynamic> json) => ShadowConfig(
   color: json['color'] as String?,
   offset: json['offset'] == null ? null : OffsetConfig.fromJson(json['offset'] as Map<String, dynamic>),
   blurRadius: (json['blurRadius'] as num?)?.toDouble() ?? 0.0,
 );
 
-Map<String, dynamic> _$ShadowConfigToJson(_ShadowConfig instance) => <String, dynamic>{
+Map<String, dynamic> _$ShadowConfigToJson(ShadowConfig instance) => <String, dynamic>{
   'color': instance.color,
   'offset': instance.offset?.toJson(),
   'blurRadius': instance.blurRadius,
 };
 
-const _$_ShadowConfigJsonSchema = {
+const _$ShadowConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
   'type': 'object',
   'properties': {
@@ -103,15 +104,15 @@ const _$_ShadowConfigJsonSchema = {
   },
 };
 
-_OffsetConfig _$OffsetConfigFromJson(Map<String, dynamic> json) =>
-    _OffsetConfig(dx: (json['dx'] as num?)?.toDouble() ?? 0.0, dy: (json['dy'] as num?)?.toDouble() ?? 0.0);
+OffsetConfig _$OffsetConfigFromJson(Map<String, dynamic> json) =>
+    OffsetConfig(dx: (json['dx'] as num?)?.toDouble() ?? 0.0, dy: (json['dy'] as num?)?.toDouble() ?? 0.0);
 
-Map<String, dynamic> _$OffsetConfigToJson(_OffsetConfig instance) => <String, dynamic>{
+Map<String, dynamic> _$OffsetConfigToJson(OffsetConfig instance) => <String, dynamic>{
   'dx': instance.dx,
   'dy': instance.dy,
 };
 
-const _$_OffsetConfigJsonSchema = {
+const _$OffsetConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
   'type': 'object',
   'properties': {
