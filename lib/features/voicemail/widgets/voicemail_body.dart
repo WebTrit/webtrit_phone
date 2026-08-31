@@ -9,6 +9,7 @@ import 'package:webtrit_phone/models/voicemail/user_voicemail.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/bloc.dart';
+import 'empty_mailbox_view.dart';
 import 'failure_retry_view.dart';
 import 'feature_not_supported_view.dart';
 import 'voicemail_tile.dart';
@@ -34,23 +35,30 @@ class VoicemailBody extends StatelessWidget {
         if (state.isInitializing) {
           return const Center(child: CircularProgressIndicator(strokeWidth: 2));
         }
-        if (state.isLoadedWithEmptyResult) {
-          return Center(child: Text(context.l10n.voicemail_Label_empty));
-        }
         if (state.isLoadedWithError) {
           return FailureRetryView(onRetry: () => context.read<VoicemailCubit>().fetchVoicemails());
         }
 
-        return Stack(
-          children: [
-            if (state.isRefreshing) const LinearProgressIndicator(minHeight: 1),
-            if (state.isVoicemailsExists)
-              VoicemailListView(
-                items: state.items,
-                selectedVoicemailsIds: state.selectedVoicemailsIds,
-                isMultipleVoicemailsSelection: state.isMultipleVoicemailsSelection,
-              ),
-          ],
+        return RefreshIndicator(
+          // The bottom-menu section runs its body behind the bar, so without an
+          // offset the spinner settles a bar's height out of sight and the pull
+          // looks like it did nothing. A host that keeps its body below an app
+          // bar hands this a top padding of zero, so the one figure serves both.
+          edgeOffset: MediaQuery.of(context).padding.top,
+          onRefresh: () => context.read<VoicemailCubit>().fetchVoicemails(),
+          child: Stack(
+            children: [
+              if (state.isRefreshing) const LinearProgressIndicator(minHeight: 1),
+              if (state.isVoicemailsExists)
+                VoicemailListView(
+                  items: state.items,
+                  selectedVoicemailsIds: state.selectedVoicemailsIds,
+                  isMultipleVoicemailsSelection: state.isMultipleVoicemailsSelection,
+                )
+              else
+                const EmptyMailboxView(),
+            ],
+          ),
         );
       },
     );
@@ -86,6 +94,10 @@ class VoicemailListView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return ListView.separated(
+      // A mailbox with a message or two has nothing to scroll, and a list that
+      // cannot scroll swallows the drag instead of passing it to the refresh
+      // indicator above it.
+      physics: const AlwaysScrollableScrollPhysics(),
       itemCount: items.length,
       separatorBuilder: (_, _) => Divider(color: colorScheme.surfaceContainerHigh, height: 1),
       itemBuilder: (context, index) {
