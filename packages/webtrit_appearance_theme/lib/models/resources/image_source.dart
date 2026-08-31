@@ -50,6 +50,20 @@ class ImageSource with _$ImageSource {
     this.uri,
 
     /// Semantic type of reference (default = "asset").
+    ///
+    /// The wire key is `$ref`, the JSON Schema keyword for a reference, and the
+    /// only raw-string key in this package. As a child of `properties` it is an
+    /// ordinary property name and the spec never reads it as a keyword there,
+    /// but a schema walker that resolves references before it descends will
+    /// follow this one and lose every path underneath it. A consumer of the
+    /// generated schema has to treat the children of `properties` as names,
+    /// never as keywords; the plain `type` property on [ShapeBorderConfig],
+    /// `AppConfigSettingsItem` and the login actions has the same exposure.
+    ///
+    /// Kept rather than renamed: it has been on the wire since 1.11.0, so a
+    /// rename is a removal plus an addition to anything tracking the shape, and
+    /// a config still sending `$ref` would fall back to "asset" without an
+    /// error. See the wire contract in AGENTS.md.
     @JsonKey(name: r'$ref') this.ref = 'asset',
 
     /// Optional rendering specification (scale, padding, etc.).

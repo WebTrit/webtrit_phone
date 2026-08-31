@@ -37,6 +37,54 @@ Custom JSON converters in `lib/converters/`:
 - `HexCodePointConverter` — `0x####` hex strings to int codepoints
 - `IntToStringConverter` / `IntToStringOptionalConverter` — legacy migration shims
 
+## Wire Contract
+
+The strings below are what a deployed release parses. The configurator's backend keeps an
+inventory of every `Class.field` a release reads, and refuses a release that removes a path or
+changes a type. Nothing in this section may be renamed, re-cased or deleted without a
+hand-written bridge entry on the backend side.
+
+### Sealed unions
+
+All three discriminate on `type`. The values are the constructor names, and the authority is
+the `switch (json['type'])` in the matching `*.freezed.dart` - not the annotation.
+
+| Class | Case rule | Values on the wire |
+| --- | --- | --- |
+| `PageBackground` | `FreezedUnionCase.snake` | `solid`, `gradient`, `image` |
+| `SupportedFeature` | `FreezedUnionCase.none` | `themeMode`, `videoCall`, `loggingConfig`, `systemNotifications`, `hybridPresence`, `callPull` |
+| `BottomMenuTabScheme` | `FreezedUnionCase.none` | `favorites`, `recents`, `contacts`, `keypad`, `messaging`, `voicemail`, `embedded` |
+
+Every value above is either one lowercase word or a camelCase name its own rule leaves alone,
+so all three rules produce identical output today. They diverge on the next multi-word
+constructor: one added to `PageBackground` arrives as `image_source`, the same one added to
+either other union arrives as `imageSource`. Read the rule off the class you are adding to;
+do not carry a convention across.
+
+### The `$ref` key
+
+`ImageSource.ref` is written as `$ref` (`lib/models/resources/image_source.dart`) - the only
+raw-string key in the package, and the JSON Schema keyword for a reference. As a child of
+`properties` it is an ordinary property name, but a schema walker that resolves references
+before it descends will follow it and lose every path underneath: the first flattener written
+against this schema produced 23 paths instead of 610. Treat the children of `properties` as
+names, never as keywords. The plain `type` property on `ShapeBorderConfig`,
+`AppConfigSettingsItem`, `AppConfigLoginQrFormat` and `AppConfigModeSelectAction` has the same
+exposure.
+
+The key stays. It has been on the wire since 1.11.0, so a rename is a removal plus an addition
+in the inventory's eyes, and a config still sending `$ref` would fall back to the `asset`
+default without an error.
+
+### Empty objects
+
+`AppConfigContactList` (`contacts.list`) and `AppConfigSms` (`messaging.sms`) declare no fields
+and serialize as `{}`. They hold their slot beside `contacts.details` and `messaging.chats`;
+the stock `assets/themes/app.config.json` marks the first "Not implemented yet". They
+contribute no path to the inventory, and removing them would take `contacts.list` and
+`messaging.sms` out of it - a removal, refused at the gate, for nothing gained. Fill them or
+leave them; do not delete them.
+
 ## Adding a New DTO Property
 
 1. Add field to the class in `lib/models/`.

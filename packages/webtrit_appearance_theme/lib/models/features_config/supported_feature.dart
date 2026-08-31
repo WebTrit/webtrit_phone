@@ -6,6 +6,9 @@ part 'supported_feature.freezed.dart';
 
 part 'supported_feature.g.dart';
 
+/// The `type` discriminator carries the constructor name verbatim, camelCase
+/// included - `themeMode`, `videoCall`, `loggingConfig`, `systemNotifications`,
+/// `hybridPresence`, `callPull`. See the wire contract in AGENTS.md.
 @Freezed(unionKey: 'type', unionValueCase: FreezedUnionCase.none)
 sealed class SupportedFeature with _$SupportedFeature {
   const factory SupportedFeature.themeMode({@Default(ThemeModeConfig.system) ThemeModeConfig mode}) =

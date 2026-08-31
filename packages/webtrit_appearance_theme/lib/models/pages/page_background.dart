@@ -6,6 +6,11 @@ part 'page_background.freezed.dart';
 
 part 'page_background.g.dart';
 
+/// The `type` discriminator carries `solid`, `gradient`, `image`. `snake` makes
+/// no difference to those three, but it is this union's rule: a multi-word
+/// constructor added here arrives snake_cased, where the same one added to
+/// [SupportedFeature] or `BottomMenuTabScheme` would stay camelCase. See the
+/// wire contract in AGENTS.md.
 @Freezed(unionKey: 'type', unionValueCase: FreezedUnionCase.snake)
 sealed class PageBackground with _$PageBackground {
   const factory PageBackground.solid({required String color}) = PageBackgroundSolid;

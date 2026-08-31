@@ -446,7 +446,11 @@ enum ContactsLayoutScheme {
   unified,
 }
 
-@Freezed(unionKey: 'type')
+/// The `type` discriminator carries the constructor name verbatim - `favorites`,
+/// `recents`, `contacts`, `keypad`, `messaging`, `voicemail`, `embedded`. `none`
+/// is freezed's default and is stated here so a change to that default cannot
+/// re-case values already on the wire. See the wire contract in AGENTS.md.
+@Freezed(unionKey: 'type', unionValueCase: FreezedUnionCase.none)
 sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
   const BottomMenuTabScheme._();
 
@@ -676,6 +680,14 @@ class AppConfigContacts with _$AppConfigContacts {
   Map<String, Object?> toJson() => _$AppConfigContactsToJson(this);
 }
 
+/// Holds the `contacts.list` slot beside [AppConfigContactDetails]. The contacts
+/// list screen has nothing configurable yet - the stock `app.config.json` marks
+/// it "Not implemented yet" - so this serializes as `{}` and contributes no
+/// path to the shape a release parses.
+///
+/// Kept rather than removed: dropping it would take `contacts.list` out of that
+/// shape, which reads as a removal, for nothing gained. Fill it when the list
+/// screen gains a setting.
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigContactList with _$AppConfigContactList {
@@ -735,6 +747,13 @@ class AppConfigMessaging with _$AppConfigMessaging {
   Map<String, Object?> toJson() => _$AppConfigMessagingToJson(this);
 }
 
+/// Holds the `messaging.sms` slot beside [AppConfigChats]. SMS has nothing
+/// configurable yet, so this serializes as `{}` and contributes no path to the
+/// shape a release parses.
+///
+/// Kept rather than removed, on the same grounds as [AppConfigContactList]:
+/// dropping it would take `messaging.sms` out of that shape. Fill it when SMS
+/// gains a setting.
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigSms with _$AppConfigSms {
