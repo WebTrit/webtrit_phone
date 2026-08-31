@@ -6,49 +6,35 @@ part of 'theme_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ThemeSettings _$ThemeSettingsFromJson(Map<String, dynamic> json) =>
-    ThemeSettings(
-      lightColorSchemeConfig: json['lightColorSchemeConfig'] == null
-          ? const ColorSchemeConfig()
-          : ColorSchemeConfig.fromJson(
-              json['lightColorSchemeConfig'] as Map<String, dynamic>,
-            ),
-      darkColorSchemeConfig: json['darkColorSchemeConfig'] == null
-          ? const ColorSchemeConfig()
-          : ColorSchemeConfig.fromJson(
-              json['darkColorSchemeConfig'] as Map<String, dynamic>,
-            ),
-      themeWidgetLightConfig: json['themeWidgetLightConfig'] == null
-          ? const ThemeWidgetConfig()
-          : ThemeWidgetConfig.fromJson(
-              json['themeWidgetLightConfig'] as Map<String, dynamic>,
-            ),
-      themeWidgetDarkConfig: json['themeWidgetDarkConfig'] == null
-          ? const ThemeWidgetConfig()
-          : ThemeWidgetConfig.fromJson(
-              json['themeWidgetDarkConfig'] as Map<String, dynamic>,
-            ),
-      themePageLightConfig: json['themePageLightConfig'] == null
-          ? const ThemePageConfig()
-          : ThemePageConfig.fromJson(
-              json['themePageLightConfig'] as Map<String, dynamic>,
-            ),
-      themePageDarkConfig: json['themePageDarkConfig'] == null
-          ? const ThemePageConfig()
-          : ThemePageConfig.fromJson(
-              json['themePageDarkConfig'] as Map<String, dynamic>,
-            ),
-    );
+ThemeSettings _$ThemeSettingsFromJson(Map<String, dynamic> json) => ThemeSettings(
+  lightColorSchemeConfig: json['lightColorSchemeConfig'] == null
+      ? const ColorSchemeConfig()
+      : ColorSchemeConfig.fromJson(json['lightColorSchemeConfig'] as Map<String, dynamic>),
+  darkColorSchemeConfig: json['darkColorSchemeConfig'] == null
+      ? const ColorSchemeConfig()
+      : ColorSchemeConfig.fromJson(json['darkColorSchemeConfig'] as Map<String, dynamic>),
+  themeWidgetLightConfig: json['themeWidgetLightConfig'] == null
+      ? const ThemeWidgetConfig()
+      : ThemeWidgetConfig.fromJson(json['themeWidgetLightConfig'] as Map<String, dynamic>),
+  themeWidgetDarkConfig: json['themeWidgetDarkConfig'] == null
+      ? const ThemeWidgetConfig()
+      : ThemeWidgetConfig.fromJson(json['themeWidgetDarkConfig'] as Map<String, dynamic>),
+  themePageLightConfig: json['themePageLightConfig'] == null
+      ? const ThemePageConfig()
+      : ThemePageConfig.fromJson(json['themePageLightConfig'] as Map<String, dynamic>),
+  themePageDarkConfig: json['themePageDarkConfig'] == null
+      ? const ThemePageConfig()
+      : ThemePageConfig.fromJson(json['themePageDarkConfig'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$ThemeSettingsToJson(ThemeSettings instance) =>
-    <String, dynamic>{
-      'lightColorSchemeConfig': instance.lightColorSchemeConfig.toJson(),
-      'darkColorSchemeConfig': instance.darkColorSchemeConfig.toJson(),
-      'themeWidgetLightConfig': instance.themeWidgetLightConfig.toJson(),
-      'themeWidgetDarkConfig': instance.themeWidgetDarkConfig.toJson(),
-      'themePageLightConfig': instance.themePageLightConfig.toJson(),
-      'themePageDarkConfig': instance.themePageDarkConfig.toJson(),
-    };
+Map<String, dynamic> _$ThemeSettingsToJson(ThemeSettings instance) => <String, dynamic>{
+  'lightColorSchemeConfig': instance.lightColorSchemeConfig.toJson(),
+  'darkColorSchemeConfig': instance.darkColorSchemeConfig.toJson(),
+  'themeWidgetLightConfig': instance.themeWidgetLightConfig.toJson(),
+  'themeWidgetDarkConfig': instance.themeWidgetDarkConfig.toJson(),
+  'themePageLightConfig': instance.themePageLightConfig.toJson(),
+  'themePageDarkConfig': instance.themePageDarkConfig.toJson(),
+};
 
 const _$ThemeSettingsJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -136,8 +122,7 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'seedColor': {
           'type': 'string',
-          'description':
-              'The seed color used to generate tonal palettes for the theme.',
+          'description': 'The seed color used to generate tonal palettes for the theme.',
           'default': '#F95A14',
         },
         'colorSchemeOverride': {
@@ -155,10 +140,7 @@ const _$ThemeSettingsJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -167,8 +149,7 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -179,102 +160,45 @@ const _$ThemeSettingsJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -303,11 +227,7 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'color': {'type': 'string', 'description': 'Color in hex format.'},
         'width': {'type': 'number', 'default': 1.0},
-        'style': {
-          'type': 'string',
-          'description': "Border style (e.g., 'solid', 'none').",
-          'default': 'solid',
-        },
+        'style': {'type': 'string', 'description': "Border style (e.g., 'solid', 'none').", 'default': 'solid'},
       },
     },
     'ShapeBorderConfig': {
@@ -315,15 +235,10 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'type': {
           'type': 'string',
-          'description':
-              "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
+          'description': "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
           'default': 'rounded',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description':
-              'The border radius value (for rounded/beveled shapes).',
-        },
+        'borderRadius': {'type': 'number', 'description': 'The border radius value (for rounded/beveled shapes).'},
       },
     },
     'VisualDensityConfig': {
@@ -336,18 +251,11 @@ const _$ThemeSettingsJsonSchema = {
     'ButtonStyleConfig': {
       'type': 'object',
       'properties': {
-        'textStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': "The style for a button's text descendants.",
-        },
-        'backgroundColor': {
-          'type': 'string',
-          'description': "The button's background fill color in hex format.",
-        },
+        'textStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': "The style for a button's text descendants."},
+        'backgroundColor': {'type': 'string', 'description': "The button's background fill color in hex format."},
         'foregroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format.",
+          'description': "The color for the button's text/icon descendants in hex format.",
         },
         'selectedBackgroundColor': {
           'type': 'string',
@@ -356,77 +264,45 @@ const _$ThemeSettingsJsonSchema = {
         },
         'selectedForegroundColor': {
           'type': 'string',
-          'description':
-              'The color for the text/icon descendants in hex format while the button is switched on.',
+          'description': 'The color for the text/icon descendants in hex format while the button is switched on.',
         },
         'selectedIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format while the button is switched on.",
+          'description': "The icon's color in hex format while the button is switched on.",
         },
         'disabledBackgroundColor': {
           'type': 'string',
-          'description':
-              "The button's background fill color in hex format when the button is disabled.",
+          'description': "The button's background fill color in hex format when the button is disabled.",
         },
         'disabledForegroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format when the button is disabled.",
+          'description': "The color for the button's text/icon descendants in hex format when the button is disabled.",
         },
         'disabledIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format when the button is disabled.",
+          'description': "The icon's color in hex format when the button is disabled.",
         },
         'disabledShadowColor': {
           'type': 'string',
-          'description':
-              'The shadow color in hex format when the button is disabled.',
+          'description': 'The shadow color in hex format when the button is disabled.',
         },
         'overlayColor': {
           'type': 'string',
-          'description':
-              'The highlight color for states (focused, hovered, pressed) in hex format.',
+          'description': 'The highlight color for states (focused, hovered, pressed) in hex format.',
         },
-        'shadowColor': {
-          'type': 'string',
-          'description': 'The shadow color in hex format.',
-        },
-        'surfaceTintColor': {
-          'type': 'string',
-          'description': 'The surface tint color in hex format.',
-        },
-        'elevation': {
-          'type': 'number',
-          'description': 'The elevation of the button.',
-        },
+        'shadowColor': {'type': 'string', 'description': 'The shadow color in hex format.'},
+        'surfaceTintColor': {'type': 'string', 'description': 'The surface tint color in hex format.'},
+        'elevation': {'type': 'number', 'description': 'The elevation of the button.'},
         'padding': {
           r'$ref': r'#/$defs/EdgeInsetsConfig',
-          'description':
-              "The padding between the button's boundary and its child.",
+          'description': "The padding between the button's boundary and its child.",
         },
-        'minimumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The minimum size of the button.',
-        },
-        'fixedSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The fixed size of the button.',
-        },
-        'maximumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The maximum size of the button.',
-        },
-        'iconColor': {
-          'type': 'string',
-          'description': "The icon's color in hex format.",
-        },
+        'minimumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The minimum size of the button.'},
+        'fixedSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The fixed size of the button.'},
+        'maximumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The maximum size of the button.'},
+        'iconColor': {'type': 'string', 'description': "The icon's color in hex format."},
         'iconSize': {'type': 'number', 'description': "The icon's size."},
-        'side': {
-          r'$ref': r'#/$defs/BorderSideConfig',
-          'description': "The color and weight of the button's outline.",
-        },
+        'side': {r'$ref': r'#/$defs/BorderSideConfig', 'description': "The color and weight of the button's outline."},
         'shape': {
           r'$ref': r'#/$defs/ShapeBorderConfig',
           'description': 'The shape of the button (e.g., rounded corners).',
@@ -435,10 +311,7 @@ const _$ThemeSettingsJsonSchema = {
           r'$ref': r'#/$defs/VisualDensityConfig',
           'description': "Defines how compact the button's layout will be.",
         },
-        'animationDuration': {
-          'type': 'integer',
-          'description': 'The duration of animated changes in milliseconds.',
-        },
+        'animationDuration': {'type': 'integer', 'description': 'The duration of animated changes in milliseconds.'},
       },
     },
     'ButtonWidgetConfig': {
@@ -477,9 +350,7 @@ const _$ThemeSettingsJsonSchema = {
     'GroupWidgetConfig': {
       'type': 'object',
       'properties': {
-        'groupTitleListTile': {
-          r'$ref': r'#/$defs/GroupTitleListTileWidgetConfig',
-        },
+        'groupTitleListTile': {r'$ref': r'#/$defs/GroupTitleListTileWidgetConfig'},
         'callActions': {r'$ref': r'#/$defs/CallActionsWidgetConfig'},
       },
     },
@@ -501,66 +372,36 @@ const _$ThemeSettingsJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'OverlayStyleModel': {
@@ -573,18 +414,13 @@ const _$ThemeSettingsJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
@@ -618,18 +454,9 @@ const _$ThemeSettingsJsonSchema = {
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
           'default': 'underline',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description': 'Corner radius for outline borders.',
-        },
-        'borderColor': {
-          'type': 'string',
-          'description': 'Border color (hex string, e.g. `#000000`).',
-        },
-        'borderWidth': {
-          'type': 'number',
-          'description': 'Stroke width of the border.',
-        },
+        'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
+        'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},
+        'borderWidth': {'type': 'number', 'description': 'Stroke width of the border.'},
       },
     },
     'TabBarConfig': {
@@ -662,9 +489,7 @@ const _$ThemeSettingsJsonSchema = {
     'BarWidgetConfig': {
       'type': 'object',
       'properties': {
-        'bottomNavigationBar': {
-          r'$ref': r'#/$defs/BottomNavigationBarWidgetConfig',
-        },
+        'bottomNavigationBar': {r'$ref': r'#/$defs/BottomNavigationBarWidgetConfig'},
         'appBarConfig': {r'$ref': r'#/$defs/AppBarConfig'},
         'tabBarConfig': {r'$ref': r'#/$defs/TabBarConfig'},
       },
@@ -688,15 +513,7 @@ const _$ThemeSettingsJsonSchema = {
           ],
         },
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
         },
       },
     },
@@ -706,8 +523,7 @@ const _$ThemeSettingsJsonSchema = {
         'attributes': {
           'type': 'object',
           'additionalProperties': {'type': 'object'},
-          'description':
-              'A map storing arbitrary key-value pairs for contextual or configuration data.',
+          'description': 'A map storing arbitrary key-value pairs for contextual or configuration data.',
           'default': {},
         },
       },
@@ -715,14 +531,8 @@ const _$ThemeSettingsJsonSchema = {
     'ImageSource': {
       'type': 'object',
       'properties': {
-        'id': {
-          'type': 'string',
-          'description': 'Backend asset ID (unique identifier in storage).',
-        },
-        'uri': {
-          'type': 'string',
-          'description': 'Unified URI pointing to the resource.',
-        },
+        'id': {'type': 'string', 'description': 'Backend asset ID (unique identifier in storage).'},
+        'uri': {'type': 'string', 'description': 'Unified URI pointing to the resource.'},
         'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
@@ -732,10 +542,7 @@ const _$ThemeSettingsJsonSchema = {
           r'$ref': r'#/$defs/ImageRenderSpec',
           'description': 'Rendering specification (scale, padding, etc.).',
         },
-        'metadata': {
-          r'$ref': r'#/$defs/Metadata',
-          'description': 'Freeform metadata for CLI or pipeline tools.',
-        },
+        'metadata': {r'$ref': r'#/$defs/Metadata', 'description': 'Freeform metadata for CLI or pipeline tools.'},
       },
     },
     'AppIconWidgetConfig': {
@@ -747,10 +554,7 @@ const _$ThemeSettingsJsonSchema = {
     'IconDataConfig': {
       'type': 'object',
       'properties': {
-        'codePoint': {
-          'type': 'string',
-          'description': 'The code point in hex, e.g. `e491`.',
-        },
+        'codePoint': {'type': 'string', 'description': 'The code point in hex, e.g. `e491`.'},
         'fontFamily': {'type': 'string', 'default': 'MaterialIcons'},
         'matchTextDirection': {'type': 'boolean', 'default': false},
       },
@@ -761,54 +565,35 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'showByDefault': {
           'type': 'boolean',
-          'description':
-              'Whether the overlay should be shown by default (widget may still override).',
+          'description': 'Whether the overlay should be shown by default (widget may still override).',
           'default': false,
         },
-        'padding': {
-          r'$ref': r'#/$defs/PaddingConfig',
-          'description': 'Padding around the loading indicator.',
-        },
+        'padding': {r'$ref': r'#/$defs/PaddingConfig', 'description': 'Padding around the loading indicator.'},
         'strokeWidth': {
           'type': 'number',
-          'description':
-              'CircularProgressIndicator stroke width (defaults to 1.0 in widget).',
+          'description': 'CircularProgressIndicator stroke width (defaults to 1.0 in widget).',
         },
       },
     },
     'SmartIndicatorStyleConfig': {
       'type': 'object',
       'properties': {
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color of the smart indicator circle.',
-        },
-        'icon': {
-          r'$ref': r'#/$defs/IconDataConfig',
-          'description': 'Icon displayed inside the smart indicator.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color of the smart indicator circle.'},
+        'icon': {r'$ref': r'#/$defs/IconDataConfig', 'description': 'Icon displayed inside the smart indicator.'},
         'sizeFactor': {
           'type': 'number',
-          'description':
-              'Size factor relative to avatar diameter (widget uses ~0.4 by default).',
+          'description': 'Size factor relative to avatar diameter (widget uses ~0.4 by default).',
         },
       },
     },
     'RegisteredBadgeStyleConfig': {
       'type': 'object',
       'properties': {
-        'registeredColor': {
-          'type': 'string',
-          'description': 'Color used when `registered == true`.',
-        },
-        'unregisteredColor': {
-          'type': 'string',
-          'description': 'Color used when `registered == false`.',
-        },
+        'registeredColor': {'type': 'string', 'description': 'Color used when `registered == true`.'},
+        'unregisteredColor': {'type': 'string', 'description': 'Color used when `registered == false`.'},
         'sizeFactor': {
           'type': 'number',
-          'description':
-              'Size factor relative to avatar diameter (widget uses ~0.2 by default).',
+          'description': 'Size factor relative to avatar diameter (widget uses ~0.2 by default).',
         },
       },
     },
@@ -817,13 +602,11 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'availableColor': {
           'type': 'string',
-          'description':
-              'Color used when presence is "available" (e.g., online, idle).',
+          'description': 'Color used when presence is "available" (e.g., online, idle).',
         },
         'unavailableColor': {
           'type': 'string',
-          'description':
-              'Color used when presence is "unavailable" (e.g., offline).',
+          'description': 'Color used when presence is "unavailable" (e.g., offline).',
         },
         'busyColor': {
           'type': 'string',
@@ -835,20 +618,13 @@ const _$ThemeSettingsJsonSchema = {
           'description':
               'Color of the activity glyph drawn inside the badge; it has to read on\ntop of the badge fill.',
         },
-        'sizeFactor': {
-          'type': 'number',
-          'description': 'Size factor relative to avatar diameter.',
-        },
+        'sizeFactor': {'type': 'number', 'description': 'Size factor relative to avatar diameter.'},
       },
     },
     'NameColorsStyleConfig': {
       'type': 'object',
       'properties': {
-        'enabled': {
-          'type': 'boolean',
-          'description': 'Whether name-derived colors are used at all.',
-          'default': true,
-        },
+        'enabled': {'type': 'boolean', 'description': 'Whether name-derived colors are used at all.', 'default': true},
         'palette': {
           'type': 'array',
           'items': {'type': 'string'},
@@ -862,26 +638,15 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'backgroundColor': {
           'type': 'string',
-          'description':
-              'Circle background color. Defaults to theme.secondaryContainer when null.',
+          'description': 'Circle background color. Defaults to theme.secondaryContainer when null.',
         },
-        'radius': {
-          'type': 'number',
-          'description': 'Avatar radius (defaults to 20.0 in widget if null).',
-        },
-        'initialsTextStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'Text style for initials fallback.',
-        },
+        'radius': {'type': 'number', 'description': 'Avatar radius (defaults to 20.0 in widget if null).'},
+        'initialsTextStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'Text style for initials fallback.'},
         'placeholderIcon': {
           r'$ref': r'#/$defs/IconDataConfig',
-          'description':
-              'Placeholder icon when no username/thumbnail is available.',
+          'description': 'Placeholder icon when no username/thumbnail is available.',
         },
-        'loading': {
-          r'$ref': r'#/$defs/LoadingOverlayStyleConfig',
-          'description': 'Loading overlay appearance.',
-        },
+        'loading': {r'$ref': r'#/$defs/LoadingOverlayStyleConfig', 'description': 'Loading overlay appearance.'},
         'smartIndicator': {
           r'$ref': r'#/$defs/SmartIndicatorStyleConfig',
           'description': '"Smart" badge indicator appearance.',
@@ -890,10 +655,7 @@ const _$ThemeSettingsJsonSchema = {
           r'$ref': r'#/$defs/RegisteredBadgeStyleConfig',
           'description': 'Registered/unregistered badge appearance.',
         },
-        'presenceBadge': {
-          r'$ref': r'#/$defs/PresenceBadgeStyleConfig',
-          'description': 'Presence badge appearance.',
-        },
+        'presenceBadge': {r'$ref': r'#/$defs/PresenceBadgeStyleConfig', 'description': 'Presence badge appearance.'},
         'nameColors': {
           r'$ref': r'#/$defs/NameColorsStyleConfig',
           'description': 'Per-name pseudorandom color appearance.',
@@ -1031,9 +793,7 @@ const _$ThemeSettingsJsonSchema = {
     'StatusesWidgetConfig': {
       'type': 'object',
       'properties': {
-        'registrationStatuses': {
-          r'$ref': r'#/$defs/RegistrationStatusesWidgetConfig',
-        },
+        'registrationStatuses': {r'$ref': r'#/$defs/RegistrationStatusesWidgetConfig'},
         'callStatuses': {r'$ref': r'#/$defs/CallStatusesWidgetConfig'},
       },
     },
@@ -1056,8 +816,7 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -1093,7 +852,7 @@ const _$ThemeSettingsJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -1108,15 +867,7 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -1127,18 +878,9 @@ const _$ThemeSettingsJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'LoginModeSelectPageConfig': {
@@ -1199,10 +941,7 @@ const _$ThemeSettingsJsonSchema = {
     'MaskConfig': {
       'type': 'object',
       'properties': {
-        'pattern': {
-          'type': 'string',
-          'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"',
-        },
+        'pattern': {'type': 'string', 'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"'},
         'filter': {
           'type': 'object',
           'additionalProperties': {'type': 'string'},
@@ -1272,9 +1011,7 @@ const _$ThemeSettingsJsonSchema = {
         'switchPage': {r'$ref': r'#/$defs/LoginSwitchPageConfig'},
         'otpSignin': {r'$ref': r'#/$defs/LoginOtpSigninPageConfig'},
         'passwordSignin': {r'$ref': r'#/$defs/LoginPasswordSigninPageConfig'},
-        'otpSigninVerify': {
-          r'$ref': r'#/$defs/LoginOtpSigninVerifyScreenPageConfig',
-        },
+        'otpSigninVerify': {r'$ref': r'#/$defs/LoginOtpSigninVerifyScreenPageConfig'},
         'signupVerify': {r'$ref': r'#/$defs/LoginSignupVerifyScreenPageConfig'},
         'coreUrlAssign': {r'$ref': r'#/$defs/LoginCoreUrlAssignPageConfig'},
       },
@@ -1379,8 +1116,7 @@ const _$ThemeSettingsJsonSchema = {
         'background': {r'$ref': r'#/$defs/PageBackground'},
         'themeOverride': {
           r'$ref': r'#/$defs/ThemeOverrideConfig',
-          'description':
-              'Configuration to force override the theme mode (e.g., force Dark mode).',
+          'description': 'Configuration to force override the theme mode (e.g., force Dark mode).',
         },
         'appBarBlurredSurface': {r'$ref': r'#/$defs/BlurredSurfaceConfig'},
         'appBarStyle': {r'$ref': r'#/$defs/AppBarConfig'},
@@ -1389,15 +1125,10 @@ const _$ThemeSettingsJsonSchema = {
     'SeparatorStyleConfig': {
       'type': 'object',
       'properties': {
-        'enabled': {
-          'type': 'boolean',
-          'description':
-              'Whether to render the separator. `null` → shown (default).',
-        },
+        'enabled': {'type': 'boolean', 'description': 'Whether to render the separator. `null` → shown (default).'},
         'color': {
           'type': 'string',
-          'description':
-              'Separator color (hex string, e.g. `#CAC7D1`). `null` → theme default.',
+          'description': 'Separator color (hex string, e.g. `#CAC7D1`). `null` → theme default.',
         },
       },
     },
@@ -1411,9 +1142,7 @@ const _$ThemeSettingsJsonSchema = {
         'leadingIconsColor': {'type': 'string'},
         'userIconColor': {'type': 'string'},
         'logoutIconColor': {'type': 'string'},
-        'groupTitleListTile': {
-          r'$ref': r'#/$defs/GroupTitleListTileWidgetConfig',
-        },
+        'groupTitleListTile': {r'$ref': r'#/$defs/GroupTitleListTileWidgetConfig'},
         'showSeparators': {
           'type': 'boolean',
           'description':
@@ -1422,8 +1151,7 @@ const _$ThemeSettingsJsonSchema = {
         },
         'separator': {
           r'$ref': r'#/$defs/SeparatorStyleConfig',
-          'description':
-              'Style of the divider lines between setting items (visibility + color).',
+          'description': 'Style of the divider lines between setting items (visibility + color).',
         },
         'background': {r'$ref': r'#/$defs/PageBackground'},
         'itemTextStyle': {r'$ref': r'#/$defs/TextStyleConfig'},

@@ -182,7 +182,11 @@ void main() {
         <String, dynamic>{},
         <String, dynamic>{'settingsConfig': <String, dynamic>{}},
       ]) {
-        final items = AppConfig.fromJson(json).settingsConfig.sections.expand((section) => section.items);
+        // `settingsSections` and not `sections`: the default no longer sits in
+        // the constructor, because a non-empty collection default crashes the
+        // schema generator. Both routes still reach it - an absent settings
+        // block and a present-but-empty one.
+        final items = AppConfig.fromJson(json).settingsConfig.settingsSections.expand((section) => section.items);
         final terms = items.firstWhere((item) => item.type == 'terms');
         expect(terms.embeddedResourceId, isNull, reason: 'json: $json');
       }

@@ -87,6 +87,7 @@ const _$AppConfigJsonSchema = {
         'actions': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/AppConfigModeSelectAction'},
+          'default': [],
         },
       },
     },
@@ -114,6 +115,7 @@ const _$AppConfigJsonSchema = {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/AppConfigLoginQrFormat'},
           'description': 'Accepted payload formats with their per-format options, probed in this\norder.',
+          'default': [],
         },
         'expectedHost': {
           'type': 'string',
@@ -132,7 +134,7 @@ const _$AppConfigJsonSchema = {
           'items': {'type': 'string'},
           'description':
               'Order of the sign-in tabs on the login switch screen, by login type name\n(passwordSignin, otpSignin, signup, qrSignin). Only the types advertised by\nthe backend are shown; this controls their order and which one is selected\nby default. Unknown or omitted names are placed last.',
-          'default': ['passwordSignin', 'otpSignin', 'signup'],
+          'default': [],
         },
         'qr': {r'$ref': r'#/$defs/AppConfigLoginQr'},
       },
@@ -293,6 +295,7 @@ const _$AppConfigJsonSchema = {
         'sections': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/AppConfigSettingsSection'},
+          'default': [],
         },
       },
     },
@@ -483,9 +486,7 @@ AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) => AppConfigL
   modeSelect: json['modeSelect'] == null
       ? const AppConfigLoginModeSelect()
       : AppConfigLoginModeSelect.fromJson(json['modeSelect'] as Map<String, dynamic>),
-  signinOrder:
-      (json['signinOrder'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-      const ['passwordSignin', 'otpSignin', 'signup'],
+  signinOrder: (json['signinOrder'] as List<dynamic>?)?.map((e) => e as String).toList() ?? const [],
   qr: json['qr'] == null ? const AppConfigLoginQr() : AppConfigLoginQr.fromJson(json['qr'] as Map<String, dynamic>),
 );
 
@@ -507,7 +508,7 @@ const _$AppConfigLoginJsonSchema = {
       'items': {'type': 'string'},
       'description':
           'Order of the sign-in tabs on the login switch screen, by login type name\n(passwordSignin, otpSignin, signup, qrSignin). Only the types advertised by\nthe backend are shown; this controls their order and which one is selected\nby default. Unknown or omitted names are placed last.',
-      'default': ['passwordSignin', 'otpSignin', 'signup'],
+      'default': [],
     },
     'qr': {r'$ref': r'#/$defs/AppConfigLoginQr'},
   },
@@ -535,6 +536,7 @@ const _$AppConfigLoginJsonSchema = {
         'actions': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/AppConfigModeSelectAction'},
+          'default': [],
         },
       },
     },
@@ -562,6 +564,7 @@ const _$AppConfigLoginJsonSchema = {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/AppConfigLoginQrFormat'},
           'description': 'Accepted payload formats with their per-format options, probed in this\norder.',
+          'default': [],
         },
         'expectedHost': {
           'type': 'string',
@@ -579,10 +582,7 @@ AppConfigLoginQr _$AppConfigLoginQrFromJson(Map<String, dynamic> json) => AppCon
       (json['formats'] as List<dynamic>?)
           ?.map((e) => AppConfigLoginQrFormat.fromJson(e as Map<String, dynamic>))
           .toList() ??
-      const [
-        AppConfigLoginQrFormat(type: 'uri', schemes: ['csc']),
-        AppConfigLoginQrFormat(type: 'json'),
-      ],
+      const [],
   expectedHost: json['expectedHost'] as String?,
 );
 
@@ -605,6 +605,7 @@ const _$AppConfigLoginQrJsonSchema = {
       'type': 'array',
       'items': {r'$ref': r'#/$defs/AppConfigLoginQrFormat'},
       'description': 'Accepted payload formats with their per-format options, probed in this\norder.',
+      'default': [],
     },
     'expectedHost': {
       'type': 'string',
@@ -673,7 +674,7 @@ AppConfigLoginModeSelect _$AppConfigLoginModeSelectFromJson(Map<String, dynamic>
       (json['actions'] as List<dynamic>?)
           ?.map((e) => AppConfigModeSelectAction.fromJson(e as Map<String, dynamic>))
           .toList() ??
-      const [AppConfigModeSelectAction(enabled: true, type: 'login', titleL10n: 'login_Button_signUpToDemoInstance')],
+      const [],
 );
 
 Map<String, dynamic> _$AppConfigLoginModeSelectToJson(AppConfigLoginModeSelect instance) => <String, dynamic>{
@@ -689,6 +690,7 @@ const _$AppConfigLoginModeSelectJsonSchema = {
     'actions': {
       'type': 'array',
       'items': {r'$ref': r'#/$defs/AppConfigModeSelectAction'},
+      'default': [],
     },
   },
   r'$defs': {
@@ -1288,56 +1290,7 @@ AppConfigSettings _$AppConfigSettingsFromJson(Map<String, dynamic> json) => AppC
       (json['sections'] as List<dynamic>?)
           ?.map((e) => AppConfigSettingsSection.fromJson(e as Map<String, dynamic>))
           .toList() ??
-      const [
-        AppConfigSettingsSection(
-          titleL10n: 'settings_ListViewTileTitle_settings',
-          enabled: true,
-          items: [
-            AppConfigSettingsItem(
-              enabled: true,
-              type: 'network',
-              titleL10n: 'settings_ListViewTileTitle_network',
-              icon: '0xe424',
-            ),
-            AppConfigSettingsItem(
-              enabled: true,
-              type: 'mediaSettings',
-              titleL10n: 'settings_ListViewTileTitle_mediaSettings',
-              icon: '0xf1cf',
-            ),
-            AppConfigSettingsItem(
-              enabled: true,
-              type: 'language',
-              titleL10n: 'settings_ListViewTileTitle_language',
-              icon: '0xe366',
-            ),
-            AppConfigSettingsItem(
-              enabled: true,
-              type: 'terms',
-              titleL10n: 'settings_ListViewTileTitle_termsConditions',
-              icon: '0xeedf',
-            ),
-            AppConfigSettingsItem(
-              enabled: true,
-              type: 'about',
-              titleL10n: 'settings_ListViewTileTitle_about',
-              icon: '0xe140',
-            ),
-          ],
-        ),
-        AppConfigSettingsSection(
-          titleL10n: 'settings_ListViewTileTitle_toolbox',
-          enabled: true,
-          items: [
-            AppConfigSettingsItem(
-              enabled: true,
-              type: 'log',
-              titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
-              icon: '0xee79',
-            ),
-          ],
-        ),
-      ],
+      const [],
 );
 
 Map<String, dynamic> _$AppConfigSettingsToJson(AppConfigSettings instance) => <String, dynamic>{
@@ -1351,6 +1304,7 @@ const _$AppConfigSettingsJsonSchema = {
     'sections': {
       'type': 'array',
       'items': {r'$ref': r'#/$defs/AppConfigSettingsSection'},
+      'default': [],
     },
   },
   r'$defs': {

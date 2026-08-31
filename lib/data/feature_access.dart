@@ -193,7 +193,7 @@ abstract final class LoginMapper {
   // Currently, modeSelectActions control both the launch screen and the buttons on the login_mode_select_screen,
   // which leads to unclear and tightly coupled logic.
   static LoginConfig map(AppConfig appConfig, List<EmbeddedData> embeddedData) {
-    final rawButtons = appConfig.loginConfig.modeSelect.actions.where((button) => button.enabled);
+    final rawButtons = appConfig.loginConfig.modeSelect.modeSelectActions.where((button) => button.enabled);
     final buttons = <LoginModeAction>[];
 
     for (final action in rawButtons) {
@@ -218,10 +218,10 @@ abstract final class LoginMapper {
     return LoginConfig(
       titleL10n: appConfig.loginConfig.modeSelect.greetingL10n,
       actions: List.unmodifiable(buttons),
-      signinOrder: appConfig.loginConfig.signinOrder,
+      signinOrder: appConfig.loginConfig.signinOrderOrDefault,
       qrSignin: QrSigninConfig(
         enabled: qr.enabled,
-        formats: [for (final format in qr.formats) QrSigninFormatConfig(type: format.type, schemes: format.schemes)],
+        formats: [for (final format in qr.qrFormats) QrSigninFormatConfig(type: format.type, schemes: format.schemes)],
         expectedHost: qr.expectedHost,
       ),
       launchLoginPage: embeddedData.firstWhereOrNull(
@@ -372,7 +372,7 @@ abstract final class SettingsMapper {
     final settingSections = <SettingsSection>[];
     bool hasVoicemail = false;
 
-    for (final section in appConfig.settingsConfig.sections.where((s) => s.enabled)) {
+    for (final section in appConfig.settingsConfig.settingsSections.where((s) => s.enabled)) {
       final items = <SettingItem>[];
 
       for (final item in section.items.where((i) => i.enabled)) {
@@ -460,7 +460,7 @@ abstract final class CallMapper {
     final defaultPresetOverride = encodingConfig.defaultPresetOverride;
 
     // Determine if the media settings UI should be accessible
-    final encodingViewEnabled = appConfig.settingsConfig.sections.any(
+    final encodingViewEnabled = appConfig.settingsConfig.settingsSections.any(
       (section) => section.items.any((item) => item.type == SettingsFlavor.mediaSettings.name && item.enabled),
     );
 

@@ -6,23 +6,19 @@ part of 'overlay_style_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-OverlayStyleModel _$OverlayStyleModelFromJson(Map<String, dynamic> json) =>
-    OverlayStyleModel(
-      systemNavigationBarColor: json['systemNavigationBarColor'] as String?,
-      systemNavigationBarIconBrightness:
-          json['systemNavigationBarIconBrightness'] as String?,
-      statusBarIconBrightness: json['statusBarIconBrightness'] as String?,
-      statusBarBrightness: json['statusBarBrightness'] as String?,
-    );
+OverlayStyleModel _$OverlayStyleModelFromJson(Map<String, dynamic> json) => OverlayStyleModel(
+  systemNavigationBarColor: json['systemNavigationBarColor'] as String?,
+  systemNavigationBarIconBrightness: json['systemNavigationBarIconBrightness'] as String?,
+  statusBarIconBrightness: json['statusBarIconBrightness'] as String?,
+  statusBarBrightness: json['statusBarBrightness'] as String?,
+);
 
-Map<String, dynamic> _$OverlayStyleModelToJson(OverlayStyleModel instance) =>
-    <String, dynamic>{
-      'systemNavigationBarColor': instance.systemNavigationBarColor,
-      'systemNavigationBarIconBrightness':
-          instance.systemNavigationBarIconBrightness,
-      'statusBarIconBrightness': instance.statusBarIconBrightness,
-      'statusBarBrightness': instance.statusBarBrightness,
-    };
+Map<String, dynamic> _$OverlayStyleModelToJson(OverlayStyleModel instance) => <String, dynamic>{
+  'systemNavigationBarColor': instance.systemNavigationBarColor,
+  'systemNavigationBarIconBrightness': instance.systemNavigationBarIconBrightness,
+  'statusBarIconBrightness': instance.statusBarIconBrightness,
+  'statusBarBrightness': instance.statusBarBrightness,
+};
 
 const _$OverlayStyleModelJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -35,16 +31,12 @@ const _$OverlayStyleModelJsonSchema = {
     },
     'systemNavigationBarIconBrightness': {
       'type': 'string',
-      'description':
-          'System navigation bar icon brightness (e.g., "dark" or "light").',
+      'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
     },
     'statusBarIconBrightness': {
       'type': 'string',
       'description': 'Status bar icon brightness (e.g., "dark" or "light").',
     },
-    'statusBarBrightness': {
-      'type': 'string',
-      'description': 'Status bar brightness (e.g., "dark" or "light").',
-    },
+    'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
   },
 };

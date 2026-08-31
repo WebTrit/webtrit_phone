@@ -7,14 +7,12 @@ part of 'page_background.dart';
 // **************************************************************************
 
 PageBackgroundSolid _$PageBackgroundSolidFromJson(Map<String, dynamic> json) =>
-    PageBackgroundSolid(
-      color: json['color'] as String,
-      type: json['type'] as String? ?? 'solid',
-    );
+    PageBackgroundSolid(color: json['color'] as String, type: json['type'] as String? ?? 'solid');
 
-Map<String, dynamic> _$PageBackgroundSolidToJson(
-  PageBackgroundSolid instance,
-) => <String, dynamic>{'color': instance.color, 'type': instance.type};
+Map<String, dynamic> _$PageBackgroundSolidToJson(PageBackgroundSolid instance) => <String, dynamic>{
+  'color': instance.color,
+  'type': instance.type,
+};
 
 const _$PageBackgroundSolidJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -26,15 +24,9 @@ const _$PageBackgroundSolidJsonSchema = {
   'required': ['color'],
 };
 
-PageBackgroundGradient _$PageBackgroundGradientFromJson(
-  Map<String, dynamic> json,
-) => PageBackgroundGradient(
+PageBackgroundGradient _$PageBackgroundGradientFromJson(Map<String, dynamic> json) => PageBackgroundGradient(
   colors: (json['colors'] as List<dynamic>).map((e) => e as String).toList(),
-  stops:
-      (json['stops'] as List<dynamic>?)
-          ?.map((e) => (e as num).toDouble())
-          .toList() ??
-      const [0.0, 1.0],
+  stops: (json['stops'] as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList() ?? const <double>[],
   beginX: (json['beginX'] as num?)?.toDouble() ?? 0.0,
   beginY: (json['beginY'] as num?)?.toDouble() ?? 0.0,
   endX: (json['endX'] as num?)?.toDouble() ?? 1.0,
@@ -42,9 +34,7 @@ PageBackgroundGradient _$PageBackgroundGradientFromJson(
   type: json['type'] as String? ?? 'gradient',
 );
 
-Map<String, dynamic> _$PageBackgroundGradientToJson(
-  PageBackgroundGradient instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$PageBackgroundGradientToJson(PageBackgroundGradient instance) => <String, dynamic>{
   'colors': instance.colors,
   'stops': instance.stops,
   'beginX': instance.beginX,
@@ -65,7 +55,7 @@ const _$PageBackgroundGradientJsonSchema = {
     'stops': {
       'type': 'array',
       'items': {'type': 'number'},
-      'default': [0.0, 1.0],
+      'default': [],
     },
     'beginX': {'type': 'number', 'default': 0.0},
     'beginY': {'type': 'number', 'default': 0.0},
@@ -76,19 +66,14 @@ const _$PageBackgroundGradientJsonSchema = {
   'required': ['colors'],
 };
 
-PageBackgroundImage _$PageBackgroundImageFromJson(Map<String, dynamic> json) =>
-    PageBackgroundImage(
-      imageUrl: json['imageUrl'] as String,
-      fit:
-          $enumDecodeNullable(_$BoxFitConfigEnumMap, json['fit']) ??
-          BoxFitConfig.cover,
-      opacity: (json['opacity'] as num?)?.toDouble() ?? 1.0,
-      type: json['type'] as String? ?? 'image',
-    );
+PageBackgroundImage _$PageBackgroundImageFromJson(Map<String, dynamic> json) => PageBackgroundImage(
+  imageUrl: json['imageUrl'] as String,
+  fit: $enumDecodeNullable(_$BoxFitConfigEnumMap, json['fit']) ?? BoxFitConfig.cover,
+  opacity: (json['opacity'] as num?)?.toDouble() ?? 1.0,
+  type: json['type'] as String? ?? 'image',
+);
 
-Map<String, dynamic> _$PageBackgroundImageToJson(
-  PageBackgroundImage instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$PageBackgroundImageToJson(PageBackgroundImage instance) => <String, dynamic>{
   'imageUrl': instance.imageUrl,
   'fit': _$BoxFitConfigEnumMap[instance.fit]!,
   'opacity': instance.opacity,
@@ -101,15 +86,7 @@ const _$PageBackgroundImageJsonSchema = {
   'properties': {
     'imageUrl': {'type': 'string'},
     'fit': {
-      'enum': [
-        'fill',
-        'contain',
-        'cover',
-        'fitWidth',
-        'fitHeight',
-        'none',
-        'scaleDown',
-      ],
+      'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
       'default': 'cover',
     },
     'opacity': {'type': 'number', 'default': 1.0},

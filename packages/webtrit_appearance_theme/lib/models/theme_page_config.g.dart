@@ -6,9 +6,7 @@ part of 'theme_page_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ThemePageConfig _$ThemePageConfigFromJson(
-  Map<String, dynamic> json,
-) => ThemePageConfig(
+ThemePageConfig _$ThemePageConfigFromJson(Map<String, dynamic> json) => ThemePageConfig(
   login: json['login'] == null
       ? const LoginPageConfig()
       : LoginPageConfig.fromJson(json['login'] as Map<String, dynamic>),
@@ -35,33 +33,28 @@ ThemePageConfig _$ThemePageConfigFromJson(
       : FavoritesPageConfig.fromJson(json['favorites'] as Map<String, dynamic>),
   conversations: json['conversations'] == null
       ? const ConversationsPageConfig()
-      : ConversationsPageConfig.fromJson(
-          json['conversations'] as Map<String, dynamic>,
-        ),
+      : ConversationsPageConfig.fromJson(json['conversations'] as Map<String, dynamic>),
   recents: json['recents'] == null
       ? const RecentsPageConfig()
       : RecentsPageConfig.fromJson(json['recents'] as Map<String, dynamic>),
   numberCdrs: json['numberCdrs'] == null
       ? const NumberCdrsPageConfig()
-      : NumberCdrsPageConfig.fromJson(
-          json['numberCdrs'] as Map<String, dynamic>,
-        ),
+      : NumberCdrsPageConfig.fromJson(json['numberCdrs'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$ThemePageConfigToJson(ThemePageConfig instance) =>
-    <String, dynamic>{
-      'login': instance.login.toJson(),
-      'about': instance.about.toJson(),
-      'dialing': instance.dialing.toJson(),
-      'keypad': instance.keypad.toJson(),
-      'settings': instance.settings.toJson(),
-      'contacts': instance.contacts.toJson(),
-      'embedded': instance.embedded.toJson(),
-      'favorites': instance.favorites.toJson(),
-      'conversations': instance.conversations.toJson(),
-      'recents': instance.recents.toJson(),
-      'numberCdrs': instance.numberCdrs.toJson(),
-    };
+Map<String, dynamic> _$ThemePageConfigToJson(ThemePageConfig instance) => <String, dynamic>{
+  'login': instance.login.toJson(),
+  'about': instance.about.toJson(),
+  'dialing': instance.dialing.toJson(),
+  'keypad': instance.keypad.toJson(),
+  'settings': instance.settings.toJson(),
+  'contacts': instance.contacts.toJson(),
+  'embedded': instance.embedded.toJson(),
+  'favorites': instance.favorites.toJson(),
+  'conversations': instance.conversations.toJson(),
+  'recents': instance.recents.toJson(),
+  'numberCdrs': instance.numberCdrs.toJson(),
+};
 
 const _$ThemePageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -85,8 +78,7 @@ const _$ThemePageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -107,43 +99,22 @@ const _$ThemePageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'ImageRenderSpec': {
@@ -165,15 +136,7 @@ const _$ThemePageConfigJsonSchema = {
           ],
         },
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
         },
       },
     },
@@ -183,8 +146,7 @@ const _$ThemePageConfigJsonSchema = {
         'attributes': {
           'type': 'object',
           'additionalProperties': {'type': 'object'},
-          'description':
-              'A map storing arbitrary key-value pairs for contextual or configuration data.',
+          'description': 'A map storing arbitrary key-value pairs for contextual or configuration data.',
           'default': {},
         },
       },
@@ -192,14 +154,8 @@ const _$ThemePageConfigJsonSchema = {
     'ImageSource': {
       'type': 'object',
       'properties': {
-        'id': {
-          'type': 'string',
-          'description': 'Backend asset ID (unique identifier in storage).',
-        },
-        'uri': {
-          'type': 'string',
-          'description': 'Unified URI pointing to the resource.',
-        },
+        'id': {'type': 'string', 'description': 'Backend asset ID (unique identifier in storage).'},
+        'uri': {'type': 'string', 'description': 'Unified URI pointing to the resource.'},
         'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
@@ -209,10 +165,7 @@ const _$ThemePageConfigJsonSchema = {
           r'$ref': r'#/$defs/ImageRenderSpec',
           'description': 'Rendering specification (scale, padding, etc.).',
         },
-        'metadata': {
-          r'$ref': r'#/$defs/Metadata',
-          'description': 'Freeform metadata for CLI or pipeline tools.',
-        },
+        'metadata': {r'$ref': r'#/$defs/Metadata', 'description': 'Freeform metadata for CLI or pipeline tools.'},
       },
     },
     'PageBackground': {
@@ -240,7 +193,7 @@ const _$ThemePageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -255,15 +208,7 @@ const _$ThemePageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -274,10 +219,7 @@ const _$ThemePageConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -286,8 +228,7 @@ const _$ThemePageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -298,77 +239,36 @@ const _$ThemePageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -378,18 +278,9 @@ const _$ThemePageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -402,66 +293,36 @@ const _$ThemePageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'AppBarConfig': {
@@ -528,11 +389,7 @@ const _$ThemePageConfigJsonSchema = {
       'properties': {
         'color': {'type': 'string', 'description': 'Color in hex format.'},
         'width': {'type': 'number', 'default': 1.0},
-        'style': {
-          'type': 'string',
-          'description': "Border style (e.g., 'solid', 'none').",
-          'default': 'solid',
-        },
+        'style': {'type': 'string', 'description': "Border style (e.g., 'solid', 'none').", 'default': 'solid'},
       },
     },
     'ShapeBorderConfig': {
@@ -540,15 +397,10 @@ const _$ThemePageConfigJsonSchema = {
       'properties': {
         'type': {
           'type': 'string',
-          'description':
-              "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
+          'description': "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
           'default': 'rounded',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description':
-              'The border radius value (for rounded/beveled shapes).',
-        },
+        'borderRadius': {'type': 'number', 'description': 'The border radius value (for rounded/beveled shapes).'},
       },
     },
     'VisualDensityConfig': {
@@ -561,18 +413,11 @@ const _$ThemePageConfigJsonSchema = {
     'ButtonStyleConfig': {
       'type': 'object',
       'properties': {
-        'textStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': "The style for a button's text descendants.",
-        },
-        'backgroundColor': {
-          'type': 'string',
-          'description': "The button's background fill color in hex format.",
-        },
+        'textStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': "The style for a button's text descendants."},
+        'backgroundColor': {'type': 'string', 'description': "The button's background fill color in hex format."},
         'foregroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format.",
+          'description': "The color for the button's text/icon descendants in hex format.",
         },
         'selectedBackgroundColor': {
           'type': 'string',
@@ -581,77 +426,45 @@ const _$ThemePageConfigJsonSchema = {
         },
         'selectedForegroundColor': {
           'type': 'string',
-          'description':
-              'The color for the text/icon descendants in hex format while the button is switched on.',
+          'description': 'The color for the text/icon descendants in hex format while the button is switched on.',
         },
         'selectedIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format while the button is switched on.",
+          'description': "The icon's color in hex format while the button is switched on.",
         },
         'disabledBackgroundColor': {
           'type': 'string',
-          'description':
-              "The button's background fill color in hex format when the button is disabled.",
+          'description': "The button's background fill color in hex format when the button is disabled.",
         },
         'disabledForegroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format when the button is disabled.",
+          'description': "The color for the button's text/icon descendants in hex format when the button is disabled.",
         },
         'disabledIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format when the button is disabled.",
+          'description': "The icon's color in hex format when the button is disabled.",
         },
         'disabledShadowColor': {
           'type': 'string',
-          'description':
-              'The shadow color in hex format when the button is disabled.',
+          'description': 'The shadow color in hex format when the button is disabled.',
         },
         'overlayColor': {
           'type': 'string',
-          'description':
-              'The highlight color for states (focused, hovered, pressed) in hex format.',
+          'description': 'The highlight color for states (focused, hovered, pressed) in hex format.',
         },
-        'shadowColor': {
-          'type': 'string',
-          'description': 'The shadow color in hex format.',
-        },
-        'surfaceTintColor': {
-          'type': 'string',
-          'description': 'The surface tint color in hex format.',
-        },
-        'elevation': {
-          'type': 'number',
-          'description': 'The elevation of the button.',
-        },
+        'shadowColor': {'type': 'string', 'description': 'The shadow color in hex format.'},
+        'surfaceTintColor': {'type': 'string', 'description': 'The surface tint color in hex format.'},
+        'elevation': {'type': 'number', 'description': 'The elevation of the button.'},
         'padding': {
           r'$ref': r'#/$defs/EdgeInsetsConfig',
-          'description':
-              "The padding between the button's boundary and its child.",
+          'description': "The padding between the button's boundary and its child.",
         },
-        'minimumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The minimum size of the button.',
-        },
-        'fixedSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The fixed size of the button.',
-        },
-        'maximumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The maximum size of the button.',
-        },
-        'iconColor': {
-          'type': 'string',
-          'description': "The icon's color in hex format.",
-        },
+        'minimumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The minimum size of the button.'},
+        'fixedSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The fixed size of the button.'},
+        'maximumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The maximum size of the button.'},
+        'iconColor': {'type': 'string', 'description': "The icon's color in hex format."},
         'iconSize': {'type': 'number', 'description': "The icon's size."},
-        'side': {
-          r'$ref': r'#/$defs/BorderSideConfig',
-          'description': "The color and weight of the button's outline.",
-        },
+        'side': {r'$ref': r'#/$defs/BorderSideConfig', 'description': "The color and weight of the button's outline."},
         'shape': {
           r'$ref': r'#/$defs/ShapeBorderConfig',
           'description': 'The shape of the button (e.g., rounded corners).',
@@ -660,10 +473,7 @@ const _$ThemePageConfigJsonSchema = {
           r'$ref': r'#/$defs/VisualDensityConfig',
           'description': "Defines how compact the button's layout will be.",
         },
-        'animationDuration': {
-          'type': 'integer',
-          'description': 'The duration of animated changes in milliseconds.',
-        },
+        'animationDuration': {'type': 'integer', 'description': 'The duration of animated changes in milliseconds.'},
       },
     },
     'LoginSwitchPageConfig': {
@@ -686,18 +496,9 @@ const _$ThemePageConfigJsonSchema = {
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
           'default': 'underline',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description': 'Corner radius for outline borders.',
-        },
-        'borderColor': {
-          'type': 'string',
-          'description': 'Border color (hex string, e.g. `#000000`).',
-        },
-        'borderWidth': {
-          'type': 'number',
-          'description': 'Stroke width of the border.',
-        },
+        'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
+        'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},
+        'borderWidth': {'type': 'number', 'description': 'Stroke width of the border.'},
       },
     },
     'InputDecorationConfig': {
@@ -727,10 +528,7 @@ const _$ThemePageConfigJsonSchema = {
     'MaskConfig': {
       'type': 'object',
       'properties': {
-        'pattern': {
-          'type': 'string',
-          'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"',
-        },
+        'pattern': {'type': 'string', 'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"'},
         'filter': {
           'type': 'object',
           'additionalProperties': {'type': 'string'},
@@ -800,9 +598,7 @@ const _$ThemePageConfigJsonSchema = {
         'switchPage': {r'$ref': r'#/$defs/LoginSwitchPageConfig'},
         'otpSignin': {r'$ref': r'#/$defs/LoginOtpSigninPageConfig'},
         'passwordSignin': {r'$ref': r'#/$defs/LoginPasswordSigninPageConfig'},
-        'otpSigninVerify': {
-          r'$ref': r'#/$defs/LoginOtpSigninVerifyScreenPageConfig',
-        },
+        'otpSigninVerify': {r'$ref': r'#/$defs/LoginOtpSigninVerifyScreenPageConfig'},
         'signupVerify': {r'$ref': r'#/$defs/LoginSignupVerifyScreenPageConfig'},
         'coreUrlAssign': {r'$ref': r'#/$defs/LoginCoreUrlAssignPageConfig'},
       },
@@ -907,8 +703,7 @@ const _$ThemePageConfigJsonSchema = {
         'background': {r'$ref': r'#/$defs/PageBackground'},
         'themeOverride': {
           r'$ref': r'#/$defs/ThemeOverrideConfig',
-          'description':
-              'Configuration to force override the theme mode (e.g., force Dark mode).',
+          'description': 'Configuration to force override the theme mode (e.g., force Dark mode).',
         },
         'appBarBlurredSurface': {r'$ref': r'#/$defs/BlurredSurfaceConfig'},
         'appBarStyle': {r'$ref': r'#/$defs/AppBarConfig'},
@@ -924,15 +719,10 @@ const _$ThemePageConfigJsonSchema = {
     'SeparatorStyleConfig': {
       'type': 'object',
       'properties': {
-        'enabled': {
-          'type': 'boolean',
-          'description':
-              'Whether to render the separator. `null` → shown (default).',
-        },
+        'enabled': {'type': 'boolean', 'description': 'Whether to render the separator. `null` → shown (default).'},
         'color': {
           'type': 'string',
-          'description':
-              'Separator color (hex string, e.g. `#CAC7D1`). `null` → theme default.',
+          'description': 'Separator color (hex string, e.g. `#CAC7D1`). `null` → theme default.',
         },
       },
     },
@@ -946,9 +736,7 @@ const _$ThemePageConfigJsonSchema = {
         'leadingIconsColor': {'type': 'string'},
         'userIconColor': {'type': 'string'},
         'logoutIconColor': {'type': 'string'},
-        'groupTitleListTile': {
-          r'$ref': r'#/$defs/GroupTitleListTileWidgetConfig',
-        },
+        'groupTitleListTile': {r'$ref': r'#/$defs/GroupTitleListTileWidgetConfig'},
         'showSeparators': {
           'type': 'boolean',
           'description':
@@ -957,8 +745,7 @@ const _$ThemePageConfigJsonSchema = {
         },
         'separator': {
           r'$ref': r'#/$defs/SeparatorStyleConfig',
-          'description':
-              'Style of the divider lines between setting items (visibility + color).',
+          'description': 'Style of the divider lines between setting items (visibility + color).',
         },
         'background': {r'$ref': r'#/$defs/PageBackground'},
         'itemTextStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
@@ -1037,17 +824,12 @@ const _$ThemePageConfigJsonSchema = {
   },
 };
 
-ThemeOverrideConfig _$ThemeOverrideConfigFromJson(Map<String, dynamic> json) =>
-    ThemeOverrideConfig(
-      mode:
-          $enumDecodeNullable(_$ThemeModeConfigEnumMap, json['mode']) ??
-          ThemeModeConfig.system,
-      applyToAppBar: json['applyToAppBar'] as bool? ?? true,
-    );
+ThemeOverrideConfig _$ThemeOverrideConfigFromJson(Map<String, dynamic> json) => ThemeOverrideConfig(
+  mode: $enumDecodeNullable(_$ThemeModeConfigEnumMap, json['mode']) ?? ThemeModeConfig.system,
+  applyToAppBar: json['applyToAppBar'] as bool? ?? true,
+);
 
-Map<String, dynamic> _$ThemeOverrideConfigToJson(
-  ThemeOverrideConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$ThemeOverrideConfigToJson(ThemeOverrideConfig instance) => <String, dynamic>{
   'mode': _$ThemeModeConfigEnumMap[instance.mode]!,
   'applyToAppBar': instance.applyToAppBar,
 };
@@ -1058,14 +840,12 @@ const _$ThemeOverrideConfigJsonSchema = {
   'properties': {
     'mode': {
       'enum': ['system', 'light', 'dark'],
-      'description':
-          'The target mode to force (e.g., ensure screen is always Dark).',
+      'description': 'The target mode to force (e.g., ensure screen is always Dark).',
       'default': 'system',
     },
     'applyToAppBar': {
       'type': 'boolean',
-      'description':
-          'If true (default), the AppBar adopts the [mode].\nIf false, the AppBar keeps the global theme.',
+      'description': 'If true (default), the AppBar adopts the [mode].\nIf false, the AppBar keeps the global theme.',
       'default': true,
     },
   },
@@ -1077,55 +857,39 @@ const _$ThemeModeConfigEnumMap = {
   ThemeModeConfig.dark: 'dark',
 };
 
-LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) =>
-    LoginPageConfig(
-      modeSelect: json['modeSelect'] == null
-          ? const LoginModeSelectPageConfig()
-          : LoginModeSelectPageConfig.fromJson(
-              json['modeSelect'] as Map<String, dynamic>,
-            ),
-      switchPage: json['switchPage'] == null
-          ? const LoginSwitchPageConfig()
-          : LoginSwitchPageConfig.fromJson(
-              json['switchPage'] as Map<String, dynamic>,
-            ),
-      otpSignin: json['otpSignin'] == null
-          ? const LoginOtpSigninPageConfig()
-          : LoginOtpSigninPageConfig.fromJson(
-              json['otpSignin'] as Map<String, dynamic>,
-            ),
-      passwordSignin: json['passwordSignin'] == null
-          ? const LoginPasswordSigninPageConfig()
-          : LoginPasswordSigninPageConfig.fromJson(
-              json['passwordSignin'] as Map<String, dynamic>,
-            ),
-      otpSigninVerify: json['otpSigninVerify'] == null
-          ? const LoginOtpSigninVerifyScreenPageConfig()
-          : LoginOtpSigninVerifyScreenPageConfig.fromJson(
-              json['otpSigninVerify'] as Map<String, dynamic>,
-            ),
-      signupVerify: json['signupVerify'] == null
-          ? const LoginSignupVerifyScreenPageConfig()
-          : LoginSignupVerifyScreenPageConfig.fromJson(
-              json['signupVerify'] as Map<String, dynamic>,
-            ),
-      coreUrlAssign: json['coreUrlAssign'] == null
-          ? const LoginCoreUrlAssignPageConfig()
-          : LoginCoreUrlAssignPageConfig.fromJson(
-              json['coreUrlAssign'] as Map<String, dynamic>,
-            ),
-    );
+LoginPageConfig _$LoginPageConfigFromJson(Map<String, dynamic> json) => LoginPageConfig(
+  modeSelect: json['modeSelect'] == null
+      ? const LoginModeSelectPageConfig()
+      : LoginModeSelectPageConfig.fromJson(json['modeSelect'] as Map<String, dynamic>),
+  switchPage: json['switchPage'] == null
+      ? const LoginSwitchPageConfig()
+      : LoginSwitchPageConfig.fromJson(json['switchPage'] as Map<String, dynamic>),
+  otpSignin: json['otpSignin'] == null
+      ? const LoginOtpSigninPageConfig()
+      : LoginOtpSigninPageConfig.fromJson(json['otpSignin'] as Map<String, dynamic>),
+  passwordSignin: json['passwordSignin'] == null
+      ? const LoginPasswordSigninPageConfig()
+      : LoginPasswordSigninPageConfig.fromJson(json['passwordSignin'] as Map<String, dynamic>),
+  otpSigninVerify: json['otpSigninVerify'] == null
+      ? const LoginOtpSigninVerifyScreenPageConfig()
+      : LoginOtpSigninVerifyScreenPageConfig.fromJson(json['otpSigninVerify'] as Map<String, dynamic>),
+  signupVerify: json['signupVerify'] == null
+      ? const LoginSignupVerifyScreenPageConfig()
+      : LoginSignupVerifyScreenPageConfig.fromJson(json['signupVerify'] as Map<String, dynamic>),
+  coreUrlAssign: json['coreUrlAssign'] == null
+      ? const LoginCoreUrlAssignPageConfig()
+      : LoginCoreUrlAssignPageConfig.fromJson(json['coreUrlAssign'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$LoginPageConfigToJson(LoginPageConfig instance) =>
-    <String, dynamic>{
-      'modeSelect': instance.modeSelect.toJson(),
-      'switchPage': instance.switchPage.toJson(),
-      'otpSignin': instance.otpSignin.toJson(),
-      'passwordSignin': instance.passwordSignin.toJson(),
-      'otpSigninVerify': instance.otpSigninVerify.toJson(),
-      'signupVerify': instance.signupVerify.toJson(),
-      'coreUrlAssign': instance.coreUrlAssign.toJson(),
-    };
+Map<String, dynamic> _$LoginPageConfigToJson(LoginPageConfig instance) => <String, dynamic>{
+  'modeSelect': instance.modeSelect.toJson(),
+  'switchPage': instance.switchPage.toJson(),
+  'otpSignin': instance.otpSignin.toJson(),
+  'passwordSignin': instance.passwordSignin.toJson(),
+  'otpSigninVerify': instance.otpSigninVerify.toJson(),
+  'signupVerify': instance.signupVerify.toJson(),
+  'coreUrlAssign': instance.coreUrlAssign.toJson(),
+};
 
 const _$LoginPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -1135,9 +899,7 @@ const _$LoginPageConfigJsonSchema = {
     'switchPage': {r'$ref': r'#/$defs/LoginSwitchPageConfig'},
     'otpSignin': {r'$ref': r'#/$defs/LoginOtpSigninPageConfig'},
     'passwordSignin': {r'$ref': r'#/$defs/LoginPasswordSigninPageConfig'},
-    'otpSigninVerify': {
-      r'$ref': r'#/$defs/LoginOtpSigninVerifyScreenPageConfig',
-    },
+    'otpSigninVerify': {r'$ref': r'#/$defs/LoginOtpSigninVerifyScreenPageConfig'},
     'signupVerify': {r'$ref': r'#/$defs/LoginSignupVerifyScreenPageConfig'},
     'coreUrlAssign': {r'$ref': r'#/$defs/LoginCoreUrlAssignPageConfig'},
   },
@@ -1147,8 +909,7 @@ const _$LoginPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -1169,43 +930,22 @@ const _$LoginPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'ImageRenderSpec': {
@@ -1227,15 +967,7 @@ const _$LoginPageConfigJsonSchema = {
           ],
         },
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
         },
       },
     },
@@ -1245,8 +977,7 @@ const _$LoginPageConfigJsonSchema = {
         'attributes': {
           'type': 'object',
           'additionalProperties': {'type': 'object'},
-          'description':
-              'A map storing arbitrary key-value pairs for contextual or configuration data.',
+          'description': 'A map storing arbitrary key-value pairs for contextual or configuration data.',
           'default': {},
         },
       },
@@ -1254,14 +985,8 @@ const _$LoginPageConfigJsonSchema = {
     'ImageSource': {
       'type': 'object',
       'properties': {
-        'id': {
-          'type': 'string',
-          'description': 'Backend asset ID (unique identifier in storage).',
-        },
-        'uri': {
-          'type': 'string',
-          'description': 'Unified URI pointing to the resource.',
-        },
+        'id': {'type': 'string', 'description': 'Backend asset ID (unique identifier in storage).'},
+        'uri': {'type': 'string', 'description': 'Unified URI pointing to the resource.'},
         'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
@@ -1271,10 +996,7 @@ const _$LoginPageConfigJsonSchema = {
           r'$ref': r'#/$defs/ImageRenderSpec',
           'description': 'Rendering specification (scale, padding, etc.).',
         },
-        'metadata': {
-          r'$ref': r'#/$defs/Metadata',
-          'description': 'Freeform metadata for CLI or pipeline tools.',
-        },
+        'metadata': {r'$ref': r'#/$defs/Metadata', 'description': 'Freeform metadata for CLI or pipeline tools.'},
       },
     },
     'PageBackground': {
@@ -1302,7 +1024,7 @@ const _$LoginPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -1317,15 +1039,7 @@ const _$LoginPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -1336,10 +1050,7 @@ const _$LoginPageConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -1348,8 +1059,7 @@ const _$LoginPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -1360,77 +1070,36 @@ const _$LoginPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -1440,18 +1109,9 @@ const _$LoginPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -1464,66 +1124,36 @@ const _$LoginPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'AppBarConfig': {
@@ -1590,11 +1220,7 @@ const _$LoginPageConfigJsonSchema = {
       'properties': {
         'color': {'type': 'string', 'description': 'Color in hex format.'},
         'width': {'type': 'number', 'default': 1.0},
-        'style': {
-          'type': 'string',
-          'description': "Border style (e.g., 'solid', 'none').",
-          'default': 'solid',
-        },
+        'style': {'type': 'string', 'description': "Border style (e.g., 'solid', 'none').", 'default': 'solid'},
       },
     },
     'ShapeBorderConfig': {
@@ -1602,15 +1228,10 @@ const _$LoginPageConfigJsonSchema = {
       'properties': {
         'type': {
           'type': 'string',
-          'description':
-              "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
+          'description': "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
           'default': 'rounded',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description':
-              'The border radius value (for rounded/beveled shapes).',
-        },
+        'borderRadius': {'type': 'number', 'description': 'The border radius value (for rounded/beveled shapes).'},
       },
     },
     'VisualDensityConfig': {
@@ -1623,18 +1244,11 @@ const _$LoginPageConfigJsonSchema = {
     'ButtonStyleConfig': {
       'type': 'object',
       'properties': {
-        'textStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': "The style for a button's text descendants.",
-        },
-        'backgroundColor': {
-          'type': 'string',
-          'description': "The button's background fill color in hex format.",
-        },
+        'textStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': "The style for a button's text descendants."},
+        'backgroundColor': {'type': 'string', 'description': "The button's background fill color in hex format."},
         'foregroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format.",
+          'description': "The color for the button's text/icon descendants in hex format.",
         },
         'selectedBackgroundColor': {
           'type': 'string',
@@ -1643,77 +1257,45 @@ const _$LoginPageConfigJsonSchema = {
         },
         'selectedForegroundColor': {
           'type': 'string',
-          'description':
-              'The color for the text/icon descendants in hex format while the button is switched on.',
+          'description': 'The color for the text/icon descendants in hex format while the button is switched on.',
         },
         'selectedIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format while the button is switched on.",
+          'description': "The icon's color in hex format while the button is switched on.",
         },
         'disabledBackgroundColor': {
           'type': 'string',
-          'description':
-              "The button's background fill color in hex format when the button is disabled.",
+          'description': "The button's background fill color in hex format when the button is disabled.",
         },
         'disabledForegroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format when the button is disabled.",
+          'description': "The color for the button's text/icon descendants in hex format when the button is disabled.",
         },
         'disabledIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format when the button is disabled.",
+          'description': "The icon's color in hex format when the button is disabled.",
         },
         'disabledShadowColor': {
           'type': 'string',
-          'description':
-              'The shadow color in hex format when the button is disabled.',
+          'description': 'The shadow color in hex format when the button is disabled.',
         },
         'overlayColor': {
           'type': 'string',
-          'description':
-              'The highlight color for states (focused, hovered, pressed) in hex format.',
+          'description': 'The highlight color for states (focused, hovered, pressed) in hex format.',
         },
-        'shadowColor': {
-          'type': 'string',
-          'description': 'The shadow color in hex format.',
-        },
-        'surfaceTintColor': {
-          'type': 'string',
-          'description': 'The surface tint color in hex format.',
-        },
-        'elevation': {
-          'type': 'number',
-          'description': 'The elevation of the button.',
-        },
+        'shadowColor': {'type': 'string', 'description': 'The shadow color in hex format.'},
+        'surfaceTintColor': {'type': 'string', 'description': 'The surface tint color in hex format.'},
+        'elevation': {'type': 'number', 'description': 'The elevation of the button.'},
         'padding': {
           r'$ref': r'#/$defs/EdgeInsetsConfig',
-          'description':
-              "The padding between the button's boundary and its child.",
+          'description': "The padding between the button's boundary and its child.",
         },
-        'minimumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The minimum size of the button.',
-        },
-        'fixedSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The fixed size of the button.',
-        },
-        'maximumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The maximum size of the button.',
-        },
-        'iconColor': {
-          'type': 'string',
-          'description': "The icon's color in hex format.",
-        },
+        'minimumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The minimum size of the button.'},
+        'fixedSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The fixed size of the button.'},
+        'maximumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The maximum size of the button.'},
+        'iconColor': {'type': 'string', 'description': "The icon's color in hex format."},
         'iconSize': {'type': 'number', 'description': "The icon's size."},
-        'side': {
-          r'$ref': r'#/$defs/BorderSideConfig',
-          'description': "The color and weight of the button's outline.",
-        },
+        'side': {r'$ref': r'#/$defs/BorderSideConfig', 'description': "The color and weight of the button's outline."},
         'shape': {
           r'$ref': r'#/$defs/ShapeBorderConfig',
           'description': 'The shape of the button (e.g., rounded corners).',
@@ -1722,10 +1304,7 @@ const _$LoginPageConfigJsonSchema = {
           r'$ref': r'#/$defs/VisualDensityConfig',
           'description': "Defines how compact the button's layout will be.",
         },
-        'animationDuration': {
-          'type': 'integer',
-          'description': 'The duration of animated changes in milliseconds.',
-        },
+        'animationDuration': {'type': 'integer', 'description': 'The duration of animated changes in milliseconds.'},
       },
     },
     'LoginSwitchPageConfig': {
@@ -1748,18 +1327,9 @@ const _$LoginPageConfigJsonSchema = {
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
           'default': 'underline',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description': 'Corner radius for outline borders.',
-        },
-        'borderColor': {
-          'type': 'string',
-          'description': 'Border color (hex string, e.g. `#000000`).',
-        },
-        'borderWidth': {
-          'type': 'number',
-          'description': 'Stroke width of the border.',
-        },
+        'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
+        'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},
+        'borderWidth': {'type': 'number', 'description': 'Stroke width of the border.'},
       },
     },
     'InputDecorationConfig': {
@@ -1789,10 +1359,7 @@ const _$LoginPageConfigJsonSchema = {
     'MaskConfig': {
       'type': 'object',
       'properties': {
-        'pattern': {
-          'type': 'string',
-          'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"',
-        },
+        'pattern': {'type': 'string', 'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"'},
         'filter': {
           'type': 'object',
           'additionalProperties': {'type': 'string'},
@@ -1858,17 +1425,15 @@ const _$LoginPageConfigJsonSchema = {
   },
 };
 
-LoginOtpSigninPageConfig _$LoginOtpSigninPageConfigFromJson(
-  Map<String, dynamic> json,
-) => LoginOtpSigninPageConfig(
+LoginOtpSigninPageConfig _$LoginOtpSigninPageConfigFromJson(Map<String, dynamic> json) => LoginOtpSigninPageConfig(
   refTextField: json['refTextField'] == null
       ? null
       : TextFieldConfig.fromJson(json['refTextField'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$LoginOtpSigninPageConfigToJson(
-  LoginOtpSigninPageConfig instance,
-) => <String, dynamic>{'refTextField': instance.refTextField?.toJson()};
+Map<String, dynamic> _$LoginOtpSigninPageConfigToJson(LoginOtpSigninPageConfig instance) => <String, dynamic>{
+  'refTextField': instance.refTextField?.toJson(),
+};
 
 const _$LoginOtpSigninPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -1880,10 +1445,7 @@ const _$LoginOtpSigninPageConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -1892,8 +1454,7 @@ const _$LoginOtpSigninPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -1904,102 +1465,45 @@ const _$LoginOtpSigninPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -2015,18 +1519,9 @@ const _$LoginOtpSigninPageConfigJsonSchema = {
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
           'default': 'underline',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description': 'Corner radius for outline borders.',
-        },
-        'borderColor': {
-          'type': 'string',
-          'description': 'Border color (hex string, e.g. `#000000`).',
-        },
-        'borderWidth': {
-          'type': 'number',
-          'description': 'Stroke width of the border.',
-        },
+        'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
+        'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},
+        'borderWidth': {'type': 'number', 'description': 'Stroke width of the border.'},
       },
     },
     'InputDecorationConfig': {
@@ -2056,10 +1551,7 @@ const _$LoginOtpSigninPageConfigJsonSchema = {
     'MaskConfig': {
       'type': 'object',
       'properties': {
-        'pattern': {
-          'type': 'string',
-          'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"',
-        },
+        'pattern': {'type': 'string', 'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"'},
         'filter': {
           'type': 'object',
           'additionalProperties': {'type': 'string'},
@@ -2090,22 +1582,17 @@ const _$LoginOtpSigninPageConfigJsonSchema = {
   },
 };
 
-LoginPasswordSigninPageConfig _$LoginPasswordSigninPageConfigFromJson(
-  Map<String, dynamic> json,
-) => LoginPasswordSigninPageConfig(
-  refTextField: json['refTextField'] == null
-      ? null
-      : TextFieldConfig.fromJson(json['refTextField'] as Map<String, dynamic>),
-  passwordTextField: json['passwordTextField'] == null
-      ? null
-      : TextFieldConfig.fromJson(
-          json['passwordTextField'] as Map<String, dynamic>,
-        ),
-);
+LoginPasswordSigninPageConfig _$LoginPasswordSigninPageConfigFromJson(Map<String, dynamic> json) =>
+    LoginPasswordSigninPageConfig(
+      refTextField: json['refTextField'] == null
+          ? null
+          : TextFieldConfig.fromJson(json['refTextField'] as Map<String, dynamic>),
+      passwordTextField: json['passwordTextField'] == null
+          ? null
+          : TextFieldConfig.fromJson(json['passwordTextField'] as Map<String, dynamic>),
+    );
 
-Map<String, dynamic> _$LoginPasswordSigninPageConfigToJson(
-  LoginPasswordSigninPageConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$LoginPasswordSigninPageConfigToJson(LoginPasswordSigninPageConfig instance) => <String, dynamic>{
   'refTextField': instance.refTextField?.toJson(),
   'passwordTextField': instance.passwordTextField?.toJson(),
 };
@@ -2121,10 +1608,7 @@ const _$LoginPasswordSigninPageConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -2133,8 +1617,7 @@ const _$LoginPasswordSigninPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -2145,102 +1628,45 @@ const _$LoginPasswordSigninPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -2256,18 +1682,9 @@ const _$LoginPasswordSigninPageConfigJsonSchema = {
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
           'default': 'underline',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description': 'Corner radius for outline borders.',
-        },
-        'borderColor': {
-          'type': 'string',
-          'description': 'Border color (hex string, e.g. `#000000`).',
-        },
-        'borderWidth': {
-          'type': 'number',
-          'description': 'Stroke width of the border.',
-        },
+        'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
+        'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},
+        'borderWidth': {'type': 'number', 'description': 'Stroke width of the border.'},
       },
     },
     'InputDecorationConfig': {
@@ -2297,10 +1714,7 @@ const _$LoginPasswordSigninPageConfigJsonSchema = {
     'MaskConfig': {
       'type': 'object',
       'properties': {
-        'pattern': {
-          'type': 'string',
-          'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"',
-        },
+        'pattern': {'type': 'string', 'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"'},
         'filter': {
           'type': 'object',
           'additionalProperties': {'type': 'string'},
@@ -2331,18 +1745,13 @@ const _$LoginPasswordSigninPageConfigJsonSchema = {
   },
 };
 
-LoginOtpSigninVerifyScreenPageConfig
-_$LoginOtpSigninVerifyScreenPageConfigFromJson(Map<String, dynamic> json) =>
+LoginOtpSigninVerifyScreenPageConfig _$LoginOtpSigninVerifyScreenPageConfigFromJson(Map<String, dynamic> json) =>
     LoginOtpSigninVerifyScreenPageConfig(
-      countdownRepeatIntervalSeconds:
-          (json['countdownRepeatIntervalSeconds'] as num?)?.toInt() ?? 30,
+      countdownRepeatIntervalSeconds: (json['countdownRepeatIntervalSeconds'] as num?)?.toInt() ?? 30,
     );
 
-Map<String, dynamic> _$LoginOtpSigninVerifyScreenPageConfigToJson(
-  LoginOtpSigninVerifyScreenPageConfig instance,
-) => <String, dynamic>{
-  'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds,
-};
+Map<String, dynamic> _$LoginOtpSigninVerifyScreenPageConfigToJson(LoginOtpSigninVerifyScreenPageConfig instance) =>
+    <String, dynamic>{'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds};
 
 const _$LoginOtpSigninVerifyScreenPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -2352,18 +1761,13 @@ const _$LoginOtpSigninVerifyScreenPageConfigJsonSchema = {
   },
 };
 
-LoginSignupVerifyScreenPageConfig _$LoginSignupVerifyScreenPageConfigFromJson(
-  Map<String, dynamic> json,
-) => LoginSignupVerifyScreenPageConfig(
-  countdownRepeatIntervalSeconds:
-      (json['countdownRepeatIntervalSeconds'] as num?)?.toInt() ?? 30,
-);
+LoginSignupVerifyScreenPageConfig _$LoginSignupVerifyScreenPageConfigFromJson(Map<String, dynamic> json) =>
+    LoginSignupVerifyScreenPageConfig(
+      countdownRepeatIntervalSeconds: (json['countdownRepeatIntervalSeconds'] as num?)?.toInt() ?? 30,
+    );
 
-Map<String, dynamic> _$LoginSignupVerifyScreenPageConfigToJson(
-  LoginSignupVerifyScreenPageConfig instance,
-) => <String, dynamic>{
-  'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds,
-};
+Map<String, dynamic> _$LoginSignupVerifyScreenPageConfigToJson(LoginSignupVerifyScreenPageConfig instance) =>
+    <String, dynamic>{'countdownRepeatIntervalSeconds': instance.countdownRepeatIntervalSeconds};
 
 const _$LoginSignupVerifyScreenPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -2373,62 +1777,36 @@ const _$LoginSignupVerifyScreenPageConfigJsonSchema = {
   },
 };
 
-LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(
-  Map<String, dynamic> json,
-) => LoginModeSelectPageConfig(
+LoginModeSelectPageConfig _$LoginModeSelectPageConfigFromJson(Map<String, dynamic> json) => LoginModeSelectPageConfig(
   themeOverride: json['themeOverride'] == null
       ? const ThemeOverrideConfig()
-      : ThemeOverrideConfig.fromJson(
-          json['themeOverride'] as Map<String, dynamic>,
-        ),
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
   systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
       ? null
-      : OverlayStyleModel.fromJson(
-          json['systemUiOverlayStyle'] as Map<String, dynamic>,
-        ),
-  mainLogo: json['mainLogo'] == null
-      ? null
-      : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
+      : OverlayStyleModel.fromJson(json['systemUiOverlayStyle'] as Map<String, dynamic>),
+  mainLogo: json['mainLogo'] == null ? null : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
   buttonLoginStyleType:
-      $enumDecodeNullable(
-        _$ElevatedButtonStyleTypeEnumMap,
-        json['buttonLoginStyleType'],
-      ) ??
+      $enumDecodeNullable(_$ElevatedButtonStyleTypeEnumMap, json['buttonLoginStyleType']) ??
       ElevatedButtonStyleType.primary,
   buttonSignupStyleType:
-      $enumDecodeNullable(
-        _$ElevatedButtonStyleTypeEnumMap,
-        json['buttonSignupStyleType'],
-      ) ??
+      $enumDecodeNullable(_$ElevatedButtonStyleTypeEnumMap, json['buttonSignupStyleType']) ??
       ElevatedButtonStyleType.primary,
-  background: json['background'] == null
-      ? null
-      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
   greetingTextStyle: json['greetingTextStyle'] == null
       ? null
-      : TextStyleConfig.fromJson(
-          json['greetingTextStyle'] as Map<String, dynamic>,
-        ),
+      : TextStyleConfig.fromJson(json['greetingTextStyle'] as Map<String, dynamic>),
   appBarBlurredSurface: json['appBarBlurredSurface'] == null
       ? null
-      : BlurredSurfaceConfig.fromJson(
-          json['appBarBlurredSurface'] as Map<String, dynamic>,
-        ),
-  appBarStyle: json['appBarStyle'] == null
-      ? null
-      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$LoginModeSelectPageConfigToJson(
-  LoginModeSelectPageConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$LoginModeSelectPageConfigToJson(LoginModeSelectPageConfig instance) => <String, dynamic>{
   'themeOverride': instance.themeOverride.toJson(),
   'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
   'mainLogo': instance.mainLogo?.toJson(),
-  'buttonLoginStyleType':
-      _$ElevatedButtonStyleTypeEnumMap[instance.buttonLoginStyleType]!,
-  'buttonSignupStyleType':
-      _$ElevatedButtonStyleTypeEnumMap[instance.buttonSignupStyleType]!,
+  'buttonLoginStyleType': _$ElevatedButtonStyleTypeEnumMap[instance.buttonLoginStyleType]!,
+  'buttonSignupStyleType': _$ElevatedButtonStyleTypeEnumMap[instance.buttonSignupStyleType]!,
   'background': instance.background?.toJson(),
   'greetingTextStyle': instance.greetingTextStyle?.toJson(),
   'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
@@ -2461,8 +1839,7 @@ const _$LoginModeSelectPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -2483,43 +1860,22 @@ const _$LoginModeSelectPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'ImageRenderSpec': {
@@ -2541,15 +1897,7 @@ const _$LoginModeSelectPageConfigJsonSchema = {
           ],
         },
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
         },
       },
     },
@@ -2559,8 +1907,7 @@ const _$LoginModeSelectPageConfigJsonSchema = {
         'attributes': {
           'type': 'object',
           'additionalProperties': {'type': 'object'},
-          'description':
-              'A map storing arbitrary key-value pairs for contextual or configuration data.',
+          'description': 'A map storing arbitrary key-value pairs for contextual or configuration data.',
           'default': {},
         },
       },
@@ -2568,14 +1915,8 @@ const _$LoginModeSelectPageConfigJsonSchema = {
     'ImageSource': {
       'type': 'object',
       'properties': {
-        'id': {
-          'type': 'string',
-          'description': 'Backend asset ID (unique identifier in storage).',
-        },
-        'uri': {
-          'type': 'string',
-          'description': 'Unified URI pointing to the resource.',
-        },
+        'id': {'type': 'string', 'description': 'Backend asset ID (unique identifier in storage).'},
+        'uri': {'type': 'string', 'description': 'Unified URI pointing to the resource.'},
         'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
@@ -2585,10 +1926,7 @@ const _$LoginModeSelectPageConfigJsonSchema = {
           r'$ref': r'#/$defs/ImageRenderSpec',
           'description': 'Rendering specification (scale, padding, etc.).',
         },
-        'metadata': {
-          r'$ref': r'#/$defs/Metadata',
-          'description': 'Freeform metadata for CLI or pipeline tools.',
-        },
+        'metadata': {r'$ref': r'#/$defs/Metadata', 'description': 'Freeform metadata for CLI or pipeline tools.'},
       },
     },
     'PageBackground': {
@@ -2616,7 +1954,7 @@ const _$LoginModeSelectPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -2631,15 +1969,7 @@ const _$LoginModeSelectPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -2650,10 +1980,7 @@ const _$LoginModeSelectPageConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -2662,8 +1989,7 @@ const _$LoginModeSelectPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -2674,77 +2000,36 @@ const _$LoginModeSelectPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -2754,18 +2039,9 @@ const _$LoginModeSelectPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -2778,66 +2054,36 @@ const _$LoginModeSelectPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'AppBarConfig': {
@@ -2872,38 +2118,22 @@ const _$ElevatedButtonStyleTypeEnumMap = {
   ElevatedButtonStyleType.neutralOnDark: 'neutralOnDark',
 };
 
-LoginSwitchPageConfig _$LoginSwitchPageConfigFromJson(
-  Map<String, dynamic> json,
-) => LoginSwitchPageConfig(
-  mainLogo: json['mainLogo'] == null
-      ? null
-      : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
-  background: json['background'] == null
-      ? null
-      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+LoginSwitchPageConfig _$LoginSwitchPageConfigFromJson(Map<String, dynamic> json) => LoginSwitchPageConfig(
+  mainLogo: json['mainLogo'] == null ? null : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
   themeOverride: json['themeOverride'] == null
       ? const ThemeOverrideConfig()
-      : ThemeOverrideConfig.fromJson(
-          json['themeOverride'] as Map<String, dynamic>,
-        ),
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
   segmentButtonStyle: json['segmentButtonStyle'] == null
       ? null
-      : ButtonStyleConfig.fromJson(
-          json['segmentButtonStyle'] as Map<String, dynamic>,
-        ),
+      : ButtonStyleConfig.fromJson(json['segmentButtonStyle'] as Map<String, dynamic>),
   appBarBlurredSurface: json['appBarBlurredSurface'] == null
       ? null
-      : BlurredSurfaceConfig.fromJson(
-          json['appBarBlurredSurface'] as Map<String, dynamic>,
-        ),
-  appBarStyle: json['appBarStyle'] == null
-      ? null
-      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$LoginSwitchPageConfigToJson(
-  LoginSwitchPageConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$LoginSwitchPageConfigToJson(LoginSwitchPageConfig instance) => <String, dynamic>{
   'themeOverride': instance.themeOverride.toJson(),
   'mainLogo': instance.mainLogo?.toJson(),
   'background': instance.background?.toJson(),
@@ -2929,8 +2159,7 @@ const _$LoginSwitchPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -2944,26 +2173,10 @@ const _$LoginSwitchPageConfigJsonSchema = {
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'ImageRenderSpec': {
@@ -2985,15 +2198,7 @@ const _$LoginSwitchPageConfigJsonSchema = {
           ],
         },
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
         },
       },
     },
@@ -3003,8 +2208,7 @@ const _$LoginSwitchPageConfigJsonSchema = {
         'attributes': {
           'type': 'object',
           'additionalProperties': {'type': 'object'},
-          'description':
-              'A map storing arbitrary key-value pairs for contextual or configuration data.',
+          'description': 'A map storing arbitrary key-value pairs for contextual or configuration data.',
           'default': {},
         },
       },
@@ -3012,14 +2216,8 @@ const _$LoginSwitchPageConfigJsonSchema = {
     'ImageSource': {
       'type': 'object',
       'properties': {
-        'id': {
-          'type': 'string',
-          'description': 'Backend asset ID (unique identifier in storage).',
-        },
-        'uri': {
-          'type': 'string',
-          'description': 'Unified URI pointing to the resource.',
-        },
+        'id': {'type': 'string', 'description': 'Backend asset ID (unique identifier in storage).'},
+        'uri': {'type': 'string', 'description': 'Unified URI pointing to the resource.'},
         'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
@@ -3029,10 +2227,7 @@ const _$LoginSwitchPageConfigJsonSchema = {
           r'$ref': r'#/$defs/ImageRenderSpec',
           'description': 'Rendering specification (scale, padding, etc.).',
         },
-        'metadata': {
-          r'$ref': r'#/$defs/Metadata',
-          'description': 'Freeform metadata for CLI or pipeline tools.',
-        },
+        'metadata': {r'$ref': r'#/$defs/Metadata', 'description': 'Freeform metadata for CLI or pipeline tools.'},
       },
     },
     'PageBackground': {
@@ -3060,7 +2255,7 @@ const _$LoginSwitchPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -3075,15 +2270,7 @@ const _$LoginSwitchPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -3094,10 +2281,7 @@ const _$LoginSwitchPageConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -3106,8 +2290,7 @@ const _$LoginSwitchPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -3118,77 +2301,36 @@ const _$LoginSwitchPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -3217,11 +2359,7 @@ const _$LoginSwitchPageConfigJsonSchema = {
       'properties': {
         'color': {'type': 'string', 'description': 'Color in hex format.'},
         'width': {'type': 'number', 'default': 1.0},
-        'style': {
-          'type': 'string',
-          'description': "Border style (e.g., 'solid', 'none').",
-          'default': 'solid',
-        },
+        'style': {'type': 'string', 'description': "Border style (e.g., 'solid', 'none').", 'default': 'solid'},
       },
     },
     'ShapeBorderConfig': {
@@ -3229,15 +2367,10 @@ const _$LoginSwitchPageConfigJsonSchema = {
       'properties': {
         'type': {
           'type': 'string',
-          'description':
-              "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
+          'description': "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
           'default': 'rounded',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description':
-              'The border radius value (for rounded/beveled shapes).',
-        },
+        'borderRadius': {'type': 'number', 'description': 'The border radius value (for rounded/beveled shapes).'},
       },
     },
     'VisualDensityConfig': {
@@ -3250,18 +2383,11 @@ const _$LoginSwitchPageConfigJsonSchema = {
     'ButtonStyleConfig': {
       'type': 'object',
       'properties': {
-        'textStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': "The style for a button's text descendants.",
-        },
-        'backgroundColor': {
-          'type': 'string',
-          'description': "The button's background fill color in hex format.",
-        },
+        'textStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': "The style for a button's text descendants."},
+        'backgroundColor': {'type': 'string', 'description': "The button's background fill color in hex format."},
         'foregroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format.",
+          'description': "The color for the button's text/icon descendants in hex format.",
         },
         'selectedBackgroundColor': {
           'type': 'string',
@@ -3270,77 +2396,45 @@ const _$LoginSwitchPageConfigJsonSchema = {
         },
         'selectedForegroundColor': {
           'type': 'string',
-          'description':
-              'The color for the text/icon descendants in hex format while the button is switched on.',
+          'description': 'The color for the text/icon descendants in hex format while the button is switched on.',
         },
         'selectedIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format while the button is switched on.",
+          'description': "The icon's color in hex format while the button is switched on.",
         },
         'disabledBackgroundColor': {
           'type': 'string',
-          'description':
-              "The button's background fill color in hex format when the button is disabled.",
+          'description': "The button's background fill color in hex format when the button is disabled.",
         },
         'disabledForegroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format when the button is disabled.",
+          'description': "The color for the button's text/icon descendants in hex format when the button is disabled.",
         },
         'disabledIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format when the button is disabled.",
+          'description': "The icon's color in hex format when the button is disabled.",
         },
         'disabledShadowColor': {
           'type': 'string',
-          'description':
-              'The shadow color in hex format when the button is disabled.',
+          'description': 'The shadow color in hex format when the button is disabled.',
         },
         'overlayColor': {
           'type': 'string',
-          'description':
-              'The highlight color for states (focused, hovered, pressed) in hex format.',
+          'description': 'The highlight color for states (focused, hovered, pressed) in hex format.',
         },
-        'shadowColor': {
-          'type': 'string',
-          'description': 'The shadow color in hex format.',
-        },
-        'surfaceTintColor': {
-          'type': 'string',
-          'description': 'The surface tint color in hex format.',
-        },
-        'elevation': {
-          'type': 'number',
-          'description': 'The elevation of the button.',
-        },
+        'shadowColor': {'type': 'string', 'description': 'The shadow color in hex format.'},
+        'surfaceTintColor': {'type': 'string', 'description': 'The surface tint color in hex format.'},
+        'elevation': {'type': 'number', 'description': 'The elevation of the button.'},
         'padding': {
           r'$ref': r'#/$defs/EdgeInsetsConfig',
-          'description':
-              "The padding between the button's boundary and its child.",
+          'description': "The padding between the button's boundary and its child.",
         },
-        'minimumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The minimum size of the button.',
-        },
-        'fixedSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The fixed size of the button.',
-        },
-        'maximumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The maximum size of the button.',
-        },
-        'iconColor': {
-          'type': 'string',
-          'description': "The icon's color in hex format.",
-        },
+        'minimumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The minimum size of the button.'},
+        'fixedSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The fixed size of the button.'},
+        'maximumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The maximum size of the button.'},
+        'iconColor': {'type': 'string', 'description': "The icon's color in hex format."},
         'iconSize': {'type': 'number', 'description': "The icon's size."},
-        'side': {
-          r'$ref': r'#/$defs/BorderSideConfig',
-          'description': "The color and weight of the button's outline.",
-        },
+        'side': {r'$ref': r'#/$defs/BorderSideConfig', 'description': "The color and weight of the button's outline."},
         'shape': {
           r'$ref': r'#/$defs/ShapeBorderConfig',
           'description': 'The shape of the button (e.g., rounded corners).',
@@ -3349,27 +2443,15 @@ const _$LoginSwitchPageConfigJsonSchema = {
           r'$ref': r'#/$defs/VisualDensityConfig',
           'description': "Defines how compact the button's layout will be.",
         },
-        'animationDuration': {
-          'type': 'integer',
-          'description': 'The duration of animated changes in milliseconds.',
-        },
+        'animationDuration': {'type': 'integer', 'description': 'The duration of animated changes in milliseconds.'},
       },
     },
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -3382,66 +2464,36 @@ const _$LoginSwitchPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'OverlayStyleModel': {
@@ -3454,18 +2506,13 @@ const _$LoginSwitchPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
@@ -3493,35 +2540,23 @@ const _$LoginSwitchPageConfigJsonSchema = {
   },
 };
 
-AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) =>
-    AboutPageConfig(
-      mainLogo: json['mainLogo'] == null
-          ? null
-          : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
-      metadata: json['metadata'] == null
-          ? const Metadata()
-          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
-      background: json['background'] == null
-          ? null
-          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
-      appBarBlurredSurface: json['appBarBlurredSurface'] == null
-          ? null
-          : BlurredSurfaceConfig.fromJson(
-              json['appBarBlurredSurface'] as Map<String, dynamic>,
-            ),
-      appBarStyle: json['appBarStyle'] == null
-          ? null
-          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
-    );
+AboutPageConfig _$AboutPageConfigFromJson(Map<String, dynamic> json) => AboutPageConfig(
+  mainLogo: json['mainLogo'] == null ? null : ImageSource.fromJson(json['mainLogo'] as Map<String, dynamic>),
+  metadata: json['metadata'] == null ? const Metadata() : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  appBarBlurredSurface: json['appBarBlurredSurface'] == null
+      ? null
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$AboutPageConfigToJson(AboutPageConfig instance) =>
-    <String, dynamic>{
-      'mainLogo': instance.mainLogo?.toJson(),
-      'metadata': instance.metadata.toJson(),
-      'background': instance.background?.toJson(),
-      'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
-      'appBarStyle': instance.appBarStyle?.toJson(),
-    };
+Map<String, dynamic> _$AboutPageConfigToJson(AboutPageConfig instance) => <String, dynamic>{
+  'mainLogo': instance.mainLogo?.toJson(),
+  'metadata': instance.metadata.toJson(),
+  'background': instance.background?.toJson(),
+  'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
+};
 
 const _$AboutPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -3537,26 +2572,10 @@ const _$AboutPageConfigJsonSchema = {
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'ImageRenderSpec': {
@@ -3578,15 +2597,7 @@ const _$AboutPageConfigJsonSchema = {
           ],
         },
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
         },
       },
     },
@@ -3596,8 +2607,7 @@ const _$AboutPageConfigJsonSchema = {
         'attributes': {
           'type': 'object',
           'additionalProperties': {'type': 'object'},
-          'description':
-              'A map storing arbitrary key-value pairs for contextual or configuration data.',
+          'description': 'A map storing arbitrary key-value pairs for contextual or configuration data.',
           'default': {},
         },
       },
@@ -3605,14 +2615,8 @@ const _$AboutPageConfigJsonSchema = {
     'ImageSource': {
       'type': 'object',
       'properties': {
-        'id': {
-          'type': 'string',
-          'description': 'Backend asset ID (unique identifier in storage).',
-        },
-        'uri': {
-          'type': 'string',
-          'description': 'Unified URI pointing to the resource.',
-        },
+        'id': {'type': 'string', 'description': 'Backend asset ID (unique identifier in storage).'},
+        'uri': {'type': 'string', 'description': 'Unified URI pointing to the resource.'},
         'refType': {
           'type': 'string',
           'description': 'Semantic type of reference (default = "asset").',
@@ -3622,10 +2626,7 @@ const _$AboutPageConfigJsonSchema = {
           r'$ref': r'#/$defs/ImageRenderSpec',
           'description': 'Rendering specification (scale, padding, etc.).',
         },
-        'metadata': {
-          r'$ref': r'#/$defs/Metadata',
-          'description': 'Freeform metadata for CLI or pipeline tools.',
-        },
+        'metadata': {r'$ref': r'#/$defs/Metadata', 'description': 'Freeform metadata for CLI or pipeline tools.'},
       },
     },
     'PageBackground': {
@@ -3653,7 +2654,7 @@ const _$AboutPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -3668,15 +2669,7 @@ const _$AboutPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -3687,18 +2680,9 @@ const _$AboutPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -3711,75 +2695,42 @@ const _$AboutPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -3788,8 +2739,7 @@ const _$AboutPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -3800,77 +2750,36 @@ const _$AboutPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -3887,18 +2796,13 @@ const _$AboutPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
@@ -3926,52 +2830,33 @@ const _$AboutPageConfigJsonSchema = {
   },
 };
 
-CallPageConfig _$CallPageConfigFromJson(
-  Map<String, dynamic> json,
-) => CallPageConfig(
+CallPageConfig _$CallPageConfigFromJson(Map<String, dynamic> json) => CallPageConfig(
   systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
       ? null
-      : OverlayStyleModel.fromJson(
-          json['systemUiOverlayStyle'] as Map<String, dynamic>,
-        ),
-  callInfo: json['callInfo'] == null
-      ? null
-      : CallPageInfoConfig.fromJson(json['callInfo'] as Map<String, dynamic>),
-  callList: json['callList'] == null
-      ? null
-      : CallPageListConfig.fromJson(json['callList'] as Map<String, dynamic>),
+      : OverlayStyleModel.fromJson(json['systemUiOverlayStyle'] as Map<String, dynamic>),
+  callInfo: json['callInfo'] == null ? null : CallPageInfoConfig.fromJson(json['callInfo'] as Map<String, dynamic>),
+  callList: json['callList'] == null ? null : CallPageListConfig.fromJson(json['callList'] as Map<String, dynamic>),
   actingOnHint: json['actingOnHint'] == null
       ? null
-      : CallPageHintConfig.fromJson(
-          json['actingOnHint'] as Map<String, dynamic>,
-        ),
-  actions: json['actions'] == null
-      ? null
-      : CallPageActionsConfig.fromJson(json['actions'] as Map<String, dynamic>),
-  background: json['background'] == null
-      ? null
-      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
-  appBarStyle: json['appBarStyle'] == null
-      ? null
-      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+      : CallPageHintConfig.fromJson(json['actingOnHint'] as Map<String, dynamic>),
+  actions: json['actions'] == null ? null : CallPageActionsConfig.fromJson(json['actions'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
   appBarBlurredSurface: json['appBarBlurredSurface'] == null
       ? null
-      : BlurredSurfaceConfig.fromJson(
-          json['appBarBlurredSurface'] as Map<String, dynamic>,
-        ),
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$CallPageConfigToJson(CallPageConfig instance) =>
-    <String, dynamic>{
-      'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
-      'appBarStyle': instance.appBarStyle?.toJson(),
-      'callInfo': instance.callInfo?.toJson(),
-      'callList': instance.callList?.toJson(),
-      'actingOnHint': instance.actingOnHint?.toJson(),
-      'actions': instance.actions?.toJson(),
-      'background': instance.background?.toJson(),
-      'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
-    };
+Map<String, dynamic> _$CallPageConfigToJson(CallPageConfig instance) => <String, dynamic>{
+  'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
+  'callInfo': instance.callInfo?.toJson(),
+  'callList': instance.callList?.toJson(),
+  'actingOnHint': instance.actingOnHint?.toJson(),
+  'actions': instance.actions?.toJson(),
+  'background': instance.background?.toJson(),
+  'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+};
 
 const _$CallPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -3997,18 +2882,13 @@ const _$CallPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'OffsetConfig': {
@@ -4021,75 +2901,42 @@ const _$CallPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -4098,8 +2945,7 @@ const _$CallPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -4110,102 +2956,45 @@ const _$CallPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -4283,11 +3072,7 @@ const _$CallPageConfigJsonSchema = {
       'properties': {
         'color': {'type': 'string', 'description': 'Color in hex format.'},
         'width': {'type': 'number', 'default': 1.0},
-        'style': {
-          'type': 'string',
-          'description': "Border style (e.g., 'solid', 'none').",
-          'default': 'solid',
-        },
+        'style': {'type': 'string', 'description': "Border style (e.g., 'solid', 'none').", 'default': 'solid'},
       },
     },
     'ShapeBorderConfig': {
@@ -4295,15 +3080,10 @@ const _$CallPageConfigJsonSchema = {
       'properties': {
         'type': {
           'type': 'string',
-          'description':
-              "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
+          'description': "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
           'default': 'rounded',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description':
-              'The border radius value (for rounded/beveled shapes).',
-        },
+        'borderRadius': {'type': 'number', 'description': 'The border radius value (for rounded/beveled shapes).'},
       },
     },
     'VisualDensityConfig': {
@@ -4316,18 +3096,11 @@ const _$CallPageConfigJsonSchema = {
     'ButtonStyleConfig': {
       'type': 'object',
       'properties': {
-        'textStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': "The style for a button's text descendants.",
-        },
-        'backgroundColor': {
-          'type': 'string',
-          'description': "The button's background fill color in hex format.",
-        },
+        'textStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': "The style for a button's text descendants."},
+        'backgroundColor': {'type': 'string', 'description': "The button's background fill color in hex format."},
         'foregroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format.",
+          'description': "The color for the button's text/icon descendants in hex format.",
         },
         'selectedBackgroundColor': {
           'type': 'string',
@@ -4336,77 +3109,45 @@ const _$CallPageConfigJsonSchema = {
         },
         'selectedForegroundColor': {
           'type': 'string',
-          'description':
-              'The color for the text/icon descendants in hex format while the button is switched on.',
+          'description': 'The color for the text/icon descendants in hex format while the button is switched on.',
         },
         'selectedIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format while the button is switched on.",
+          'description': "The icon's color in hex format while the button is switched on.",
         },
         'disabledBackgroundColor': {
           'type': 'string',
-          'description':
-              "The button's background fill color in hex format when the button is disabled.",
+          'description': "The button's background fill color in hex format when the button is disabled.",
         },
         'disabledForegroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format when the button is disabled.",
+          'description': "The color for the button's text/icon descendants in hex format when the button is disabled.",
         },
         'disabledIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format when the button is disabled.",
+          'description': "The icon's color in hex format when the button is disabled.",
         },
         'disabledShadowColor': {
           'type': 'string',
-          'description':
-              'The shadow color in hex format when the button is disabled.',
+          'description': 'The shadow color in hex format when the button is disabled.',
         },
         'overlayColor': {
           'type': 'string',
-          'description':
-              'The highlight color for states (focused, hovered, pressed) in hex format.',
+          'description': 'The highlight color for states (focused, hovered, pressed) in hex format.',
         },
-        'shadowColor': {
-          'type': 'string',
-          'description': 'The shadow color in hex format.',
-        },
-        'surfaceTintColor': {
-          'type': 'string',
-          'description': 'The surface tint color in hex format.',
-        },
-        'elevation': {
-          'type': 'number',
-          'description': 'The elevation of the button.',
-        },
+        'shadowColor': {'type': 'string', 'description': 'The shadow color in hex format.'},
+        'surfaceTintColor': {'type': 'string', 'description': 'The surface tint color in hex format.'},
+        'elevation': {'type': 'number', 'description': 'The elevation of the button.'},
         'padding': {
           r'$ref': r'#/$defs/EdgeInsetsConfig',
-          'description':
-              "The padding between the button's boundary and its child.",
+          'description': "The padding between the button's boundary and its child.",
         },
-        'minimumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The minimum size of the button.',
-        },
-        'fixedSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The fixed size of the button.',
-        },
-        'maximumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The maximum size of the button.',
-        },
-        'iconColor': {
-          'type': 'string',
-          'description': "The icon's color in hex format.",
-        },
+        'minimumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The minimum size of the button.'},
+        'fixedSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The fixed size of the button.'},
+        'maximumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The maximum size of the button.'},
+        'iconColor': {'type': 'string', 'description': "The icon's color in hex format."},
         'iconSize': {'type': 'number', 'description': "The icon's size."},
-        'side': {
-          r'$ref': r'#/$defs/BorderSideConfig',
-          'description': "The color and weight of the button's outline.",
-        },
+        'side': {r'$ref': r'#/$defs/BorderSideConfig', 'description': "The color and weight of the button's outline."},
         'shape': {
           r'$ref': r'#/$defs/ShapeBorderConfig',
           'description': 'The shape of the button (e.g., rounded corners).',
@@ -4415,10 +3156,7 @@ const _$CallPageConfigJsonSchema = {
           r'$ref': r'#/$defs/VisualDensityConfig',
           'description': "Defines how compact the button's layout will be.",
         },
-        'animationDuration': {
-          'type': 'integer',
-          'description': 'The duration of animated changes in milliseconds.',
-        },
+        'animationDuration': {'type': 'integer', 'description': 'The duration of animated changes in milliseconds.'},
       },
     },
     'CallPageActionsConfig': {
@@ -4465,7 +3203,7 @@ const _$CallPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -4480,15 +3218,7 @@ const _$CallPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -4499,26 +3229,15 @@ const _$CallPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
   },
 };
 
-CallPageActionsConfig _$CallPageActionsConfigFromJson(
-  Map<String, dynamic> json,
-) => CallPageActionsConfig(
+CallPageActionsConfig _$CallPageActionsConfigFromJson(Map<String, dynamic> json) => CallPageActionsConfig(
   callStart: json['callStart'] == null
       ? const ButtonStyleConfig()
       : ButtonStyleConfig.fromJson(json['callStart'] as Map<String, dynamic>),
@@ -4548,14 +3267,10 @@ CallPageActionsConfig _$CallPageActionsConfigFromJson(
       : ButtonStyleConfig.fromJson(json['key'] as Map<String, dynamic>),
   keypadInputStyle: json['keypadInputStyle'] == null
       ? null
-      : TextStyleConfig.fromJson(
-          json['keypadInputStyle'] as Map<String, dynamic>,
-        ),
+      : TextStyleConfig.fromJson(json['keypadInputStyle'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$CallPageActionsConfigToJson(
-  CallPageActionsConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$CallPageActionsConfigToJson(CallPageActionsConfig instance) => <String, dynamic>{
   'callStart': instance.callStart.toJson(),
   'hangup': instance.hangup.toJson(),
   'transfer': instance.transfer.toJson(),
@@ -4591,10 +3306,7 @@ const _$CallPageActionsConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -4603,8 +3315,7 @@ const _$CallPageActionsConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -4615,102 +3326,45 @@ const _$CallPageActionsConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -4739,11 +3393,7 @@ const _$CallPageActionsConfigJsonSchema = {
       'properties': {
         'color': {'type': 'string', 'description': 'Color in hex format.'},
         'width': {'type': 'number', 'default': 1.0},
-        'style': {
-          'type': 'string',
-          'description': "Border style (e.g., 'solid', 'none').",
-          'default': 'solid',
-        },
+        'style': {'type': 'string', 'description': "Border style (e.g., 'solid', 'none').", 'default': 'solid'},
       },
     },
     'ShapeBorderConfig': {
@@ -4751,15 +3401,10 @@ const _$CallPageActionsConfigJsonSchema = {
       'properties': {
         'type': {
           'type': 'string',
-          'description':
-              "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
+          'description': "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
           'default': 'rounded',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description':
-              'The border radius value (for rounded/beveled shapes).',
-        },
+        'borderRadius': {'type': 'number', 'description': 'The border radius value (for rounded/beveled shapes).'},
       },
     },
     'VisualDensityConfig': {
@@ -4772,18 +3417,11 @@ const _$CallPageActionsConfigJsonSchema = {
     'ButtonStyleConfig': {
       'type': 'object',
       'properties': {
-        'textStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': "The style for a button's text descendants.",
-        },
-        'backgroundColor': {
-          'type': 'string',
-          'description': "The button's background fill color in hex format.",
-        },
+        'textStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': "The style for a button's text descendants."},
+        'backgroundColor': {'type': 'string', 'description': "The button's background fill color in hex format."},
         'foregroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format.",
+          'description': "The color for the button's text/icon descendants in hex format.",
         },
         'selectedBackgroundColor': {
           'type': 'string',
@@ -4792,77 +3430,45 @@ const _$CallPageActionsConfigJsonSchema = {
         },
         'selectedForegroundColor': {
           'type': 'string',
-          'description':
-              'The color for the text/icon descendants in hex format while the button is switched on.',
+          'description': 'The color for the text/icon descendants in hex format while the button is switched on.',
         },
         'selectedIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format while the button is switched on.",
+          'description': "The icon's color in hex format while the button is switched on.",
         },
         'disabledBackgroundColor': {
           'type': 'string',
-          'description':
-              "The button's background fill color in hex format when the button is disabled.",
+          'description': "The button's background fill color in hex format when the button is disabled.",
         },
         'disabledForegroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format when the button is disabled.",
+          'description': "The color for the button's text/icon descendants in hex format when the button is disabled.",
         },
         'disabledIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format when the button is disabled.",
+          'description': "The icon's color in hex format when the button is disabled.",
         },
         'disabledShadowColor': {
           'type': 'string',
-          'description':
-              'The shadow color in hex format when the button is disabled.',
+          'description': 'The shadow color in hex format when the button is disabled.',
         },
         'overlayColor': {
           'type': 'string',
-          'description':
-              'The highlight color for states (focused, hovered, pressed) in hex format.',
+          'description': 'The highlight color for states (focused, hovered, pressed) in hex format.',
         },
-        'shadowColor': {
-          'type': 'string',
-          'description': 'The shadow color in hex format.',
-        },
-        'surfaceTintColor': {
-          'type': 'string',
-          'description': 'The surface tint color in hex format.',
-        },
-        'elevation': {
-          'type': 'number',
-          'description': 'The elevation of the button.',
-        },
+        'shadowColor': {'type': 'string', 'description': 'The shadow color in hex format.'},
+        'surfaceTintColor': {'type': 'string', 'description': 'The surface tint color in hex format.'},
+        'elevation': {'type': 'number', 'description': 'The elevation of the button.'},
         'padding': {
           r'$ref': r'#/$defs/EdgeInsetsConfig',
-          'description':
-              "The padding between the button's boundary and its child.",
+          'description': "The padding between the button's boundary and its child.",
         },
-        'minimumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The minimum size of the button.',
-        },
-        'fixedSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The fixed size of the button.',
-        },
-        'maximumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The maximum size of the button.',
-        },
-        'iconColor': {
-          'type': 'string',
-          'description': "The icon's color in hex format.",
-        },
+        'minimumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The minimum size of the button.'},
+        'fixedSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The fixed size of the button.'},
+        'maximumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The maximum size of the button.'},
+        'iconColor': {'type': 'string', 'description': "The icon's color in hex format."},
         'iconSize': {'type': 'number', 'description': "The icon's size."},
-        'side': {
-          r'$ref': r'#/$defs/BorderSideConfig',
-          'description': "The color and weight of the button's outline.",
-        },
+        'side': {r'$ref': r'#/$defs/BorderSideConfig', 'description': "The color and weight of the button's outline."},
         'shape': {
           r'$ref': r'#/$defs/ShapeBorderConfig',
           'description': 'The shape of the button (e.g., rounded corners).',
@@ -4871,46 +3477,33 @@ const _$CallPageActionsConfigJsonSchema = {
           r'$ref': r'#/$defs/VisualDensityConfig',
           'description': "Defines how compact the button's layout will be.",
         },
-        'animationDuration': {
-          'type': 'integer',
-          'description': 'The duration of animated changes in milliseconds.',
-        },
+        'animationDuration': {'type': 'integer', 'description': 'The duration of animated changes in milliseconds.'},
       },
     },
   },
 };
 
-CallPageInfoConfig _$CallPageInfoConfigFromJson(Map<String, dynamic> json) =>
-    CallPageInfoConfig(
-      usernameTextStyle: json['usernameTextStyle'] == null
-          ? null
-          : TextStyleConfig.fromJson(
-              json['usernameTextStyle'] as Map<String, dynamic>,
-            ),
-      numberTextStyle: json['numberTextStyle'] == null
-          ? null
-          : TextStyleConfig.fromJson(
-              json['numberTextStyle'] as Map<String, dynamic>,
-            ),
-      callStatusTextStyle: json['callStatusTextStyle'] == null
-          ? null
-          : TextStyleConfig.fromJson(
-              json['callStatusTextStyle'] as Map<String, dynamic>,
-            ),
-      processingStatusTextStyle: json['processingStatusTextStyle'] == null
-          ? null
-          : TextStyleConfig.fromJson(
-              json['processingStatusTextStyle'] as Map<String, dynamic>,
-            ),
-    );
+CallPageInfoConfig _$CallPageInfoConfigFromJson(Map<String, dynamic> json) => CallPageInfoConfig(
+  usernameTextStyle: json['usernameTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(json['usernameTextStyle'] as Map<String, dynamic>),
+  numberTextStyle: json['numberTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(json['numberTextStyle'] as Map<String, dynamic>),
+  callStatusTextStyle: json['callStatusTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(json['callStatusTextStyle'] as Map<String, dynamic>),
+  processingStatusTextStyle: json['processingStatusTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(json['processingStatusTextStyle'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$CallPageInfoConfigToJson(CallPageInfoConfig instance) =>
-    <String, dynamic>{
-      'usernameTextStyle': instance.usernameTextStyle?.toJson(),
-      'numberTextStyle': instance.numberTextStyle?.toJson(),
-      'callStatusTextStyle': instance.callStatusTextStyle?.toJson(),
-      'processingStatusTextStyle': instance.processingStatusTextStyle?.toJson(),
-    };
+Map<String, dynamic> _$CallPageInfoConfigToJson(CallPageInfoConfig instance) => <String, dynamic>{
+  'usernameTextStyle': instance.usernameTextStyle?.toJson(),
+  'numberTextStyle': instance.numberTextStyle?.toJson(),
+  'callStatusTextStyle': instance.callStatusTextStyle?.toJson(),
+  'processingStatusTextStyle': instance.processingStatusTextStyle?.toJson(),
+};
 
 const _$CallPageInfoConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -4925,10 +3518,7 @@ const _$CallPageInfoConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -4937,8 +3527,7 @@ const _$CallPageInfoConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -4949,102 +3538,45 @@ const _$CallPageInfoConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -5054,25 +3586,23 @@ const _$CallPageInfoConfigJsonSchema = {
   },
 };
 
-CallPageListConfig _$CallPageListConfigFromJson(Map<String, dynamic> json) =>
-    CallPageListConfig(
-      rowBackgroundColor: json['rowBackgroundColor'] as String?,
-      rowFocusedBackgroundColor: json['rowFocusedBackgroundColor'] as String?,
-      rowFocusedBorderColor: json['rowFocusedBorderColor'] as String?,
-      dotRingingColor: json['dotRingingColor'] as String?,
-      dotOnCallColor: json['dotOnCallColor'] as String?,
-      dotHeldColor: json['dotHeldColor'] as String?,
-    );
+CallPageListConfig _$CallPageListConfigFromJson(Map<String, dynamic> json) => CallPageListConfig(
+  rowBackgroundColor: json['rowBackgroundColor'] as String?,
+  rowFocusedBackgroundColor: json['rowFocusedBackgroundColor'] as String?,
+  rowFocusedBorderColor: json['rowFocusedBorderColor'] as String?,
+  dotRingingColor: json['dotRingingColor'] as String?,
+  dotOnCallColor: json['dotOnCallColor'] as String?,
+  dotHeldColor: json['dotHeldColor'] as String?,
+);
 
-Map<String, dynamic> _$CallPageListConfigToJson(CallPageListConfig instance) =>
-    <String, dynamic>{
-      'rowBackgroundColor': instance.rowBackgroundColor,
-      'rowFocusedBackgroundColor': instance.rowFocusedBackgroundColor,
-      'rowFocusedBorderColor': instance.rowFocusedBorderColor,
-      'dotRingingColor': instance.dotRingingColor,
-      'dotOnCallColor': instance.dotOnCallColor,
-      'dotHeldColor': instance.dotHeldColor,
-    };
+Map<String, dynamic> _$CallPageListConfigToJson(CallPageListConfig instance) => <String, dynamic>{
+  'rowBackgroundColor': instance.rowBackgroundColor,
+  'rowFocusedBackgroundColor': instance.rowFocusedBackgroundColor,
+  'rowFocusedBorderColor': instance.rowFocusedBorderColor,
+  'dotRingingColor': instance.dotRingingColor,
+  'dotOnCallColor': instance.dotOnCallColor,
+  'dotHeldColor': instance.dotHeldColor,
+};
 
 const _$CallPageListConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -5087,17 +3617,15 @@ const _$CallPageListConfigJsonSchema = {
   },
 };
 
-CallPageHintConfig _$CallPageHintConfigFromJson(Map<String, dynamic> json) =>
-    CallPageHintConfig(
-      backgroundColor: json['backgroundColor'] as String?,
-      affectedNameColor: json['affectedNameColor'] as String?,
-    );
+CallPageHintConfig _$CallPageHintConfigFromJson(Map<String, dynamic> json) => CallPageHintConfig(
+  backgroundColor: json['backgroundColor'] as String?,
+  affectedNameColor: json['affectedNameColor'] as String?,
+);
 
-Map<String, dynamic> _$CallPageHintConfigToJson(CallPageHintConfig instance) =>
-    <String, dynamic>{
-      'backgroundColor': instance.backgroundColor,
-      'affectedNameColor': instance.affectedNameColor,
-    };
+Map<String, dynamic> _$CallPageHintConfigToJson(CallPageHintConfig instance) => <String, dynamic>{
+  'backgroundColor': instance.backgroundColor,
+  'affectedNameColor': instance.affectedNameColor,
+};
 
 const _$CallPageHintConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -5108,59 +3636,39 @@ const _$CallPageHintConfigJsonSchema = {
   },
 };
 
-KeypadPageConfig _$KeypadPageConfigFromJson(Map<String, dynamic> json) =>
-    KeypadPageConfig(
-      systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
-          ? null
-          : OverlayStyleModel.fromJson(
-              json['systemUiOverlayStyle'] as Map<String, dynamic>,
-            ),
-      textField: json['textField'] == null
-          ? null
-          : TextFieldConfig.fromJson(json['textField'] as Map<String, dynamic>),
-      contactName: json['contactName'] == null
-          ? null
-          : TextFieldConfig.fromJson(
-              json['contactName'] as Map<String, dynamic>,
-            ),
-      keypad: json['keypad'] == null
-          ? null
-          : KeypadStyleConfig.fromJson(json['keypad'] as Map<String, dynamic>),
-      actionpad: json['actionpad'] == null
-          ? null
-          : ActionPadWidgetConfig.fromJson(
-              json['actionpad'] as Map<String, dynamic>,
-            ),
-      background: json['background'] == null
-          ? null
-          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
-      themeOverride: json['themeOverride'] == null
-          ? const ThemeOverrideConfig()
-          : ThemeOverrideConfig.fromJson(
-              json['themeOverride'] as Map<String, dynamic>,
-            ),
-      appBarBlurredSurface: json['appBarBlurredSurface'] == null
-          ? null
-          : BlurredSurfaceConfig.fromJson(
-              json['appBarBlurredSurface'] as Map<String, dynamic>,
-            ),
-      appBarStyle: json['appBarStyle'] == null
-          ? null
-          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
-    );
+KeypadPageConfig _$KeypadPageConfigFromJson(Map<String, dynamic> json) => KeypadPageConfig(
+  systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
+      ? null
+      : OverlayStyleModel.fromJson(json['systemUiOverlayStyle'] as Map<String, dynamic>),
+  textField: json['textField'] == null ? null : TextFieldConfig.fromJson(json['textField'] as Map<String, dynamic>),
+  contactName: json['contactName'] == null
+      ? null
+      : TextFieldConfig.fromJson(json['contactName'] as Map<String, dynamic>),
+  keypad: json['keypad'] == null ? null : KeypadStyleConfig.fromJson(json['keypad'] as Map<String, dynamic>),
+  actionpad: json['actionpad'] == null
+      ? null
+      : ActionPadWidgetConfig.fromJson(json['actionpad'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
+  appBarBlurredSurface: json['appBarBlurredSurface'] == null
+      ? null
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$KeypadPageConfigToJson(KeypadPageConfig instance) =>
-    <String, dynamic>{
-      'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
-      'textField': instance.textField?.toJson(),
-      'contactName': instance.contactName?.toJson(),
-      'keypad': instance.keypad?.toJson(),
-      'actionpad': instance.actionpad?.toJson(),
-      'background': instance.background?.toJson(),
-      'themeOverride': instance.themeOverride.toJson(),
-      'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
-      'appBarStyle': instance.appBarStyle?.toJson(),
-    };
+Map<String, dynamic> _$KeypadPageConfigToJson(KeypadPageConfig instance) => <String, dynamic>{
+  'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
+  'textField': instance.textField?.toJson(),
+  'contactName': instance.contactName?.toJson(),
+  'keypad': instance.keypad?.toJson(),
+  'actionpad': instance.actionpad?.toJson(),
+  'background': instance.background?.toJson(),
+  'themeOverride': instance.themeOverride.toJson(),
+  'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
+};
 
 const _$KeypadPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -5174,8 +3682,7 @@ const _$KeypadPageConfigJsonSchema = {
     'background': {r'$ref': r'#/$defs/PageBackground'},
     'themeOverride': {
       r'$ref': r'#/$defs/ThemeOverrideConfig',
-      'description':
-          'Configuration to force override the theme mode (e.g., force Dark mode).',
+      'description': 'Configuration to force override the theme mode (e.g., force Dark mode).',
     },
     'appBarBlurredSurface': {r'$ref': r'#/$defs/BlurredSurfaceConfig'},
     'appBarStyle': {r'$ref': r'#/$defs/AppBarConfig'},
@@ -5191,27 +3698,19 @@ const _$KeypadPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -5220,8 +3719,7 @@ const _$KeypadPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -5232,102 +3730,45 @@ const _$KeypadPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -5343,18 +3784,9 @@ const _$KeypadPageConfigJsonSchema = {
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
           'default': 'underline',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description': 'Corner radius for outline borders.',
-        },
-        'borderColor': {
-          'type': 'string',
-          'description': 'Border color (hex string, e.g. `#000000`).',
-        },
-        'borderWidth': {
-          'type': 'number',
-          'description': 'Stroke width of the border.',
-        },
+        'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
+        'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},
+        'borderWidth': {'type': 'number', 'description': 'Stroke width of the border.'},
       },
     },
     'InputDecorationConfig': {
@@ -5384,10 +3816,7 @@ const _$KeypadPageConfigJsonSchema = {
     'MaskConfig': {
       'type': 'object',
       'properties': {
-        'pattern': {
-          'type': 'string',
-          'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"',
-        },
+        'pattern': {'type': 'string', 'description': 'The mask pattern, e.g. "+380 (##) ###-##-##"'},
         'filter': {
           'type': 'object',
           'additionalProperties': {'type': 'string'},
@@ -5446,11 +3875,7 @@ const _$KeypadPageConfigJsonSchema = {
       'properties': {
         'color': {'type': 'string', 'description': 'Color in hex format.'},
         'width': {'type': 'number', 'default': 1.0},
-        'style': {
-          'type': 'string',
-          'description': "Border style (e.g., 'solid', 'none').",
-          'default': 'solid',
-        },
+        'style': {'type': 'string', 'description': "Border style (e.g., 'solid', 'none').", 'default': 'solid'},
       },
     },
     'ShapeBorderConfig': {
@@ -5458,15 +3883,10 @@ const _$KeypadPageConfigJsonSchema = {
       'properties': {
         'type': {
           'type': 'string',
-          'description':
-              "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
+          'description': "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
           'default': 'rounded',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description':
-              'The border radius value (for rounded/beveled shapes).',
-        },
+        'borderRadius': {'type': 'number', 'description': 'The border radius value (for rounded/beveled shapes).'},
       },
     },
     'VisualDensityConfig': {
@@ -5479,18 +3899,11 @@ const _$KeypadPageConfigJsonSchema = {
     'ButtonStyleConfig': {
       'type': 'object',
       'properties': {
-        'textStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': "The style for a button's text descendants.",
-        },
-        'backgroundColor': {
-          'type': 'string',
-          'description': "The button's background fill color in hex format.",
-        },
+        'textStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': "The style for a button's text descendants."},
+        'backgroundColor': {'type': 'string', 'description': "The button's background fill color in hex format."},
         'foregroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format.",
+          'description': "The color for the button's text/icon descendants in hex format.",
         },
         'selectedBackgroundColor': {
           'type': 'string',
@@ -5499,77 +3912,45 @@ const _$KeypadPageConfigJsonSchema = {
         },
         'selectedForegroundColor': {
           'type': 'string',
-          'description':
-              'The color for the text/icon descendants in hex format while the button is switched on.',
+          'description': 'The color for the text/icon descendants in hex format while the button is switched on.',
         },
         'selectedIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format while the button is switched on.",
+          'description': "The icon's color in hex format while the button is switched on.",
         },
         'disabledBackgroundColor': {
           'type': 'string',
-          'description':
-              "The button's background fill color in hex format when the button is disabled.",
+          'description': "The button's background fill color in hex format when the button is disabled.",
         },
         'disabledForegroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format when the button is disabled.",
+          'description': "The color for the button's text/icon descendants in hex format when the button is disabled.",
         },
         'disabledIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format when the button is disabled.",
+          'description': "The icon's color in hex format when the button is disabled.",
         },
         'disabledShadowColor': {
           'type': 'string',
-          'description':
-              'The shadow color in hex format when the button is disabled.',
+          'description': 'The shadow color in hex format when the button is disabled.',
         },
         'overlayColor': {
           'type': 'string',
-          'description':
-              'The highlight color for states (focused, hovered, pressed) in hex format.',
+          'description': 'The highlight color for states (focused, hovered, pressed) in hex format.',
         },
-        'shadowColor': {
-          'type': 'string',
-          'description': 'The shadow color in hex format.',
-        },
-        'surfaceTintColor': {
-          'type': 'string',
-          'description': 'The surface tint color in hex format.',
-        },
-        'elevation': {
-          'type': 'number',
-          'description': 'The elevation of the button.',
-        },
+        'shadowColor': {'type': 'string', 'description': 'The shadow color in hex format.'},
+        'surfaceTintColor': {'type': 'string', 'description': 'The surface tint color in hex format.'},
+        'elevation': {'type': 'number', 'description': 'The elevation of the button.'},
         'padding': {
           r'$ref': r'#/$defs/EdgeInsetsConfig',
-          'description':
-              "The padding between the button's boundary and its child.",
+          'description': "The padding between the button's boundary and its child.",
         },
-        'minimumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The minimum size of the button.',
-        },
-        'fixedSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The fixed size of the button.',
-        },
-        'maximumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The maximum size of the button.',
-        },
-        'iconColor': {
-          'type': 'string',
-          'description': "The icon's color in hex format.",
-        },
+        'minimumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The minimum size of the button.'},
+        'fixedSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The fixed size of the button.'},
+        'maximumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The maximum size of the button.'},
+        'iconColor': {'type': 'string', 'description': "The icon's color in hex format."},
         'iconSize': {'type': 'number', 'description': "The icon's size."},
-        'side': {
-          r'$ref': r'#/$defs/BorderSideConfig',
-          'description': "The color and weight of the button's outline.",
-        },
+        'side': {r'$ref': r'#/$defs/BorderSideConfig', 'description': "The color and weight of the button's outline."},
         'shape': {
           r'$ref': r'#/$defs/ShapeBorderConfig',
           'description': 'The shape of the button (e.g., rounded corners).',
@@ -5578,10 +3959,7 @@ const _$KeypadPageConfigJsonSchema = {
           r'$ref': r'#/$defs/VisualDensityConfig',
           'description': "Defines how compact the button's layout will be.",
         },
-        'animationDuration': {
-          'type': 'integer',
-          'description': 'The duration of animated changes in milliseconds.',
-        },
+        'animationDuration': {'type': 'integer', 'description': 'The duration of animated changes in milliseconds.'},
       },
     },
     'ActionPadWidgetConfig': {
@@ -5620,7 +3998,7 @@ const _$KeypadPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -5635,15 +4013,7 @@ const _$KeypadPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -5656,8 +4026,7 @@ const _$KeypadPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -5671,18 +4040,9 @@ const _$KeypadPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -5695,66 +4055,36 @@ const _$KeypadPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'AppBarConfig': {
@@ -5782,25 +4112,19 @@ const _$KeypadPageConfigJsonSchema = {
   },
 };
 
-ActionPadWidgetConfig _$ActionPadWidgetConfigFromJson(
-  Map<String, dynamic> json,
-) => ActionPadWidgetConfig(
+ActionPadWidgetConfig _$ActionPadWidgetConfigFromJson(Map<String, dynamic> json) => ActionPadWidgetConfig(
   callStart: json['callStart'] == null
       ? const ButtonStyleConfig()
       : ButtonStyleConfig.fromJson(json['callStart'] as Map<String, dynamic>),
   callTransfer: json['callTransfer'] == null
       ? const ButtonStyleConfig()
-      : ButtonStyleConfig.fromJson(
-          json['callTransfer'] as Map<String, dynamic>,
-        ),
+      : ButtonStyleConfig.fromJson(json['callTransfer'] as Map<String, dynamic>),
   backspace: json['backspace'] == null
       ? const ButtonStyleConfig()
       : ButtonStyleConfig.fromJson(json['backspace'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$ActionPadWidgetConfigToJson(
-  ActionPadWidgetConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$ActionPadWidgetConfigToJson(ActionPadWidgetConfig instance) => <String, dynamic>{
   'callStart': instance.callStart.toJson(),
   'callTransfer': instance.callTransfer.toJson(),
   'backspace': instance.backspace.toJson(),
@@ -5821,10 +4145,7 @@ const _$ActionPadWidgetConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -5833,8 +4154,7 @@ const _$ActionPadWidgetConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -5845,102 +4165,45 @@ const _$ActionPadWidgetConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -5969,11 +4232,7 @@ const _$ActionPadWidgetConfigJsonSchema = {
       'properties': {
         'color': {'type': 'string', 'description': 'Color in hex format.'},
         'width': {'type': 'number', 'default': 1.0},
-        'style': {
-          'type': 'string',
-          'description': "Border style (e.g., 'solid', 'none').",
-          'default': 'solid',
-        },
+        'style': {'type': 'string', 'description': "Border style (e.g., 'solid', 'none').", 'default': 'solid'},
       },
     },
     'ShapeBorderConfig': {
@@ -5981,15 +4240,10 @@ const _$ActionPadWidgetConfigJsonSchema = {
       'properties': {
         'type': {
           'type': 'string',
-          'description':
-              "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
+          'description': "The type of shape. Common values: 'rounded', 'circle', 'stadium', 'beveled'.",
           'default': 'rounded',
         },
-        'borderRadius': {
-          'type': 'number',
-          'description':
-              'The border radius value (for rounded/beveled shapes).',
-        },
+        'borderRadius': {'type': 'number', 'description': 'The border radius value (for rounded/beveled shapes).'},
       },
     },
     'VisualDensityConfig': {
@@ -6002,18 +4256,11 @@ const _$ActionPadWidgetConfigJsonSchema = {
     'ButtonStyleConfig': {
       'type': 'object',
       'properties': {
-        'textStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': "The style for a button's text descendants.",
-        },
-        'backgroundColor': {
-          'type': 'string',
-          'description': "The button's background fill color in hex format.",
-        },
+        'textStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': "The style for a button's text descendants."},
+        'backgroundColor': {'type': 'string', 'description': "The button's background fill color in hex format."},
         'foregroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format.",
+          'description': "The color for the button's text/icon descendants in hex format.",
         },
         'selectedBackgroundColor': {
           'type': 'string',
@@ -6022,77 +4269,45 @@ const _$ActionPadWidgetConfigJsonSchema = {
         },
         'selectedForegroundColor': {
           'type': 'string',
-          'description':
-              'The color for the text/icon descendants in hex format while the button is switched on.',
+          'description': 'The color for the text/icon descendants in hex format while the button is switched on.',
         },
         'selectedIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format while the button is switched on.",
+          'description': "The icon's color in hex format while the button is switched on.",
         },
         'disabledBackgroundColor': {
           'type': 'string',
-          'description':
-              "The button's background fill color in hex format when the button is disabled.",
+          'description': "The button's background fill color in hex format when the button is disabled.",
         },
         'disabledForegroundColor': {
           'type': 'string',
-          'description':
-              "The color for the button's text/icon descendants in hex format when the button is disabled.",
+          'description': "The color for the button's text/icon descendants in hex format when the button is disabled.",
         },
         'disabledIconColor': {
           'type': 'string',
-          'description':
-              "The icon's color in hex format when the button is disabled.",
+          'description': "The icon's color in hex format when the button is disabled.",
         },
         'disabledShadowColor': {
           'type': 'string',
-          'description':
-              'The shadow color in hex format when the button is disabled.',
+          'description': 'The shadow color in hex format when the button is disabled.',
         },
         'overlayColor': {
           'type': 'string',
-          'description':
-              'The highlight color for states (focused, hovered, pressed) in hex format.',
+          'description': 'The highlight color for states (focused, hovered, pressed) in hex format.',
         },
-        'shadowColor': {
-          'type': 'string',
-          'description': 'The shadow color in hex format.',
-        },
-        'surfaceTintColor': {
-          'type': 'string',
-          'description': 'The surface tint color in hex format.',
-        },
-        'elevation': {
-          'type': 'number',
-          'description': 'The elevation of the button.',
-        },
+        'shadowColor': {'type': 'string', 'description': 'The shadow color in hex format.'},
+        'surfaceTintColor': {'type': 'string', 'description': 'The surface tint color in hex format.'},
+        'elevation': {'type': 'number', 'description': 'The elevation of the button.'},
         'padding': {
           r'$ref': r'#/$defs/EdgeInsetsConfig',
-          'description':
-              "The padding between the button's boundary and its child.",
+          'description': "The padding between the button's boundary and its child.",
         },
-        'minimumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The minimum size of the button.',
-        },
-        'fixedSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The fixed size of the button.',
-        },
-        'maximumSize': {
-          r'$ref': r'#/$defs/SizeConfig',
-          'description': 'The maximum size of the button.',
-        },
-        'iconColor': {
-          'type': 'string',
-          'description': "The icon's color in hex format.",
-        },
+        'minimumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The minimum size of the button.'},
+        'fixedSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The fixed size of the button.'},
+        'maximumSize': {r'$ref': r'#/$defs/SizeConfig', 'description': 'The maximum size of the button.'},
+        'iconColor': {'type': 'string', 'description': "The icon's color in hex format."},
         'iconSize': {'type': 'number', 'description': "The icon's size."},
-        'side': {
-          r'$ref': r'#/$defs/BorderSideConfig',
-          'description': "The color and weight of the button's outline.",
-        },
+        'side': {r'$ref': r'#/$defs/BorderSideConfig', 'description': "The color and weight of the button's outline."},
         'shape': {
           r'$ref': r'#/$defs/ShapeBorderConfig',
           'description': 'The shape of the button (e.g., rounded corners).',
@@ -6101,68 +4316,49 @@ const _$ActionPadWidgetConfigJsonSchema = {
           r'$ref': r'#/$defs/VisualDensityConfig',
           'description': "Defines how compact the button's layout will be.",
         },
-        'animationDuration': {
-          'type': 'integer',
-          'description': 'The duration of animated changes in milliseconds.',
-        },
+        'animationDuration': {'type': 'integer', 'description': 'The duration of animated changes in milliseconds.'},
       },
     },
   },
 };
 
-SettingsPageConfig _$SettingsPageConfigFromJson(Map<String, dynamic> json) =>
-    SettingsPageConfig(
-      themeOverride: json['themeOverride'] == null
-          ? const ThemeOverrideConfig()
-          : ThemeOverrideConfig.fromJson(
-              json['themeOverride'] as Map<String, dynamic>,
-            ),
-      leadingIconsColor: json['leadingIconsColor'] as String?,
-      userIconColor: json['userIconColor'] as String?,
-      logoutIconColor: json['logoutIconColor'] as String?,
-      groupTitleListTile: json['groupTitleListTile'] == null
-          ? null
-          : GroupTitleListTileWidgetConfig.fromJson(
-              json['groupTitleListTile'] as Map<String, dynamic>,
-            ),
-      showSeparators: json['showSeparators'] as bool? ?? true,
-      separator: json['separator'] == null
-          ? null
-          : SeparatorStyleConfig.fromJson(
-              json['separator'] as Map<String, dynamic>,
-            ),
-      background: json['background'] == null
-          ? null
-          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
-      itemTextStyle: json['itemTextStyle'] == null
-          ? null
-          : TextStyleConfig.fromJson(
-              json['itemTextStyle'] as Map<String, dynamic>,
-            ),
-      appBarBlurredSurface: json['appBarBlurredSurface'] == null
-          ? null
-          : BlurredSurfaceConfig.fromJson(
-              json['appBarBlurredSurface'] as Map<String, dynamic>,
-            ),
-      appBarStyle: json['appBarStyle'] == null
-          ? null
-          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
-    );
+SettingsPageConfig _$SettingsPageConfigFromJson(Map<String, dynamic> json) => SettingsPageConfig(
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
+  leadingIconsColor: json['leadingIconsColor'] as String?,
+  userIconColor: json['userIconColor'] as String?,
+  logoutIconColor: json['logoutIconColor'] as String?,
+  groupTitleListTile: json['groupTitleListTile'] == null
+      ? null
+      : GroupTitleListTileWidgetConfig.fromJson(json['groupTitleListTile'] as Map<String, dynamic>),
+  showSeparators: json['showSeparators'] as bool? ?? true,
+  separator: json['separator'] == null
+      ? null
+      : SeparatorStyleConfig.fromJson(json['separator'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  itemTextStyle: json['itemTextStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(json['itemTextStyle'] as Map<String, dynamic>),
+  appBarBlurredSurface: json['appBarBlurredSurface'] == null
+      ? null
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$SettingsPageConfigToJson(SettingsPageConfig instance) =>
-    <String, dynamic>{
-      'themeOverride': instance.themeOverride.toJson(),
-      'leadingIconsColor': instance.leadingIconsColor,
-      'userIconColor': instance.userIconColor,
-      'logoutIconColor': instance.logoutIconColor,
-      'groupTitleListTile': instance.groupTitleListTile?.toJson(),
-      'showSeparators': instance.showSeparators,
-      'separator': instance.separator?.toJson(),
-      'background': instance.background?.toJson(),
-      'itemTextStyle': instance.itemTextStyle?.toJson(),
-      'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
-      'appBarStyle': instance.appBarStyle?.toJson(),
-    };
+Map<String, dynamic> _$SettingsPageConfigToJson(SettingsPageConfig instance) => <String, dynamic>{
+  'themeOverride': instance.themeOverride.toJson(),
+  'leadingIconsColor': instance.leadingIconsColor,
+  'userIconColor': instance.userIconColor,
+  'logoutIconColor': instance.logoutIconColor,
+  'groupTitleListTile': instance.groupTitleListTile?.toJson(),
+  'showSeparators': instance.showSeparators,
+  'separator': instance.separator?.toJson(),
+  'background': instance.background?.toJson(),
+  'itemTextStyle': instance.itemTextStyle?.toJson(),
+  'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
+};
 
 const _$SettingsPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -6184,8 +4380,7 @@ const _$SettingsPageConfigJsonSchema = {
     },
     'separator': {
       r'$ref': r'#/$defs/SeparatorStyleConfig',
-      'description':
-          'Style of the divider lines between setting items (visibility + color).',
+      'description': 'Style of the divider lines between setting items (visibility + color).',
     },
     'background': {r'$ref': r'#/$defs/PageBackground'},
     'itemTextStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
@@ -6198,8 +4393,7 @@ const _$SettingsPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -6213,10 +4407,7 @@ const _$SettingsPageConfigJsonSchema = {
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -6225,8 +4416,7 @@ const _$SettingsPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -6237,102 +4427,45 @@ const _$SettingsPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -6349,15 +4482,10 @@ const _$SettingsPageConfigJsonSchema = {
     'SeparatorStyleConfig': {
       'type': 'object',
       'properties': {
-        'enabled': {
-          'type': 'boolean',
-          'description':
-              'Whether to render the separator. `null` → shown (default).',
-        },
+        'enabled': {'type': 'boolean', 'description': 'Whether to render the separator. `null` → shown (default).'},
         'color': {
           'type': 'string',
-          'description':
-              'Separator color (hex string, e.g. `#CAC7D1`). `null` → theme default.',
+          'description': 'Separator color (hex string, e.g. `#CAC7D1`). `null` → theme default.',
         },
       },
     },
@@ -6386,7 +4514,7 @@ const _$SettingsPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -6401,15 +4529,7 @@ const _$SettingsPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -6420,18 +4540,9 @@ const _$SettingsPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -6444,66 +4555,36 @@ const _$SettingsPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'OverlayStyleModel': {
@@ -6516,18 +4597,13 @@ const _$SettingsPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
@@ -6555,33 +4631,23 @@ const _$SettingsPageConfigJsonSchema = {
   },
 };
 
-ContactsPageConfig _$ContactsPageConfigFromJson(Map<String, dynamic> json) =>
-    ContactsPageConfig(
-      themeOverride: json['themeOverride'] == null
-          ? const ThemeOverrideConfig()
-          : ThemeOverrideConfig.fromJson(
-              json['themeOverride'] as Map<String, dynamic>,
-            ),
-      background: json['background'] == null
-          ? null
-          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
-      appBarBlurredSurface: json['appBarBlurredSurface'] == null
-          ? null
-          : BlurredSurfaceConfig.fromJson(
-              json['appBarBlurredSurface'] as Map<String, dynamic>,
-            ),
-      appBarStyle: json['appBarStyle'] == null
-          ? null
-          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
-    );
+ContactsPageConfig _$ContactsPageConfigFromJson(Map<String, dynamic> json) => ContactsPageConfig(
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  appBarBlurredSurface: json['appBarBlurredSurface'] == null
+      ? null
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$ContactsPageConfigToJson(ContactsPageConfig instance) =>
-    <String, dynamic>{
-      'themeOverride': instance.themeOverride.toJson(),
-      'background': instance.background?.toJson(),
-      'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
-      'appBarStyle': instance.appBarStyle?.toJson(),
-    };
+Map<String, dynamic> _$ContactsPageConfigToJson(ContactsPageConfig instance) => <String, dynamic>{
+  'themeOverride': instance.themeOverride.toJson(),
+  'background': instance.background?.toJson(),
+  'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
+};
 
 const _$ContactsPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -6601,8 +4667,7 @@ const _$ContactsPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -6638,7 +4703,7 @@ const _$ContactsPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -6653,15 +4718,7 @@ const _$ContactsPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -6672,18 +4729,9 @@ const _$ContactsPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -6696,75 +4744,42 @@ const _$ContactsPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -6773,8 +4788,7 @@ const _$ContactsPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -6785,102 +4799,45 @@ const _$ContactsPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -6897,18 +4854,13 @@ const _$ContactsPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
@@ -6936,33 +4888,23 @@ const _$ContactsPageConfigJsonSchema = {
   },
 };
 
-EmbeddedPageConfig _$EmbeddedPageConfigFromJson(Map<String, dynamic> json) =>
-    EmbeddedPageConfig(
-      themeOverride: json['themeOverride'] == null
-          ? const ThemeOverrideConfig()
-          : ThemeOverrideConfig.fromJson(
-              json['themeOverride'] as Map<String, dynamic>,
-            ),
-      background: json['background'] == null
-          ? null
-          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
-      appBarBlurredSurface: json['appBarBlurredSurface'] == null
-          ? null
-          : BlurredSurfaceConfig.fromJson(
-              json['appBarBlurredSurface'] as Map<String, dynamic>,
-            ),
-      appBarStyle: json['appBarStyle'] == null
-          ? null
-          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
-    );
+EmbeddedPageConfig _$EmbeddedPageConfigFromJson(Map<String, dynamic> json) => EmbeddedPageConfig(
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  appBarBlurredSurface: json['appBarBlurredSurface'] == null
+      ? null
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$EmbeddedPageConfigToJson(EmbeddedPageConfig instance) =>
-    <String, dynamic>{
-      'themeOverride': instance.themeOverride.toJson(),
-      'background': instance.background?.toJson(),
-      'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
-      'appBarStyle': instance.appBarStyle?.toJson(),
-    };
+Map<String, dynamic> _$EmbeddedPageConfigToJson(EmbeddedPageConfig instance) => <String, dynamic>{
+  'themeOverride': instance.themeOverride.toJson(),
+  'background': instance.background?.toJson(),
+  'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
+};
 
 const _$EmbeddedPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -6982,8 +4924,7 @@ const _$EmbeddedPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -7019,7 +4960,7 @@ const _$EmbeddedPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -7034,15 +4975,7 @@ const _$EmbeddedPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -7053,18 +4986,9 @@ const _$EmbeddedPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -7077,75 +5001,42 @@ const _$EmbeddedPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -7154,8 +5045,7 @@ const _$EmbeddedPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -7166,102 +5056,45 @@ const _$EmbeddedPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -7278,18 +5111,13 @@ const _$EmbeddedPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
@@ -7317,29 +5145,18 @@ const _$EmbeddedPageConfigJsonSchema = {
   },
 };
 
-FavoritesPageConfig _$FavoritesPageConfigFromJson(Map<String, dynamic> json) =>
-    FavoritesPageConfig(
-      themeOverride: json['themeOverride'] == null
-          ? const ThemeOverrideConfig()
-          : ThemeOverrideConfig.fromJson(
-              json['themeOverride'] as Map<String, dynamic>,
-            ),
-      background: json['background'] == null
-          ? null
-          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
-      appBarBlurredSurface: json['appBarBlurredSurface'] == null
-          ? null
-          : BlurredSurfaceConfig.fromJson(
-              json['appBarBlurredSurface'] as Map<String, dynamic>,
-            ),
-      appBarStyle: json['appBarStyle'] == null
-          ? null
-          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
-    );
+FavoritesPageConfig _$FavoritesPageConfigFromJson(Map<String, dynamic> json) => FavoritesPageConfig(
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  appBarBlurredSurface: json['appBarBlurredSurface'] == null
+      ? null
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$FavoritesPageConfigToJson(
-  FavoritesPageConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$FavoritesPageConfigToJson(FavoritesPageConfig instance) => <String, dynamic>{
   'themeOverride': instance.themeOverride.toJson(),
   'background': instance.background?.toJson(),
   'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
@@ -7364,8 +5181,7 @@ const _$FavoritesPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -7401,7 +5217,7 @@ const _$FavoritesPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -7416,15 +5232,7 @@ const _$FavoritesPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -7435,18 +5243,9 @@ const _$FavoritesPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -7459,75 +5258,42 @@ const _$FavoritesPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -7536,8 +5302,7 @@ const _$FavoritesPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -7548,102 +5313,45 @@ const _$FavoritesPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -7660,18 +5368,13 @@ const _$FavoritesPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
@@ -7699,30 +5402,18 @@ const _$FavoritesPageConfigJsonSchema = {
   },
 };
 
-ConversationsPageConfig _$ConversationsPageConfigFromJson(
-  Map<String, dynamic> json,
-) => ConversationsPageConfig(
+ConversationsPageConfig _$ConversationsPageConfigFromJson(Map<String, dynamic> json) => ConversationsPageConfig(
   themeOverride: json['themeOverride'] == null
       ? const ThemeOverrideConfig()
-      : ThemeOverrideConfig.fromJson(
-          json['themeOverride'] as Map<String, dynamic>,
-        ),
-  background: json['background'] == null
-      ? null
-      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
   appBarBlurredSurface: json['appBarBlurredSurface'] == null
       ? null
-      : BlurredSurfaceConfig.fromJson(
-          json['appBarBlurredSurface'] as Map<String, dynamic>,
-        ),
-  appBarStyle: json['appBarStyle'] == null
-      ? null
-      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$ConversationsPageConfigToJson(
-  ConversationsPageConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$ConversationsPageConfigToJson(ConversationsPageConfig instance) => <String, dynamic>{
   'themeOverride': instance.themeOverride.toJson(),
   'background': instance.background?.toJson(),
   'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
@@ -7747,8 +5438,7 @@ const _$ConversationsPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -7784,7 +5474,7 @@ const _$ConversationsPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -7799,15 +5489,7 @@ const _$ConversationsPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -7818,18 +5500,9 @@ const _$ConversationsPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -7842,75 +5515,42 @@ const _$ConversationsPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -7919,8 +5559,7 @@ const _$ConversationsPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -7931,102 +5570,45 @@ const _$ConversationsPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -8043,18 +5625,13 @@ const _$ConversationsPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
@@ -8082,33 +5659,23 @@ const _$ConversationsPageConfigJsonSchema = {
   },
 };
 
-RecentsPageConfig _$RecentsPageConfigFromJson(Map<String, dynamic> json) =>
-    RecentsPageConfig(
-      themeOverride: json['themeOverride'] == null
-          ? const ThemeOverrideConfig()
-          : ThemeOverrideConfig.fromJson(
-              json['themeOverride'] as Map<String, dynamic>,
-            ),
-      background: json['background'] == null
-          ? null
-          : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
-      appBarBlurredSurface: json['appBarBlurredSurface'] == null
-          ? null
-          : BlurredSurfaceConfig.fromJson(
-              json['appBarBlurredSurface'] as Map<String, dynamic>,
-            ),
-      appBarStyle: json['appBarStyle'] == null
-          ? null
-          : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
-    );
+RecentsPageConfig _$RecentsPageConfigFromJson(Map<String, dynamic> json) => RecentsPageConfig(
+  themeOverride: json['themeOverride'] == null
+      ? const ThemeOverrideConfig()
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+  appBarBlurredSurface: json['appBarBlurredSurface'] == null
+      ? null
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+);
 
-Map<String, dynamic> _$RecentsPageConfigToJson(RecentsPageConfig instance) =>
-    <String, dynamic>{
-      'themeOverride': instance.themeOverride.toJson(),
-      'background': instance.background?.toJson(),
-      'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
-      'appBarStyle': instance.appBarStyle?.toJson(),
-    };
+Map<String, dynamic> _$RecentsPageConfigToJson(RecentsPageConfig instance) => <String, dynamic>{
+  'themeOverride': instance.themeOverride.toJson(),
+  'background': instance.background?.toJson(),
+  'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
+  'appBarStyle': instance.appBarStyle?.toJson(),
+};
 
 const _$RecentsPageConfigJsonSchema = {
   r'$schema': 'https://json-schema.org/draft/2020-12/schema',
@@ -8128,8 +5695,7 @@ const _$RecentsPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -8165,7 +5731,7 @@ const _$RecentsPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -8180,15 +5746,7 @@ const _$RecentsPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -8199,18 +5757,9 @@ const _$RecentsPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -8223,75 +5772,42 @@ const _$RecentsPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -8300,8 +5816,7 @@ const _$RecentsPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -8312,102 +5827,45 @@ const _$RecentsPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -8424,18 +5882,13 @@ const _$RecentsPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
@@ -8468,30 +5921,18 @@ LoginCoreUrlAssignPageConfig _$LoginCoreUrlAssignPageConfigFromJson(
 ) => LoginCoreUrlAssignPageConfig(
   themeOverride: json['themeOverride'] == null
       ? const ThemeOverrideConfig()
-      : ThemeOverrideConfig.fromJson(
-          json['themeOverride'] as Map<String, dynamic>,
-        ),
+      : ThemeOverrideConfig.fromJson(json['themeOverride'] as Map<String, dynamic>),
   systemUiOverlayStyle: json['systemUiOverlayStyle'] == null
       ? null
-      : OverlayStyleModel.fromJson(
-          json['systemUiOverlayStyle'] as Map<String, dynamic>,
-        ),
-  background: json['background'] == null
-      ? null
-      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+      : OverlayStyleModel.fromJson(json['systemUiOverlayStyle'] as Map<String, dynamic>),
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
   appBarBlurredSurface: json['appBarBlurredSurface'] == null
       ? null
-      : BlurredSurfaceConfig.fromJson(
-          json['appBarBlurredSurface'] as Map<String, dynamic>,
-        ),
-  appBarStyle: json['appBarStyle'] == null
-      ? null
-      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$LoginCoreUrlAssignPageConfigToJson(
-  LoginCoreUrlAssignPageConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$LoginCoreUrlAssignPageConfigToJson(LoginCoreUrlAssignPageConfig instance) => <String, dynamic>{
   'themeOverride': instance.themeOverride.toJson(),
   'systemUiOverlayStyle': instance.systemUiOverlayStyle?.toJson(),
   'background': instance.background?.toJson(),
@@ -8515,8 +5956,7 @@ const _$LoginCoreUrlAssignPageConfigJsonSchema = {
       'properties': {
         'mode': {
           'enum': ['system', 'light', 'dark'],
-          'description':
-              'The target mode to force (e.g., ensure screen is always Dark).',
+          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
           'default': 'system',
         },
         'applyToAppBar': {
@@ -8537,18 +5977,13 @@ const _$LoginCoreUrlAssignPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'PageBackground': {
@@ -8576,7 +6011,7 @@ const _$LoginCoreUrlAssignPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -8591,15 +6026,7 @@ const _$LoginCoreUrlAssignPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -8610,18 +6037,9 @@ const _$LoginCoreUrlAssignPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -8634,75 +6052,42 @@ const _$LoginCoreUrlAssignPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -8711,8 +6096,7 @@ const _$LoginCoreUrlAssignPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -8723,102 +6107,45 @@ const _$LoginCoreUrlAssignPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -8850,25 +6177,15 @@ const _$LoginCoreUrlAssignPageConfigJsonSchema = {
   },
 };
 
-NumberCdrsPageConfig _$NumberCdrsPageConfigFromJson(
-  Map<String, dynamic> json,
-) => NumberCdrsPageConfig(
-  background: json['background'] == null
-      ? null
-      : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
+NumberCdrsPageConfig _$NumberCdrsPageConfigFromJson(Map<String, dynamic> json) => NumberCdrsPageConfig(
+  background: json['background'] == null ? null : PageBackground.fromJson(json['background'] as Map<String, dynamic>),
   appBarBlurredSurface: json['appBarBlurredSurface'] == null
       ? null
-      : BlurredSurfaceConfig.fromJson(
-          json['appBarBlurredSurface'] as Map<String, dynamic>,
-        ),
-  appBarStyle: json['appBarStyle'] == null
-      ? null
-      : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
+      : BlurredSurfaceConfig.fromJson(json['appBarBlurredSurface'] as Map<String, dynamic>),
+  appBarStyle: json['appBarStyle'] == null ? null : AppBarConfig.fromJson(json['appBarStyle'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$NumberCdrsPageConfigToJson(
-  NumberCdrsPageConfig instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$NumberCdrsPageConfigToJson(NumberCdrsPageConfig instance) => <String, dynamic>{
   'background': instance.background?.toJson(),
   'appBarBlurredSurface': instance.appBarBlurredSurface?.toJson(),
   'appBarStyle': instance.appBarStyle?.toJson(),
@@ -8908,7 +6225,7 @@ const _$NumberCdrsPageConfigJsonSchema = {
         'stops': {
           'type': 'array',
           'items': {'type': 'number'},
-          'default': [0.0, 1.0],
+          'default': [],
         },
         'beginX': {'type': 'number', 'default': 0.0},
         'beginY': {'type': 'number', 'default': 0.0},
@@ -8923,15 +6240,7 @@ const _$NumberCdrsPageConfigJsonSchema = {
       'properties': {
         'imageUrl': {'type': 'string'},
         'fit': {
-          'enum': [
-            'fill',
-            'contain',
-            'cover',
-            'fitWidth',
-            'fitHeight',
-            'none',
-            'scaleDown',
-          ],
+          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
           'default': 'cover',
         },
         'opacity': {'type': 'number', 'default': 1.0},
@@ -8942,18 +6251,9 @@ const _$NumberCdrsPageConfigJsonSchema = {
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Overlay color (hex string, e.g. `#000000`).',
-        },
-        'sigmaX': {
-          'type': 'number',
-          'description': 'Horizontal gaussian blur sigma.',
-        },
-        'sigmaY': {
-          'type': 'number',
-          'description': 'Vertical gaussian blur sigma.',
-        },
+        'color': {'type': 'string', 'description': 'Overlay color (hex string, e.g. `#000000`).'},
+        'sigmaX': {'type': 'number', 'description': 'Horizontal gaussian blur sigma.'},
+        'sigmaY': {'type': 'number', 'description': 'Vertical gaussian blur sigma.'},
       },
     },
     'OffsetConfig': {
@@ -8966,75 +6266,42 @@ const _$NumberCdrsPageConfigJsonSchema = {
     'ShadowConfig': {
       'type': 'object',
       'properties': {
-        'color': {
-          'type': 'string',
-          'description': 'Color of the shadow (hex string).',
-        },
-        'offset': {
-          r'$ref': r'#/$defs/OffsetConfig',
-          'description': 'The displacement of the shadow.',
-        },
-        'blurRadius': {
-          'type': 'number',
-          'description': 'The blur radius of the shadow.',
-          'default': 0.0,
-        },
+        'color': {'type': 'string', 'description': 'Color of the shadow (hex string).'},
+        'offset': {r'$ref': r'#/$defs/OffsetConfig', 'description': 'The displacement of the shadow.'},
+        'blurRadius': {'type': 'number', 'description': 'The blur radius of the shadow.', 'default': 0.0},
       },
     },
     'IconThemeDataConfig': {
       'type': 'object',
       'properties': {
-        'size': {
-          'type': 'number',
-          'description': 'The default size for icons.',
-        },
+        'size': {'type': 'number', 'description': 'The default size for icons.'},
         'fill': {
           'type': 'number',
-          'description':
-              'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
+          'description': 'The default fill for icons (0.0 to 1.0).\nUseful for variable fonts (e.g. Material Symbols).',
         },
         'weight': {
           'type': 'number',
-          'description':
-              'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
+          'description': 'The default weight for icons (e.g. 400.0).\nUseful for variable fonts.',
         },
-        'grade': {
-          'type': 'number',
-          'description':
-              'The default grade for icons.\nUseful for variable fonts.',
-        },
+        'grade': {'type': 'number', 'description': 'The default grade for icons.\nUseful for variable fonts.'},
         'opticalSize': {
           'type': 'number',
-          'description':
-              'The default optical size for icons.\nUseful for variable fonts.',
+          'description': 'The default optical size for icons.\nUseful for variable fonts.',
         },
-        'color': {
-          'type': 'string',
-          'description': 'The default color for icons (hex string).',
-        },
-        'opacity': {
-          'type': 'number',
-          'description':
-              'An opacity to apply to both explicit and default icon colors.',
-        },
+        'color': {'type': 'string', 'description': 'The default color for icons (hex string).'},
+        'opacity': {'type': 'number', 'description': 'An opacity to apply to both explicit and default icon colors.'},
         'shadows': {
           'type': 'array',
           'items': {r'$ref': r'#/$defs/ShadowConfig'},
           'description': 'A list of shadows to apply to the icons.',
         },
-        'applyTextScaling': {
-          'type': 'boolean',
-          'description': 'Whether to apply text scaling to the icons.',
-        },
+        'applyTextScaling': {'type': 'boolean', 'description': 'Whether to apply text scaling to the icons.'},
       },
     },
     'FontWeightConfig': {
       'type': 'object',
       'properties': {
-        'weight': {
-          'type': 'integer',
-          'description': 'Numeric weight of the font (100–900 typical).',
-        },
+        'weight': {'type': 'integer', 'description': 'Numeric weight of the font (100–900 typical).'},
       },
       'required': ['weight'],
     },
@@ -9043,8 +6310,7 @@ const _$NumberCdrsPageConfigJsonSchema = {
       'properties': {
         'value': {
           'type': 'string',
-          'description':
-              'The font style, as a string. Common values: `"normal"`, `"italic"`.',
+          'description': 'The font style, as a string. Common values: `"normal"`, `"italic"`.',
           'default': 'normal',
         },
       },
@@ -9055,102 +6321,45 @@ const _$NumberCdrsPageConfigJsonSchema = {
         'types': {
           'type': 'array',
           'items': {'type': 'string'},
-          'description':
-              'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
+          'description': 'A list of decoration types. Supported values:\n`"underline"`, `"lineThrough"`, `"overline"`.',
           'default': [],
         },
-        'hint': {
-          'type': 'string',
-          'description':
-              'Text to suggest what sort of input the field accepts.',
-        },
-        'hintStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [hint].',
-        },
+        'hint': {'type': 'string', 'description': 'Text to suggest what sort of input the field accepts.'},
+        'hintStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [hint].'},
         'prefixText': {
           'type': 'string',
           'description':
               'Text that appears before the editable part of the field (e.g., a currency symbol or country code).',
         },
-        'prefixStyle': {
-          r'$ref': r'#/$defs/TextStyleConfig',
-          'description': 'The style to use for the [prefixText].',
-        },
+        'prefixStyle': {r'$ref': r'#/$defs/TextStyleConfig', 'description': 'The style to use for the [prefixText].'},
       },
     },
     'PaddingConfig': {
       'type': 'object',
       'properties': {
-        'left': {
-          'type': 'number',
-          'description': 'Left padding value.',
-          'default': 0.0,
-        },
-        'top': {
-          'type': 'number',
-          'description': 'Top padding value.',
-          'default': 0.0,
-        },
-        'right': {
-          'type': 'number',
-          'description': 'Right padding value.',
-          'default': 0.0,
-        },
-        'bottom': {
-          'type': 'number',
-          'description': 'Bottom padding value.',
-          'default': 0.0,
-        },
+        'left': {'type': 'number', 'description': 'Left padding value.', 'default': 0.0},
+        'top': {'type': 'number', 'description': 'Top padding value.', 'default': 0.0},
+        'right': {'type': 'number', 'description': 'Right padding value.', 'default': 0.0},
+        'bottom': {'type': 'number', 'description': 'Bottom padding value.', 'default': 0.0},
       },
     },
     'TextStyleConfig': {
       'type': 'object',
       'properties': {
-        'fontFamily': {
-          'type': 'string',
-          'description': 'The name of the font family to use (e.g., "Roboto").',
-        },
-        'fontSize': {
-          'type': 'number',
-          'description': 'The size of glyphs (e.g., 14.0).',
-        },
-        'fontWeight': {
-          r'$ref': r'#/$defs/FontWeightConfig',
-          'description': 'The thickness of the glyphs.',
-        },
-        'fontStyle': {
-          r'$ref': r'#/$defs/FontStyleConfig',
-          'description': 'Whether the glyphs should be italicized.',
-        },
-        'color': {
-          'type': 'string',
-          'description': 'The text color in hex format (e.g., "#FF0000").',
-        },
-        'letterSpacing': {
-          'type': 'number',
-          'description': 'The spacing between letters, in logical pixels.',
-        },
-        'wordSpacing': {
-          'type': 'number',
-          'description': 'The spacing between words, in logical pixels.',
-        },
-        'height': {
-          'type': 'number',
-          'description': 'The line height, as a multiplier of font size.',
-        },
+        'fontFamily': {'type': 'string', 'description': 'The name of the font family to use (e.g., "Roboto").'},
+        'fontSize': {'type': 'number', 'description': 'The size of glyphs (e.g., 14.0).'},
+        'fontWeight': {r'$ref': r'#/$defs/FontWeightConfig', 'description': 'The thickness of the glyphs.'},
+        'fontStyle': {r'$ref': r'#/$defs/FontStyleConfig', 'description': 'Whether the glyphs should be italicized.'},
+        'color': {'type': 'string', 'description': 'The text color in hex format (e.g., "#FF0000").'},
+        'letterSpacing': {'type': 'number', 'description': 'The spacing between letters, in logical pixels.'},
+        'wordSpacing': {'type': 'number', 'description': 'The spacing between words, in logical pixels.'},
+        'height': {'type': 'number', 'description': 'The line height, as a multiplier of font size.'},
         'decoration': {
           r'$ref': r'#/$defs/TextDecorationConfig',
           'description': 'Decorations like underline or strikethrough.',
         },
-        'backgroundColor': {
-          'type': 'string',
-          'description': 'Background color for the text in hex format.',
-        },
-        'backgroundBorderRadius': {
-          'type': 'number',
-          'description': 'Border radius for background decoration.',
-        },
+        'backgroundColor': {'type': 'string', 'description': 'Background color for the text in hex format.'},
+        'backgroundBorderRadius': {'type': 'number', 'description': 'Border radius for background decoration.'},
         'backgroundPadding': {
           r'$ref': r'#/$defs/PaddingConfig',
           'description': 'Padding around text when background is applied.',
@@ -9167,18 +6376,13 @@ const _$NumberCdrsPageConfigJsonSchema = {
         },
         'systemNavigationBarIconBrightness': {
           'type': 'string',
-          'description':
-              'System navigation bar icon brightness (e.g., "dark" or "light").',
+          'description': 'System navigation bar icon brightness (e.g., "dark" or "light").',
         },
         'statusBarIconBrightness': {
           'type': 'string',
-          'description':
-              'Status bar icon brightness (e.g., "dark" or "light").',
+          'description': 'Status bar icon brightness (e.g., "dark" or "light").',
         },
-        'statusBarBrightness': {
-          'type': 'string',
-          'description': 'Status bar brightness (e.g., "dark" or "light").',
-        },
+        'statusBarBrightness': {'type': 'string', 'description': 'Status bar brightness (e.g., "dark" or "light").'},
       },
     },
     'AppBarConfig': {
