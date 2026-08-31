@@ -30,7 +30,9 @@ class FooConfig with _$FooConfig {
 }
 ```
 
-Sealed unions use `@Freezed(unionKey: 'type')` with discriminated JSON (e.g. `BottomMenuTabScheme`).
+Sealed unions use `@Freezed(unionKey: 'type', unionValueCase: FreezedUnionCase.none)` with
+discriminated JSON (e.g. `BottomMenuTabScheme`). The values they accept are a wire contract -
+[Wire Contract](#wire-contract) below is the authority on them.
 
 Custom JSON converters in `lib/converters/`:
 
@@ -49,17 +51,22 @@ hand-written bridge entry on the backend side.
 All three discriminate on `type`. The values are the constructor names, and the authority is
 the `switch (json['type'])` in the matching `*.freezed.dart` - not the annotation.
 
-| Class | Case rule | Values on the wire |
-| --- | --- | --- |
-| `PageBackground` | `FreezedUnionCase.snake` | `solid`, `gradient`, `image` |
-| `SupportedFeature` | `FreezedUnionCase.none` | `themeMode`, `videoCall`, `loggingConfig`, `systemNotifications`, `hybridPresence`, `callPull` |
-| `BottomMenuTabScheme` | `FreezedUnionCase.none` | `favorites`, `recents`, `contacts`, `keypad`, `messaging`, `voicemail`, `embedded` |
+| Class | Values on the wire |
+| --- | --- |
+| `PageBackground` | `solid`, `gradient`, `image` |
+| `SupportedFeature` | `themeMode`, `videoCall`, `loggingConfig`, `systemNotifications`, `hybridPresence`, `callPull` |
+| `BottomMenuTabScheme` | `favorites`, `recents`, `contacts`, `keypad`, `messaging`, `voicemail`, `embedded` |
 
-Every value above is either one lowercase word or a camelCase name its own rule leaves alone,
-so all three rules produce identical output today. They diverge on the next multi-word
-constructor: one added to `PageBackground` arrives as `image_source`, the same one added to
-either other union arrives as `imageSource`. Read the rule off the class you are adding to;
-do not carry a convention across.
+All three state `unionValueCase: FreezedUnionCase.none`, so a multi-word factory added to any
+of them arrives camelCase. `PageBackground` carried `snake` from the commit that introduced it
+(#814) until it was made explicit: the union has only ever had single-word factories, so that
+rule never produced a snake_cased value, and dropping it left the generated files
+byte-identical. It was historical, not a property of backgrounds - the package now has one
+rule rather than a divergence to remember.
+
+`test/wire_contract_test.dart` holds this table through `fromJson`/`toJson`. A renamed factory,
+a changed `unionValueCase` and a dropped variant each fail it. Adding a variant does not - an
+addition is what the registry accepts - so add the new value to both the test and the table.
 
 ### The `$ref` key
 
