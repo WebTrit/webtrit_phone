@@ -42,6 +42,7 @@ export 'shimmer.dart';
 export 'sip_presence_indicator.dart';
 export 'sized_circular_progress_indicator.dart';
 export 'tab_bar.dart';
+export 'tab_icon_count_badge.dart';
 export 'text_buttons_table.dart';
 export 'themed_scaffold.dart';
 export 'transfer_bottom_navigation_bar.dart';

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -30,36 +29,7 @@ class VoicemailFlavorOverlay extends StatelessWidget {
     // `watch` alone follows the count: BlocProvider marks its dependents on
     // every emission.
     final unreadCount = context.watch<VoicemailUnreadCubit?>()?.state ?? 0;
-    if (unreadCount == 0) return child;
 
-    // The badge draws a glyph and says nothing of its own; the count travels as
-    // the entry's VALUE. The caption belongs to the bar, which draws it after
-    // this slot, so there is nothing of ours drawn later to hang the phrase on.
-    // See docs/accessibility.md, "Counting things", and the messaging badge
-    // next to this one.
-    //
-    // Deliberately no `container: true`: the node must merge into the entry the
-    // bar builds, the one that carries the name, the id and the press.
-    final spokenCount = context.parseL10n(
-      'common_SemanticsValue_unreadCount',
-      arguments: [unreadCount],
-      // A host without the app's translations still gets a working bar; the
-      // badge simply stays silent rather than red-screening the navigation.
-      fallback: '',
-    );
-
-    return Stack(
-      children: [
-        child,
-        Positioned(
-          right: 0,
-          bottom: 0,
-          child: Semantics(
-            value: spokenCount,
-            child: CountBadge(count: unreadCount, size: 14),
-          ),
-        ),
-      ],
-    );
+    return TabIconCountBadge(icon: child, count: unreadCount);
   }
 }
