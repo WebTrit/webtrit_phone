@@ -46,7 +46,7 @@ sealed class PageBackground {
 
 /// A single colour.
 @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
 class PageBackgroundSolid extends PageBackground with _$PageBackgroundSolid {
   const PageBackgroundSolid({required this.color, this.type = 'solid'});
 
@@ -62,11 +62,13 @@ class PageBackgroundSolid extends PageBackground with _$PageBackgroundSolid {
 
   @override
   Map<String, Object?> toJson() => _$PageBackgroundSolidToJson(this);
+
+  static const Map<String, Object?> jsonSchema = _$PageBackgroundSolidJsonSchema;
 }
 
 /// A linear gradient between two points of the page.
 @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
 class PageBackgroundGradient extends PageBackground with _$PageBackgroundGradient {
   const PageBackgroundGradient({
     required this.colors,
@@ -112,11 +114,13 @@ class PageBackgroundGradient extends PageBackground with _$PageBackgroundGradien
 
   @override
   Map<String, Object?> toJson() => _$PageBackgroundGradientToJson(this);
+
+  static const Map<String, Object?> jsonSchema = _$PageBackgroundGradientJsonSchema;
 }
 
 /// An image, fetched from [imageUrl].
 @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
 class PageBackgroundImage extends PageBackground with _$PageBackgroundImage {
   const PageBackgroundImage({
     required this.imageUrl,
@@ -143,4 +147,6 @@ class PageBackgroundImage extends PageBackground with _$PageBackgroundImage {
 
   @override
   Map<String, Object?> toJson() => _$PageBackgroundImageToJson(this);
+
+  static const Map<String, Object?> jsonSchema = _$PageBackgroundImageJsonSchema;
 }

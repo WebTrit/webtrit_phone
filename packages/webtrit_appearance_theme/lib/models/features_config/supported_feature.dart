@@ -47,7 +47,7 @@ sealed class SupportedFeature {
 
 /// Which theme mode the app starts in, and whether a person may change it.
 @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
 class SupportedThemeMode extends SupportedFeature with _$SupportedThemeMode {
   const SupportedThemeMode({this.mode = ThemeModeConfig.system, this.type = 'themeMode'});
 
@@ -62,11 +62,13 @@ class SupportedThemeMode extends SupportedFeature with _$SupportedThemeMode {
 
   @override
   Map<String, Object?> toJson() => _$SupportedThemeModeToJson(this);
+
+  static const Map<String, Object?> jsonSchema = _$SupportedThemeModeJsonSchema;
 }
 
 /// Whether a call may carry video.
 @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
 class SupportedVideoCall extends SupportedFeature with _$SupportedVideoCall {
   const SupportedVideoCall({this.enabled = true, this.type = 'videoCall'});
 
@@ -81,11 +83,13 @@ class SupportedVideoCall extends SupportedFeature with _$SupportedVideoCall {
 
   @override
   Map<String, Object?> toJson() => _$SupportedVideoCallToJson(this);
+
+  static const Map<String, Object?> jsonSchema = _$SupportedVideoCallJsonSchema;
 }
 
 /// Logging and RTC monitoring.
 @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
 class SupportedLoggingConfig extends SupportedFeature with _$SupportedLoggingConfig {
   const SupportedLoggingConfig({
     this.logLevel = 'INFO',
@@ -113,11 +117,13 @@ class SupportedLoggingConfig extends SupportedFeature with _$SupportedLoggingCon
 
   @override
   Map<String, Object?> toJson() => _$SupportedLoggingConfigToJson(this);
+
+  static const Map<String, Object?> jsonSchema = _$SupportedLoggingConfigJsonSchema;
 }
 
 /// Whether the app raises system notifications.
 @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
 class SupportedSystemNotifications extends SupportedFeature with _$SupportedSystemNotifications {
   const SupportedSystemNotifications({this.enabled = true, this.type = 'systemNotifications'});
 
@@ -133,11 +139,13 @@ class SupportedSystemNotifications extends SupportedFeature with _$SupportedSyst
 
   @override
   Map<String, Object?> toJson() => _$SupportedSystemNotificationsToJson(this);
+
+  static const Map<String, Object?> jsonSchema = _$SupportedSystemNotificationsJsonSchema;
 }
 
 /// Whether presence is read from both the SIP line and the messaging service.
 @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
 class SupportedHybridPresence extends SupportedFeature with _$SupportedHybridPresence {
   const SupportedHybridPresence({this.enabled = true, this.type = 'hybridPresence'});
 
@@ -152,11 +160,13 @@ class SupportedHybridPresence extends SupportedFeature with _$SupportedHybridPre
 
   @override
   Map<String, Object?> toJson() => _$SupportedHybridPresenceToJson(this);
+
+  static const Map<String, Object?> jsonSchema = _$SupportedHybridPresenceJsonSchema;
 }
 
 /// How the pull of a video call is handled.
 @freezed
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
 class SupportedCallPull extends SupportedFeature with _$SupportedCallPull {
   const SupportedCallPull({this.videoStrategy = 'softMute', this.type = 'callPull'});
 
@@ -173,4 +183,6 @@ class SupportedCallPull extends SupportedFeature with _$SupportedCallPull {
 
   @override
   Map<String, Object?> toJson() => _$SupportedCallPullToJson(this);
+
+  static const Map<String, Object?> jsonSchema = _$SupportedCallPullJsonSchema;
 }
