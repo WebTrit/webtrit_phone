@@ -34,7 +34,13 @@ Sealed unions use `@Freezed(unionKey: 'type')` with discriminated JSON (e.g. `Bo
 
 Custom JSON converters in `lib/converters/`:
 
-- `IntToStringConverter` / `IntToStringOptionalConverter` — legacy migration shims
+- `HexCodePointConverter` — `0x####` hex strings to int codepoints
+- `UriConverter` — `Uri` to and from its string form
+
+Keep the list short. A converter makes a field's Dart type differ from what the JSON carries, so
+anything reading the type off the class describes something the document never contains. Prefer a
+type that serialises as itself - which is why `IconDataConfig.codePoint` is a `String` and
+`embeddedResourceId` is a `String`.
 
 ## Adding a New DTO Property
 

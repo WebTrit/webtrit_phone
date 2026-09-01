@@ -9,7 +9,7 @@ part of 'embedded_resource.dart';
 EmbeddedResource _$EmbeddedResourceFromJson(
   Map<String, dynamic> json,
 ) => EmbeddedResource(
-  id: const IntToStringConverter().fromJson(json['id']),
+  id: json['id'] as String,
   uri: json['uri'] as String,
   type:
       $enumDecodeNullable(_$EmbeddedResourceTypeEnumMap, json['type']) ??
@@ -30,7 +30,7 @@ EmbeddedResource _$EmbeddedResourceFromJson(
 
 Map<String, dynamic> _$EmbeddedResourceToJson(EmbeddedResource instance) =>
     <String, dynamic>{
-      'id': const IntToStringConverter().toJson(instance.id),
+      'id': instance.id,
       'uri': instance.uri,
       'type': _$EmbeddedResourceTypeEnumMap[instance.type]!,
       'attributes': instance.attributes,

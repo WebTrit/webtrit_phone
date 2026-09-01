@@ -3041,7 +3041,7 @@ return embedded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  favorites,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)?  recents,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)?  contacts,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  keypad,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  messaging,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  voicemail,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId,  String type)?  embedded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  favorites,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)?  recents,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)?  contacts,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  keypad,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  messaging,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  voicemail,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String embeddedResourceId,  String type)?  embedded,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case FavoritesTabScheme() when favorites != null:
 return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case RecentsTabScheme() when recents != null:
@@ -3068,7 +3068,7 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  favorites,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)  recents,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)  contacts,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  keypad,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  messaging,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  voicemail,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId,  String type)  embedded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  favorites,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)  recents,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)  contacts,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  keypad,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  messaging,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  voicemail,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String embeddedResourceId,  String type)  embedded,}) {final _that = this;
 switch (_that) {
 case FavoritesTabScheme():
 return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case RecentsTabScheme():
@@ -3091,7 +3091,7 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  favorites,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)?  recents,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)?  contacts,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  keypad,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  messaging,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  voicemail,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @IntToStringConverter()  String embeddedResourceId,  String type)?  embedded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  favorites,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)?  recents,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)?  contacts,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  keypad,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  messaging,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  voicemail,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String embeddedResourceId,  String type)?  embedded,}) {final _that = this;
 switch (_that) {
 case FavoritesTabScheme() when favorites != null:
 return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case RecentsTabScheme() when recents != null:
@@ -3605,14 +3605,14 @@ as String,
 
 @JsonSerializable(explicitToJson: true)
 class EmbeddedTabScheme extends BottomMenuTabScheme {
-  const EmbeddedTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, @IntToStringConverter() required this.embeddedResourceId, this.type = 'embedded'}): super._();
+  const EmbeddedTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, required this.embeddedResourceId, this.type = 'embedded'}): super._();
   factory EmbeddedTabScheme.fromJson(Map<String, dynamic> json) => _$EmbeddedTabSchemeFromJson(json);
 
 @override@JsonKey() final  bool enabled;
 @override@JsonKey() final  bool initial;
 @override final  String titleL10n;
 @override final  String icon;
-@IntToStringConverter() final  String embeddedResourceId;
+ final  String embeddedResourceId;
 @override@JsonKey() final  String type;
 
 /// Create a copy of BottomMenuTabScheme
@@ -3648,7 +3648,7 @@ abstract mixin class $EmbeddedTabSchemeCopyWith<$Res> implements $BottomMenuTabS
   factory $EmbeddedTabSchemeCopyWith(EmbeddedTabScheme value, $Res Function(EmbeddedTabScheme) _then) = _$EmbeddedTabSchemeCopyWithImpl;
 @override @useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon,@IntToStringConverter() String embeddedResourceId, String type
+ bool enabled, bool initial, String titleL10n, String icon, String embeddedResourceId, String type
 });
 
 
@@ -4089,7 +4089,7 @@ abstract mixin class $AppConfigSettingsItemCopyWith<$Res>  {
   factory $AppConfigSettingsItemCopyWith(AppConfigSettingsItem value, $Res Function(AppConfigSettingsItem) _then) = _$AppConfigSettingsItemCopyWithImpl;
 @useResult
 $Res call({
- bool enabled, String titleL10n, String type, String icon, String? iconColor,@IntToStringOptionalConverter() String? embeddedResourceId
+ bool enabled, String titleL10n, String type, String icon, String? iconColor, String? embeddedResourceId
 });
 
 
