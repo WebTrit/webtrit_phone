@@ -15,15 +15,11 @@ const double kDisabledOpacity = 0.40;
 final _logger = Logger('CallScreenStyleFactory');
 
 class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
-  CallScreenStyleFactory(this.colors, this.pageConfig, this.legacyCallActionsConfig, this.defaultFontFamily);
+  CallScreenStyleFactory(this.colors, this.pageConfig, this.defaultFontFamily);
 
   final ColorScheme colors;
   final CallPageConfig? pageConfig;
   final String? defaultFontFamily;
-
-  // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
-  // ignore: deprecated_member_use
-  final CallActionsWidgetConfig? legacyCallActionsConfig;
 
   @override
   CallScreenStyles create() {
@@ -39,7 +35,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
         callInfo: _mapCallInfoStyle(infoCfg),
         list: _mapCallListStyle(pageConfig?.callList),
         hint: _mapHintStyle(pageConfig?.actingOnHint),
-        actions: _resolveActionsStyle(fromPage: pageConfig?.actions, fromLegacy: legacyCallActionsConfig),
+        actions: _mapActionsFromPage(pageConfig?.actions),
       ),
     );
   }
@@ -150,18 +146,17 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
     );
   }
 
-  CallScreenActionsStyle? _resolveActionsStyle({
-    CallPageActionsConfig? fromPage,
-    // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
-    // ignore: deprecated_member_use
-    CallActionsWidgetConfig? fromLegacy,
-  }) {
-    if (fromPage != null) return _mapActionsFromPage(fromPage);
-    if (fromLegacy != null) return _mapActionsFromLegacy(fromLegacy);
-    return null;
-  }
+  /// The nine call buttons, from the page config alone.
+  ///
+  /// There used to be a second source here - the retired
+  /// `widgetConfig.group.callActions` - and which of the two applied was
+  /// decided by whether its container object existed rather than by whether
+  /// anything in it was set. The two disagreed about what an unset button looks
+  /// like, so the same theme drew a different call screen depending on which
+  /// backend served it. One source is what makes that impossible.
+  CallScreenActionsStyle? _mapActionsFromPage(CallPageActionsConfig? a) {
+    if (a == null) return null;
 
-  CallScreenActionsStyle _mapActionsFromPage(CallPageActionsConfig a) {
     return CallScreenActionsStyle(
       callStart: _actionStyle(a.callStart, background: colors.tertiary, foreground: colors.onTertiary),
       hangup: _actionStyle(a.hangup, background: colors.error, foreground: colors.onError),
@@ -247,60 +242,6 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
       iconColor: themed.iconColor,
       overlayColor: themed.overlayColor,
       padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-    );
-  }
-
-  // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
-  // ignore: deprecated_member_use
-  CallScreenActionsStyle _mapActionsFromLegacy(CallActionsWidgetConfig c) {
-    final inactiveIcon = colors.surface;
-
-    final actionBg = colors.surface.withValues(alpha: kDisabledOpacity);
-    final activeActionBg = colors.surface;
-
-    final callStartBg = c.callStartBackgroundColor?.toColor() ?? colors.tertiary;
-    final hangupBg = c.hangupBackgroundColor?.toColor() ?? colors.error;
-    final transferBg = c.transferBackgroundColor?.toColor() ?? actionBg;
-
-    final cameraBg = c.cameraBackgroundColor?.toColor() ?? actionBg;
-    final cameraActiveBg = c.cameraActiveBackgroundColor?.toColor() ?? activeActionBg;
-
-    final mutedBg = c.mutedBackgroundColor?.toColor() ?? actionBg;
-    final mutedActiveBg = c.mutedActiveBackgroundColor?.toColor() ?? activeActionBg;
-
-    final speakerBg = c.speakerBackgroundColor?.toColor() ?? actionBg;
-    final speakerActiveBg = c.speakerActiveBackgroundColor?.toColor() ?? activeActionBg;
-
-    final heldBg = c.heldBackgroundColor?.toColor() ?? actionBg;
-    final heldActiveBg = c.heldActiveBackgroundColor?.toColor() ?? activeActionBg;
-
-    final swapBg = c.swapBackgroundColor?.toColor() ?? actionBg;
-    final keyBg = c.keyBackgroundColor?.toColor() ?? actionBg;
-
-    ButtonStyle legacy(Color background, {Color? foreground, Color? selectedBackground}) {
-      return _actionStyle(
-        const ButtonStyleConfig(),
-        background: background,
-        foreground: foreground ?? colors.surface,
-        icon: inactiveIcon,
-        toggleable: selectedBackground != null,
-        // The retired config had no disabled colors, and the buttons it styled
-        // kept their background while unavailable. Keep that.
-        disabledBackground: background,
-        selectedBackground: selectedBackground,
-      );
-    }
-
-    return CallScreenActionsStyle(
-      callStart: legacy(callStartBg, foreground: colors.onTertiary),
-      hangup: legacy(hangupBg, foreground: colors.onError),
-      transfer: legacy(transferBg, foreground: colors.onSecondary),
-      camera: legacy(cameraBg, selectedBackground: cameraActiveBg),
-      muted: legacy(mutedBg, selectedBackground: mutedActiveBg),
-      speaker: legacy(speakerBg, selectedBackground: speakerActiveBg),
-      held: legacy(heldBg, selectedBackground: heldActiveBg),
-      swap: legacy(swapBg),
-      key: legacy(keyBg),
     );
   }
 }

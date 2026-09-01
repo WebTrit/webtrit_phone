@@ -1,7 +1,6 @@
 export 'about_screen_style_factory.dart';
 export 'action_pad_style_factory.dart';
 export 'app_icon_style_factory.dart';
-export 'call_actions_style_factory.dart';
 export 'call_screen_style_factory.dart';
 export 'call_status_style_factory.dart';
 export 'confirm_dialog_style_factory.dart';

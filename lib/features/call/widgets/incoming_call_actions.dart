@@ -7,9 +7,6 @@ import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-export 'call_actions_style.dart';
-export 'call_actions_styles.dart';
-
 /// Decline / Answer buttons for the focused ringing call.
 ///
 /// Always at most two actions: what happens to the other calls on answer is

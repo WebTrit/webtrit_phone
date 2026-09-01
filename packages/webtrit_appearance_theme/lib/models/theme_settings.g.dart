@@ -454,33 +454,12 @@ const _$ThemeSettingsJsonSchema = {
         'textStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
       },
     },
-    'CallActionsWidgetConfig': {
-      'type': 'object',
-      'properties': {
-        'callStartBackgroundColor': {'type': 'string'},
-        'hangupBackgroundColor': {'type': 'string'},
-        'transferBackgroundColor': {'type': 'string'},
-        'cameraBackgroundColor': {'type': 'string'},
-        'cameraActiveBackgroundColor': {'type': 'string'},
-        'mutedBackgroundColor': {'type': 'string'},
-        'mutedActiveBackgroundColor': {'type': 'string'},
-        'speakerBackgroundColor': {'type': 'string'},
-        'speakerActiveBackgroundColor': {'type': 'string'},
-        'heldBackgroundColor': {'type': 'string'},
-        'heldActiveBackgroundColor': {'type': 'string'},
-        'swapBackgroundColor': {'type': 'string'},
-        'keyBackgroundColor': {'type': 'string'},
-        'keypadBackgroundColor': {'type': 'string'},
-        'keypadActiveBackgroundColor': {'type': 'string'},
-      },
-    },
     'GroupWidgetConfig': {
       'type': 'object',
       'properties': {
         'groupTitleListTile': {
           r'$ref': r'#/$defs/GroupTitleListTileWidgetConfig',
         },
-        'callActions': {r'$ref': r'#/$defs/CallActionsWidgetConfig'},
       },
     },
     'BottomNavigationBarWidgetConfig': {

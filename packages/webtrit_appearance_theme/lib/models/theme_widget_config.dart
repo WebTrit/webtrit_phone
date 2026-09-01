@@ -84,19 +84,10 @@ class ButtonWidgetConfig with _$ButtonWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class GroupWidgetConfig with _$GroupWidgetConfig {
-  const GroupWidgetConfig({
-    this.groupTitleListTile = const GroupTitleListTileWidgetConfig(),
-    // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
-    // ignore: deprecated_member_use_from_same_package
-    this.callActions = const CallActionsWidgetConfig(),
-  });
+  const GroupWidgetConfig({this.groupTitleListTile = const GroupTitleListTileWidgetConfig()});
 
   @override
   final GroupTitleListTileWidgetConfig groupTitleListTile;
-
-  @override
-  @Deprecated('Use CallPageActionsConfig instead')
-  final CallActionsWidgetConfig callActions;
 
   factory GroupWidgetConfig.fromJson(Map<String, Object?> json) => _$GroupWidgetConfigFromJson(json);
 
@@ -194,78 +185,6 @@ class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
       _$GroupTitleListTileWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$GroupTitleListTileWidgetConfigToJson(this);
-}
-
-@Deprecated('Use CallPageActionsConfig instead')
-@freezed
-@JsonSerializable(explicitToJson: true)
-class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
-  const CallActionsWidgetConfig({
-    this.callStartBackgroundColor,
-    this.hangupBackgroundColor,
-    this.transferBackgroundColor,
-    this.cameraBackgroundColor,
-    this.cameraActiveBackgroundColor,
-    this.mutedBackgroundColor,
-    this.mutedActiveBackgroundColor,
-    this.speakerBackgroundColor,
-    this.speakerActiveBackgroundColor,
-    this.heldBackgroundColor,
-    this.heldActiveBackgroundColor,
-    this.swapBackgroundColor,
-    this.keyBackgroundColor,
-    this.keypadBackgroundColor,
-    this.keypadActiveBackgroundColor,
-  });
-
-  @override
-  final String? callStartBackgroundColor;
-
-  @override
-  final String? hangupBackgroundColor;
-
-  @override
-  final String? transferBackgroundColor;
-
-  @override
-  final String? cameraBackgroundColor;
-
-  @override
-  final String? cameraActiveBackgroundColor;
-
-  @override
-  final String? mutedBackgroundColor;
-
-  @override
-  final String? mutedActiveBackgroundColor;
-
-  @override
-  final String? speakerBackgroundColor;
-
-  @override
-  final String? speakerActiveBackgroundColor;
-
-  @override
-  final String? heldBackgroundColor;
-
-  @override
-  final String? heldActiveBackgroundColor;
-
-  @override
-  final String? swapBackgroundColor;
-
-  @override
-  final String? keyBackgroundColor;
-
-  @override
-  final String? keypadBackgroundColor;
-
-  @override
-  final String? keypadActiveBackgroundColor;
-
-  factory CallActionsWidgetConfig.fromJson(Map<String, Object?> json) => _$CallActionsWidgetConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$CallActionsWidgetConfigToJson(this);
 }
 
 @freezed

@@ -581,7 +581,7 @@ case _:
 /// @nodoc
 mixin _$GroupWidgetConfig {
 
- GroupTitleListTileWidgetConfig get groupTitleListTile; CallActionsWidgetConfig get callActions;
+ GroupTitleListTileWidgetConfig get groupTitleListTile;
 /// Create a copy of GroupWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -592,16 +592,16 @@ $GroupWidgetConfigCopyWith<GroupWidgetConfig> get copyWith => _$GroupWidgetConfi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GroupWidgetConfig&&(identical(other.groupTitleListTile, groupTitleListTile) || other.groupTitleListTile == groupTitleListTile)&&(identical(other.callActions, callActions) || other.callActions == callActions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GroupWidgetConfig&&(identical(other.groupTitleListTile, groupTitleListTile) || other.groupTitleListTile == groupTitleListTile));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,groupTitleListTile,callActions);
+int get hashCode => Object.hash(runtimeType,groupTitleListTile);
 
 @override
 String toString() {
-  return 'GroupWidgetConfig(groupTitleListTile: $groupTitleListTile, callActions: $callActions)';
+  return 'GroupWidgetConfig(groupTitleListTile: $groupTitleListTile)';
 }
 
 
@@ -612,7 +612,7 @@ abstract mixin class $GroupWidgetConfigCopyWith<$Res>  {
   factory $GroupWidgetConfigCopyWith(GroupWidgetConfig value, $Res Function(GroupWidgetConfig) _then) = _$GroupWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- GroupTitleListTileWidgetConfig groupTitleListTile, CallActionsWidgetConfig callActions
+ GroupTitleListTileWidgetConfig groupTitleListTile
 });
 
 
@@ -629,11 +629,10 @@ class _$GroupWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of GroupWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? groupTitleListTile = null,Object? callActions = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? groupTitleListTile = null,}) {
   return _then(GroupWidgetConfig(
 groupTitleListTile: null == groupTitleListTile ? _self.groupTitleListTile : groupTitleListTile // ignore: cast_nullable_to_non_nullable
-as GroupTitleListTileWidgetConfig,callActions: null == callActions ? _self.callActions : callActions // ignore: cast_nullable_to_non_nullable
-as CallActionsWidgetConfig,
+as GroupTitleListTileWidgetConfig,
   ));
 }
 
@@ -1394,206 +1393,6 @@ as TextStyleConfig?,
 
 /// Adds pattern-matching-related methods to [GroupTitleListTileWidgetConfig].
 extension GroupTitleListTileWidgetConfigPatterns on GroupTitleListTileWidgetConfig {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-
-}
-
-
-/// @nodoc
-mixin _$CallActionsWidgetConfig {
-
- String? get callStartBackgroundColor; String? get hangupBackgroundColor; String? get transferBackgroundColor; String? get cameraBackgroundColor; String? get cameraActiveBackgroundColor; String? get mutedBackgroundColor; String? get mutedActiveBackgroundColor; String? get speakerBackgroundColor; String? get speakerActiveBackgroundColor; String? get heldBackgroundColor; String? get heldActiveBackgroundColor; String? get swapBackgroundColor; String? get keyBackgroundColor; String? get keypadBackgroundColor; String? get keypadActiveBackgroundColor;
-/// Create a copy of CallActionsWidgetConfig
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$CallActionsWidgetConfigCopyWith<CallActionsWidgetConfig> get copyWith => _$CallActionsWidgetConfigCopyWithImpl<CallActionsWidgetConfig>(this as CallActionsWidgetConfig, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CallActionsWidgetConfig&&(identical(other.callStartBackgroundColor, callStartBackgroundColor) || other.callStartBackgroundColor == callStartBackgroundColor)&&(identical(other.hangupBackgroundColor, hangupBackgroundColor) || other.hangupBackgroundColor == hangupBackgroundColor)&&(identical(other.transferBackgroundColor, transferBackgroundColor) || other.transferBackgroundColor == transferBackgroundColor)&&(identical(other.cameraBackgroundColor, cameraBackgroundColor) || other.cameraBackgroundColor == cameraBackgroundColor)&&(identical(other.cameraActiveBackgroundColor, cameraActiveBackgroundColor) || other.cameraActiveBackgroundColor == cameraActiveBackgroundColor)&&(identical(other.mutedBackgroundColor, mutedBackgroundColor) || other.mutedBackgroundColor == mutedBackgroundColor)&&(identical(other.mutedActiveBackgroundColor, mutedActiveBackgroundColor) || other.mutedActiveBackgroundColor == mutedActiveBackgroundColor)&&(identical(other.speakerBackgroundColor, speakerBackgroundColor) || other.speakerBackgroundColor == speakerBackgroundColor)&&(identical(other.speakerActiveBackgroundColor, speakerActiveBackgroundColor) || other.speakerActiveBackgroundColor == speakerActiveBackgroundColor)&&(identical(other.heldBackgroundColor, heldBackgroundColor) || other.heldBackgroundColor == heldBackgroundColor)&&(identical(other.heldActiveBackgroundColor, heldActiveBackgroundColor) || other.heldActiveBackgroundColor == heldActiveBackgroundColor)&&(identical(other.swapBackgroundColor, swapBackgroundColor) || other.swapBackgroundColor == swapBackgroundColor)&&(identical(other.keyBackgroundColor, keyBackgroundColor) || other.keyBackgroundColor == keyBackgroundColor)&&(identical(other.keypadBackgroundColor, keypadBackgroundColor) || other.keypadBackgroundColor == keypadBackgroundColor)&&(identical(other.keypadActiveBackgroundColor, keypadActiveBackgroundColor) || other.keypadActiveBackgroundColor == keypadActiveBackgroundColor));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,callStartBackgroundColor,hangupBackgroundColor,transferBackgroundColor,cameraBackgroundColor,cameraActiveBackgroundColor,mutedBackgroundColor,mutedActiveBackgroundColor,speakerBackgroundColor,speakerActiveBackgroundColor,heldBackgroundColor,heldActiveBackgroundColor,swapBackgroundColor,keyBackgroundColor,keypadBackgroundColor,keypadActiveBackgroundColor);
-
-@override
-String toString() {
-  return 'CallActionsWidgetConfig(callStartBackgroundColor: $callStartBackgroundColor, hangupBackgroundColor: $hangupBackgroundColor, transferBackgroundColor: $transferBackgroundColor, cameraBackgroundColor: $cameraBackgroundColor, cameraActiveBackgroundColor: $cameraActiveBackgroundColor, mutedBackgroundColor: $mutedBackgroundColor, mutedActiveBackgroundColor: $mutedActiveBackgroundColor, speakerBackgroundColor: $speakerBackgroundColor, speakerActiveBackgroundColor: $speakerActiveBackgroundColor, heldBackgroundColor: $heldBackgroundColor, heldActiveBackgroundColor: $heldActiveBackgroundColor, swapBackgroundColor: $swapBackgroundColor, keyBackgroundColor: $keyBackgroundColor, keypadBackgroundColor: $keypadBackgroundColor, keypadActiveBackgroundColor: $keypadActiveBackgroundColor)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $CallActionsWidgetConfigCopyWith<$Res>  {
-  factory $CallActionsWidgetConfigCopyWith(CallActionsWidgetConfig value, $Res Function(CallActionsWidgetConfig) _then) = _$CallActionsWidgetConfigCopyWithImpl;
-@useResult
-$Res call({
- String? callStartBackgroundColor, String? hangupBackgroundColor, String? transferBackgroundColor, String? cameraBackgroundColor, String? cameraActiveBackgroundColor, String? mutedBackgroundColor, String? mutedActiveBackgroundColor, String? speakerBackgroundColor, String? speakerActiveBackgroundColor, String? heldBackgroundColor, String? heldActiveBackgroundColor, String? swapBackgroundColor, String? keyBackgroundColor, String? keypadBackgroundColor, String? keypadActiveBackgroundColor
-});
-
-
-
-
-}
-/// @nodoc
-class _$CallActionsWidgetConfigCopyWithImpl<$Res>
-    implements $CallActionsWidgetConfigCopyWith<$Res> {
-  _$CallActionsWidgetConfigCopyWithImpl(this._self, this._then);
-
-  final CallActionsWidgetConfig _self;
-  final $Res Function(CallActionsWidgetConfig) _then;
-
-/// Create a copy of CallActionsWidgetConfig
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? callStartBackgroundColor = freezed,Object? hangupBackgroundColor = freezed,Object? transferBackgroundColor = freezed,Object? cameraBackgroundColor = freezed,Object? cameraActiveBackgroundColor = freezed,Object? mutedBackgroundColor = freezed,Object? mutedActiveBackgroundColor = freezed,Object? speakerBackgroundColor = freezed,Object? speakerActiveBackgroundColor = freezed,Object? heldBackgroundColor = freezed,Object? heldActiveBackgroundColor = freezed,Object? swapBackgroundColor = freezed,Object? keyBackgroundColor = freezed,Object? keypadBackgroundColor = freezed,Object? keypadActiveBackgroundColor = freezed,}) {
-  return _then(CallActionsWidgetConfig(
-callStartBackgroundColor: freezed == callStartBackgroundColor ? _self.callStartBackgroundColor : callStartBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,hangupBackgroundColor: freezed == hangupBackgroundColor ? _self.hangupBackgroundColor : hangupBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,transferBackgroundColor: freezed == transferBackgroundColor ? _self.transferBackgroundColor : transferBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,cameraBackgroundColor: freezed == cameraBackgroundColor ? _self.cameraBackgroundColor : cameraBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,cameraActiveBackgroundColor: freezed == cameraActiveBackgroundColor ? _self.cameraActiveBackgroundColor : cameraActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,mutedBackgroundColor: freezed == mutedBackgroundColor ? _self.mutedBackgroundColor : mutedBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,mutedActiveBackgroundColor: freezed == mutedActiveBackgroundColor ? _self.mutedActiveBackgroundColor : mutedActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,speakerBackgroundColor: freezed == speakerBackgroundColor ? _self.speakerBackgroundColor : speakerBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,speakerActiveBackgroundColor: freezed == speakerActiveBackgroundColor ? _self.speakerActiveBackgroundColor : speakerActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,heldBackgroundColor: freezed == heldBackgroundColor ? _self.heldBackgroundColor : heldBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,heldActiveBackgroundColor: freezed == heldActiveBackgroundColor ? _self.heldActiveBackgroundColor : heldActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,swapBackgroundColor: freezed == swapBackgroundColor ? _self.swapBackgroundColor : swapBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,keyBackgroundColor: freezed == keyBackgroundColor ? _self.keyBackgroundColor : keyBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,keypadBackgroundColor: freezed == keypadBackgroundColor ? _self.keypadBackgroundColor : keypadBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,keypadActiveBackgroundColor: freezed == keypadActiveBackgroundColor ? _self.keypadActiveBackgroundColor : keypadActiveBackgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [CallActionsWidgetConfig].
-extension CallActionsWidgetConfigPatterns on CallActionsWidgetConfig {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
