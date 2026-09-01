@@ -84,13 +84,22 @@ class AppBarStatusesScreenshot extends StatelessWidget {
   }
 }
 
-/// The bar's colour pushed a fifth of the way towards the far end of the theme, so the
-/// bar keeps its own colour and still has an edge against what is behind it.
+/// The colour the bar actually ends up painting, with its transparency resolved.
+///
+/// The bar is frosted in most themes, so its configured colour carries an alpha: used
+/// as it is, it would tint whatever is behind it instead of standing on it.
+Color _barColor(ThemeData theme) {
+  final configured = theme.appBarTheme.backgroundColor ?? theme.colorScheme.surface;
+
+  return Color.alphaBlend(configured, theme.colorScheme.surface);
+}
+
+/// That colour pushed a fifth of the way towards the far end of the theme, so the bar
+/// keeps its own colour and still has an edge against what is behind it.
 Color _pageColor(ThemeData theme) {
-  final barColor = theme.appBarTheme.backgroundColor ?? theme.colorScheme.surface;
   final towards = theme.brightness == Brightness.light ? Colors.black : Colors.white;
 
-  return Color.alphaBlend(towards.withValues(alpha: 0.2), barColor);
+  return Color.alphaBlend(towards.withValues(alpha: 0.2), _barColor(theme));
 }
 
 class _Case {
@@ -174,7 +183,12 @@ class _Row extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: SizedBox(height: bar.preferredSize.height, child: bar),
+                    // Painted under the bar, because the bar itself is frosted: without
+                    // something opaque behind it, it would take the colour of the page.
+                    child: ColoredBox(
+                      color: _barColor(theme),
+                      child: SizedBox(height: bar.preferredSize.height, child: bar),
+                    ),
                   ),
                 );
               },
