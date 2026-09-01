@@ -1200,6 +1200,7 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
       } else {
         final remoteDescription = jsep.toDescription();
         sdpSanitizer?.apply(remoteDescription);
+        _logger.infoPretty(remoteDescription.sdp, tag: '__onCallSignalingEventProgress remoteDescription');
         try {
           await peerConnection.setRemoteDescription(remoteDescription);
           emit(state.copyWithMappedActiveCall(event.callId, (call) => call.copyWith(earlyMedia: true)));
@@ -2259,10 +2260,13 @@ class CallBloc extends Bloc<CallEvent, CallState> with WidgetsBindingObserver im
 
       final remoteDescription = offer.toDescription();
       sdpSanitizer?.apply(remoteDescription);
+      _logger.infoPretty(remoteDescription.sdp, tag: '__onMutationPerformAnswer remoteDescription');
       await peerConnection.setRemoteDescription(remoteDescription);
       _logger.info('__onMutationPerformAnswer: remoteDescription set');
+
       final localDescription = await peerConnection.createAnswer({});
       sdpMunger?.apply(localDescription);
+      _logger.infoPretty(localDescription.sdp, tag: '__onMutationPerformAnswer localDescription');
 
       // According to RFC 8829 5.6 (https://datatracker.ietf.org/doc/html/rfc8829#section-5.6),
       // localDescription should be set before sending the answer to transition into stable state.
