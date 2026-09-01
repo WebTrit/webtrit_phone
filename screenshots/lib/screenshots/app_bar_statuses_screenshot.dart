@@ -66,7 +66,13 @@ class AppBarStatusesScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
+      // Taken from the bar's own colour rather than from a colour role: the roles a page
+      // would normally use land within a shade of the bar in this theme, and a bar that
+      // cannot be told from the page behind it is the one thing this page must not do.
+      backgroundColor: _pageColor(theme),
       body: SafeArea(
         child: ListView.builder(
           padding: const EdgeInsets.only(bottom: 24),
@@ -76,6 +82,15 @@ class AppBarStatusesScreenshot extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The bar's colour pushed a fifth of the way towards the far end of the theme, so the
+/// bar keeps its own colour and still has an edge against what is behind it.
+Color _pageColor(ThemeData theme) {
+  final barColor = theme.appBarTheme.backgroundColor ?? theme.colorScheme.surface;
+  final towards = theme.brightness == Brightness.light ? Colors.black : Colors.white;
+
+  return Color.alphaBlend(towards.withValues(alpha: 0.2), barColor);
 }
 
 class _Case {
@@ -153,17 +168,14 @@ class _Row extends StatelessWidget {
                 // for and nothing under it - the page is a list of bars, not of screens.
                 final bar = MainAppBar(title: Text(EnvironmentConfig.APP_NAME), context: context);
 
-                // Outlined, because a bar drawn on a page the colour of a bar has no
-                // visible edge: the frame is what says where the caption ends and the
-                // thing being looked at begins.
-                return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: theme.colorScheme.outlineVariant),
-                    borderRadius: BorderRadius.circular(8),
+                // The bar and nothing else, on a page tinted away from it: no frame, no
+                // strip of body under it - both read as something the bar carries.
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(height: bar.preferredSize.height, child: bar),
                   ),
-                  clipBehavior: Clip.antiAlias,
-                  child: SizedBox(height: bar.preferredSize.height, child: bar),
                 );
               },
             ),
