@@ -66,19 +66,9 @@ class ThemeStyleFactoryProvider {
     final groupTitleListTile = widgetConfig.group?.groupTitleListTile;
     final linkify = widgetConfig.text.linkify;
 
-    // Built once, and handed to the one thing that reads it. It used to be
-    // put on the theme as well - twice, by two instances of this type, so the
-    // second replaced the first and neither was ever asked for.
-    final textButtonStyle = TextButtonStyleFactory(colorScheme).create();
-
     // Specific widget styles
     final appIconStylesProvider = AppIconStyleFactory(colorScheme, appIconConfig);
-    final confirmDialogStylesProvider = ConfirmDialogStyleFactory(
-      colorScheme,
-      textButtonStyle,
-      confirmDialog,
-      defaultFontFamily,
-    );
+    final confirmDialogStylesProvider = ConfirmDialogStyleFactory(colorScheme, confirmDialog, defaultFontFamily);
     final inputDecorationStyleFactory = InputDecorationStyleFactory(colorScheme);
     final callStatusStyleFactory = CallStatusStyleFactory(colorScheme, callStatuses);
     final elevatedButtonStyleFactory = ElevatedButtonStyleFactory(colorScheme, elevatedButton, defaultFontFamily);
