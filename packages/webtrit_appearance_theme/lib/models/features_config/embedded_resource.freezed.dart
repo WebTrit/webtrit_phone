@@ -46,7 +46,7 @@ abstract mixin class $EmbeddedResourceCopyWith<$Res>  {
   factory $EmbeddedResourceCopyWith(EmbeddedResource value, $Res Function(EmbeddedResource) _then) = _$EmbeddedResourceCopyWithImpl;
 @useResult
 $Res call({
-@IntToStringConverter() String id, String uri, EmbeddedResourceType type, Map<String, dynamic> attributes, ToolbarConfig toolbar, Metadata metadata, List<String> payload, bool enableConsoleLogCapture, String? reconnectStrategy
+ String id, String uri, EmbeddedResourceType type, Map<String, dynamic> attributes, ToolbarConfig toolbar, Metadata metadata, List<String> payload, bool enableConsoleLogCapture, String? reconnectStrategy
 });
 
 

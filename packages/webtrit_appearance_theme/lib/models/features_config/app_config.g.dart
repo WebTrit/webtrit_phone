@@ -467,9 +467,7 @@ AppConfigSettingsItem _$AppConfigSettingsItemFromJson(
   type: json['type'] as String,
   icon: json['icon'] as String,
   iconColor: json['iconColor'] as String?,
-  embeddedResourceId: const IntToStringOptionalConverter().fromJson(
-    json['embeddedResourceId'],
-  ),
+  embeddedResourceId: json['embeddedResourceId'] as String?,
 );
 
 Map<String, dynamic> _$AppConfigSettingsItemToJson(
@@ -480,9 +478,7 @@ Map<String, dynamic> _$AppConfigSettingsItemToJson(
   'type': instance.type,
   'icon': instance.icon,
   'iconColor': instance.iconColor,
-  'embeddedResourceId': const IntToStringOptionalConverter().toJson(
-    instance.embeddedResourceId,
-  ),
+  'embeddedResourceId': instance.embeddedResourceId,
 };
 
 AppConfigContacts _$AppConfigContactsFromJson(Map<String, dynamic> json) =>
@@ -745,9 +741,7 @@ EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      embeddedResourceId: const IntToStringConverter().fromJson(
-        json['embeddedResourceId'],
-      ),
+      embeddedResourceId: json['embeddedResourceId'] as String,
       type: json['type'] as String? ?? 'embedded',
     );
 
@@ -757,8 +751,6 @@ Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'embeddedResourceId': const IntToStringConverter().toJson(
-        instance.embeddedResourceId,
-      ),
+      'embeddedResourceId': instance.embeddedResourceId,
       'type': instance.type,
     };

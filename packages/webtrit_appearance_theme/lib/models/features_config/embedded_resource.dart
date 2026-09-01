@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../converters/converters.dart';
 import 'embedded_resource_type.dart';
 import 'metadata.dart';
 
@@ -24,9 +23,7 @@ part 'embedded_resource.g.dart';
 class EmbeddedResource with _$EmbeddedResource {
   /// Creates an [EmbeddedResource].
   const EmbeddedResource({
-    /// TODO: Migration workaround — accepts both int and string IDs.
-    /// Remove [IntToStringConverter] once all JSONs use string IDs only.
-    @IntToStringConverter() required this.id,
+    required this.id,
     required this.uri,
     this.type = EmbeddedResourceType.unknown,
     this.attributes = const {},
@@ -45,7 +42,6 @@ class EmbeddedResource with _$EmbeddedResource {
 
   /// Unique identifier for this resource.
   @override
-  @IntToStringConverter()
   final String id;
 
   /// The URI that points to the embedded resource.
