@@ -766,26 +766,64 @@ class TabBarConfig with _$TabBarConfig {
 /// describe the overall [ThemeData.appBarTheme]. Properties are null by default,
 /// allowing the [AppBar] constructor to provide its own defaults.
 @freezed
-abstract class AppBarConfig with _$AppBarConfig {
-  const factory AppBarConfig({
-    @Default(true) bool primary,
-    @Default(true) bool showBackButton,
-    String? backgroundColor,
-    String? foregroundColor,
-    String? shadowColor,
-    String? surfaceTintColor,
-    double? elevation,
-    double? scrolledUnderElevation,
-    double? titleSpacing,
-    double? leadingWidth,
-    double? toolbarHeight,
-    bool? centerTitle,
-    IconThemeDataConfig? iconTheme,
-    IconThemeDataConfig? actionsIconTheme,
-    TextStyleConfig? titleTextStyle,
-    TextStyleConfig? toolbarTextStyle,
-    OverlayStyleModel? systemOverlayStyle,
-  }) = _AppBarConfig;
+@JsonSerializable(explicitToJson: true)
+class AppBarConfig with _$AppBarConfig {
+  const AppBarConfig({
+    this.primary = true,
+    this.showBackButton = true,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.shadowColor,
+    this.surfaceTintColor,
+    this.elevation,
+    this.scrolledUnderElevation,
+    this.titleSpacing,
+    this.leadingWidth,
+    this.toolbarHeight,
+    this.centerTitle,
+    this.iconTheme,
+    this.actionsIconTheme,
+    this.titleTextStyle,
+    this.toolbarTextStyle,
+    this.systemOverlayStyle,
+  });
+
+  @override
+  final bool primary;
+  @override
+  final bool showBackButton;
+  @override
+  final String? backgroundColor;
+  @override
+  final String? foregroundColor;
+  @override
+  final String? shadowColor;
+  @override
+  final String? surfaceTintColor;
+  @override
+  final double? elevation;
+  @override
+  final double? scrolledUnderElevation;
+  @override
+  final double? titleSpacing;
+  @override
+  final double? leadingWidth;
+  @override
+  final double? toolbarHeight;
+  @override
+  final bool? centerTitle;
+  @override
+  final IconThemeDataConfig? iconTheme;
+  @override
+  final IconThemeDataConfig? actionsIconTheme;
+  @override
+  final TextStyleConfig? titleTextStyle;
+  @override
+  final TextStyleConfig? toolbarTextStyle;
+  @override
+  final OverlayStyleModel? systemOverlayStyle;
 
   factory AppBarConfig.fromJson(Map<String, Object?> json) => _$AppBarConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppBarConfigToJson(this);
 }

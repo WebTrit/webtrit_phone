@@ -15,18 +15,13 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BlurredSurfaceConfig {
 
-/// Overlay color (hex string, e.g. `#000000`).
- String? get color;/// Horizontal gaussian blur sigma.
- double? get sigmaX;/// Vertical gaussian blur sigma.
- double? get sigmaY;
+ String? get color; double? get sigmaX; double? get sigmaY;
 /// Create a copy of BlurredSurfaceConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $BlurredSurfaceConfigCopyWith<BlurredSurfaceConfig> get copyWith => _$BlurredSurfaceConfigCopyWithImpl<BlurredSurfaceConfig>(this as BlurredSurfaceConfig, _$identity);
 
-  /// Serializes this BlurredSurfaceConfig to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -69,7 +64,7 @@ class _$BlurredSurfaceConfigCopyWithImpl<$Res>
 /// Create a copy of BlurredSurfaceConfig
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? color = freezed,Object? sigmaX = freezed,Object? sigmaY = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(BlurredSurfaceConfig(
 color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as String?,sigmaX: freezed == sigmaX ? _self.sigmaX : sigmaX // ignore: cast_nullable_to_non_nullable
 as double?,sigmaY: freezed == sigmaY ? _self.sigmaY : sigmaY // ignore: cast_nullable_to_non_nullable
@@ -94,11 +89,10 @@ extension BlurredSurfaceConfigPatterns on BlurredSurfaceConfig {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _BlurredSurfaceConfig value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _BlurredSurfaceConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return orElse();
 
 }
@@ -116,11 +110,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _BlurredSurfaceConfig value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _BlurredSurfaceConfig():
-return $default(_that);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -137,11 +130,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _BlurredSurfaceConfig value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _BlurredSurfaceConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return null;
 
 }
@@ -158,10 +150,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? color,  double? sigmaX,  double? sigmaY)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _BlurredSurfaceConfig() when $default != null:
-return $default(_that.color,_that.sigmaX,_that.sigmaY);case _:
+case _:
   return orElse();
 
 }
@@ -179,10 +170,9 @@ return $default(_that.color,_that.sigmaX,_that.sigmaY);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? color,  double? sigmaX,  double? sigmaY)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _BlurredSurfaceConfig():
-return $default(_that.color,_that.sigmaX,_that.sigmaY);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,90 +189,13 @@ return $default(_that.color,_that.sigmaX,_that.sigmaY);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? color,  double? sigmaX,  double? sigmaY)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _BlurredSurfaceConfig() when $default != null:
-return $default(_that.color,_that.sigmaX,_that.sigmaY);case _:
+case _:
   return null;
 
 }
 }
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _BlurredSurfaceConfig implements BlurredSurfaceConfig {
-  const _BlurredSurfaceConfig({this.color, this.sigmaX, this.sigmaY});
-  factory _BlurredSurfaceConfig.fromJson(Map<String, dynamic> json) => _$BlurredSurfaceConfigFromJson(json);
-
-/// Overlay color (hex string, e.g. `#000000`).
-@override final  String? color;
-/// Horizontal gaussian blur sigma.
-@override final  double? sigmaX;
-/// Vertical gaussian blur sigma.
-@override final  double? sigmaY;
-
-/// Create a copy of BlurredSurfaceConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$BlurredSurfaceConfigCopyWith<_BlurredSurfaceConfig> get copyWith => __$BlurredSurfaceConfigCopyWithImpl<_BlurredSurfaceConfig>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$BlurredSurfaceConfigToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BlurredSurfaceConfig&&(identical(other.color, color) || other.color == color)&&(identical(other.sigmaX, sigmaX) || other.sigmaX == sigmaX)&&(identical(other.sigmaY, sigmaY) || other.sigmaY == sigmaY));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,color,sigmaX,sigmaY);
-
-@override
-String toString() {
-  return 'BlurredSurfaceConfig(color: $color, sigmaX: $sigmaX, sigmaY: $sigmaY)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$BlurredSurfaceConfigCopyWith<$Res> implements $BlurredSurfaceConfigCopyWith<$Res> {
-  factory _$BlurredSurfaceConfigCopyWith(_BlurredSurfaceConfig value, $Res Function(_BlurredSurfaceConfig) _then) = __$BlurredSurfaceConfigCopyWithImpl;
-@override @useResult
-$Res call({
- String? color, double? sigmaX, double? sigmaY
-});
-
-
-
-
-}
-/// @nodoc
-class __$BlurredSurfaceConfigCopyWithImpl<$Res>
-    implements _$BlurredSurfaceConfigCopyWith<$Res> {
-  __$BlurredSurfaceConfigCopyWithImpl(this._self, this._then);
-
-  final _BlurredSurfaceConfig _self;
-  final $Res Function(_BlurredSurfaceConfig) _then;
-
-/// Create a copy of BlurredSurfaceConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? color = freezed,Object? sigmaX = freezed,Object? sigmaY = freezed,}) {
-  return _then(_BlurredSurfaceConfig(
-color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
-as String?,sigmaX: freezed == sigmaX ? _self.sigmaX : sigmaX // ignore: cast_nullable_to_non_nullable
-as double?,sigmaY: freezed == sigmaY ? _self.sigmaY : sigmaY // ignore: cast_nullable_to_non_nullable
-as double?,
-  ));
-}
-
 
 }
 
