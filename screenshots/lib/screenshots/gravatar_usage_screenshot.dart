@@ -11,6 +11,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'package:screenshots/data/data.dart';
 import 'package:screenshots/mocks/mocks.dart';
+import 'package:screenshots/widgets/widgets.dart';
 
 /// Where a Gravatar photo is drawn in the app, in the widget that draws it.
 ///
@@ -52,73 +53,74 @@ class GravatarUsageScreenshot extends StatelessWidget {
     final callRadius = (MediaQuery.sizeOf(context).shortestSide * 0.30).clamp(24.0, 150.0);
 
     return Scaffold(
-      backgroundColor: Color.alphaBlend(
-        (theme.brightness == Brightness.light ? Colors.black : Colors.white).withValues(alpha: 0.2),
-        theme.appBarTheme.backgroundColor ?? theme.colorScheme.surface,
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.only(bottom: 32),
-          children: [
-            _Usage(
-              what: 'a list row',
-              where: 'recent_tile.dart, contact_tile.dart, favorite_tile.dart, cdr_tile.dart',
-              radius: 20,
-              devicePixelRatio: devicePixelRatio,
-              child: RecentTile(recent: _recent, callNumbers: const ['1234'], dateFormat: DateFormat.Hm()),
-            ),
-            _Usage(
-              what: 'the account button in the app bar',
-              where: 'main_app_bar.dart',
-              radius: 20,
-              devicePixelRatio: devicePixelRatio,
-              child: const _AppBar(),
-            ),
-            _Usage(
-              what: 'the minimized call window, over its shimmer',
-              where: 'call_active_thumbnail.dart',
-              radius: 37,
-              devicePixelRatio: devicePixelRatio,
-              background: theme.colorScheme.surfaceContainerHighest,
-              child: Center(
-                child: CallActiveThumbnail(
-                  activeCall: dAudioActiveCall,
-                  orientation: Orientation.portrait,
-                  contactResolver: _FixedContactResolver(_contact),
+      // The same backdrop the status page stands on, for the same reason: these widgets
+      // are frosted or drawn over video, and a plain page hides that.
+      backgroundColor: Colors.transparent,
+      body: MockupBackdrop(
+        child: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.only(bottom: 32),
+            children: [
+              _Usage(
+                what: 'a list row',
+                where: 'recent_tile.dart, contact_tile.dart, favorite_tile.dart, cdr_tile.dart',
+                radius: 20,
+                devicePixelRatio: devicePixelRatio,
+                child: RecentTile(recent: _recent, callNumbers: const ['1234'], dateFormat: DateFormat.Hm()),
+              ),
+              _Usage(
+                what: 'the account button in the app bar',
+                where: 'main_app_bar.dart',
+                radius: 20,
+                devicePixelRatio: devicePixelRatio,
+                child: const _AppBar(),
+              ),
+              _Usage(
+                what: 'the minimized call window, over its shimmer',
+                where: 'call_active_thumbnail.dart',
+                radius: 37,
+                devicePixelRatio: devicePixelRatio,
+                background: theme.colorScheme.surfaceContainerHighest,
+                child: Center(
+                  child: CallActiveThumbnail(
+                    activeCall: dAudioActiveCall,
+                    orientation: Orientation.portrait,
+                    contactResolver: _FixedContactResolver(_contact),
+                  ),
                 ),
               ),
-            ),
-            _Usage(
-              what: 'the call screen, where the video would be',
-              where: 'call_controls.dart - 30% of the shortest side',
-              radius: callRadius,
-              devicePixelRatio: devicePixelRatio,
-              background: theme.colorScheme.surfaceContainerHighest,
-              child: Center(
-                child: CallRemoteAvatar(
-                  activeCall: dAudioActiveCall,
-                  radius: callRadius,
-                  contactResolver: _FixedContactResolver(_contact),
+              _Usage(
+                what: 'the call screen, where the video would be',
+                where: 'call_controls.dart - 30% of the shortest side',
+                radius: callRadius,
+                devicePixelRatio: devicePixelRatio,
+                background: theme.colorScheme.surfaceContainerHighest,
+                child: Center(
+                  child: CallRemoteAvatar(
+                    activeCall: dAudioActiveCall,
+                    radius: callRadius,
+                    contactResolver: _FixedContactResolver(_contact),
+                  ),
                 ),
               ),
-            ),
-            _Usage(
-              what: 'a screen header',
-              where: 'contact_screen.dart, call_log_screen.dart, number_cdrs_screen.dart',
-              radius: 50,
-              devicePixelRatio: devicePixelRatio,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Column(
-                  children: [
-                    LeadingAvatar(username: _contact.displayTitle, thumbnailUrl: _contact.thumbnailUrl, radius: 50),
-                    const SizedBox(height: 12),
-                    Text(_contact.displayTitle, style: theme.textTheme.headlineSmall),
-                  ],
+              _Usage(
+                what: 'a screen header',
+                where: 'contact_screen.dart, call_log_screen.dart, number_cdrs_screen.dart',
+                radius: 50,
+                devicePixelRatio: devicePixelRatio,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Column(
+                    children: [
+                      LeadingAvatar(username: _contact.displayTitle, thumbnailUrl: _contact.thumbnailUrl, radius: 50),
+                      const SizedBox(height: 12),
+                      Text(_contact.displayTitle, style: theme.textTheme.headlineSmall),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

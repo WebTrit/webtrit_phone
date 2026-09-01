@@ -9,6 +9,7 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'package:screenshots/data/data.dart';
 import 'package:screenshots/mocks/mocks.dart';
+import 'package:screenshots/widgets/widgets.dart';
 
 /// Every state the main app bar can be in, one under another.
 ///
@@ -66,18 +67,17 @@ class AppBarStatusesScreenshot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
-      // Taken from the bar's own colour rather than from a colour role: the roles a page
-      // would normally use land within a shade of the bar in this theme, and a bar that
-      // cannot be told from the page behind it is the one thing this page must not do.
-      backgroundColor: _pageColor(theme),
-      body: SafeArea(
-        child: ListView.builder(
-          padding: const EdgeInsets.only(bottom: 24),
-          itemCount: _cases.length,
-          itemBuilder: (context, index) => _Row(theCase: _cases[index]),
+      // Transparent, because the page stands on the checkerboard: a bar that cannot be
+      // told from what is behind it is the one thing this page must not do.
+      backgroundColor: Colors.transparent,
+      body: MockupBackdrop(
+        child: SafeArea(
+          child: ListView.builder(
+            padding: const EdgeInsets.only(bottom: 24),
+            itemCount: _cases.length,
+            itemBuilder: (context, index) => _Row(theCase: _cases[index]),
+          ),
         ),
       ),
     );
@@ -92,14 +92,6 @@ Color _barColor(ThemeData theme) {
   final configured = theme.appBarTheme.backgroundColor ?? theme.colorScheme.surface;
 
   return Color.alphaBlend(configured, theme.colorScheme.surface);
-}
-
-/// That colour pushed a fifth of the way towards the far end of the theme, so the bar
-/// keeps its own colour and still has an edge against what is behind it.
-Color _pageColor(ThemeData theme) {
-  final towards = theme.brightness == Brightness.light ? Colors.black : Colors.white;
-
-  return Color.alphaBlend(towards.withValues(alpha: 0.2), _barColor(theme));
 }
 
 class _Case {
