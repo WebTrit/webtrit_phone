@@ -28,7 +28,15 @@ void main() {
   });
 
   test('toString', () {
-    expect(CoreInfo(version: Version(0, 1, 0)).toString(), equals('CoreInfo(0.1.0)'));
+    expect(CoreInfo(version: Version(0, 1, 0)).toString(), equals('CoreInfo(0.1.0, false)'));
+    expect(CoreInfo(version: Version(0, 1, 0), iceServersConfigured: true).toString(), equals('CoreInfo(0.1.0, true)'));
+  });
+
+  test('iceServersConfigured participates in equality', () {
+    expect(
+      CoreInfo(version: Version(0, 1, 0), iceServersConfigured: true) == CoreInfo(version: Version(0, 1, 0)),
+      false,
+    );
   });
 
   test('supportsPeerMessage', () {

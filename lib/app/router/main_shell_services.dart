@@ -65,6 +65,9 @@ class MainShellServices extends StatelessWidget {
   /// - [SystemInfoRepository]: polled every 5 minutes to refresh system information.
   /// - [VoicemailRepository]: polled every 5 minutes, but only if voicemail runs for this session
   ///   ([FeatureAccess.voicemailAvailable]) - whichever placement offers it.
+  /// - [IceServersRepository]: polled every 5 minutes when the core bundles STUN/TURN servers.
+  ///   The tick is a noop until the cached configuration approaches its expiration, so its only
+  ///   job is to renew short-lived TURN credentials inside a long-running session.
   ///
   /// This method centralizes the polling configuration, so changes in polling logic or intervals
   /// can be made here without touching the [Provider] or [PollingService] setup.
@@ -75,6 +78,7 @@ class MainShellServices extends StatelessWidget {
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
     final favoritesRepository = context.read<FavoritesRepository>();
     final sipSubscriptionsRepository = context.read<SipSubscriptionsRepository>();
+    final iceServersRepository = context.read<IceServersRepository>();
 
     return [
       PollingRegistration(
@@ -109,6 +113,11 @@ class MainShellServices extends StatelessWidget {
         PollingRegistration(
           listener: sipSubscriptionsRepository,
           interval: Duration(seconds: EnvironmentConfig.SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+        ),
+      if (iceServersRepository is IceServersRepositoryImpl)
+        PollingRegistration(
+          listener: iceServersRepository,
+          interval: Duration(seconds: EnvironmentConfig.ICE_SERVERS_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
     ];
   }

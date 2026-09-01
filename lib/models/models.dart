@@ -26,6 +26,7 @@ export 'failures/failures.dart';
 export 'favorite.dart';
 export 'favorite_outbox_action.dart';
 export 'feature_access/feature_access.dart';
+export 'ice_servers_config.dart';
 export 'ice_settings.dart';
 export 'incoming_call_type.dart';
 export 'integration/integration.dart';

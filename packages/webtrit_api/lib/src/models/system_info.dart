@@ -57,11 +57,17 @@ class SystemInfo with _$SystemInfo {
 @freezed
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class CoreInfo with _$CoreInfo {
-  const CoreInfo({@VersionConverter() required this.version});
+  const CoreInfo({@VersionConverter() required this.version, this.iceServersConfigured});
 
   @override
   @VersionConverter()
   final Version version;
+
+  /// Whether the deployment bundles its own STUN/TURN servers, served by
+  /// `GET /api/v1/user/ice-servers` (JSON key `ice_servers_configured`).
+  /// `null` = the core does not report the capability, i.e. it has none.
+  @override
+  final bool? iceServersConfigured;
 
   factory CoreInfo.fromJson(Map<String, Object?> json) => _$CoreInfoFromJson(json);
 

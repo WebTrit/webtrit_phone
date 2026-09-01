@@ -193,6 +193,20 @@ class MainShellRepositories extends StatelessWidget {
             }
           },
         ),
+        RepositoryProvider<IceServersRepository>(
+          create: (context) {
+            // Only a core that bundles STUN/TURN servers has a configuration to
+            // serve; every other deployment keeps the public STUN fallback,
+            // which the empty implementation returns without a request.
+            if (!featureAccess.coreSupport.supportsBundledIceServers) return const EmptyIceServersRepository();
+
+            return IceServersRepositoryImpl(
+              webtritApiClient: context.read<WebtritApiClient>(),
+              token: context.read<AppBloc>().state.session.token!,
+            );
+          },
+          dispose: disposeIfDisposable,
+        ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
             webtritApiClient: context.read<WebtritApiClient>(),
