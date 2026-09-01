@@ -36,20 +36,19 @@ redirecting factories, a `fromJson` that switches on `type`, and the getters com
 variant; each variant declares its own `type` with its value as the default, and a
 `static const jsonSchema = _$<Variant>JsonSchema;` (the generated constant is private to its
 library, so nothing outside the file can reach it otherwise). The reason for the shape is the
-schema: a freezed union's variants are classes freezed writes, and the generator, which reads
-fields off source classes, saw none - union and variants alike came out empty. Adding a variant
-means two adjacent things in the one file: a redirecting factory and a `fromJson` branch. Which
-classes the union is made of is read off the source by the builder, so the schema follows on its
-own, and `test/union_schema_test.dart` checks both directions of the result.
+schema: a freezed union's variants are classes freezed writes, so there is no source class
+declaring the fields a variant holds. Adding one is two adjacent things in the same file - see
+[Recipes](#recipes).
 
 Custom JSON converters in `lib/converters/`:
 
 - `UriConverter` — `Uri` to and from its string form
 
-Keep the list short. A converter makes the schema lie: json_serializable describes the field by
-its Dart type, not by the JSON the converter reads and writes, so a field that needs one is a
-field a validator will get wrong. Prefer a type that serialises as itself - which is why
-`IconDataConfig.codePoint` is a `String` and `embeddedResourceId` is a `String`.
+Do not add another - it is one of the [rules](#rules-for-extending-the-contract), and the tests
+enforce it. A converter makes a field's Dart type differ from what the JSON carries, and the
+schema describes the Dart type, so a converted field is published as something no document
+contains. That is why `IconDataConfig.codePoint` is a `String` and `embeddedResourceId` is a
+`String`.
 
 ## Adding a New DTO Property
 
@@ -59,8 +58,12 @@ field a validator will get wrong. Prefer a type that serialises as itself - whic
 4. Update bridge mapping in `lib/theme/` of the parent project.
 5. Consume via `Theme.of(context).extension<T>()` in widgets.
 
-A brand-new **root** type takes one more step - expose its schema, see
-[Exposing a new schema root](#exposing-a-new-schema-root).
+A brand-new **root** type takes two more lines - see [Recipes](#recipes).
+
+Nothing above needs you to remember what the schema can and cannot describe: the shapes that
+break it are listed under [Rules for extending the contract](#rules-for-extending-the-contract),
+and `dart test` names the rule you broke and what to write instead. Worked examples are in
+[Recipes](#recipes).
 
 ## Constraints
 
@@ -71,151 +74,178 @@ A brand-new **root** type takes one more step - expose its schema, see
 
 ## JSON Schema
 
-Every root type exposes the JSON Schema (draft 2020-12) of its JSON contract:
+Every root type publishes the JSON Schema (draft 2020-12) of its JSON. It is not a by-product:
+it is what a configurator generates a form from, and what validates a theme document before the
+app is asked to parse it. Two guarantees hold and are tested:
 
-```dart
-const encoder = JsonEncoder.withIndent('  ');
-print(encoder.convert(ThemeSettings.jsonSchema));   // also AppConfig, EmbeddedResource
-```
+- **complete** - every JSON key the generated `toJson` writes appears in the schema (610 keys
+  across 132 types);
+- **true of the app's own documents** - `test/theme/shipped_theme_validates_test.dart` in the
+  parent project runs a real JSON Schema validator over every file in `assets/themes/`, and they
+  pass with no errors.
 
-From the CLI - inside the package, or from anywhere that depends on it (the app root, for
-instance), which is how a schema file is obtained without touching Dart code:
+### Getting one out
 
 ```bash
-dart run bin/print_json_schema.dart                        # inside the package
-dart run webtrit_appearance_theme:print_json_schema        # from a dependent package
+dart run bin/print_json_schema.dart                         # inside the package
+dart run webtrit_appearance_theme:print_json_schema          # from a dependent package
+dart run webtrit_appearance_theme:print_json_schema --list    # available roots
 dart run webtrit_appearance_theme:print_json_schema AppConfig --out app_config.schema.json
-dart run webtrit_appearance_theme:print_json_schema --list # available roots
 ```
 
-`pubspec.yaml` also maps it as the `webtrit_theme_schema` executable, so
-`dart pub global activate` exposes it under that name.
+Roots are `ThemeSettings`, `AppConfig` and `EmbeddedResource`. A nested type is not a root: it
+already appears in a root's `$defs` and is addressable as `#/$defs/<Type>` - which is how the
+theme fragments in `assets/themes/` are validated. `pubspec.yaml` also maps the CLI as the
+`webtrit_theme_schema` executable for `dart pub global activate`. Write exports to a gitignored
+directory; `*.schema.json` is ignored repo-wide.
 
-The schemas come from json_serializable's `create_json_schema` option, enabled for the
-whole package in `build.yaml`; each `_$<Type>JsonSchema` constant lands in the matching
-`.g.dart` and a `jsonSchema` static re-exports it (the constant itself is private to its
-library). They are regenerated by `build_runner`, so no extra step after a model change.
-A root re-exports through `assembleUnions` and `assembleEnums`, which is why its `jsonSchema`
-is `static final` rather than `static const`.
+In Dart:
 
-### Exposing a new schema root
+```dart
+print(const JsonEncoder.withIndent('  ').convert(ThemeSettings.jsonSchema));
+```
 
-`build_runner` writes a `_$<Type>JsonSchema` constant next to `_$<Type>FromJson` for every
-annotated class, but that constant is **private to its library** - nothing outside the file
-can read it. A type that callers must validate or generate against is therefore not done
-until both lines exist:
+### How it is put together
 
-1. in the class, right above its `fromJson` factory:
-
-   ```dart
-   /// JSON Schema (draft 2020-12) of the <what> contract, generated by
-   /// json_serializable's `create_json_schema` option, with what the generator
-   /// cannot describe assembled in.
-   static final Map<String, Object?> jsonSchema = assembleNullability(
-     assembleEnums(assembleUnions(_$<Type>JsonSchema, unionVariants), '<Type>', enumProperties),
-     '<Type>',
-     nullableProperties,
-   );
-   ```
-
-   The three wrappers are independent and each skips what the root does not reach, so a root can
-   take all of them whether or not it has a union or an enum below it. Only a root with none of the
-   three could stay `static const`, and there is no such root.
-
-2. an entry in `_roots` of `bin/print_json_schema.dart`, so the CLI can print it.
-
-Do this for roots only - a document somebody actually feeds to the app (`ThemeSettings`,
-`AppConfig`, `EmbeddedResource`). Nested config types need nothing: they already appear in
-the root's `$defs` and are addressable as `#/$defs/<Type>`.
-
-**What the contract has to look like for this to work.** The schema comes from the released
-json_serializable with nothing patched and nothing overridden, and it stays that way only because
-the contract is shaped to suit it. Four rules follow from one fact - the generator reads **fields
-off the source class**, and has no notion of a union or an enum - and each is a shape you could
-reintroduce without noticing. The tests named against them are what keep the schema honest:
-
-- **no non-empty collection default.** One crashes the generator outright, killing generation for
-  the whole library - `fromJson`/`toJson` included, not only the schema. Defaults for a collection
-  are resolved when read (`modeSelectActions`, `qrFormats`, `signinOrderOrDefault`,
-  `settingsSections`).
-- **state on the class, not on a generated impl.** A class in the freezed factory shape
-  (`const factory X(...) = _X`) declares no fields of its own, so it comes out as
-  `{"type": "object", "properties": {}}` - and nothing traverses it, so the types nested inside it
-  get no `$def` either.
-- **a union is a sealed base with an ordinary class per variant.** Its `oneOf` is assembled from
-  the classes that extend the base; `test/union_schema_test.dart` fails if a word the decoder
-  takes is not a variant the schema offers, or the other way round.
-- **an enum-typed property is described from the enum itself.** `test/enum_property_test.dart`
-  walks the published schema and fails on any property still described as a bare object, which is
-  what an enum nobody described looks like.
-
-Neither of the last two is kept by hand - see below.
-
-Both assemblies live in `lib/schema/union_assembly.dart` and run where a root exposes its
-`jsonSchema`, which is why that member is `static final` rather than `static const`.
-
-### Both tables are generated
-
-`lib/builder.dart` - a build-time library nothing imports at run time, declared and applied in
-this package's own `build.yaml` - runs as part of `build_runner` and writes two files into
-`lib/schema/`:
-
-| File | What it says |
+| Path | What it is |
 |---|---|
-| `enum_properties.g.dart` | which properties are enum-typed, the words each accepts, the one it defaults to |
-| `union_variants.g.dart` | which classes each union is made of |
-| `nullable_properties.g.dart` | which properties accept `null` |
+| `lib/models/**` | the DTOs. The schema is derived from these and nothing else |
+| `lib/builder.dart` | build-time only. Writes the three tables below, and holds `contractViolations` |
+| `lib/schema/enum_properties.g.dart` | generated: which properties are enum-typed, the words each accepts, its default |
+| `lib/schema/union_variants.g.dart` | generated: which classes each union is made of |
+| `lib/schema/nullable_properties.g.dart` | generated: which properties accept `null` |
+| `lib/schema/union_assembly.dart` | the three `assemble*` functions that use those tables |
+| `bin/print_json_schema.dart` | the CLI, with `_roots` |
+| `build.yaml` | declares and applies the builder. It does **not** enable the schema option |
 
-Adding an enum field, or a variant to a union, therefore takes no edit beyond the declaration
-itself. Both assemblies take the whole package's table and skip what the root does not reach, so
-all three roots are handed the same one.
+json_serializable writes a `_$<Type>JsonSchema` constant for a class whose annotation carries
+`createJsonSchema: true` - the three roots and the 16 union variants, the only ones whose
+constant anything reads. Asked for in `build.yaml` instead, it writes one for all 135 annotated
+classes, of which 116 are private to their library and read by nothing.
 
-The builder reads the source **syntactically**, parsed rather than resolved. Resolving would need
-each model library's `part` files, which do not exist until freezed and json_serializable have
-run, and those in turn need these tables to resolve the roots that import them - a cycle. Parsing
-has none, and the AST moves far less between analyzer majors than the element model does. The
-price is that a type counts as an enum, or as a variant, only within this package - which is
-where the contract lives. Anything missed surfaces as the empty object the two schema walks fail
-on.
+That constant is **private to its library**, so a `jsonSchema` member in the class is the only
+way anything outside the file can reach it. A root's wraps the constant in the three assemblies,
+which is why it is `static final` rather than `static const`.
 
-It sits in this package rather than in a generator package of its own because `build.yaml` names a
-builder by `package:` URI, so the file has to live under some `lib/`. Putting it here means
-`lib/builder.dart` imports dev dependencies, which `depend_on_referenced_packages` objects to -
-silenced at the top of that file, since the alternative is a pure-Dart contract package declaring
-an analyzer and a formatter as runtime dependencies of the app. Nothing imports `builder.dart`;
-`build.yaml` is the only thing that names it, and it must stay that way.
+What the assemblies add, because the generator will not:
 
-The published schema is complete: `ThemeSettings` 90 of 90 `$defs`, `AppConfig` 41 of 41,
-`EmbeddedResource` complete - no empty object anywhere except the two classes that genuinely have
-no fields.
+| Gap | What the generator publishes | What the assembly does |
+|---|---|---|
+| a sealed base declares no fields | an empty object, no variant reached | `oneOf` over the variant classes, their `$defs` lifted in |
+| no branch for an enum exists | a bare `{"type": "object"}` | the words it accepts and its default |
+| a discriminator is a plain `string` | a document matches several `oneOf` branches at once | pins it with `const`, taken from the `default` already there |
+| nullability is dropped | `{"type": "string"}` rejects an explicit `null` | widens to `["string", "null"]`, or an `anyOf` for a `$ref` |
 
-`create_json_schema` is asked for **per class**, with `createJsonSchema: true` on the annotation of
-the three roots and the 16 union variants - the only ones whose constant anything reads. Enabled
-for the whole package instead, it writes a constant for all 135 annotated classes, of which 116
-are private to their library and read by nothing: 9 254 lines of generated code that only churn
-the diff of every later change.
+The third one is not theoretical: every `bottomMenu` tab of the shipped `app.config.json` matched
+six of the seven variants, so `oneOf` rejected all of them.
 
-**The schema validates what the app ships.** Coverage is complete - every JSON key the generated
-`toJson` writes appears in the schema (610 keys across 132 types, checked by comparing the two) -
-and `test/theme/shipped_theme_validates_test.dart` in the parent project runs a real JSON Schema
-validator over every theme document in `assets/themes/`, which all pass with no errors.
+The builder reads the source **syntactically** - parsed, not resolved. Resolving a model library
+needs its `part` files, which do not exist until freezed and json_serializable have run, and those
+in turn need these tables to resolve the roots that import them: a cycle no build phase ordering
+escapes. Parsing has none, and the AST moves far less between analyzer majors than the element
+model does. The price is that a type counts as an enum, or as a variant, only where this package
+declares it - which is where the contract lives.
 
-Two things the generator leaves imprecise are assembled in, because without them the app's own
-assets fail against their own contract:
+`build.yaml` names a builder by `package:` URI, so `lib/builder.dart` has to sit under `lib/`
+rather than in a generator package of its own. It therefore imports dev dependencies, which
+`depend_on_referenced_packages` objects to - silenced at the top of that file, the alternative
+being a pure-Dart contract package declaring an analyzer and a formatter as runtime dependencies
+of the app. Nothing imports `builder.dart`; `build.yaml` is the only thing that names it, and it
+must stay that way.
 
-- **nullability.** A `String?` is published as `{"type": "string"}`, so the explicit `null` that
-  `toJson` writes is rejected. `assembleNullability` widens the properties named in
-  `nullable_properties.g.dart` - a `type` becomes a list of two, a stated `enum` gains `null`, and
-  a `$ref` is wrapped in an `anyOf` (a sibling keyword beside `$ref` is ignored in draft 2020-12).
-- **the union discriminator.** Each variant's `type` carries its word as a `default`, but a plain
-  `string` accepts every other variant's word too - so a document matches several branches of the
-  `oneOf`, and `oneOf` demands exactly one. Every `bottomMenu` tab of `app.config.json` matched six
-  of the seven variants. `assembleUnions` pins it with a `const`, taken from the `default` the
-  generator already wrote.
+### Rules for extending the contract
 
-What stays imprecise: `JsonConverter` annotations are ignored, so a converted field is described by
-its Dart type rather than by what the JSON carries. That is why the contract has almost none - see
-the converter note above.
+The generator reads **fields off the source class** and knows nothing about a union, an enum or a
+converter. Five ordinary-looking things you could write in a DTO make it describe the contract
+wrongly, or stop describing it at all - and the first takes `fromJson` and `toJson` down with it,
+so the damage is not limited to the schema.
+
+Keep none of this in your head. `test/contract_rules_test.dart` reads this package's own source
+and fails with the rule, the type or field, and what to write instead.
+
+| Rule | Write this instead | Why |
+|---|---|---|
+| **no non-empty collection default** | an empty collection, with the default resolved when read | a non-empty one crashes generation for the whole library, `fromJson`/`toJson` included |
+| **no new `JsonConverter`** | a field whose type is the type the JSON carries | the schema describes the Dart type, so a converted field is published as something no document contains. `UriConverter` is the exception - a `Uri` is a string on the wire and is described as one |
+| **no freezed union** | a sealed base with an ordinary class per variant | a freezed union's variants are classes freezed writes, and declare no fields the generator can read |
+| **state on the class, not a generated impl** | a constructor plus `final` fields, not `const factory X(...) = _X` | a class with no fields of its own is published as an empty object, and the types nested inside it get no `$def` at all |
+| **a schema asked for is a schema exposed** | `createJsonSchema: true` together with a `jsonSchema` member, plus an entry in `bin/print_json_schema.dart` for a root | the generated constant is private to its library |
+
+Three things deliberately have **no** rule, because they are read off the source and assembled in:
+naming an enum property, listing a union's variants, and marking a field nullable. Add the field
+and run `build_runner`.
+
+### Recipes
+
+**A property on an existing type.** Add the field, run `build_runner`. Nothing else - an enum type
+or a nullable type is picked up on its own.
+
+```dart
+@override
+final BoxFitConfig? fit;      // enum + nullable, both handled
+```
+
+**A variant of an existing union.** Two adjacent things in the one file, then `build_runner`:
+
+```dart
+// on the sealed base
+const factory BottomMenuTabScheme.dialer({...}) = DialerTabScheme;
+
+factory BottomMenuTabScheme.fromJson(Map<String, Object?> json) => switch (json['type']) {
+  'dialer' => DialerTabScheme.fromJson(json),
+  ...
+};
+```
+
+The variant class itself needs `@JsonSerializable(explicitToJson: true, createJsonSchema: true)`,
+a `type` field defaulting to its own word, and
+`static const Map<String, Object?> jsonSchema = _$DialerTabSchemeJsonSchema;`. `union_variants.g.dart`
+picks it up because it extends the base.
+
+**A new union.** A sealed base with the redirecting factories, a `fromJson` that switches on
+`type`, the getters common to every variant, and one class per variant as above. Nothing to
+register: the builder finds the base by `sealed` and the variants by `extends`.
+
+**A new root.** Two lines, then `build_runner`:
+
+```dart
+@JsonSerializable(explicitToJson: true, createJsonSchema: true)
+class NewRoot with _$NewRoot {
+  // ...
+  static final Map<String, Object?> jsonSchema = assembleNullability(
+    assembleEnums(assembleUnions(_$NewRootJsonSchema, unionVariants), 'NewRoot', enumProperties),
+    'NewRoot',
+    nullableProperties,
+  );
+}
+```
+
+and an entry in `_roots` of `bin/print_json_schema.dart`. The three wrappers are independent and
+each skips what the root does not reach, so take all three whether or not there is a union or an
+enum below it.
+
+### What stays imprecise
+
+`JsonConverter` annotations are ignored, so a converted field is described by its Dart type rather
+than by what the JSON carries. That is the reason for the rule against adding one.
+
+### Verifying
+
+```bash
+dart run build_runner build     # regenerates the three tables and the schema constants
+dart test                        # the contract rules and the published schema
+```
+
+| Test | What it catches |
+|---|---|
+| `test/contract_rules_test.dart` | a DTO written in a shape the schema cannot describe |
+| `test/enum_property_test.dart` | a property the schema still describes as a bare object |
+| `test/union_schema_test.dart` | a word a decoder takes that the schema does not offer as a variant, and the reverse |
+| `test/schema_tables_builder_test.dart` | what the builder reads out of a source file |
+| `test/theme/shipped_theme_validates_test.dart` (parent) | a shipped theme document the schema rejects |
+
+Only the first reads the source; the rest read the published schema, so a table that is generated
+wrongly fails there rather than passing quietly.
 
 ## Commands
 
