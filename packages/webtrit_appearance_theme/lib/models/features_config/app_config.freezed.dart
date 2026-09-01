@@ -2837,67 +2837,22 @@ case _:
 
 }
 
-BottomMenuTabScheme _$BottomMenuTabSchemeFromJson(
-  Map<String, dynamic> json
-) {
-        switch (json['type']) {
-                  case 'favorites':
-          return FavoritesTabScheme.fromJson(
-            json
-          );
-                case 'recents':
-          return RecentsTabScheme.fromJson(
-            json
-          );
-                case 'contacts':
-          return ContactsTabScheme.fromJson(
-            json
-          );
-                case 'keypad':
-          return KeypadTabScheme.fromJson(
-            json
-          );
-                case 'messaging':
-          return MessagingTabScheme.fromJson(
-            json
-          );
-                case 'voicemail':
-          return VoicemailTabScheme.fromJson(
-            json
-          );
-                case 'embedded':
-          return EmbeddedTabScheme.fromJson(
-            json
-          );
-        
-          default:
-            throw CheckedFromJsonException(
-  json,
-  'type',
-  'BottomMenuTabScheme',
-  'Invalid union type "${json['type']}"!'
-);
-        }
-      
-}
 
 /// @nodoc
-mixin _$BottomMenuTabScheme {
+mixin _$FavoritesTabScheme {
 
  bool get enabled; bool get initial; String get titleL10n; String get icon; String get type;
-/// Create a copy of BottomMenuTabScheme
+/// Create a copy of FavoritesTabScheme
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$BottomMenuTabSchemeCopyWith<BottomMenuTabScheme> get copyWith => _$BottomMenuTabSchemeCopyWithImpl<BottomMenuTabScheme>(this as BottomMenuTabScheme, _$identity);
+$FavoritesTabSchemeCopyWith<FavoritesTabScheme> get copyWith => _$FavoritesTabSchemeCopyWithImpl<FavoritesTabScheme>(this as FavoritesTabScheme, _$identity);
 
-  /// Serializes this BottomMenuTabScheme to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BottomMenuTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.type, type) || other.type == type));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoritesTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2906,15 +2861,15 @@ int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type)
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
+  return 'FavoritesTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $BottomMenuTabSchemeCopyWith<$Res>  {
-  factory $BottomMenuTabSchemeCopyWith(BottomMenuTabScheme value, $Res Function(BottomMenuTabScheme) _then) = _$BottomMenuTabSchemeCopyWithImpl;
+abstract mixin class $FavoritesTabSchemeCopyWith<$Res>  {
+  factory $FavoritesTabSchemeCopyWith(FavoritesTabScheme value, $Res Function(FavoritesTabScheme) _then) = _$FavoritesTabSchemeCopyWithImpl;
 @useResult
 $Res call({
  bool enabled, bool initial, String titleL10n, String icon, String type
@@ -2925,17 +2880,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$BottomMenuTabSchemeCopyWithImpl<$Res>
-    implements $BottomMenuTabSchemeCopyWith<$Res> {
-  _$BottomMenuTabSchemeCopyWithImpl(this._self, this._then);
+class _$FavoritesTabSchemeCopyWithImpl<$Res>
+    implements $FavoritesTabSchemeCopyWith<$Res> {
+  _$FavoritesTabSchemeCopyWithImpl(this._self, this._then);
 
-  final BottomMenuTabScheme _self;
-  final $Res Function(BottomMenuTabScheme) _then;
+  final FavoritesTabScheme _self;
+  final $Res Function(FavoritesTabScheme) _then;
 
-/// Create a copy of BottomMenuTabScheme
+/// Create a copy of FavoritesTabScheme
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
-  return _then(_self.copyWith(
+  return _then(FavoritesTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
@@ -2948,8 +2903,8 @@ as String,
 }
 
 
-/// Adds pattern-matching-related methods to [BottomMenuTabScheme].
-extension BottomMenuTabSchemePatterns on BottomMenuTabScheme {
+/// Adds pattern-matching-related methods to [FavoritesTabScheme].
+extension FavoritesTabSchemePatterns on FavoritesTabScheme {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -2962,17 +2917,10 @@ extension BottomMenuTabSchemePatterns on BottomMenuTabScheme {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( FavoritesTabScheme value)?  favorites,TResult Function( RecentsTabScheme value)?  recents,TResult Function( ContactsTabScheme value)?  contacts,TResult Function( KeypadTabScheme value)?  keypad,TResult Function( MessagingTabScheme value)?  messaging,TResult Function( VoicemailTabScheme value)?  voicemail,TResult Function( EmbeddedTabScheme value)?  embedded,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case FavoritesTabScheme() when favorites != null:
-return favorites(_that);case RecentsTabScheme() when recents != null:
-return recents(_that);case ContactsTabScheme() when contacts != null:
-return contacts(_that);case KeypadTabScheme() when keypad != null:
-return keypad(_that);case MessagingTabScheme() when messaging != null:
-return messaging(_that);case VoicemailTabScheme() when voicemail != null:
-return voicemail(_that);case EmbeddedTabScheme() when embedded != null:
-return embedded(_that);case _:
+case _:
   return orElse();
 
 }
@@ -2990,17 +2938,13 @@ return embedded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( FavoritesTabScheme value)  favorites,required TResult Function( RecentsTabScheme value)  recents,required TResult Function( ContactsTabScheme value)  contacts,required TResult Function( KeypadTabScheme value)  keypad,required TResult Function( MessagingTabScheme value)  messaging,required TResult Function( VoicemailTabScheme value)  voicemail,required TResult Function( EmbeddedTabScheme value)  embedded,}){
+@optionalTypeArgs TResult map<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case FavoritesTabScheme():
-return favorites(_that);case RecentsTabScheme():
-return recents(_that);case ContactsTabScheme():
-return contacts(_that);case KeypadTabScheme():
-return keypad(_that);case MessagingTabScheme():
-return messaging(_that);case VoicemailTabScheme():
-return voicemail(_that);case EmbeddedTabScheme():
-return embedded(_that);}
+case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -3014,17 +2958,10 @@ return embedded(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( FavoritesTabScheme value)?  favorites,TResult? Function( RecentsTabScheme value)?  recents,TResult? Function( ContactsTabScheme value)?  contacts,TResult? Function( KeypadTabScheme value)?  keypad,TResult? Function( MessagingTabScheme value)?  messaging,TResult? Function( VoicemailTabScheme value)?  voicemail,TResult? Function( EmbeddedTabScheme value)?  embedded,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case FavoritesTabScheme() when favorites != null:
-return favorites(_that);case RecentsTabScheme() when recents != null:
-return recents(_that);case ContactsTabScheme() when contacts != null:
-return contacts(_that);case KeypadTabScheme() when keypad != null:
-return keypad(_that);case MessagingTabScheme() when messaging != null:
-return messaging(_that);case VoicemailTabScheme() when voicemail != null:
-return voicemail(_that);case EmbeddedTabScheme() when embedded != null:
-return embedded(_that);case _:
+case _:
   return null;
 
 }
@@ -3041,16 +2978,9 @@ return embedded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  favorites,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)?  recents,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)?  contacts,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  keypad,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  messaging,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  voicemail,TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String embeddedResourceId,  String type)?  embedded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case FavoritesTabScheme() when favorites != null:
-return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case RecentsTabScheme() when recents != null:
-return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory,_that.type);case ContactsTabScheme() when contacts != null:
-return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes,_that.layout,_that.favorites,_that.type);case KeypadTabScheme() when keypad != null:
-return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case MessagingTabScheme() when messaging != null:
-return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case VoicemailTabScheme() when voicemail != null:
-return voicemail(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case EmbeddedTabScheme() when embedded != null:
-return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.embeddedResourceId,_that.type);case _:
+case _:
   return orElse();
 
 }
@@ -3068,16 +2998,12 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  favorites,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)  recents,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)  contacts,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  keypad,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  messaging,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)  voicemail,required TResult Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String embeddedResourceId,  String type)  embedded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case FavoritesTabScheme():
-return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case RecentsTabScheme():
-return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory,_that.type);case ContactsTabScheme():
-return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes,_that.layout,_that.favorites,_that.type);case KeypadTabScheme():
-return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case MessagingTabScheme():
-return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case VoicemailTabScheme():
-return voicemail(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case EmbeddedTabScheme():
-return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.embeddedResourceId,_that.type);}
+case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -3091,16 +3017,9 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  favorites,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon, @JsonKey(readValue: _readRecentsSupportsCallHistory)  bool supportsCallHistory,  String type)?  recents,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  List<String> contactSourceTypes, @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)  ContactsLayoutScheme layout,  bool favorites,  String type)?  contacts,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  keypad,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  messaging,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String type)?  voicemail,TResult? Function( bool enabled,  bool initial,  String titleL10n,  String icon,  String embeddedResourceId,  String type)?  embedded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case FavoritesTabScheme() when favorites != null:
-return favorites(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case RecentsTabScheme() when recents != null:
-return recents(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.supportsCallHistory,_that.type);case ContactsTabScheme() when contacts != null:
-return contacts(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.contactSourceTypes,_that.layout,_that.favorites,_that.type);case KeypadTabScheme() when keypad != null:
-return keypad(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case MessagingTabScheme() when messaging != null:
-return messaging(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case VoicemailTabScheme() when voicemail != null:
-return voicemail(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.type);case EmbeddedTabScheme() when embedded != null:
-return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.embeddedResourceId,_that.type);case _:
+case _:
   return null;
 
 }
@@ -3108,111 +3027,18 @@ return embedded(_that.enabled,_that.initial,_that.titleL10n,_that.icon,_that.emb
 
 }
 
+
 /// @nodoc
+mixin _$RecentsTabScheme {
 
-@JsonSerializable(explicitToJson: true)
-class FavoritesTabScheme extends BottomMenuTabScheme {
-  const FavoritesTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, this.type = 'favorites'}): super._();
-  factory FavoritesTabScheme.fromJson(Map<String, dynamic> json) => _$FavoritesTabSchemeFromJson(json);
-
-@override@JsonKey() final  bool enabled;
-@override@JsonKey() final  bool initial;
-@override final  String titleL10n;
-@override final  String icon;
-@override@JsonKey() final  String type;
-
-/// Create a copy of BottomMenuTabScheme
+ bool get enabled; bool get initial; String get titleL10n; String get icon; bool get supportsCallHistory; String get type;
+/// Create a copy of RecentsTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$FavoritesTabSchemeCopyWith<FavoritesTabScheme> get copyWith => _$FavoritesTabSchemeCopyWithImpl<FavoritesTabScheme>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$FavoritesTabSchemeToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoritesTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.type, type) || other.type == type));
-}
-
 @JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type);
-
-@override
-String toString() {
-  return 'BottomMenuTabScheme.favorites(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $FavoritesTabSchemeCopyWith<$Res> implements $BottomMenuTabSchemeCopyWith<$Res> {
-  factory $FavoritesTabSchemeCopyWith(FavoritesTabScheme value, $Res Function(FavoritesTabScheme) _then) = _$FavoritesTabSchemeCopyWithImpl;
-@override @useResult
-$Res call({
- bool enabled, bool initial, String titleL10n, String icon, String type
-});
-
-
-
-
-}
-/// @nodoc
-class _$FavoritesTabSchemeCopyWithImpl<$Res>
-    implements $FavoritesTabSchemeCopyWith<$Res> {
-  _$FavoritesTabSchemeCopyWithImpl(this._self, this._then);
-
-  final FavoritesTabScheme _self;
-  final $Res Function(FavoritesTabScheme) _then;
-
-/// Create a copy of BottomMenuTabScheme
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
-  return _then(FavoritesTabScheme(
-enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
-as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
-as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
-as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-@JsonSerializable(explicitToJson: true)
-class RecentsTabScheme extends BottomMenuTabScheme {
-  const RecentsTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, @JsonKey(readValue: _readRecentsSupportsCallHistory) this.supportsCallHistory = true, this.type = 'recents'}): super._();
-  factory RecentsTabScheme.fromJson(Map<String, dynamic> json) => _$RecentsTabSchemeFromJson(json);
-
-@override@JsonKey() final  bool enabled;
-@override@JsonKey() final  bool initial;
-@override final  String titleL10n;
-@override final  String icon;
-// Local opt-in for remote call history (CDRs). Resolved against the server
-// `callHistory` adapter capability in feature_access (both must be true).
-// Reads the `supportsCallHistory` key and falls back to the legacy `useCdrs`
-// key so existing configs keep their value.
-@JsonKey(readValue: _readRecentsSupportsCallHistory) final  bool supportsCallHistory;
-@override@JsonKey() final  String type;
-
-/// Create a copy of BottomMenuTabScheme
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$RecentsTabSchemeCopyWith<RecentsTabScheme> get copyWith => _$RecentsTabSchemeCopyWithImpl<RecentsTabScheme>(this, _$identity);
+$RecentsTabSchemeCopyWith<RecentsTabScheme> get copyWith => _$RecentsTabSchemeCopyWithImpl<RecentsTabScheme>(this as RecentsTabScheme, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$RecentsTabSchemeToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
@@ -3225,18 +3051,18 @@ int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,suppo
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.recents(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, supportsCallHistory: $supportsCallHistory, type: $type)';
+  return 'RecentsTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, supportsCallHistory: $supportsCallHistory, type: $type)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $RecentsTabSchemeCopyWith<$Res> implements $BottomMenuTabSchemeCopyWith<$Res> {
+abstract mixin class $RecentsTabSchemeCopyWith<$Res>  {
   factory $RecentsTabSchemeCopyWith(RecentsTabScheme value, $Res Function(RecentsTabScheme) _then) = _$RecentsTabSchemeCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon,@JsonKey(readValue: _readRecentsSupportsCallHistory) bool supportsCallHistory, String type
+ bool enabled, bool initial, String titleL10n, String icon, bool supportsCallHistory, String type
 });
 
 
@@ -3251,9 +3077,9 @@ class _$RecentsTabSchemeCopyWithImpl<$Res>
   final RecentsTabScheme _self;
   final $Res Function(RecentsTabScheme) _then;
 
-/// Create a copy of BottomMenuTabScheme
+/// Create a copy of RecentsTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? supportsCallHistory = null,Object? type = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? supportsCallHistory = null,Object? type = null,}) {
   return _then(RecentsTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
@@ -3265,78 +3091,169 @@ as String,
   ));
 }
 
+}
+
+
+/// Adds pattern-matching-related methods to [RecentsTabScheme].
+extension RecentsTabSchemePatterns on RecentsTabScheme {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
 
 }
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
 
 /// @nodoc
+mixin _$ContactsTabScheme {
 
-@JsonSerializable(explicitToJson: true)
-class ContactsTabScheme extends BottomMenuTabScheme {
-  const ContactsTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, final  List<String> contactSourceTypes = const <String>[], @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed) this.layout = ContactsLayoutScheme.tabbed, this.favorites = true, this.type = 'contacts'}): _contactSourceTypes = contactSourceTypes,super._();
-  factory ContactsTabScheme.fromJson(Map<String, dynamic> json) => _$ContactsTabSchemeFromJson(json);
-
-@override@JsonKey() final  bool enabled;
-@override@JsonKey() final  bool initial;
-@override final  String titleL10n;
-@override final  String icon;
- final  List<String> _contactSourceTypes;
-@JsonKey() List<String> get contactSourceTypes {
-  if (_contactSourceTypes is EqualUnmodifiableListView) return _contactSourceTypes;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_contactSourceTypes);
-}
-
-/// How the section is arranged. A deployment that says nothing keeps the
-/// arrangement it already has.
-///
-/// Read leniently: a configurator may offer an arrangement before an
-/// installed app knows how to draw it, and such a build has to fall back
-/// to the one it does know rather than fail to read its own settings.
-@JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed) final  ContactsLayoutScheme layout;
-/// Whether the favourites are one of the lists the chooser offers.
-///
-/// The list behind that entry is the favourites section's own - the same
-/// rows, in the order a person arranged them - not this section's list
-/// narrowed down. Read only where the arrangement has a chooser, which is
-/// the unified one; on by default, because a deployment picking that
-/// arrangement is picking the one favourites live in.
-@JsonKey() final  bool favorites;
-@override@JsonKey() final  String type;
-
-/// Create a copy of BottomMenuTabScheme
+ bool get enabled; bool get initial; String get titleL10n; String get icon; List<String> get contactSourceTypes; ContactsLayoutScheme get layout; bool get favorites; String get type;
+/// Create a copy of ContactsTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$ContactsTabSchemeCopyWith<ContactsTabScheme> get copyWith => _$ContactsTabSchemeCopyWithImpl<ContactsTabScheme>(this, _$identity);
+$ContactsTabSchemeCopyWith<ContactsTabScheme> get copyWith => _$ContactsTabSchemeCopyWithImpl<ContactsTabScheme>(this as ContactsTabScheme, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$ContactsTabSchemeToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactsTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other._contactSourceTypes, _contactSourceTypes)&&(identical(other.layout, layout) || other.layout == layout)&&(identical(other.favorites, favorites) || other.favorites == favorites)&&(identical(other.type, type) || other.type == type));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactsTabScheme&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.initial, initial) || other.initial == initial)&&(identical(other.titleL10n, titleL10n) || other.titleL10n == titleL10n)&&(identical(other.icon, icon) || other.icon == icon)&&const DeepCollectionEquality().equals(other.contactSourceTypes, contactSourceTypes)&&(identical(other.layout, layout) || other.layout == layout)&&(identical(other.favorites, favorites) || other.favorites == favorites)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,const DeepCollectionEquality().hash(_contactSourceTypes),layout,favorites,type);
+int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,const DeepCollectionEquality().hash(contactSourceTypes),layout,favorites,type);
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.contacts(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, contactSourceTypes: $contactSourceTypes, layout: $layout, favorites: $favorites, type: $type)';
+  return 'ContactsTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, contactSourceTypes: $contactSourceTypes, layout: $layout, favorites: $favorites, type: $type)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $ContactsTabSchemeCopyWith<$Res> implements $BottomMenuTabSchemeCopyWith<$Res> {
+abstract mixin class $ContactsTabSchemeCopyWith<$Res>  {
   factory $ContactsTabSchemeCopyWith(ContactsTabScheme value, $Res Function(ContactsTabScheme) _then) = _$ContactsTabSchemeCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
- bool enabled, bool initial, String titleL10n, String icon, List<String> contactSourceTypes,@JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed) ContactsLayoutScheme layout, bool favorites, String type
+ bool enabled, bool initial, String titleL10n, String icon, List<String> contactSourceTypes, ContactsLayoutScheme layout, bool favorites, String type
 });
 
 
@@ -3351,15 +3268,15 @@ class _$ContactsTabSchemeCopyWithImpl<$Res>
   final ContactsTabScheme _self;
   final $Res Function(ContactsTabScheme) _then;
 
-/// Create a copy of BottomMenuTabScheme
+/// Create a copy of ContactsTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? contactSourceTypes = null,Object? layout = null,Object? favorites = null,Object? type = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? contactSourceTypes = null,Object? layout = null,Object? favorites = null,Object? type = null,}) {
   return _then(ContactsTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
 as bool,titleL10n: null == titleL10n ? _self.titleL10n : titleL10n // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String,contactSourceTypes: null == contactSourceTypes ? _self._contactSourceTypes : contactSourceTypes // ignore: cast_nullable_to_non_nullable
+as String,contactSourceTypes: null == contactSourceTypes ? _self.contactSourceTypes : contactSourceTypes // ignore: cast_nullable_to_non_nullable
 as List<String>,layout: null == layout ? _self.layout : layout // ignore: cast_nullable_to_non_nullable
 as ContactsLayoutScheme,favorites: null == favorites ? _self.favorites : favorites // ignore: cast_nullable_to_non_nullable
 as bool,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -3367,32 +3284,145 @@ as String,
   ));
 }
 
+}
+
+
+/// Adds pattern-matching-related methods to [ContactsTabScheme].
+extension ContactsTabSchemePatterns on ContactsTabScheme {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
 
 }
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
 
 /// @nodoc
+mixin _$KeypadTabScheme {
 
-@JsonSerializable(explicitToJson: true)
-class KeypadTabScheme extends BottomMenuTabScheme {
-  const KeypadTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, this.type = 'keypad'}): super._();
-  factory KeypadTabScheme.fromJson(Map<String, dynamic> json) => _$KeypadTabSchemeFromJson(json);
-
-@override@JsonKey() final  bool enabled;
-@override@JsonKey() final  bool initial;
-@override final  String titleL10n;
-@override final  String icon;
-@override@JsonKey() final  String type;
-
-/// Create a copy of BottomMenuTabScheme
+ bool get enabled; bool get initial; String get titleL10n; String get icon; String get type;
+/// Create a copy of KeypadTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$KeypadTabSchemeCopyWith<KeypadTabScheme> get copyWith => _$KeypadTabSchemeCopyWithImpl<KeypadTabScheme>(this, _$identity);
+$KeypadTabSchemeCopyWith<KeypadTabScheme> get copyWith => _$KeypadTabSchemeCopyWithImpl<KeypadTabScheme>(this as KeypadTabScheme, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$KeypadTabSchemeToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
@@ -3405,16 +3435,16 @@ int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type)
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.keypad(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
+  return 'KeypadTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $KeypadTabSchemeCopyWith<$Res> implements $BottomMenuTabSchemeCopyWith<$Res> {
+abstract mixin class $KeypadTabSchemeCopyWith<$Res>  {
   factory $KeypadTabSchemeCopyWith(KeypadTabScheme value, $Res Function(KeypadTabScheme) _then) = _$KeypadTabSchemeCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  bool enabled, bool initial, String titleL10n, String icon, String type
 });
@@ -3431,9 +3461,9 @@ class _$KeypadTabSchemeCopyWithImpl<$Res>
   final KeypadTabScheme _self;
   final $Res Function(KeypadTabScheme) _then;
 
-/// Create a copy of BottomMenuTabScheme
+/// Create a copy of KeypadTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
   return _then(KeypadTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
@@ -3444,32 +3474,145 @@ as String,
   ));
 }
 
+}
+
+
+/// Adds pattern-matching-related methods to [KeypadTabScheme].
+extension KeypadTabSchemePatterns on KeypadTabScheme {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
 
 }
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
 
 /// @nodoc
+mixin _$MessagingTabScheme {
 
-@JsonSerializable(explicitToJson: true)
-class MessagingTabScheme extends BottomMenuTabScheme {
-  const MessagingTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, this.type = 'messaging'}): super._();
-  factory MessagingTabScheme.fromJson(Map<String, dynamic> json) => _$MessagingTabSchemeFromJson(json);
-
-@override@JsonKey() final  bool enabled;
-@override@JsonKey() final  bool initial;
-@override final  String titleL10n;
-@override final  String icon;
-@override@JsonKey() final  String type;
-
-/// Create a copy of BottomMenuTabScheme
+ bool get enabled; bool get initial; String get titleL10n; String get icon; String get type;
+/// Create a copy of MessagingTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$MessagingTabSchemeCopyWith<MessagingTabScheme> get copyWith => _$MessagingTabSchemeCopyWithImpl<MessagingTabScheme>(this, _$identity);
+$MessagingTabSchemeCopyWith<MessagingTabScheme> get copyWith => _$MessagingTabSchemeCopyWithImpl<MessagingTabScheme>(this as MessagingTabScheme, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$MessagingTabSchemeToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
@@ -3482,16 +3625,16 @@ int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type)
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.messaging(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
+  return 'MessagingTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $MessagingTabSchemeCopyWith<$Res> implements $BottomMenuTabSchemeCopyWith<$Res> {
+abstract mixin class $MessagingTabSchemeCopyWith<$Res>  {
   factory $MessagingTabSchemeCopyWith(MessagingTabScheme value, $Res Function(MessagingTabScheme) _then) = _$MessagingTabSchemeCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  bool enabled, bool initial, String titleL10n, String icon, String type
 });
@@ -3508,9 +3651,9 @@ class _$MessagingTabSchemeCopyWithImpl<$Res>
   final MessagingTabScheme _self;
   final $Res Function(MessagingTabScheme) _then;
 
-/// Create a copy of BottomMenuTabScheme
+/// Create a copy of MessagingTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
   return _then(MessagingTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
@@ -3521,32 +3664,145 @@ as String,
   ));
 }
 
+}
+
+
+/// Adds pattern-matching-related methods to [MessagingTabScheme].
+extension MessagingTabSchemePatterns on MessagingTabScheme {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
 
 }
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
 
 /// @nodoc
+mixin _$VoicemailTabScheme {
 
-@JsonSerializable(explicitToJson: true)
-class VoicemailTabScheme extends BottomMenuTabScheme {
-  const VoicemailTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, this.type = 'voicemail'}): super._();
-  factory VoicemailTabScheme.fromJson(Map<String, dynamic> json) => _$VoicemailTabSchemeFromJson(json);
-
-@override@JsonKey() final  bool enabled;
-@override@JsonKey() final  bool initial;
-@override final  String titleL10n;
-@override final  String icon;
-@override@JsonKey() final  String type;
-
-/// Create a copy of BottomMenuTabScheme
+ bool get enabled; bool get initial; String get titleL10n; String get icon; String get type;
+/// Create a copy of VoicemailTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$VoicemailTabSchemeCopyWith<VoicemailTabScheme> get copyWith => _$VoicemailTabSchemeCopyWithImpl<VoicemailTabScheme>(this, _$identity);
+$VoicemailTabSchemeCopyWith<VoicemailTabScheme> get copyWith => _$VoicemailTabSchemeCopyWithImpl<VoicemailTabScheme>(this as VoicemailTabScheme, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$VoicemailTabSchemeToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
@@ -3559,16 +3815,16 @@ int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,type)
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.voicemail(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
+  return 'VoicemailTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, type: $type)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $VoicemailTabSchemeCopyWith<$Res> implements $BottomMenuTabSchemeCopyWith<$Res> {
+abstract mixin class $VoicemailTabSchemeCopyWith<$Res>  {
   factory $VoicemailTabSchemeCopyWith(VoicemailTabScheme value, $Res Function(VoicemailTabScheme) _then) = _$VoicemailTabSchemeCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  bool enabled, bool initial, String titleL10n, String icon, String type
 });
@@ -3585,9 +3841,9 @@ class _$VoicemailTabSchemeCopyWithImpl<$Res>
   final VoicemailTabScheme _self;
   final $Res Function(VoicemailTabScheme) _then;
 
-/// Create a copy of BottomMenuTabScheme
+/// Create a copy of VoicemailTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? type = null,}) {
   return _then(VoicemailTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
@@ -3598,33 +3854,145 @@ as String,
   ));
 }
 
+}
+
+
+/// Adds pattern-matching-related methods to [VoicemailTabScheme].
+extension VoicemailTabSchemePatterns on VoicemailTabScheme {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
 
 }
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+
+}
+
 
 /// @nodoc
+mixin _$EmbeddedTabScheme {
 
-@JsonSerializable(explicitToJson: true)
-class EmbeddedTabScheme extends BottomMenuTabScheme {
-  const EmbeddedTabScheme({this.enabled = true, this.initial = false, required this.titleL10n, required this.icon, required this.embeddedResourceId, this.type = 'embedded'}): super._();
-  factory EmbeddedTabScheme.fromJson(Map<String, dynamic> json) => _$EmbeddedTabSchemeFromJson(json);
-
-@override@JsonKey() final  bool enabled;
-@override@JsonKey() final  bool initial;
-@override final  String titleL10n;
-@override final  String icon;
- final  String embeddedResourceId;
-@override@JsonKey() final  String type;
-
-/// Create a copy of BottomMenuTabScheme
+ bool get enabled; bool get initial; String get titleL10n; String get icon; String get embeddedResourceId; String get type;
+/// Create a copy of EmbeddedTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$EmbeddedTabSchemeCopyWith<EmbeddedTabScheme> get copyWith => _$EmbeddedTabSchemeCopyWithImpl<EmbeddedTabScheme>(this, _$identity);
+$EmbeddedTabSchemeCopyWith<EmbeddedTabScheme> get copyWith => _$EmbeddedTabSchemeCopyWithImpl<EmbeddedTabScheme>(this as EmbeddedTabScheme, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$EmbeddedTabSchemeToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
@@ -3637,16 +4005,16 @@ int get hashCode => Object.hash(runtimeType,enabled,initial,titleL10n,icon,embed
 
 @override
 String toString() {
-  return 'BottomMenuTabScheme.embedded(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, embeddedResourceId: $embeddedResourceId, type: $type)';
+  return 'EmbeddedTabScheme(enabled: $enabled, initial: $initial, titleL10n: $titleL10n, icon: $icon, embeddedResourceId: $embeddedResourceId, type: $type)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $EmbeddedTabSchemeCopyWith<$Res> implements $BottomMenuTabSchemeCopyWith<$Res> {
+abstract mixin class $EmbeddedTabSchemeCopyWith<$Res>  {
   factory $EmbeddedTabSchemeCopyWith(EmbeddedTabScheme value, $Res Function(EmbeddedTabScheme) _then) = _$EmbeddedTabSchemeCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  bool enabled, bool initial, String titleL10n, String icon, String embeddedResourceId, String type
 });
@@ -3663,9 +4031,9 @@ class _$EmbeddedTabSchemeCopyWithImpl<$Res>
   final EmbeddedTabScheme _self;
   final $Res Function(EmbeddedTabScheme) _then;
 
-/// Create a copy of BottomMenuTabScheme
+/// Create a copy of EmbeddedTabScheme
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? embeddedResourceId = null,Object? type = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? initial = null,Object? titleL10n = null,Object? icon = null,Object? embeddedResourceId = null,Object? type = null,}) {
   return _then(EmbeddedTabScheme(
 enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool,initial: null == initial ? _self.initial : initial // ignore: cast_nullable_to_non_nullable
@@ -3677,6 +4045,130 @@ as String,
   ));
 }
 
+}
+
+
+/// Adds pattern-matching-related methods to [EmbeddedTabScheme].
+extension EmbeddedTabSchemePatterns on EmbeddedTabScheme {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
+final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
+switch (_that) {
+case _:
+  return null;
+
+}
+}
 
 }
 

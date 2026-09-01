@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../pages/page_background.dart';
+
 import 'supported_feature.dart';
 
 part 'app_config.freezed.dart';
@@ -476,113 +478,386 @@ enum ContactsLayoutScheme {
   unified,
 }
 
-@Freezed(unionKey: 'type')
-sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
-  const BottomMenuTabScheme._();
+/// One tab of the bottom bar.
+///
+/// Written as a sealed base with a class per tab rather than as a freezed union
+/// - see [PageBackground] for why. A new tab needs a redirecting factory and a
+/// `fromJson` branch; the schema follows on its own.
+sealed class BottomMenuTabScheme {
+  const BottomMenuTabScheme();
 
-  /// The discriminator, declared rather than left to freezed.
-  ///
-  /// Freezed writes a `$type` of its own and puts the value in the
-  /// constructor's initialiser list, where the schema generator cannot see it:
-  /// the parameter default it reads is `null`. Declared here it is an ordinary
-  /// field with an ordinary default, so the generated schema states
-  /// `{'type': 'string', 'default': 'solid'}` and no hand-written map has to
-  /// repeat it.
-  ///
-  /// The wire is unchanged - the key is the union key, and freezed drops its
-  /// own `$type` for a variant that declares one. What it costs is a parameter
-  /// on every `when` and `map` callback, which is spelt `_` because inside a
-  /// branch the value is the branch.
-  @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.favorites({
-    @Default(true) bool enabled,
-    @Default(false) bool initial,
+    bool enabled,
+    bool initial,
     required String titleL10n,
     required String icon,
-    @Default('favorites') String type,
+    String type,
   }) = FavoritesTabScheme;
 
-  @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.recents({
-    @Default(true) bool enabled,
-    @Default(false) bool initial,
+    bool enabled,
+    bool initial,
     required String titleL10n,
     required String icon,
-    // Local opt-in for remote call history (CDRs). Resolved against the server
-    // `callHistory` adapter capability in feature_access (both must be true).
-    // Reads the `supportsCallHistory` key and falls back to the legacy `useCdrs`
-    // key so existing configs keep their value.
-    @JsonKey(readValue: _readRecentsSupportsCallHistory) @Default(true) bool supportsCallHistory,
-    @Default('recents') String type,
+    bool supportsCallHistory,
+    String type,
   }) = RecentsTabScheme;
 
-  @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.contacts({
-    @Default(true) bool enabled,
-    @Default(false) bool initial,
+    bool enabled,
+    bool initial,
     required String titleL10n,
     required String icon,
-    @Default(<String>[]) List<String> contactSourceTypes,
-
-    /// How the section is arranged. A deployment that says nothing keeps the
-    /// arrangement it already has.
-    ///
-    /// Read leniently: a configurator may offer an arrangement before an
-    /// installed app knows how to draw it, and such a build has to fall back
-    /// to the one it does know rather than fail to read its own settings.
-    @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)
-    @Default(ContactsLayoutScheme.tabbed)
+    List<String> contactSourceTypes,
     ContactsLayoutScheme layout,
-
-    /// Whether the favourites are one of the lists the chooser offers.
-    ///
-    /// The list behind that entry is the favourites section's own - the same
-    /// rows, in the order a person arranged them - not this section's list
-    /// narrowed down. Read only where the arrangement has a chooser, which is
-    /// the unified one; on by default, because a deployment picking that
-    /// arrangement is picking the one favourites live in.
-    @Default(true) bool favorites,
-    @Default('contacts') String type,
+    bool favorites,
+    String type,
   }) = ContactsTabScheme;
 
-  @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.keypad({
-    @Default(true) bool enabled,
-    @Default(false) bool initial,
+    bool enabled,
+    bool initial,
     required String titleL10n,
     required String icon,
-    @Default('keypad') String type,
+    String type,
   }) = KeypadTabScheme;
 
-  @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.messaging({
-    @Default(true) bool enabled,
-    @Default(false) bool initial,
+    bool enabled,
+    bool initial,
     required String titleL10n,
     required String icon,
-    @Default('messaging') String type,
+    String type,
   }) = MessagingTabScheme;
 
-  @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.voicemail({
-    @Default(true) bool enabled,
-    @Default(false) bool initial,
+    bool enabled,
+    bool initial,
     required String titleL10n,
     required String icon,
-    @Default('voicemail') String type,
+    String type,
   }) = VoicemailTabScheme;
 
-  @JsonSerializable(explicitToJson: true)
   const factory BottomMenuTabScheme.embedded({
-    @Default(true) bool enabled,
-    @Default(false) bool initial,
+    bool enabled,
+    bool initial,
     required String titleL10n,
     required String icon,
     required String embeddedResourceId,
-    @Default('embedded') String type,
+    String type,
   }) = EmbeddedTabScheme;
 
-  factory BottomMenuTabScheme.fromJson(Map<String, dynamic> json) => _$BottomMenuTabSchemeFromJson(json);
+  factory BottomMenuTabScheme.fromJson(Map<String, Object?> json) => switch (json['type']) {
+    'favorites' => FavoritesTabScheme.fromJson(json),
+    'recents' => RecentsTabScheme.fromJson(json),
+    'contacts' => ContactsTabScheme.fromJson(json),
+    'keypad' => KeypadTabScheme.fromJson(json),
+    'messaging' => MessagingTabScheme.fromJson(json),
+    'voicemail' => VoicemailTabScheme.fromJson(json),
+    'embedded' => EmbeddedTabScheme.fromJson(json),
+    final unknown => throw CheckedFromJsonException(
+      json,
+      'type',
+      'BottomMenuTabScheme',
+      'Invalid union type "$unknown"!',
+    ),
+  };
+
+  /// Whether the tab is shown at all.
+  bool get enabled;
+
+  /// Whether the app opens on this tab.
+  bool get initial;
+
+  /// The l10n key of the tab's title.
+  String get titleL10n;
+
+  /// The tab's icon, as a code point.
+  String get icon;
+
+  /// The discriminator: which tab this is.
+  String get type;
+
+  Map<String, Object?> toJson();
+}
+
+/// The favourites tab.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class FavoritesTabScheme extends BottomMenuTabScheme with _$FavoritesTabScheme {
+  const FavoritesTabScheme({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    this.type = 'favorites',
+  });
+
+  @override
+  final bool enabled;
+
+  @override
+  final bool initial;
+
+  @override
+  final String titleL10n;
+
+  @override
+  final String icon;
+
+  /// The discriminator. Always `favorites`.
+  @override
+  final String type;
+
+  factory FavoritesTabScheme.fromJson(Map<String, Object?> json) => _$FavoritesTabSchemeFromJson(json);
+
+  @override
+  Map<String, Object?> toJson() => _$FavoritesTabSchemeToJson(this);
+}
+
+/// The recents tab.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class RecentsTabScheme extends BottomMenuTabScheme with _$RecentsTabScheme {
+  const RecentsTabScheme({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    this.supportsCallHistory = true,
+    this.type = 'recents',
+  });
+
+  @override
+  final bool enabled;
+
+  @override
+  final bool initial;
+
+  @override
+  final String titleL10n;
+
+  @override
+  final String icon;
+
+  /// Local opt-in for remote call history (CDRs). Resolved against the server
+  /// `callHistory` adapter capability in feature_access - both must be true.
+  ///
+  /// Reads the `supportsCallHistory` key and falls back to the legacy `useCdrs`
+  /// key so existing configs keep their value.
+  @JsonKey(readValue: _readRecentsSupportsCallHistory)
+  @override
+  final bool supportsCallHistory;
+
+  /// The discriminator. Always `recents`.
+  @override
+  final String type;
+
+  factory RecentsTabScheme.fromJson(Map<String, Object?> json) => _$RecentsTabSchemeFromJson(json);
+
+  @override
+  Map<String, Object?> toJson() => _$RecentsTabSchemeToJson(this);
+}
+
+/// The contacts tab.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class ContactsTabScheme extends BottomMenuTabScheme with _$ContactsTabScheme {
+  const ContactsTabScheme({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    this.contactSourceTypes = const <String>[],
+    this.layout = ContactsLayoutScheme.tabbed,
+    this.favorites = true,
+    this.type = 'contacts',
+  });
+
+  @override
+  final bool enabled;
+
+  @override
+  final bool initial;
+
+  @override
+  final String titleL10n;
+
+  @override
+  final String icon;
+
+  @override
+  final List<String> contactSourceTypes;
+
+  /// How the section is arranged. A deployment that says nothing keeps the
+  /// arrangement it already has.
+  ///
+  /// Read leniently: a configurator may offer an arrangement before an
+  /// installed app knows how to draw it, and such a build has to fall back
+  /// to the one it does know rather than fail to read its own settings.
+  @JsonKey(unknownEnumValue: ContactsLayoutScheme.tabbed)
+  @override
+  final ContactsLayoutScheme layout;
+
+  /// Whether the favourites are one of the lists the chooser offers.
+  ///
+  /// The list behind that entry is the favourites section's own - the same
+  /// rows, in the order a person arranged them - not this section's list
+  /// narrowed down. Read only where the arrangement has a chooser, which is
+  /// the unified one; on by default, because a deployment picking that
+  /// arrangement is picking the one favourites live in.
+  @override
+  final bool favorites;
+
+  /// The discriminator. Always `contacts`.
+  @override
+  final String type;
+
+  factory ContactsTabScheme.fromJson(Map<String, Object?> json) => _$ContactsTabSchemeFromJson(json);
+
+  @override
+  Map<String, Object?> toJson() => _$ContactsTabSchemeToJson(this);
+}
+
+/// The keypad tab.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class KeypadTabScheme extends BottomMenuTabScheme with _$KeypadTabScheme {
+  const KeypadTabScheme({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    this.type = 'keypad',
+  });
+
+  @override
+  final bool enabled;
+
+  @override
+  final bool initial;
+
+  @override
+  final String titleL10n;
+
+  @override
+  final String icon;
+
+  /// The discriminator. Always `keypad`.
+  @override
+  final String type;
+
+  factory KeypadTabScheme.fromJson(Map<String, Object?> json) => _$KeypadTabSchemeFromJson(json);
+
+  @override
+  Map<String, Object?> toJson() => _$KeypadTabSchemeToJson(this);
+}
+
+/// The messaging tab.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class MessagingTabScheme extends BottomMenuTabScheme with _$MessagingTabScheme {
+  const MessagingTabScheme({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    this.type = 'messaging',
+  });
+
+  @override
+  final bool enabled;
+
+  @override
+  final bool initial;
+
+  @override
+  final String titleL10n;
+
+  @override
+  final String icon;
+
+  /// The discriminator. Always `messaging`.
+  @override
+  final String type;
+
+  factory MessagingTabScheme.fromJson(Map<String, Object?> json) => _$MessagingTabSchemeFromJson(json);
+
+  @override
+  Map<String, Object?> toJson() => _$MessagingTabSchemeToJson(this);
+}
+
+/// The voicemail tab.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class VoicemailTabScheme extends BottomMenuTabScheme with _$VoicemailTabScheme {
+  const VoicemailTabScheme({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    this.type = 'voicemail',
+  });
+
+  @override
+  final bool enabled;
+
+  @override
+  final bool initial;
+
+  @override
+  final String titleL10n;
+
+  @override
+  final String icon;
+
+  /// The discriminator. Always `voicemail`.
+  @override
+  final String type;
+
+  factory VoicemailTabScheme.fromJson(Map<String, Object?> json) => _$VoicemailTabSchemeFromJson(json);
+
+  @override
+  Map<String, Object?> toJson() => _$VoicemailTabSchemeToJson(this);
+}
+
+/// A tab showing an embedded resource.
+@freezed
+@JsonSerializable(explicitToJson: true)
+class EmbeddedTabScheme extends BottomMenuTabScheme with _$EmbeddedTabScheme {
+  const EmbeddedTabScheme({
+    this.enabled = true,
+    this.initial = false,
+    required this.titleL10n,
+    required this.icon,
+    required this.embeddedResourceId,
+    this.type = 'embedded',
+  });
+
+  @override
+  final bool enabled;
+
+  @override
+  final bool initial;
+
+  @override
+  final String titleL10n;
+
+  @override
+  final String icon;
+
+  /// Names the [EmbeddedResource] this tab shows.
+  @override
+  final String embeddedResourceId;
+
+  /// The discriminator. Always `embedded`.
+  @override
+  final String type;
+
+  factory EmbeddedTabScheme.fromJson(Map<String, Object?> json) => _$EmbeddedTabSchemeFromJson(json);
+
+  @override
+  Map<String, Object?> toJson() => _$EmbeddedTabSchemeToJson(this);
 }
 
 @freezed

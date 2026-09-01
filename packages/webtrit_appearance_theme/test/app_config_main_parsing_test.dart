@@ -34,126 +34,63 @@ void main() {
       expect(tabs[6], isA<EmbeddedTabScheme>());
 
       // Favorites
-      tabs[0].when(
-        favorites: (enabled, initial, titleL10n, icon, _) {
-          // Off by default: favourites are reached inside contacts now, and a
-          // section of their own beside it would offer the same list twice.
-          expect(enabled, isFalse);
-          expect(initial, isFalse);
-          expect(titleL10n, 'main_BottomNavigationBarItemLabel_favorites');
-          expect(icon, '0xe5fd');
-        },
-        recents: unexpectedRecents,
-        contacts: unexpectedContacts,
-        keypad: unexpectedKeypad,
-        messaging: unexpectedMessaging,
-        voicemail: unexpectedVoicemail,
-        embedded: unexpectedEmbedded,
-      );
+      final favorites = tabs[0] as FavoritesTabScheme;
+      // Off by default: favourites are reached inside contacts now, and a
+      // section of their own beside it would offer the same list twice.
+      expect(favorites.enabled, isFalse);
+      expect(favorites.initial, isFalse);
+      expect(favorites.titleL10n, 'main_BottomNavigationBarItemLabel_favorites');
+      expect(favorites.icon, '0xe5fd');
 
       // Recents
-      tabs[1].when(
-        favorites: unexpectedFavorites,
-        recents: (enabled, initial, titleL10n, icon, supportsCallHistory, _) {
-          expect(enabled, isTrue);
-          expect(initial, isFalse);
-          expect(titleL10n, 'main_BottomNavigationBarItemLabel_recents');
-          expect(icon, '0xe03a');
-          expect(supportsCallHistory, isTrue);
-        },
-        contacts: unexpectedContacts,
-        keypad: unexpectedKeypad,
-        messaging: unexpectedMessaging,
-        voicemail: unexpectedVoicemail,
-        embedded: unexpectedEmbedded,
-      );
+      final recents = tabs[1] as RecentsTabScheme;
+      expect(recents.enabled, isTrue);
+      expect(recents.initial, isFalse);
+      expect(recents.titleL10n, 'main_BottomNavigationBarItemLabel_recents');
+      expect(recents.icon, '0xe03a');
+      expect(recents.supportsCallHistory, isTrue);
 
       // Contacts
-      tabs[2].when(
-        favorites: unexpectedFavorites,
-        recents: unexpectedRecents,
-        contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, layout, favorites, _) {
-          expect(enabled, isTrue);
-          expect(initial, isFalse);
-          expect(titleL10n, 'main_BottomNavigationBarItemLabel_contacts');
-          expect(icon, '0xee35');
-          expect(contactSourceTypes, ['local', 'external']);
-          // The arrangement that takes the place of the section the tab above
-          // no longer offers, with favourites inside it.
-          expect(layout, ContactsLayoutScheme.unified);
-          expect(favorites, isTrue);
-        },
-        keypad: unexpectedKeypad,
-        messaging: unexpectedMessaging,
-        voicemail: unexpectedVoicemail,
-        embedded: unexpectedEmbedded,
-      );
+      final contacts = tabs[2] as ContactsTabScheme;
+      expect(contacts.enabled, isTrue);
+      expect(contacts.initial, isFalse);
+      expect(contacts.titleL10n, 'main_BottomNavigationBarItemLabel_contacts');
+      expect(contacts.icon, '0xee35');
+      expect(contacts.contactSourceTypes, ['local', 'external']);
+      // The arrangement that takes the place of the section the tab above
+      // no longer offers, with favourites inside it.
+      expect(contacts.layout, ContactsLayoutScheme.unified);
+      expect(contacts.favorites, isTrue);
 
       // Keypad
-      tabs[3].when(
-        favorites: unexpectedFavorites,
-        recents: unexpectedRecents,
-        contacts: unexpectedContacts,
-        keypad: (enabled, initial, titleL10n, icon, _) {
-          expect(enabled, isTrue);
-          expect(initial, isTrue);
-          expect(titleL10n, 'main_BottomNavigationBarItemLabel_keypad');
-          expect(icon, '0xe1ce');
-        },
-        messaging: unexpectedMessaging,
-        voicemail: unexpectedVoicemail,
-        embedded: unexpectedEmbedded,
-      );
+      final keypad = tabs[3] as KeypadTabScheme;
+      expect(keypad.enabled, isTrue);
+      expect(keypad.initial, isTrue);
+      expect(keypad.titleL10n, 'main_BottomNavigationBarItemLabel_keypad');
+      expect(keypad.icon, '0xe1ce');
 
       // Messaging
-      tabs[4].when(
-        favorites: unexpectedFavorites,
-        recents: unexpectedRecents,
-        contacts: unexpectedContacts,
-        keypad: unexpectedKeypad,
-        messaging: (enabled, initial, titleL10n, icon, _) {
-          expect(enabled, isTrue);
-          expect(initial, isFalse);
-          expect(titleL10n, 'main_BottomNavigationBarItemLabel_chats');
-          expect(icon, '0xe155');
-        },
-        voicemail: unexpectedVoicemail,
-        embedded: unexpectedEmbedded,
-      );
+      final messaging = tabs[4] as MessagingTabScheme;
+      expect(messaging.enabled, isTrue);
+      expect(messaging.initial, isFalse);
+      expect(messaging.titleL10n, 'main_BottomNavigationBarItemLabel_chats');
+      expect(messaging.icon, '0xe155');
 
       // Embedded #1
-      tabs[5].when(
-        favorites: unexpectedFavorites,
-        recents: unexpectedRecents,
-        contacts: unexpectedContacts,
-        keypad: unexpectedKeypad,
-        messaging: unexpectedMessaging,
-        voicemail: unexpectedVoicemail,
-        embedded: (enabled, initial, titleL10n, icon, embeddedResourceId, _) {
-          expect(enabled, isFalse);
-          expect(initial, isFalse);
-          expect(titleL10n, 'main_BottomNavigationBarItemLabel_embedded');
-          expect(icon, '0xe2ce');
-          expect(embeddedResourceId, 'example_embedded_payload_data');
-        },
-      );
+      final embedded = tabs[5] as EmbeddedTabScheme;
+      expect(embedded.enabled, isFalse);
+      expect(embedded.initial, isFalse);
+      expect(embedded.titleL10n, 'main_BottomNavigationBarItemLabel_embedded');
+      expect(embedded.icon, '0xe2ce');
+      expect(embedded.embeddedResourceId, 'example_embedded_payload_data');
 
       // Embedded #2
-      tabs[6].when(
-        favorites: unexpectedFavorites,
-        recents: unexpectedRecents,
-        contacts: unexpectedContacts,
-        keypad: unexpectedKeypad,
-        messaging: unexpectedMessaging,
-        voicemail: unexpectedVoicemail,
-        embedded: (enabled, initial, titleL10n, icon, embeddedResourceId, _) {
-          expect(enabled, isFalse);
-          expect(initial, isFalse);
-          expect(titleL10n, 'main_BottomNavigationBarItemLabel_embedded_spa_example');
-          expect(icon, '0xe2ce');
-          expect(embeddedResourceId, 'example_embedded_spa');
-        },
-      );
+      final embeddedSpa = tabs[6] as EmbeddedTabScheme;
+      expect(embeddedSpa.enabled, isFalse);
+      expect(embeddedSpa.initial, isFalse);
+      expect(embeddedSpa.titleL10n, 'main_BottomNavigationBarItemLabel_embedded_spa_example');
+      expect(embeddedSpa.icon, '0xe2ce');
+      expect(embeddedSpa.embeddedResourceId, 'example_embedded_spa');
     });
 
     test('loginConfig [modeSelect screen] & settingsConfig basic fields parsed', () {

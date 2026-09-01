@@ -361,6 +361,160 @@ Map<String, dynamic> _$EncodingDefaultPresetOverrideToJson(
   'removeExtmaps': instance.removeExtmaps,
 };
 
+FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
+    FavoritesTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      type: json['type'] as String? ?? 'favorites',
+    );
+
+Map<String, dynamic> _$FavoritesTabSchemeToJson(FavoritesTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.type,
+    };
+
+RecentsTabScheme _$RecentsTabSchemeFromJson(Map<String, dynamic> json) =>
+    RecentsTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      supportsCallHistory:
+          _readRecentsSupportsCallHistory(json, 'supportsCallHistory')
+              as bool? ??
+          true,
+      type: json['type'] as String? ?? 'recents',
+    );
+
+Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'supportsCallHistory': instance.supportsCallHistory,
+      'type': instance.type,
+    };
+
+ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
+    ContactsTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      contactSourceTypes:
+          (json['contactSourceTypes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
+      layout:
+          $enumDecodeNullable(
+            _$ContactsLayoutSchemeEnumMap,
+            json['layout'],
+            unknownValue: ContactsLayoutScheme.tabbed,
+          ) ??
+          ContactsLayoutScheme.tabbed,
+      favorites: json['favorites'] as bool? ?? true,
+      type: json['type'] as String? ?? 'contacts',
+    );
+
+Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'contactSourceTypes': instance.contactSourceTypes,
+      'layout': _$ContactsLayoutSchemeEnumMap[instance.layout]!,
+      'favorites': instance.favorites,
+      'type': instance.type,
+    };
+
+const _$ContactsLayoutSchemeEnumMap = {
+  ContactsLayoutScheme.tabbed: 'tabbed',
+  ContactsLayoutScheme.unified: 'unified',
+};
+
+KeypadTabScheme _$KeypadTabSchemeFromJson(Map<String, dynamic> json) =>
+    KeypadTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      type: json['type'] as String? ?? 'keypad',
+    );
+
+Map<String, dynamic> _$KeypadTabSchemeToJson(KeypadTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.type,
+    };
+
+MessagingTabScheme _$MessagingTabSchemeFromJson(Map<String, dynamic> json) =>
+    MessagingTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      type: json['type'] as String? ?? 'messaging',
+    );
+
+Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.type,
+    };
+
+VoicemailTabScheme _$VoicemailTabSchemeFromJson(Map<String, dynamic> json) =>
+    VoicemailTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      type: json['type'] as String? ?? 'voicemail',
+    );
+
+Map<String, dynamic> _$VoicemailTabSchemeToJson(VoicemailTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.type,
+    };
+
+EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
+    EmbeddedTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      embeddedResourceId: json['embeddedResourceId'] as String,
+      type: json['type'] as String? ?? 'embedded',
+    );
+
+Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'embeddedResourceId': instance.embeddedResourceId,
+      'type': instance.type,
+    };
+
 AppConfigSettings _$AppConfigSettingsFromJson(Map<String, dynamic> json) =>
     AppConfigSettings(
       sections:
@@ -542,157 +696,3 @@ AppConfigLocalization _$AppConfigLocalizationFromJson(
 Map<String, dynamic> _$AppConfigLocalizationToJson(
   AppConfigLocalization instance,
 ) => <String, dynamic>{'enabledLanguages': instance.enabledLanguages};
-
-FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
-    FavoritesTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      type: json['type'] as String? ?? 'favorites',
-    );
-
-Map<String, dynamic> _$FavoritesTabSchemeToJson(FavoritesTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'type': instance.type,
-    };
-
-RecentsTabScheme _$RecentsTabSchemeFromJson(Map<String, dynamic> json) =>
-    RecentsTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      supportsCallHistory:
-          _readRecentsSupportsCallHistory(json, 'supportsCallHistory')
-              as bool? ??
-          true,
-      type: json['type'] as String? ?? 'recents',
-    );
-
-Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'supportsCallHistory': instance.supportsCallHistory,
-      'type': instance.type,
-    };
-
-ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
-    ContactsTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      contactSourceTypes:
-          (json['contactSourceTypes'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const <String>[],
-      layout:
-          $enumDecodeNullable(
-            _$ContactsLayoutSchemeEnumMap,
-            json['layout'],
-            unknownValue: ContactsLayoutScheme.tabbed,
-          ) ??
-          ContactsLayoutScheme.tabbed,
-      favorites: json['favorites'] as bool? ?? true,
-      type: json['type'] as String? ?? 'contacts',
-    );
-
-Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'contactSourceTypes': instance.contactSourceTypes,
-      'layout': _$ContactsLayoutSchemeEnumMap[instance.layout]!,
-      'favorites': instance.favorites,
-      'type': instance.type,
-    };
-
-const _$ContactsLayoutSchemeEnumMap = {
-  ContactsLayoutScheme.tabbed: 'tabbed',
-  ContactsLayoutScheme.unified: 'unified',
-};
-
-KeypadTabScheme _$KeypadTabSchemeFromJson(Map<String, dynamic> json) =>
-    KeypadTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      type: json['type'] as String? ?? 'keypad',
-    );
-
-Map<String, dynamic> _$KeypadTabSchemeToJson(KeypadTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'type': instance.type,
-    };
-
-MessagingTabScheme _$MessagingTabSchemeFromJson(Map<String, dynamic> json) =>
-    MessagingTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      type: json['type'] as String? ?? 'messaging',
-    );
-
-Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'type': instance.type,
-    };
-
-VoicemailTabScheme _$VoicemailTabSchemeFromJson(Map<String, dynamic> json) =>
-    VoicemailTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      type: json['type'] as String? ?? 'voicemail',
-    );
-
-Map<String, dynamic> _$VoicemailTabSchemeToJson(VoicemailTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'type': instance.type,
-    };
-
-EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
-    EmbeddedTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      embeddedResourceId: json['embeddedResourceId'] as String,
-      type: json['type'] as String? ?? 'embedded',
-    );
-
-Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'embeddedResourceId': instance.embeddedResourceId,
-      'type': instance.type,
-    };

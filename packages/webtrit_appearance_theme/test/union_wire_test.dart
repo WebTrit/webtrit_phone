@@ -1,3 +1,4 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:test/test.dart';
 import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 
@@ -13,6 +14,7 @@ import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 /// and read back, and has to come back as itself.
 void main() {
   _typesMatchTheWire();
+  _anUnknownWordIsRefused();
   _theEmbeddedIdIsAString();
 
   group('what the decoder makes of what the encoder wrote', () {
@@ -118,6 +120,21 @@ void _theEmbeddedIdIsAString() {
       // served by the frozen track, and one that reaches here is a mistake
       // worth seeing rather than one to paper over.
       expect(() => BottomMenuTabScheme.fromJson(tab(4)), throwsA(isA<TypeError>()));
+    });
+  });
+}
+
+/// A word the decoder does not know is refused.
+///
+/// The sealed base dispatches on `type` and has no default branch, so a document
+/// naming a variant that does not exist fails to parse rather than quietly
+/// becoming one that does.
+void _anUnknownWordIsRefused() {
+  group('what the decoder makes of a word it does not know', () {
+    test('an unknown word is refused rather than read as something else', () {
+      expect(() => PageBackground.fromJson({'type': 'video'}), throwsA(isA<CheckedFromJsonException>()));
+      expect(() => SupportedFeature.fromJson({'type': 'telepathy'}), throwsA(isA<CheckedFromJsonException>()));
+      expect(() => BottomMenuTabScheme.fromJson({'type': 'radio'}), throwsA(isA<CheckedFromJsonException>()));
     });
   });
 }
