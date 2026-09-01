@@ -1,4 +1,5 @@
 export 'about_screenshot.dart';
+export 'app_bar_statuses_screenshot.dart';
 export 'call_log_screen_screenshot.dart';
 export 'call_screen_screenshot.dart';
 export 'caller_id_settings_screen_screenshot.dart';
