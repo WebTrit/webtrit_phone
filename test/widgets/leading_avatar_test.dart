@@ -6,6 +6,7 @@ import 'package:webtrit_phone/theme/styles/styles.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/avatar_status_badge.dart';
 import 'package:webtrit_phone/widgets/leading_avatar.dart';
+import 'package:webtrit_phone/widgets/safe_network_image.dart';
 
 void main() {
   Widget wrap(Widget child, {NameColorsStyle? nameColors}) {
@@ -85,6 +86,31 @@ void main() {
       await tester.pumpWidget(wrap(const LeadingAvatar(username: null), nameColors: const NameColorsStyle()));
 
       expect(backgroundOf(tester), const Color(0xFFEEF3F6));
+    });
+  });
+
+  group('LeadingAvatar photo resolution', () {
+    testWidgets('asks Gravatar for the size it paints, in device pixels', (tester) async {
+      // The test binding paints at 3.0, so a 74 px avatar is 222 real pixels.
+      await tester.pumpWidget(
+        wrap(
+          LeadingAvatar(
+            username: 'John Doe',
+            thumbnailUrl: Uri.parse('https://www.gravatar.com/avatar/abc'),
+            radius: 37,
+          ),
+        ),
+      );
+
+      final image = tester.widget<SafeNetworkImage>(find.byType(SafeNetworkImage));
+      expect(Uri.parse(image.url).queryParameters['s'], '222');
+    });
+
+    testWidgets('leaves a non-Gravatar url alone', (tester) async {
+      const url = 'https://example.com/photo.png';
+      await tester.pumpWidget(wrap(LeadingAvatar(username: 'John Doe', thumbnailUrl: Uri.parse(url), radius: 37)));
+
+      expect(tester.widget<SafeNetworkImage>(find.byType(SafeNetworkImage)).url, url);
     });
   });
 
