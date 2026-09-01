@@ -293,7 +293,7 @@ abstract final class BottomMenuMapper {
     FeatureOverrides overrides,
   ) {
     return tab.when(
-      favorites: (enabled, initial, titleL10n, icon) => FavoritesBottomMenuTab(
+      favorites: (enabled, initial, titleL10n, icon, _) => FavoritesBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
@@ -302,14 +302,14 @@ abstract final class BottomMenuMapper {
       // Local flag (config) can be overridden by Firebase Remote Config, then gated by the core
       // capability: call history is shown only when the resolved local flag AND the server
       // callHistory capability are both true.
-      recents: (enabled, initial, titleL10n, icon, supportsCallHistory) => RecentsBottomMenuTab(
+      recents: (enabled, initial, titleL10n, icon, supportsCallHistory, _) => RecentsBottomMenuTab(
         supportsCallHistory: (overrides.isCallHistoryEnabled ?? supportsCallHistory) && coreSupport.supportsCallHistory,
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, layout, favorites) => ContactsBottomMenuTab(
+      contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, layout, favorites, _) => ContactsBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
@@ -323,25 +323,25 @@ abstract final class BottomMenuMapper {
             .where((type) => type != ContactSourceType.external || coreSupport.supportsExtensions)
             .toList(),
       ),
-      keypad: (enabled, initial, titleL10n, icon) => KeypadBottomMenuTab(
+      keypad: (enabled, initial, titleL10n, icon, _) => KeypadBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      messaging: (enabled, initial, titleL10n, icon) => MessagingBottomMenuTab(
+      messaging: (enabled, initial, titleL10n, icon, _) => MessagingBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      voicemail: (enabled, initial, titleL10n, icon) => VoicemailBottomMenuTab(
+      voicemail: (enabled, initial, titleL10n, icon, _) => VoicemailBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      embedded: (enabled, initial, titleL10n, icon, embeddedId) {
+      embedded: (enabled, initial, titleL10n, icon, embeddedId, _) {
         final embeddedResource = embeddedConfig.embeddedResources.firstWhereOrNull(
           (resource) => resource.id == embeddedId,
         );
@@ -530,7 +530,7 @@ abstract final class MessagingMapper {
   /// Maps configuration and core support to [MessagingConfig].
   static MessagingConfig map(AppConfig appConfig, CoreSupport coreSupport) {
     final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
-      (tab) => tab.maybeWhen(messaging: (enabled, _, _, _) => enabled, orElse: () => false),
+      (tab) => tab.maybeWhen(messaging: (enabled, _, _, _, _) => enabled, orElse: () => false),
     );
 
     return MessagingConfig(
