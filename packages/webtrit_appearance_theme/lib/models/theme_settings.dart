@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../schema/enum_properties.dart';
+import '../schema/enum_properties.g.dart';
 import '../schema/union_assembly.dart';
 
 import 'color_scheme.config.dart';
@@ -61,7 +61,7 @@ class ThemeSettings with _$ThemeSettings {
   static final Map<String, Object?> jsonSchema = assembleEnums(
     assembleUnions(_$ThemeSettingsJsonSchema, {'PageBackground': PageBackground.variantSchemas}),
     'ThemeSettings',
-    themeEnumProperties,
+    enumProperties,
   );
 
   factory ThemeSettings.fromJson(Map<String, Object?> json) => _$ThemeSettingsFromJson(json);

@@ -59,21 +59,20 @@ Object? _pointSelfRefsAt(Object? node, String variant) {
   return node;
 }
 
-/// An enum-typed property: the values it may take, and where its default is
-/// written.
+/// An enum-typed property: the words it may take, and the one it defaults to.
+///
+/// Written by `webtrit_appearance_theme_builder` into `enum_properties.g.dart`,
+/// off the enum's own constants and the default on the constructor parameter, so
+/// neither is stated twice.
 class EnumProperty {
-  const EnumProperty(this.values, this.defaultsOf);
+  const EnumProperty(this.values, this.defaultValue);
 
-  /// The enum's values, in declaration order. Their JSON spelling is
-  /// [Enum.name] - no enum in this package renames one with `@JsonValue`.
-  final List<Enum> values;
+  /// The words the property accepts, as `toJson` writes them - the `@JsonValue`
+  /// of a constant where there is one, its name otherwise.
+  final List<String> values;
 
-  /// `toJson` of an instance built with nothing but its required arguments.
-  ///
-  /// The default is read back off that rather than repeated here, so the
-  /// constructor stays the one place a default is written and no table can
-  /// drift from it.
-  final Map<String, Object?> Function() defaultsOf;
+  /// The word the constructor falls back to, or null where it has no default.
+  final String? defaultValue;
 }
 
 /// Returns [root] with each enum-typed property in [enums] stating its values.
@@ -83,9 +82,10 @@ class EnumProperty {
 /// property comes out as a bare `{"type": "object"}` - no value list, no default,
 /// nothing a reader could build a chooser from.
 ///
-/// [enums] maps a type's name - [rootName] for the root's own object, a `$defs`
-/// entry otherwise - to its enum properties. Whatever the generator did write for
-/// the property is kept, its `description` included.
+/// [enums] is the whole package's table, keyed by type name - [rootName] for the
+/// root's own object, a `$defs` entry otherwise. A type this root does not reach
+/// is skipped, so all three roots are handed the same table. Whatever the
+/// generator did write for a property is kept, its `description` included.
 Map<String, Object?> assembleEnums(
   Map<String, Object?> root,
   String rootName,
@@ -96,22 +96,17 @@ Map<String, Object?> assembleEnums(
 
   enums.forEach((typeName, properties) {
     final owner = typeName == rootName ? rootProperties : (defs[typeName] as Map<String, Object?>?)?['properties'];
-    if (owner is! Map<String, Object?>) {
-      throw StateError('$typeName is named as carrying an enum property but the schema does not describe it');
-    }
+    if (owner is! Map<String, Object?>) return;
 
     final described = <String, Object?>{...owner};
     properties.forEach((name, property) {
       final generated = described[name];
-      if (generated is! Map<String, Object?>) {
-        throw StateError('$typeName.$name is named as an enum property but the schema does not describe it');
-      }
-      final fallback = property.defaultsOf()[name];
+      if (generated is! Map<String, Object?>) return;
       described[name] = <String, Object?>{
-        'enum': [for (final value in property.values) value.name],
+        'enum': property.values,
         for (final entry in generated.entries)
           if (entry.key != 'type') entry.key: entry.value,
-        'default': ?fallback,
+        'default': ?property.defaultValue,
       };
     });
 

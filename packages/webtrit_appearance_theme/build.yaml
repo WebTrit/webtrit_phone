@@ -4,3 +4,5 @@ targets:
       json_serializable:
         options:
           create_json_schema: true
+      webtrit_appearance_theme_builder:enum_properties:
+        enabled: true

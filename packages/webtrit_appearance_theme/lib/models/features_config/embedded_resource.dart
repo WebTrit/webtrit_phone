@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../schema/enum_properties.dart';
+import '../../schema/enum_properties.g.dart';
 import '../../schema/union_assembly.dart';
 
 import 'embedded_resource_type.dart';
@@ -93,7 +93,7 @@ class EmbeddedResource with _$EmbeddedResource {
   static final Map<String, Object?> jsonSchema = assembleEnums(
     _$EmbeddedResourceJsonSchema,
     'EmbeddedResource',
-    embeddedResourceEnumProperties,
+    enumProperties,
   );
 
   factory EmbeddedResource.fromJson(Map<String, Object?> json) => _$EmbeddedResourceFromJson(json);

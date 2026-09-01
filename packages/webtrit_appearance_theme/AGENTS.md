@@ -112,7 +112,7 @@ until both lines exist:
    static final Map<String, Object?> jsonSchema = assembleEnums(
      assembleUnions(_$<Type>JsonSchema, {/* union name: variantSchemas */}),
      '<Type>',
-     <enum table>,
+     enumProperties,
    );
    ```
 
@@ -143,12 +143,29 @@ Four rules follow, and the tests named against them are what keep the schema hon
   it got no `$def` either.
 - **a union is a sealed base with an ordinary class per variant.** Its `oneOf` is assembled
   from `variantSchemas`; `test/union_schema_test.dart` fails if a variant is missing from it.
-- **an enum-typed property is named in `lib/schema/enum_properties.dart`.** Its values and
-  default are assembled in; `test/enum_property_test.dart` walks the published schema and fails
-  on any property still described as a bare object, which is what an unlisted enum looks like.
+- **an enum-typed property is described from the enum itself.** There is nothing to keep here:
+  `webtrit_appearance_theme_builder` writes `lib/schema/enum_properties.g.dart` off the enum's
+  constants and the default on the constructor parameter, and the assembly fills the property in
+  from that. `test/enum_property_test.dart` reads none of it - it walks the published schema and
+  fails on any property still described as a bare object, which is what an enum nobody described
+  looks like.
 
 Both assemblies live in `lib/schema/union_assembly.dart` and run where a root exposes its
 `jsonSchema`, which is why that member is `static final` rather than `static const`.
+
+### The enum table is generated
+
+`webtrit_appearance_theme_builder` (a sibling package, dev dependency, applied in `build.yaml`)
+runs as part of `build_runner` and writes `lib/schema/enum_properties.g.dart` - which enum-typed
+properties the contract has, the words each accepts, and the one it defaults to. Adding an enum
+field therefore takes no edit beyond the field itself.
+
+It reads the source **syntactically**, parsed rather than resolved. Resolving would need each
+model library's `part` files, which do not exist until freezed and json_serializable have run,
+and those in turn need this table to resolve the roots that import it - a cycle. Parsing has
+none, and the AST moves far less between analyzer majors than the element model does. The price
+is that a type counts as an enum only where this package declares it; one from elsewhere is not
+seen, and surfaces as the bare object the test fails on.
 
 The published schema is byte-for-byte what the fork used to produce - `ThemeSettings` 90 of 90
 `$defs`, `AppConfig` 41 of 41, `EmbeddedResource` complete.

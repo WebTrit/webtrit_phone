@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../schema/enum_properties.dart';
+import '../../schema/enum_properties.g.dart';
 import '../../schema/union_assembly.dart';
 import '../pages/page_background.dart';
 
@@ -58,7 +58,7 @@ class AppConfig with _$AppConfig {
       'BottomMenuTabScheme': BottomMenuTabScheme.variantSchemas,
     }),
     'AppConfig',
-    appConfigEnumProperties,
+    enumProperties,
   );
 
   factory AppConfig.fromJson(Map<String, Object?> json) => _$AppConfigFromJson(json);

@@ -1,0 +1,8 @@
+builders:
+  enum_properties:
+    import: "package:webtrit_appearance_theme_builder/builder.dart"
+    builder_factories: ["enumPropertiesBuilder"]
+    build_extensions: {"$lib$": ["schema/enum_properties.g.dart"]}
+    auto_apply: none
+    build_to: source
+    runs_before: ["json_serializable:json_serializable"]

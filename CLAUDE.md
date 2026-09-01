@@ -25,5 +25,5 @@
 - **Card not Container**: elevation/shadow → `Card`, not `Container + BoxShadow`.
 - **Schema migration**: `dart run bin/create_new_schema_dump_and_test_migration.dart` after any Drift table change.
 - **Theming steps**: DTO → codegen → JSON assets → bridge → extension (all 5 steps when adding a theme property).
-- **Theme schema root**: a new ROOT DTO in `webtrit_appearance_theme` also needs `static const Map<String, Object?> jsonSchema = _$<Type>JsonSchema;` in the class plus an entry in `bin/print_json_schema.dart` — the generated constant is private to its library, so without the static the schema is unreachable. Nested types need nothing (they land in the root's `$defs`).
+- **Theme schema root**: a new ROOT DTO in `webtrit_appearance_theme` also needs a `jsonSchema` static in the class plus an entry in `bin/print_json_schema.dart` — the generated constant is private to its library, so without the static the schema is unreachable. A root with a union or an enum below it wraps that constant in `assembleUnions`/`assembleEnums` and is `static final`; see the package AGENTS.md. Nested types need nothing (they land in the root's `$defs`).
 - **Flavor combinator**: `--flavor deeplinkssmsReceiver` = deeplinks + sms receiver (see AGENTS.md for full matrix).

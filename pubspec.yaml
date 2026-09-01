@@ -10,6 +10,7 @@ workspace:
   - packages/ssl_certificates
   - packages/store_info_extractor
   - packages/webtrit_appearance_theme
+  - packages/webtrit_appearance_theme_builder
   - packages/device_auto_rotate
   - packages/data/app_database
   - packages/_http_client

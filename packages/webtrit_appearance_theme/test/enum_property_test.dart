@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:webtrit_appearance_theme/schema/enum_properties.dart';
+import 'package:webtrit_appearance_theme/schema/enum_properties.g.dart';
 import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 
 /// An enum-typed property states the values it may take.
@@ -9,11 +9,12 @@ import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 /// `{"type": "object"}` - no values, no default, nothing a configurator could
 /// build a chooser from. The package names such properties and fills them in.
 ///
-/// A list that has to be kept by hand is only as good as what catches a gap in
-/// it, so the first test here is the one that matters: it does not read the list
-/// at all. It walks the published schema and fails on any property still
-/// described as a bare object - which is precisely what an enum nobody listed
-/// looks like.
+/// The table is written by `webtrit_appearance_theme_builder`, so a new enum
+/// property needs no edit - but a builder that misses one would be just as quiet
+/// as a person who forgot. The first test here is therefore the one that matters:
+/// it does not read the table at all. It walks the published schema and fails on
+/// any property still described as a bare object - which is precisely what an
+/// enum nobody described looks like.
 void main() {
   final published = <String, Map<String, Object?>>{
     'ThemeSettings': ThemeSettings.jsonSchema,
@@ -79,56 +80,49 @@ void main() {
           bare,
           isEmpty,
           reason:
-              'These properties of ${root.key} are described as a bare object. An enum-typed one '
-              'belongs in lib/schema/enum_properties.dart.',
+              'These properties of ${root.key} are described as a bare object, which is what an '
+              'enum the builder did not see looks like. It reads only enums this package declares.',
         );
       }
     });
 
     test('a listed property states its enum values in the schema', () {
-      final tables = {
-        'ThemeSettings': (ThemeSettings.jsonSchema, themeEnumProperties),
-        'AppConfig': (AppConfig.jsonSchema, appConfigEnumProperties),
-        'EmbeddedResource': (EmbeddedResource.jsonSchema, embeddedResourceEnumProperties),
-      };
+      final unseen = {for (final type in enumProperties.keys) type};
 
-      for (final table in tables.entries) {
-        final (schema, listed) = table.value;
+      for (final root in published.entries) {
+        final schema = root.value;
         final defs = schema[r'$defs'] as Map<String, Object?>? ?? const {};
 
-        listed.forEach((type, properties) {
+        enumProperties.forEach((type, properties) {
           final owner =
-              (type == table.key ? schema['properties'] : (defs[type]! as Map<String, Object?>)['properties'])!
-                  as Map<String, Object?>;
+              (type == root.key ? schema['properties'] : (defs[type] as Map<String, Object?>?)?['properties'])
+                  as Map<String, Object?>?;
+          if (owner == null) return;
+          unseen.remove(type);
 
           properties.forEach((name, property) {
             final described = owner[name]! as Map<String, Object?>;
-            expect(described['enum'], [
-              for (final value in property.values) value.name,
-            ], reason: '$type.$name does not state its values');
+            expect(described['enum'], property.values, reason: '$type.$name does not state its values');
           });
         });
       }
+
+      expect(unseen, isEmpty, reason: 'the builder described types no published root reaches');
     });
 
     test('a default is one of the values the property offers', () {
-      // The one way the values could be wrong: an enum renamed on the wire with
-      // `@JsonValue`, which `Enum.name` would not know about. The default is
-      // read off a real instance, so if a rename existed this would catch it.
-      for (final table in [themeEnumProperties, appConfigEnumProperties, embeddedResourceEnumProperties]) {
-        table.forEach((type, properties) {
-          properties.forEach((name, property) {
-            final fallback = property.defaultsOf()[name];
-            if (fallback == null) return;
+      enumProperties.forEach((type, properties) {
+        properties.forEach((name, property) {
+          final fallback = property.defaultValue;
+          if (fallback == null) return;
 
-            expect(
-              [for (final value in property.values) value.name],
-              contains(fallback),
-              reason: '$type.$name defaults to "$fallback", which is not one of its values',
-            );
-          });
+          expect(
+            property.values,
+            contains(fallback),
+            reason: '$type.$name defaults to "$fallback", which is not one of its values',
+          );
         });
-      }
+      });
     });
   });
 }

@@ -18,6 +18,8 @@ dev_dependencies:
   freezed: ^3.2.5
   build_runner: ^2.15.0
   json_serializable: ^6.14.1
+  webtrit_appearance_theme_builder:
+    path: ../webtrit_appearance_theme_builder
   webtrit_analysis:
     git: https://github.com/WebTrit/webtrit_analysis.git
   test: ^1.31.0
