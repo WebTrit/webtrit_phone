@@ -594,7 +594,6 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
     this.userIconColor,
     this.logoutIconColor,
     this.groupTitleListTile,
-    this.showSeparators = true,
     this.separator,
     this.background,
     this.itemTextStyle,
@@ -618,12 +617,6 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
   @override
   final GroupTitleListTileWidgetConfig? groupTitleListTile;
 
-  /// Deprecated: visibility now lives in [separator] (`separator.enabled`).
-  /// Kept for backward compatibility with themes saved before [separator] existed.
-  @Deprecated('Use separator.enabled instead')
-  @override
-  final bool showSeparators;
-
   /// Style of the divider lines between setting items (visibility + color).
   @override
   final SeparatorStyleConfig? separator;
@@ -640,17 +633,28 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
   @override
   final AppBarConfig? appBarStyle;
 
+  /// Themes saved before [separator] existed said whether the divider showed
+  /// with a boolean beside it. It is folded in here, at the boundary, so no
+  /// reader downstream has to know the key ever existed - the same shape
+  /// `supportsCallHistory` uses for the key it replaced.
+  ///
+  /// Folded when the style does not answer, not merely when the style is
+  /// absent. The store writes `separator` as soon as either of its fields is
+  /// filled, so a theme that was only ever coloured arrives carrying a style
+  /// that says nothing about visibility - and the boolean beside it is still
+  /// the answer. Folding only on an absent style is what let a coloured
+  /// separator turn a hidden one back on.
   factory SettingsPageConfig.fromJson(Map<String, Object?> json) {
-    // TODO: Migration workaround — themes saved before `separator` existed expressed separator
-    // visibility through the boolean `showSeparators`. Fold it into the new `separator` style
-    // (visibility kept, default color) when `separator` is absent, so those themes keep working.
-    // Remove this block and the deprecated `showSeparators` field in a future major release once
-    // all stored themes carry `separator`.
-    if (json['separator'] == null && json['showSeparators'] != null) {
-      json = {
-        ...json,
-        'separator': <String, Object?>{'enabled': json['showSeparators']},
-      };
+    final retired = json['showSeparators'];
+    if (retired != null) {
+      final existing = json['separator'];
+      final style = existing is Map ? Map<String, Object?>.from(existing) : <String, Object?>{};
+      if (style['enabled'] == null) {
+        json = {
+          ...json,
+          'separator': <String, Object?>{...style, 'enabled': retired},
+        };
+      }
     }
     return _$SettingsPageConfigFromJson(json);
   }

@@ -3245,7 +3245,7 @@ case _:
 /// @nodoc
 mixin _$SettingsPageConfig {
 
- ThemeOverrideConfig get themeOverride; String? get leadingIconsColor; String? get userIconColor; String? get logoutIconColor; GroupTitleListTileWidgetConfig? get groupTitleListTile; bool get showSeparators; SeparatorStyleConfig? get separator; PageBackground? get background; TextStyleConfig? get itemTextStyle; BlurredSurfaceConfig? get appBarBlurredSurface; AppBarConfig? get appBarStyle;
+ ThemeOverrideConfig get themeOverride; String? get leadingIconsColor; String? get userIconColor; String? get logoutIconColor; GroupTitleListTileWidgetConfig? get groupTitleListTile; SeparatorStyleConfig? get separator; PageBackground? get background; TextStyleConfig? get itemTextStyle; BlurredSurfaceConfig? get appBarBlurredSurface; AppBarConfig? get appBarStyle;
 /// Create a copy of SettingsPageConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -3256,16 +3256,16 @@ $SettingsPageConfigCopyWith<SettingsPageConfig> get copyWith => _$SettingsPageCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsPageConfig&&(identical(other.themeOverride, themeOverride) || other.themeOverride == themeOverride)&&(identical(other.leadingIconsColor, leadingIconsColor) || other.leadingIconsColor == leadingIconsColor)&&(identical(other.userIconColor, userIconColor) || other.userIconColor == userIconColor)&&(identical(other.logoutIconColor, logoutIconColor) || other.logoutIconColor == logoutIconColor)&&(identical(other.groupTitleListTile, groupTitleListTile) || other.groupTitleListTile == groupTitleListTile)&&(identical(other.showSeparators, showSeparators) || other.showSeparators == showSeparators)&&(identical(other.separator, separator) || other.separator == separator)&&(identical(other.background, background) || other.background == background)&&(identical(other.itemTextStyle, itemTextStyle) || other.itemTextStyle == itemTextStyle)&&(identical(other.appBarBlurredSurface, appBarBlurredSurface) || other.appBarBlurredSurface == appBarBlurredSurface)&&(identical(other.appBarStyle, appBarStyle) || other.appBarStyle == appBarStyle));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsPageConfig&&(identical(other.themeOverride, themeOverride) || other.themeOverride == themeOverride)&&(identical(other.leadingIconsColor, leadingIconsColor) || other.leadingIconsColor == leadingIconsColor)&&(identical(other.userIconColor, userIconColor) || other.userIconColor == userIconColor)&&(identical(other.logoutIconColor, logoutIconColor) || other.logoutIconColor == logoutIconColor)&&(identical(other.groupTitleListTile, groupTitleListTile) || other.groupTitleListTile == groupTitleListTile)&&(identical(other.separator, separator) || other.separator == separator)&&(identical(other.background, background) || other.background == background)&&(identical(other.itemTextStyle, itemTextStyle) || other.itemTextStyle == itemTextStyle)&&(identical(other.appBarBlurredSurface, appBarBlurredSurface) || other.appBarBlurredSurface == appBarBlurredSurface)&&(identical(other.appBarStyle, appBarStyle) || other.appBarStyle == appBarStyle));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,themeOverride,leadingIconsColor,userIconColor,logoutIconColor,groupTitleListTile,showSeparators,separator,background,itemTextStyle,appBarBlurredSurface,appBarStyle);
+int get hashCode => Object.hash(runtimeType,themeOverride,leadingIconsColor,userIconColor,logoutIconColor,groupTitleListTile,separator,background,itemTextStyle,appBarBlurredSurface,appBarStyle);
 
 @override
 String toString() {
-  return 'SettingsPageConfig(themeOverride: $themeOverride, leadingIconsColor: $leadingIconsColor, userIconColor: $userIconColor, logoutIconColor: $logoutIconColor, groupTitleListTile: $groupTitleListTile, showSeparators: $showSeparators, separator: $separator, background: $background, itemTextStyle: $itemTextStyle, appBarBlurredSurface: $appBarBlurredSurface, appBarStyle: $appBarStyle)';
+  return 'SettingsPageConfig(themeOverride: $themeOverride, leadingIconsColor: $leadingIconsColor, userIconColor: $userIconColor, logoutIconColor: $logoutIconColor, groupTitleListTile: $groupTitleListTile, separator: $separator, background: $background, itemTextStyle: $itemTextStyle, appBarBlurredSurface: $appBarBlurredSurface, appBarStyle: $appBarStyle)';
 }
 
 
@@ -3276,7 +3276,7 @@ abstract mixin class $SettingsPageConfigCopyWith<$Res>  {
   factory $SettingsPageConfigCopyWith(SettingsPageConfig value, $Res Function(SettingsPageConfig) _then) = _$SettingsPageConfigCopyWithImpl;
 @useResult
 $Res call({
- ThemeOverrideConfig themeOverride, String? leadingIconsColor, String? userIconColor, String? logoutIconColor, GroupTitleListTileWidgetConfig? groupTitleListTile, bool showSeparators, SeparatorStyleConfig? separator, PageBackground? background, TextStyleConfig? itemTextStyle, BlurredSurfaceConfig? appBarBlurredSurface, AppBarConfig? appBarStyle
+ ThemeOverrideConfig themeOverride, String? leadingIconsColor, String? userIconColor, String? logoutIconColor, GroupTitleListTileWidgetConfig? groupTitleListTile, SeparatorStyleConfig? separator, PageBackground? background, TextStyleConfig? itemTextStyle, BlurredSurfaceConfig? appBarBlurredSurface, AppBarConfig? appBarStyle
 });
 
 
@@ -3293,15 +3293,14 @@ class _$SettingsPageConfigCopyWithImpl<$Res>
 
 /// Create a copy of SettingsPageConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? themeOverride = null,Object? leadingIconsColor = freezed,Object? userIconColor = freezed,Object? logoutIconColor = freezed,Object? groupTitleListTile = freezed,Object? showSeparators = null,Object? separator = freezed,Object? background = freezed,Object? itemTextStyle = freezed,Object? appBarBlurredSurface = freezed,Object? appBarStyle = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? themeOverride = null,Object? leadingIconsColor = freezed,Object? userIconColor = freezed,Object? logoutIconColor = freezed,Object? groupTitleListTile = freezed,Object? separator = freezed,Object? background = freezed,Object? itemTextStyle = freezed,Object? appBarBlurredSurface = freezed,Object? appBarStyle = freezed,}) {
   return _then(SettingsPageConfig(
 themeOverride: null == themeOverride ? _self.themeOverride : themeOverride // ignore: cast_nullable_to_non_nullable
 as ThemeOverrideConfig,leadingIconsColor: freezed == leadingIconsColor ? _self.leadingIconsColor : leadingIconsColor // ignore: cast_nullable_to_non_nullable
 as String?,userIconColor: freezed == userIconColor ? _self.userIconColor : userIconColor // ignore: cast_nullable_to_non_nullable
 as String?,logoutIconColor: freezed == logoutIconColor ? _self.logoutIconColor : logoutIconColor // ignore: cast_nullable_to_non_nullable
 as String?,groupTitleListTile: freezed == groupTitleListTile ? _self.groupTitleListTile : groupTitleListTile // ignore: cast_nullable_to_non_nullable
-as GroupTitleListTileWidgetConfig?,showSeparators: null == showSeparators ? _self.showSeparators : showSeparators // ignore: cast_nullable_to_non_nullable
-as bool,separator: freezed == separator ? _self.separator : separator // ignore: cast_nullable_to_non_nullable
+as GroupTitleListTileWidgetConfig?,separator: freezed == separator ? _self.separator : separator // ignore: cast_nullable_to_non_nullable
 as SeparatorStyleConfig?,background: freezed == background ? _self.background : background // ignore: cast_nullable_to_non_nullable
 as PageBackground?,itemTextStyle: freezed == itemTextStyle ? _self.itemTextStyle : itemTextStyle // ignore: cast_nullable_to_non_nullable
 as TextStyleConfig?,appBarBlurredSurface: freezed == appBarBlurredSurface ? _self.appBarBlurredSurface : appBarBlurredSurface // ignore: cast_nullable_to_non_nullable

@@ -9,7 +9,7 @@ part of 'separator_style_config.dart';
 SeparatorStyleConfig _$SeparatorStyleConfigFromJson(
   Map<String, dynamic> json,
 ) => SeparatorStyleConfig(
-  enabled: json['enabled'] as bool?,
+  enabled: json['enabled'] as bool? ?? true,
   color: json['color'] as String?,
 );
 

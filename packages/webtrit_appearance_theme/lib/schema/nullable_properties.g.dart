@@ -281,7 +281,7 @@ const nullableProperties = <String, List<String>>{
   'PresenceBadgeStyleConfig': ['availableColor', 'busyColor', 'iconColor', 'sizeFactor', 'unavailableColor'],
   'RecentsPageConfig': ['appBarBlurredSurface', 'appBarStyle', 'background'],
   'RegisteredBadgeStyleConfig': ['registeredColor', 'sizeFactor', 'unregisteredColor'],
-  'SeparatorStyleConfig': ['color', 'enabled'],
+  'SeparatorStyleConfig': ['color'],
   'SettingsPageConfig': [
     'appBarBlurredSurface',
     'appBarStyle',
@@ -332,7 +332,7 @@ const nullableProperties = <String, List<String>>{
   ],
   'ThemeWidgetConfig': ['group'],
   'ToolbarConfig': ['titleL10n'],
-  '_ClassInfo': ['superName'],
+  '_ClassInfo': ['freezedUnionKey', 'redirectsTo', 'superName'],
   '_FieldInfo': ['defaultConstant'],
   '_Property': ['defaultValue'],
 };

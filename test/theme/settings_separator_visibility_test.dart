@@ -8,11 +8,14 @@ import 'package:webtrit_phone/theme/factory/styles/settings_screen_style_factory
 
 /// Whether the settings list draws separators.
 ///
-/// Two things say so: the `separator` style, and the boolean it replaced. Which
-/// one applies is decided by the value, not by whether the object holding it
-/// exists - a distinction that matters because the store builds `separator` as
-/// soon as either of its two fields is filled, so a colour alone produces a
-/// style object that says nothing about visibility.
+/// One field says so, and a style that exists always answers it. The boolean it
+/// replaced is folded in by `SettingsPageConfig.fromJson`, so these cases are
+/// the fold as much as the resolution.
+///
+/// The distinction that matters: the store writes `separator` as soon as either
+/// of its two fields is filled, so a colour alone used to produce a style that
+/// said nothing about visibility - and nothing is what a hidden separator was
+/// turned back on by.
 void main() {
   bool? visibility(String json) {
     final config = SettingsPageConfig.fromJson(jsonDecode(json) as Map<String, dynamic>);
@@ -49,11 +52,16 @@ void main() {
     expect(visibility('{"separator": {"enabled": true}, "showSeparators": false}'), isTrue);
   });
 
-  // A theme that says neither still answers `true`, because the retired boolean
-  // carries that as its default. Worth pinning: it is the reason removing that
-  // field is not a no-op, and the reason the fallback above cannot simply be
-  // dropped.
-  test('a theme that says neither shows them', () {
-    expect(visibility('{}'), isTrue);
+  // A theme with no separator style at all decides nothing here, and the screen
+  // reads that as shown. The default moved there when the retired boolean - and
+  // its own default of `true` - went.
+  test('a theme with no separator style leaves the answer to the screen', () {
+    expect(visibility('{}'), isNull);
+  });
+
+  // A style that exists cannot say nothing any more: `enabled` carries its own
+  // default, so colouring one and saying nothing else means shown.
+  test('a style that names only a colour still answers', () {
+    expect(visibility('{"separator": {"color": "#CCCCCC"}}'), isTrue);
   });
 }

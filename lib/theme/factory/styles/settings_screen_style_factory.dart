@@ -30,19 +30,11 @@ class SettingsScreenStyleFactory implements ThemeStyleFactory<SettingsScreenStyl
       defaultFontFamily,
     ).create().primary;
 
-    // Whether the separator is shown is decided by the value, not by whether
-    // the object holding it exists.
-    //
-    // It used to be the object: a `separator` present meant the legacy boolean
-    // must not override it, on the grounds that a theme carrying the new style
-    // had already said what it wanted. It had not necessarily said this part.
-    // The store builds `separator` as soon as either of its two columns is
-    // filled, so setting a colour alone produces `{enabled: null, color: ...}`
-    // - and a brand that had turned separators off got them back the day
-    // somebody coloured them.
+    // One field says it, and a style that exists always answers. The boolean
+    // this replaced is folded into it by `SettingsPageConfig.fromJson`, so
+    // nothing here knows it existed.
     final separator = config?.separator;
-    // ignore: deprecated_member_use
-    final showSeparators = separator?.enabled ?? config?.showSeparators;
+    final showSeparators = separator?.enabled;
     final separatorColor = separator?.color?.toColor();
 
     // Resolve theme override values safely
