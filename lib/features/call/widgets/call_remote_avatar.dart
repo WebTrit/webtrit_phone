@@ -117,7 +117,7 @@ class _CallRemoteAvatarContent extends StatelessWidget {
       // would be upscaled to a blur at this diameter. The size is one of the shared
       // request sizes, so this is the same url the rest of the app already asked for.
       final devicePixels = diameter * MediaQuery.devicePixelRatioOf(context);
-      final url = gravatarUrlWithSize(thumbnailUrl, gravatarRequestSize(devicePixels)) ?? thumbnailUrl!;
+      final url = GravatarUrl.withSize(thumbnailUrl, GravatarUrl.requestSize(devicePixels)) ?? thumbnailUrl!;
 
       return Image.network(
         url.toString(),

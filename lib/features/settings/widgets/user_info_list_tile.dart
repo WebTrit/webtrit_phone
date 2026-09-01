@@ -47,7 +47,7 @@ class UserInfoListTile extends StatelessWidget {
               children: [
                 LeadingAvatar(
                   username: info?.name ?? info?.numbers.main,
-                  thumbnailUrl: gravatarThumbnailUrl(info?.email),
+                  thumbnailUrl: GravatarUrl.forEmail(info?.email),
                   radius: radius,
                   showLoading: true,
                   loadingPadding: EdgeInsets.zero,
