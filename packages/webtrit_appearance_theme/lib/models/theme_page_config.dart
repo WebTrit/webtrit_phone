@@ -633,31 +633,7 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
   @override
   final AppBarConfig? appBarStyle;
 
-  /// Themes saved before [separator] existed said whether the divider showed
-  /// with a boolean beside it. It is folded in here, at the boundary, so no
-  /// reader downstream has to know the key ever existed - the same shape
-  /// `supportsCallHistory` uses for the key it replaced.
-  ///
-  /// Folded when the style does not answer, not merely when the style is
-  /// absent. The store writes `separator` as soon as either of its fields is
-  /// filled, so a theme that was only ever coloured arrives carrying a style
-  /// that says nothing about visibility - and the boolean beside it is still
-  /// the answer. Folding only on an absent style is what let a coloured
-  /// separator turn a hidden one back on.
-  factory SettingsPageConfig.fromJson(Map<String, Object?> json) {
-    final retired = json['showSeparators'];
-    if (retired != null) {
-      final existing = json['separator'];
-      final style = existing is Map ? Map<String, Object?>.from(existing) : <String, Object?>{};
-      if (style['enabled'] == null) {
-        json = {
-          ...json,
-          'separator': <String, Object?>{...style, 'enabled': retired},
-        };
-      }
-    }
-    return _$SettingsPageConfigFromJson(json);
-  }
+  factory SettingsPageConfig.fromJson(Map<String, Object?> json) => _$SettingsPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$SettingsPageConfigToJson(this);
 }
