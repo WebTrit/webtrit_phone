@@ -13,9 +13,18 @@ import 'package:webtrit_phone/theme/factory/styles/action_pad_style_factory.dart
 /// job of this palette, and it is the only thing asserted here - the exact
 /// roles can move, three buttons reading alike cannot.
 void main() {
-  ColorScheme scheme() => ColorScheme.fromSeed(seedColor: const Color(0xFF1A73E8));
+  ColorScheme scheme([Brightness brightness = Brightness.light]) =>
+      ColorScheme.fromSeed(seedColor: const Color(0xFF1A73E8), brightness: brightness);
 
   Color? backgroundOf(ButtonStyle? style) => style?.backgroundColor?.resolve(const <WidgetState>{});
+
+  Color? disabledBackgroundOf(ButtonStyle? style) =>
+      style?.backgroundColor?.resolve(const <WidgetState>{WidgetState.disabled});
+
+  /// How far apart two fills are at their widest channel, which is as much as a
+  /// number can say about whether an eye tells them apart.
+  double apart(Color a, Color b) =>
+      [(a.r - b.r).abs(), (a.g - b.g).abs(), (a.b - b.b).abs()].reduce((x, y) => x > y ? x : y);
 
   ({Color? call, Color? options, Color? backspace}) backgrounds({ActionPadWidgetConfig? config}) {
     final styles = ActionPadStyleFactory(scheme(), config, null).create().primary;
@@ -48,6 +57,22 @@ void main() {
 
     expect(backgrounds().backspace, colors.surfaceContainerHighest);
   });
+
+  // The screen opens on an empty number, and an empty number disables all three
+  // buttons, so a dead backspace is the first thing anyone sees. The shared
+  // disabled fill is a faded neutral, which for a button already resting on a
+  // surface tone lands within a couple of percent of where it started.
+  for (final brightness in Brightness.values) {
+    test('a disabled backspace does not look like an enabled one in $brightness', () {
+      final colors = scheme(brightness);
+      final backspace = ActionPadStyleFactory(colors, null, null).create().primary?.backspace?.style;
+
+      final resting = backgroundOf(backspace)!;
+      final dead = Color.alphaBlend(disabledBackgroundOf(backspace)!, colors.surface);
+
+      expect(apart(resting, dead), greaterThan(0.05));
+    });
+  }
 
   // The fallback is what an unset button takes, and nothing more: a theme that
   // names a colour still wins.
