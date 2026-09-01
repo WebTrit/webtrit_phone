@@ -148,7 +148,11 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
           if (displayStream)
             StreamThumbnail(stream: widget.activeCall.remoteStream)
           else
-            _AvatarOverlay(activeCall: widget.activeCall, contactResolver: widget.contactResolver),
+            _AvatarOverlay(
+              activeCall: widget.activeCall,
+              contactResolver: widget.contactResolver,
+              smallerSide: widget.smallerSide,
+            ),
         ],
       ),
     );
@@ -156,10 +160,16 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
 }
 
 class _AvatarOverlay extends StatelessWidget {
-  const _AvatarOverlay({required this.activeCall, this.contactResolver});
+  const _AvatarOverlay({required this.activeCall, required this.smallerSide, this.contactResolver});
+
+  static const double _padding = 8;
 
   final ActiveCall activeCall;
   final ContactResolver? contactResolver;
+
+  /// Smaller side of the window the avatar sits in; it is what the avatar is sized
+  /// from, so a window configured larger or smaller carries it along.
+  final double smallerSide;
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +180,7 @@ class _AvatarOverlay extends StatelessWidget {
     // tight, it is drawn as an ellipse the shape of the window and the photo inside
     // it is cropped to match.
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(_padding),
       child: Center(
         child: FutureBuilder<Contact?>(
           future: contactResolver?.resolve(number),
@@ -179,7 +189,7 @@ class _AvatarOverlay extends StatelessWidget {
             final resolvedName = snapshot.data?.maybeName ?? displayName;
 
             return LeadingAvatar(
-              radius: 24,
+              radius: (smallerSide - _padding * 2) / 2,
               username: resolvedName,
               thumbnailUrl: snapshot.data?.thumbnailUrl,
               placeholderIcon: Icons.phone_in_talk_outlined,

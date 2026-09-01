@@ -86,8 +86,10 @@ void main() {
       );
       await tester.pump();
 
+      // 90 wide by default, less the 8 of padding on each side.
       final size = tester.getSize(find.byType(LeadingAvatar));
       expect(size.width, size.height);
+      expect(size.width, 74.0);
 
       await teardown(tester);
     });
