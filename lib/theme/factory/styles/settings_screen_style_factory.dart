@@ -30,15 +30,19 @@ class SettingsScreenStyleFactory implements ThemeStyleFactory<SettingsScreenStyl
       defaultFontFamily,
     ).create().primary;
 
-    // Separator: when a `separator` style is present it fully wins — `enabled == null` means
-    // "default (shown)" downstream, so the legacy boolean must NOT override it. Only fall back
-    // to the deprecated `showSeparators` when there is no `separator` config at all (e.g. an
-    // in-memory config not produced via fromJson; JSON loads are migrated into `separator`).
+    // Whether the separator is shown is decided by the value, not by whether
+    // the object holding it exists.
+    //
+    // It used to be the object: a `separator` present meant the legacy boolean
+    // must not override it, on the grounds that a theme carrying the new style
+    // had already said what it wanted. It had not necessarily said this part.
+    // The store builds `separator` as soon as either of its two columns is
+    // filled, so setting a colour alone produces `{enabled: null, color: ...}`
+    // - and a brand that had turned separators off got them back the day
+    // somebody coloured them.
     final separator = config?.separator;
-    final showSeparators = separator != null
-        ? separator.enabled
-        // ignore: deprecated_member_use
-        : config?.showSeparators;
+    // ignore: deprecated_member_use
+    final showSeparators = separator?.enabled ?? config?.showSeparators;
     final separatorColor = separator?.color?.toColor();
 
     // Resolve theme override values safely
