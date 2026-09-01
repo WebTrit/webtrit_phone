@@ -127,7 +127,14 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
 
   Widget _buildAvatarContent(double diameter, LeadingAvatarStyle style) {
     if (widget.thumbnailUrl != null) {
-      return ClipOval(key: ValueKey('remote:${widget.thumbnailUrl?.hashCode}'), child: _remoteImage(diameter, style));
+      // Gravatar serves 80x80 unless asked otherwise, which is soft on a list row and
+      // visibly pixelated on a large avatar, so ask for the resolution actually painted.
+      final devicePixels = (diameter * MediaQuery.devicePixelRatioOf(context)).round();
+      final url = gravatarUrlWithSize(widget.thumbnailUrl, devicePixels) ?? widget.thumbnailUrl!;
+
+      // Keyed by the sized url, not by the contact's: the image provider is resolved once
+      // per mount, so a new size has to arrive as a new child.
+      return ClipOval(key: ValueKey('remote:$url'), child: _remoteImage(url, diameter, style));
     } else if (widget.thumbnail != null) {
       return const ClipOval(key: ValueKey('local'), child: _LocalImage());
     } else {
@@ -161,9 +168,9 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     );
   }
 
-  Widget _remoteImage(double diameter, LeadingAvatarStyle style) {
+  Widget _remoteImage(Uri url, double diameter, LeadingAvatarStyle style) {
     return SafeNetworkImage(
-      widget.thumbnailUrl.toString(),
+      url.toString(),
       fit: BoxFit.cover,
       placeholderBuilder: () => _placeholder(diameter, style),
       errorBuilder: () {
