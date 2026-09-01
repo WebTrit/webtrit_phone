@@ -10,9 +10,6 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-export 'call_actions_style.dart';
-export 'call_actions_styles.dart';
-
 final _logger = Logger('ActiveCallActions');
 
 class ActiveCallActions extends StatefulWidget {
