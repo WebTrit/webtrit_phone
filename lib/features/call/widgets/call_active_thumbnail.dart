@@ -165,21 +165,27 @@ class _AvatarOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final number = activeCall.handle.value;
 
+    // The window stretches whatever fills it to its own 9:16 shape. The avatar is a
+    // circle of a fixed size, so it has to be let out of those constraints: taken
+    // tight, it is drawn as an ellipse the shape of the window and the photo inside
+    // it is cropped to match.
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: FutureBuilder<Contact?>(
-        future: contactResolver?.resolve(number),
-        builder: (context, snapshot) {
-          final displayName = activeCall.displayName ?? '';
-          final resolvedName = snapshot.data?.maybeName ?? displayName;
+      child: Center(
+        child: FutureBuilder<Contact?>(
+          future: contactResolver?.resolve(number),
+          builder: (context, snapshot) {
+            final displayName = activeCall.displayName ?? '';
+            final resolvedName = snapshot.data?.maybeName ?? displayName;
 
-          return LeadingAvatar(
-            radius: 24,
-            username: resolvedName,
-            thumbnailUrl: snapshot.data?.thumbnailUrl,
-            placeholderIcon: Icons.phone_in_talk_outlined,
-          );
-        },
+            return LeadingAvatar(
+              radius: 24,
+              username: resolvedName,
+              thumbnailUrl: snapshot.data?.thumbnailUrl,
+              placeholderIcon: Icons.phone_in_talk_outlined,
+            );
+          },
+        ),
       ),
     );
   }
