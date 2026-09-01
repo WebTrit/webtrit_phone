@@ -144,6 +144,18 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
     ];
   }
 
+  /// What the contacts section shows when nothing configures it. The
+  /// screenshots app runs standalone as well as inside the editor, and a
+  /// contacts screen with no address book in it is a preview of nothing.
+  static final _defaultContactsTab = ContactsBottomMenuTab(
+    enabled: true,
+    initial: false,
+    titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+    icon: Icons.people,
+    contactSourceTypes: const [ContactSourceType.local, ContactSourceType.external],
+    layout: const ContactsTabbedLayout(),
+  );
+
   List<BottomMenuTab> _defaultTabs(BuildContext context) {
     return [
       const FavoritesBottomMenuTab(
@@ -159,14 +171,7 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
         icon: Icons.history,
         supportsCallHistory: false,
       ),
-      ContactsBottomMenuTab(
-        enabled: true,
-        initial: false,
-        titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
-        icon: Icons.people,
-        contactSourceTypes: [],
-        layout: const ContactsTabbedLayout(),
-      ),
+      _defaultContactsTab,
       const KeypadBottomMenuTab(
         enabled: true,
         initial: false,
@@ -233,14 +238,36 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
           ),
         );
       case MainFlavor.contacts:
-        return BlocProvider<ContactsBloc>(
-          create: (_) => MockContactsSearchBloc.mainScreen(),
-          child: ContactsScreen(
-            sourceTypes: const [ContactSourceType.local, ContactSourceType.external],
-            sourceTypeWidgetBuilder: _buildContactSourceTypeWidget,
-            title: widget.title,
+        // The two arrangements are two screens in the app, chosen by the tab's
+        // layout the same way `AppRouter` chooses between them. Building one of
+        // them unconditionally is what made the arrangement, the address book
+        // switches and the favourites entry all read as ignored in the preview.
+        final contactsTab =
+            featureAccess?.bottomMenuConfig.getTabEnabled<ContactsBottomMenuTab>() ?? _defaultContactsTab;
+        return switch (contactsTab.layout) {
+          ContactsUnifiedLayout() => MultiBlocProvider(
+            providers: [
+              BlocProvider<ContactsBloc>(create: (_) => MockContactsSearchBloc.mainScreen()),
+              // Above the screen, not inside its body: the rearrange button in
+              // the scaffold reads the same list.
+              BlocProvider<FavoritesBloc>(create: (_) => MockFavoritesBloc.mainScreen()),
+            ],
+            child: ContactsFilterScreen(
+              selections: contactsTab.listSelections,
+              sourceTypeWidgetBuilder: _buildContactSourceTypeWidget,
+              favoritesWidgetBuilder: _buildFavoritesWidget,
+              title: widget.title,
+            ),
           ),
-        );
+          ContactsTabbedLayout() => BlocProvider<ContactsBloc>(
+            create: (_) => MockContactsSearchBloc.mainScreen(),
+            child: ContactsScreen(
+              sourceTypes: contactsTab.contactSourceTypes,
+              sourceTypeWidgetBuilder: _buildContactSourceTypeWidget,
+              title: widget.title,
+            ),
+          ),
+        };
       case MainFlavor.keypad:
         return BlocProvider<KeypadCubit>(
           create: (context) => widget.interactive
@@ -304,18 +331,45 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
     }
   }
 
-  Widget _buildContactSourceTypeWidget(BuildContext context, ContactSourceType sourceType) {
+  /// `markFavorites` is optional so this serves both screens: the tabbed one
+  /// asks for two positional arguments, the unified one passes the flag when a
+  /// list is shown beside the favourites entry.
+  Widget _buildContactSourceTypeWidget(
+    BuildContext context,
+    ContactSourceType sourceType, {
+    bool markFavorites = false,
+  }) {
     switch (sourceType) {
       case ContactSourceType.local:
         return BlocProvider<ContactsLocalTabBloc>(
           create: (_) => MockContactsLocalTabBloc.mainScreen(),
-          child: const ContactsLocalTab(),
+          child: ContactsLocalTab(markFavorites: markFavorites),
         );
       case ContactSourceType.external:
         return BlocProvider<ContactsExternalTabBloc>(
           create: (_) => MockContactsExternalTabBloc.mainScreen(),
-          child: const ContactsExternalTab(),
+          child: ContactsExternalTab(markFavorites: markFavorites),
         );
     }
+  }
+
+  /// The favourites entry of the unified chooser, with the same call
+  /// capabilities the favourites section itself is previewed with.
+  Widget _buildFavoritesWidget(
+    BuildContext context, {
+    bool reorderMode = false,
+    void Function(int index)? onReorderStart,
+    void Function(int index)? onReorderEnd,
+  }) {
+    return FavoritesList(
+      reorderMode: reorderMode,
+      onReorderStart: onReorderStart,
+      onReorderEnd: onReorderEnd,
+      transferEnabled: false,
+      videoEnabled: true,
+      chatsEnabled: false,
+      smssEnabled: false,
+      cdrsEnabled: false,
+    );
   }
 }
