@@ -66,7 +66,7 @@ AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
           (json['signinOrder'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ['passwordSignin', 'otpSignin', 'signup'],
+          const [],
       qr: json['qr'] == null
           ? const AppConfigLoginQr()
           : AppConfigLoginQr.fromJson(json['qr'] as Map<String, dynamic>),
@@ -90,10 +90,7 @@ AppConfigLoginQr _$AppConfigLoginQrFromJson(Map<String, dynamic> json) =>
                     AppConfigLoginQrFormat.fromJson(e as Map<String, dynamic>),
               )
               .toList() ??
-          const [
-            AppConfigLoginQrFormat(type: 'uri', schemes: ['csc']),
-            AppConfigLoginQrFormat(type: 'json'),
-          ],
+          const [],
       expectedHost: json['expectedHost'] as String?,
     );
 
@@ -142,13 +139,7 @@ AppConfigLoginModeSelect _$AppConfigLoginModeSelectFromJson(
                 AppConfigModeSelectAction.fromJson(e as Map<String, dynamic>),
           )
           .toList() ??
-      const [
-        AppConfigModeSelectAction(
-          enabled: true,
-          type: 'login',
-          titleL10n: 'login_Button_signUpToDemoInstance',
-        ),
-      ],
+      const [],
 );
 
 Map<String, dynamic> _$AppConfigLoginModeSelectToJson(
@@ -380,56 +371,7 @@ AppConfigSettings _$AppConfigSettingsFromJson(Map<String, dynamic> json) =>
                 ),
               )
               .toList() ??
-          const [
-            AppConfigSettingsSection(
-              titleL10n: 'settings_ListViewTileTitle_settings',
-              enabled: true,
-              items: [
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'network',
-                  titleL10n: 'settings_ListViewTileTitle_network',
-                  icon: '0xe424',
-                ),
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'mediaSettings',
-                  titleL10n: 'settings_ListViewTileTitle_mediaSettings',
-                  icon: '0xf1cf',
-                ),
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'language',
-                  titleL10n: 'settings_ListViewTileTitle_language',
-                  icon: '0xe366',
-                ),
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'terms',
-                  titleL10n: 'settings_ListViewTileTitle_termsConditions',
-                  icon: '0xeedf',
-                ),
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'about',
-                  titleL10n: 'settings_ListViewTileTitle_about',
-                  icon: '0xe140',
-                ),
-              ],
-            ),
-            AppConfigSettingsSection(
-              titleL10n: 'settings_ListViewTileTitle_toolbox',
-              enabled: true,
-              items: [
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'log',
-                  titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
-                  icon: '0xee79',
-                ),
-              ],
-            ),
-          ],
+          const [],
     );
 
 Map<String, dynamic> _$AppConfigSettingsToJson(AppConfigSettings instance) =>

@@ -25,7 +25,13 @@ sealed class PageBackground with _$PageBackground {
 
   const factory PageBackground.gradient({
     required List<String> colors,
-    @Default([0.0, 1.0]) List<double> stops,
+    // No default here, and none anywhere in the contract: a non-empty
+    // collection default crashes the schema generator, which hands the
+    // analyser's own objects to a literal writer that has no case for them.
+    // The value belongs where it is read anyway - a gradient with no stops is
+    // an even gradient, and saying so at the point of drawing is clearer than
+    // materialising a pair into every document that never asked for one.
+    @Default(<double>[]) List<double> stops,
     @Default(0.0) double beginX,
     @Default(0.0) double beginY,
     @Default(1.0) double endX,
