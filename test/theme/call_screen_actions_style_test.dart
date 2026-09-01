@@ -182,4 +182,23 @@ held
   disabled bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
   sel+dis  bg=#66EEF3F6 fg=#6630302F icon=#66EEF3F6''');
   });
+  // A theme written before the page config had `actions` still has to draw
+  // nine buttons. It used to be caught by the retired widget-level styles,
+  // which were a defaulted field and therefore never absent; with those gone,
+  // an unmapped config would reach `TextButton` as no style at all and lose
+  // the circle a call button is.
+  test('a theme with no actions config still styles every button', () {
+    final colors = _scheme();
+    final actions = CallScreenStyleFactory(colors, const CallPageConfig(), null).create().primary!.actions!;
+
+    for (final name in ['callStart', 'hangup', 'transfer', 'swap', 'key', 'camera', 'muted', 'speaker', 'held']) {
+      final button = buttonOf(actions, name);
+      expect(button, isNotNull, reason: '$name has no style');
+      expect(
+        button!.backgroundColor?.resolve(const <WidgetState>{}),
+        isNotNull,
+        reason: '$name has no background, so it would not draw a circle',
+      );
+    }
+  });
 }

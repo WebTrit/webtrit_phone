@@ -35,7 +35,12 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
         callInfo: _mapCallInfoStyle(infoCfg),
         list: _mapCallListStyle(pageConfig?.callList),
         hint: _mapHintStyle(pageConfig?.actingOnHint),
-        actions: _mapActionsFromPage(pageConfig?.actions),
+        // An absent `actions` is a theme written before the page config had
+        // one, and it still has to draw nine buttons. Mapped from an empty
+        // config rather than answered with null: null reaches `TextButton` as
+        // no style at all, which takes the app's plain text-button theme and
+        // loses the circle a call button is.
+        actions: _mapActionsFromPage(pageConfig?.actions ?? const CallPageActionsConfig()),
       ),
     );
   }
@@ -154,9 +159,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   /// anything in it was set. The two disagreed about what an unset button looks
   /// like, so the same theme drew a different call screen depending on which
   /// backend served it. One source is what makes that impossible.
-  CallScreenActionsStyle? _mapActionsFromPage(CallPageActionsConfig? a) {
-    if (a == null) return null;
-
+  CallScreenActionsStyle _mapActionsFromPage(CallPageActionsConfig a) {
     return CallScreenActionsStyle(
       callStart: _actionStyle(a.callStart, background: colors.tertiary, foreground: colors.onTertiary),
       hangup: _actionStyle(a.hangup, background: colors.error, foreground: colors.onError),
