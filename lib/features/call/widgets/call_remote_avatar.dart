@@ -114,9 +114,10 @@ class _CallRemoteAvatarContent extends StatelessWidget {
 
     if (thumbnailUrl != null) {
       // Ask the remote for the resolution actually painted; the list-sized default
-      // would be upscaled to a blur at this diameter.
-      final devicePixels = (diameter * MediaQuery.devicePixelRatioOf(context)).round();
-      final url = gravatarUrlWithSize(thumbnailUrl, devicePixels) ?? thumbnailUrl!;
+      // would be upscaled to a blur at this diameter. The size is one of the shared
+      // request sizes, so this is the same url the rest of the app already asked for.
+      final devicePixels = diameter * MediaQuery.devicePixelRatioOf(context);
+      final url = gravatarUrlWithSize(thumbnailUrl, gravatarRequestSize(devicePixels)) ?? thumbnailUrl!;
 
       return Image.network(
         url.toString(),

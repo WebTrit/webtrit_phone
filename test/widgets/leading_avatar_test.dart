@@ -90,8 +90,9 @@ void main() {
   });
 
   group('LeadingAvatar photo resolution', () {
-    testWidgets('asks Gravatar for the size it paints, in device pixels', (tester) async {
-      // The test binding paints at 3.0, so a 74 px avatar is 222 real pixels.
+    testWidgets('asks Gravatar for a shared size that covers what it paints', (tester) async {
+      // The test binding paints at 3.0, so a 74 px avatar is 222 real pixels, asked for
+      // as the 256 every other avatar of about that size asks for.
       await tester.pumpWidget(
         wrap(
           LeadingAvatar(
@@ -103,7 +104,18 @@ void main() {
       );
 
       final image = tester.widget<SafeNetworkImage>(find.byType(SafeNetworkImage));
-      expect(Uri.parse(image.url).queryParameters['s'], '222');
+      expect(Uri.parse(image.url).queryParameters['s'], '256');
+    });
+
+    testWidgets('keeps one url across nearby sizes, so the photo is downloaded once', (tester) async {
+      final photo = Uri.parse('https://www.gravatar.com/avatar/abc');
+
+      await tester.pumpWidget(wrap(LeadingAvatar(username: 'John Doe', thumbnailUrl: photo, radius: 37)));
+      final requested = tester.widget<SafeNetworkImage>(find.byType(SafeNetworkImage)).url;
+
+      await tester.pumpWidget(wrap(LeadingAvatar(username: 'John Doe', thumbnailUrl: photo, radius: 40)));
+
+      expect(tester.widget<SafeNetworkImage>(find.byType(SafeNetworkImage)).url, requested);
     });
 
     testWidgets('leaves a non-Gravatar url alone', (tester) async {
