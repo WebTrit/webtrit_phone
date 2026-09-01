@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SeparatorStyleConfig {
 
- bool? get enabled; String? get color;
+ bool get enabled; String? get color;
 /// Create a copy of SeparatorStyleConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $SeparatorStyleConfigCopyWith<$Res>  {
   factory $SeparatorStyleConfigCopyWith(SeparatorStyleConfig value, $Res Function(SeparatorStyleConfig) _then) = _$SeparatorStyleConfigCopyWithImpl;
 @useResult
 $Res call({
- bool? enabled, String? color
+ bool enabled, String? color
 });
 
 
@@ -63,10 +63,10 @@ class _$SeparatorStyleConfigCopyWithImpl<$Res>
 
 /// Create a copy of SeparatorStyleConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? enabled = freezed,Object? color = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enabled = null,Object? color = freezed,}) {
   return _then(SeparatorStyleConfig(
-enabled: freezed == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
-as bool?,color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
+enabled: null == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
+as bool,color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

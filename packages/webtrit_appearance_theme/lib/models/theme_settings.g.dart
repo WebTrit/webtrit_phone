@@ -1298,8 +1298,8 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'enabled': {
           'type': 'boolean',
-          'description':
-              'Whether to render the separator. `null` → shown (default).',
+          'description': 'Whether to render the separator.',
+          'default': true,
         },
         'color': {
           'type': 'string',
@@ -1320,12 +1320,6 @@ const _$ThemeSettingsJsonSchema = {
         'logoutIconColor': {'type': 'string'},
         'groupTitleListTile': {
           r'$ref': r'#/$defs/GroupTitleListTileWidgetConfig',
-        },
-        'showSeparators': {
-          'type': 'boolean',
-          'description':
-              'Deprecated: visibility now lives in [separator] (`separator.enabled`).\nKept for backward compatibility with themes saved before [separator] existed.',
-          'default': true,
         },
         'separator': {
           r'$ref': r'#/$defs/SeparatorStyleConfig',
