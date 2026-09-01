@@ -12,6 +12,17 @@ import '../theme_style_factory.dart';
 
 const double kDisabledOpacity = 0.40;
 
+/// How much of the surface a call button shows through when the theme sets no
+/// background for it.
+///
+/// The resting look of the six neutral actions is a tint of the call screen
+/// rather than a tone of its own, so the switched-on look - an opaque surface -
+/// is a change in opacity and not a step between two near-white tones. It is
+/// the same figure the retired widget-level styles used, and it is a factor
+/// again for `disabled`: 0.40 of 0.40 leaves 0.16, so unavailable stays
+/// distinct from unset.
+const double kRestingOpacity = 0.40;
+
 final _logger = Logger('CallScreenStyleFactory');
 
 class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
@@ -163,50 +174,27 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   /// `CallActionButton` hands the style to a `TextButton`, so no style is the
   /// app's plain text-button theme rather than the default call button.
   CallScreenActionsStyle _mapActionsFromPage(CallPageActionsConfig? a) {
+    // What every action that is not call or hangup rests as. One value rather
+    // than three tones of surface-container: the six read as one row of
+    // buttons, and a per-button tone is a difference nobody asked for and
+    // nobody can see.
+    final resting = colors.surface.withValues(alpha: kRestingOpacity);
+
     return CallScreenActionsStyle(
+      // The two that are filled by nature. A call is green and a hangup is
+      // red on every phone ever made, so these carry a colour of their own
+      // rather than a tint of the screen.
       callStart: _actionStyle(a?.callStart, background: colors.tertiary, foreground: colors.onTertiary),
       hangup: _actionStyle(a?.hangup, background: colors.error, foreground: colors.onError),
-      transfer: _actionStyle(a?.transfer, background: colors.secondary, foreground: colors.onSecondary),
-      swap: _actionStyle(
-        a?.swap,
-        background: colors.surfaceContainerHigh,
-        foreground: colors.onSurface,
-        icon: colors.onSurface,
-      ),
-      key: _actionStyle(
-        a?.key,
-        background: colors.surfaceContainer,
-        foreground: colors.onSurface,
-        icon: colors.onSurface,
-      ),
-      camera: _actionStyle(
-        a?.camera,
-        background: colors.surfaceContainerHighest,
-        foreground: colors.onSurface,
-        icon: colors.onSurface,
-        toggleable: true,
-      ),
-      muted: _actionStyle(
-        a?.muted,
-        background: colors.surfaceContainerHigh,
-        foreground: colors.onSurface,
-        icon: colors.onSurface,
-        toggleable: true,
-      ),
-      speaker: _actionStyle(
-        a?.speaker,
-        background: colors.surfaceContainerHigh,
-        foreground: colors.onSurface,
-        icon: colors.onSurface,
-        toggleable: true,
-      ),
-      held: _actionStyle(
-        a?.held,
-        background: colors.surfaceContainerHigh,
-        foreground: colors.onSurface,
-        icon: colors.onSurface,
-        toggleable: true,
-      ),
+      // Transfer is one of the row, not an accent. It carried `secondary`,
+      // which drew a filled dark circle among five tinted ones.
+      transfer: _actionStyle(a?.transfer, background: resting, foreground: colors.surface),
+      swap: _actionStyle(a?.swap, background: resting, foreground: colors.surface),
+      key: _actionStyle(a?.key, background: resting, foreground: colors.surface),
+      camera: _actionStyle(a?.camera, background: resting, foreground: colors.surface, toggleable: true),
+      muted: _actionStyle(a?.muted, background: resting, foreground: colors.surface, toggleable: true),
+      speaker: _actionStyle(a?.speaker, background: resting, foreground: colors.surface, toggleable: true),
+      held: _actionStyle(a?.held, background: resting, foreground: colors.surface, toggleable: true),
       keypadInputTextStyle: _resolveKeypadInputTextStyle(a?.keypadInputStyle),
     );
   }
