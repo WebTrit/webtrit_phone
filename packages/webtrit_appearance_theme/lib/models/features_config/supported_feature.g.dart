@@ -11,13 +11,13 @@ SupportedThemeMode _$SupportedThemeModeFromJson(Map<String, dynamic> json) =>
       mode:
           $enumDecodeNullable(_$ThemeModeConfigEnumMap, json['mode']) ??
           ThemeModeConfig.system,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'themeMode',
     );
 
 Map<String, dynamic> _$SupportedThemeModeToJson(SupportedThemeMode instance) =>
     <String, dynamic>{
       'mode': _$ThemeModeConfigEnumMap[instance.mode]!,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 const _$ThemeModeConfigEnumMap = {
@@ -29,11 +29,11 @@ const _$ThemeModeConfigEnumMap = {
 SupportedVideoCall _$SupportedVideoCallFromJson(Map<String, dynamic> json) =>
     SupportedVideoCall(
       enabled: json['enabled'] as bool? ?? true,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'videoCall',
     );
 
 Map<String, dynamic> _$SupportedVideoCallToJson(SupportedVideoCall instance) =>
-    <String, dynamic>{'enabled': instance.enabled, 'type': instance.$type};
+    <String, dynamic>{'enabled': instance.enabled, 'type': instance.type};
 
 SupportedLoggingConfig _$SupportedLoggingConfigFromJson(
   Map<String, dynamic> json,
@@ -41,7 +41,7 @@ SupportedLoggingConfig _$SupportedLoggingConfigFromJson(
   logLevel: json['logLevel'] as String? ?? 'INFO',
   checkIntervalSec: (json['checkIntervalSec'] as num?)?.toInt() ?? 15,
   anonymizationEnabled: json['anonymizationEnabled'] as bool? ?? true,
-  $type: json['type'] as String?,
+  type: json['type'] as String? ?? 'loggingConfig',
 );
 
 Map<String, dynamic> _$SupportedLoggingConfigToJson(
@@ -50,39 +50,39 @@ Map<String, dynamic> _$SupportedLoggingConfigToJson(
   'logLevel': instance.logLevel,
   'checkIntervalSec': instance.checkIntervalSec,
   'anonymizationEnabled': instance.anonymizationEnabled,
-  'type': instance.$type,
+  'type': instance.type,
 };
 
 SupportedSystemNotifications _$SupportedSystemNotificationsFromJson(
   Map<String, dynamic> json,
 ) => SupportedSystemNotifications(
   enabled: json['enabled'] as bool? ?? true,
-  $type: json['type'] as String?,
+  type: json['type'] as String? ?? 'systemNotifications',
 );
 
 Map<String, dynamic> _$SupportedSystemNotificationsToJson(
   SupportedSystemNotifications instance,
-) => <String, dynamic>{'enabled': instance.enabled, 'type': instance.$type};
+) => <String, dynamic>{'enabled': instance.enabled, 'type': instance.type};
 
 SupportedHybridPresence _$SupportedHybridPresenceFromJson(
   Map<String, dynamic> json,
 ) => SupportedHybridPresence(
   enabled: json['enabled'] as bool? ?? true,
-  $type: json['type'] as String?,
+  type: json['type'] as String? ?? 'hybridPresence',
 );
 
 Map<String, dynamic> _$SupportedHybridPresenceToJson(
   SupportedHybridPresence instance,
-) => <String, dynamic>{'enabled': instance.enabled, 'type': instance.$type};
+) => <String, dynamic>{'enabled': instance.enabled, 'type': instance.type};
 
 SupportedCallPull _$SupportedCallPullFromJson(Map<String, dynamic> json) =>
     SupportedCallPull(
       videoStrategy: json['videoStrategy'] as String? ?? 'softMute',
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'callPull',
     );
 
 Map<String, dynamic> _$SupportedCallPullToJson(SupportedCallPull instance) =>
     <String, dynamic>{
       'videoStrategy': instance.videoStrategy,
-      'type': instance.$type,
+      'type': instance.type,
     };

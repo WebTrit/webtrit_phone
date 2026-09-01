@@ -35,7 +35,7 @@ void main() {
 
       // Favorites
       tabs[0].when(
-        favorites: (enabled, initial, titleL10n, icon) {
+        favorites: (enabled, initial, titleL10n, icon, _) {
           // Off by default: favourites are reached inside contacts now, and a
           // section of their own beside it would offer the same list twice.
           expect(enabled, isFalse);
@@ -54,7 +54,7 @@ void main() {
       // Recents
       tabs[1].when(
         favorites: unexpectedFavorites,
-        recents: (enabled, initial, titleL10n, icon, supportsCallHistory) {
+        recents: (enabled, initial, titleL10n, icon, supportsCallHistory, _) {
           expect(enabled, isTrue);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_recents');
@@ -72,7 +72,7 @@ void main() {
       tabs[2].when(
         favorites: unexpectedFavorites,
         recents: unexpectedRecents,
-        contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, layout, favorites) {
+        contacts: (enabled, initial, titleL10n, icon, contactSourceTypes, layout, favorites, _) {
           expect(enabled, isTrue);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_contacts');
@@ -94,7 +94,7 @@ void main() {
         favorites: unexpectedFavorites,
         recents: unexpectedRecents,
         contacts: unexpectedContacts,
-        keypad: (enabled, initial, titleL10n, icon) {
+        keypad: (enabled, initial, titleL10n, icon, _) {
           expect(enabled, isTrue);
           expect(initial, isTrue);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_keypad');
@@ -111,7 +111,7 @@ void main() {
         recents: unexpectedRecents,
         contacts: unexpectedContacts,
         keypad: unexpectedKeypad,
-        messaging: (enabled, initial, titleL10n, icon) {
+        messaging: (enabled, initial, titleL10n, icon, _) {
           expect(enabled, isTrue);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_chats');
@@ -129,7 +129,7 @@ void main() {
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
         voicemail: unexpectedVoicemail,
-        embedded: (enabled, initial, titleL10n, icon, embeddedResourceId) {
+        embedded: (enabled, initial, titleL10n, icon, embeddedResourceId, _) {
           expect(enabled, isFalse);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_embedded');
@@ -146,7 +146,7 @@ void main() {
         keypad: unexpectedKeypad,
         messaging: unexpectedMessaging,
         voicemail: unexpectedVoicemail,
-        embedded: (enabled, initial, titleL10n, icon, embeddedResourceId) {
+        embedded: (enabled, initial, titleL10n, icon, embeddedResourceId, _) {
           expect(enabled, isFalse);
           expect(initial, isFalse);
           expect(titleL10n, 'main_BottomNavigationBarItemLabel_embedded_spa_example');
