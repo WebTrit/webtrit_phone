@@ -93,5 +93,17 @@ void main() {
 
       await teardown(tester);
     });
+
+    testWidgets('a window narrower than its own padding leaves the avatar at nothing, not below it', (tester) async {
+      await tester.pumpWidget(
+        wrap(CallActiveThumbnail(activeCall: _acceptedCall(), orientation: Orientation.portrait, smallerSide: 10)),
+      );
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(LeadingAvatar)), Size.zero);
+
+      await teardown(tester);
+    });
   });
 }
