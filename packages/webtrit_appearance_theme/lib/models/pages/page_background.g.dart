@@ -16,6 +16,23 @@ Map<String, dynamic> _$PageBackgroundSolidToJson(
   PageBackgroundSolid instance,
 ) => <String, dynamic>{'color': instance.color, 'type': instance.type};
 
+const _$PageBackgroundSolidJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'color': {
+      'type': 'string',
+      'description': 'The colour to fill with (hex string, e.g. `#3A6EA5`).',
+    },
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `solid`.',
+      'default': 'solid',
+    },
+  },
+  'required': ['color'],
+};
+
 PageBackgroundGradient _$PageBackgroundGradientFromJson(
   Map<String, dynamic> json,
 ) => PageBackgroundGradient(
@@ -44,6 +61,35 @@ Map<String, dynamic> _$PageBackgroundGradientToJson(
   'type': instance.type,
 };
 
+const _$PageBackgroundGradientJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'colors': {
+      'type': 'array',
+      'items': {'type': 'string'},
+      'description': 'The colours to run between (hex strings).',
+    },
+    'stops': {
+      'type': 'array',
+      'items': {'type': 'number'},
+      'description':
+          'Where each colour sits, `0.0` to `1.0`. Empty means an even spread.',
+      'default': [],
+    },
+    'beginX': {'type': 'number', 'default': 0.0},
+    'beginY': {'type': 'number', 'default': 0.0},
+    'endX': {'type': 'number', 'default': 1.0},
+    'endY': {'type': 'number', 'default': 1.0},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `gradient`.',
+      'default': 'gradient',
+    },
+  },
+  'required': ['colors'],
+};
+
 PageBackgroundImage _$PageBackgroundImageFromJson(Map<String, dynamic> json) =>
     PageBackgroundImage(
       imageUrl: json['imageUrl'] as String,
@@ -61,6 +107,25 @@ Map<String, dynamic> _$PageBackgroundImageToJson(
   'fit': _$BoxFitConfigEnumMap[instance.fit]!,
   'opacity': instance.opacity,
   'type': instance.type,
+};
+
+const _$PageBackgroundImageJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'imageUrl': {'type': 'string'},
+    'fit': {
+      'type': 'object',
+      'description': 'How the image is fitted into the page.',
+    },
+    'opacity': {'type': 'number', 'default': 1.0},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `image`.',
+      'default': 'image',
+    },
+  },
+  'required': ['imageUrl'],
 };
 
 const _$BoxFitConfigEnumMap = {

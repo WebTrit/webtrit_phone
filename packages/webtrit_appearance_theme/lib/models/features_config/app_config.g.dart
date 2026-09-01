@@ -50,6 +50,289 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
   'supported': instance.supported.map((e) => e.toJson()).toList(),
 };
 
+const _$AppConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'loginConfig': {r'$ref': r'#/$defs/AppConfigLogin'},
+    'mainConfig': {r'$ref': r'#/$defs/AppConfigMain'},
+    'settingsConfig': {r'$ref': r'#/$defs/AppConfigSettings'},
+    'callConfig': {r'$ref': r'#/$defs/AppConfigCall'},
+    'contacts': {r'$ref': r'#/$defs/AppConfigContacts'},
+    'messaging': {r'$ref': r'#/$defs/AppConfigMessaging'},
+    'localization': {r'$ref': r'#/$defs/AppConfigLocalization'},
+    'supported': {
+      'type': 'array',
+      'items': {r'$ref': r'#/$defs/SupportedFeature'},
+      'default': [],
+    },
+  },
+  r'$defs': {
+    'AppConfigLoginCommon': {
+      'type': 'object',
+      'properties': {
+        'fullScreenLaunchEmbeddedResourceId': {'type': 'string'},
+      },
+    },
+    'AppConfigModeSelectAction': {
+      'type': 'object',
+      'properties': {
+        'enabled': {'type': 'boolean'},
+        'type': {'type': 'string'},
+        'titleL10n': {'type': 'string'},
+        'embeddedId': {'type': 'string'},
+      },
+      'required': ['enabled', 'type', 'titleL10n'],
+    },
+    'AppConfigLoginModeSelect': {
+      'type': 'object',
+      'properties': {
+        'greetingL10n': {'type': 'string'},
+        'actions': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/AppConfigModeSelectAction'},
+          'default': [],
+        },
+      },
+    },
+    'AppConfigLoginQrFormat': {
+      'type': 'object',
+      'properties': {
+        'type': {
+          'type': 'string',
+          'description': 'Decoder name (`uri`, `json`).',
+        },
+        'schemes': {
+          'type': 'array',
+          'items': {'type': 'string'},
+          'description':
+              '`uri` only: accepted scheme names, matched case-insensitively.',
+        },
+      },
+      'required': ['type'],
+    },
+    'AppConfigLoginQr': {
+      'type': 'object',
+      'properties': {
+        'enabled': {
+          'type': 'boolean',
+          'description': 'Whether the QR-code sign-in tab is available at all.',
+          'default': false,
+        },
+        'formats': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/AppConfigLoginQrFormat'},
+          'description':
+              'Accepted payload formats with their per-format options, probed in this\norder.',
+          'default': [],
+        },
+        'expectedHost': {
+          'type': 'string',
+          'description':
+              'Expected host (cloud id) of the code, shared by all formats. When set,\ncodes issued for a different host are rejected; null accepts any host.',
+        },
+      },
+    },
+    'AppConfigLogin': {
+      'type': 'object',
+      'properties': {
+        'common': {r'$ref': r'#/$defs/AppConfigLoginCommon'},
+        'modeSelect': {r'$ref': r'#/$defs/AppConfigLoginModeSelect'},
+        'signinOrder': {
+          'type': 'array',
+          'items': {'type': 'string'},
+          'description':
+              'Order of the sign-in tabs on the login switch screen, by login type name\n(passwordSignin, otpSignin, signup, qrSignin). Only the types advertised by\nthe backend are shown; this controls their order and which one is selected\nby default. Unknown or omitted names are placed last.',
+          'default': [],
+        },
+        'qr': {r'$ref': r'#/$defs/AppConfigLoginQr'},
+      },
+    },
+    'BottomMenuTabScheme': {'type': 'object', 'properties': {}},
+    'AppConfigBottomMenu': {
+      'type': 'object',
+      'properties': {
+        'cacheSelectedTab': {'type': 'boolean', 'default': true},
+        'tabs': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/BottomMenuTabScheme'},
+          'default': [],
+        },
+      },
+    },
+    'AppConfigMain': {
+      'type': 'object',
+      'properties': {
+        'bottomMenu': {r'$ref': r'#/$defs/AppConfigBottomMenu'},
+        'systemNotificationsEnabled': {'type': 'boolean', 'default': true},
+      },
+    },
+    'AppConfigSettingsItem': {
+      'type': 'object',
+      'properties': {
+        'enabled': {'type': 'boolean', 'default': true},
+        'titleL10n': {'type': 'string'},
+        'type': {'type': 'string'},
+        'icon': {'type': 'string'},
+        'iconColor': {'type': 'string'},
+        'embeddedResourceId': {'type': 'string'},
+      },
+      'required': ['titleL10n', 'type', 'icon'],
+    },
+    'AppConfigSettingsSection': {
+      'type': 'object',
+      'properties': {
+        'titleL10n': {'type': 'string'},
+        'enabled': {'type': 'boolean', 'default': true},
+        'items': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/AppConfigSettingsItem'},
+          'default': [],
+        },
+      },
+      'required': ['titleL10n'],
+    },
+    'AppConfigSettings': {
+      'type': 'object',
+      'properties': {
+        'sections': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/AppConfigSettingsSection'},
+          'default': [],
+        },
+      },
+    },
+    'AppConfigTransfer': {
+      'type': 'object',
+      'properties': {
+        'enableBlindTransfer': {'type': 'boolean', 'default': true},
+        'enableAttendedTransfer': {'type': 'boolean', 'default': true},
+      },
+    },
+    'EncodingDefaultPresetOverride': {
+      'type': 'object',
+      'properties': {
+        'audioBitrate': {'type': 'integer'},
+        'videoBitrate': {'type': 'integer'},
+        'ptime': {'type': 'integer'},
+        'maxptime': {'type': 'integer'},
+        'opusSamplingRate': {'type': 'integer'},
+        'opusBitrate': {'type': 'integer'},
+        'opusStereo': {'type': 'boolean'},
+        'opusDtx': {'type': 'boolean'},
+        'removeStaticAudioRtpMaps': {'type': 'boolean'},
+        'remapTE8payloadTo101': {'type': 'boolean'},
+        'removeREMBFeedback': {'type': 'boolean'},
+        'removeTWCCFeedback': {'type': 'boolean'},
+        'removeExtmaps': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+      },
+    },
+    'AppConfigEncoding': {
+      'type': 'object',
+      'properties': {
+        'bypassConfig': {'type': 'boolean', 'default': false},
+        'defaultPresetOverride': {
+          r'$ref': r'#/$defs/EncodingDefaultPresetOverride',
+        },
+      },
+    },
+    'AppConfigNegotiationSettingsOverride': {
+      'type': 'object',
+      'properties': {
+        'includeInactiveVideoInOfferAnswer': {
+          'type': 'boolean',
+          'default': false,
+        },
+      },
+    },
+    'AppConfigPeerConnection': {
+      'type': 'object',
+      'properties': {
+        'negotiation': {
+          r'$ref': r'#/$defs/AppConfigNegotiationSettingsOverride',
+        },
+      },
+    },
+    'AppConfigCall': {
+      'type': 'object',
+      'properties': {
+        'videoEnabled': {'type': 'boolean', 'default': true},
+        'transfer': {r'$ref': r'#/$defs/AppConfigTransfer'},
+        'encoding': {r'$ref': r'#/$defs/AppConfigEncoding'},
+        'peerConnection': {r'$ref': r'#/$defs/AppConfigPeerConnection'},
+      },
+    },
+    'AppConfigContactList': {'type': 'object', 'properties': {}},
+    'AppConfigContactDetailsActions': {
+      'type': 'object',
+      'properties': {
+        'appBar': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+        'phoneTile': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+        'emailTile': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+      },
+    },
+    'AppConfigContactDetails': {
+      'type': 'object',
+      'properties': {
+        'actions': {r'$ref': r'#/$defs/AppConfigContactDetailsActions'},
+      },
+    },
+    'AppConfigContacts': {
+      'type': 'object',
+      'properties': {
+        'list': {r'$ref': r'#/$defs/AppConfigContactList'},
+        'details': {r'$ref': r'#/$defs/AppConfigContactDetails'},
+      },
+    },
+    'AppConfigSms': {'type': 'object', 'properties': {}},
+    'ChatContactInfo': {
+      'type': 'object',
+      'properties': {
+        'showVideoButtonAction': {'type': 'boolean', 'default': true},
+      },
+    },
+    'AppConfigChats': {
+      'type': 'object',
+      'properties': {
+        'groupChatButtonEnabled': {'type': 'boolean', 'default': true},
+        'contactInfo': {r'$ref': r'#/$defs/ChatContactInfo'},
+      },
+    },
+    'AppConfigMessaging': {
+      'type': 'object',
+      'properties': {
+        'sms': {r'$ref': r'#/$defs/AppConfigSms'},
+        'chats': {r'$ref': r'#/$defs/AppConfigChats'},
+      },
+    },
+    'AppConfigLocalization': {
+      'type': 'object',
+      'properties': {
+        'enabledLanguages': {
+          'type': 'array',
+          'items': {'type': 'string'},
+          'description':
+              'Allowlist of language codes (ISO 639-1, e.g. \'en\', \'it\') the app exposes.\nThe app intersects this with the locales it actually bundles, so only\nlanguages present in both are selectable and used for auto-resolution.\nAn empty list (the default) means "no restriction" - all bundled locales\nare available, preserving the previous behavior.',
+          'default': [],
+        },
+      },
+    },
+    'SupportedFeature': {'type': 'object', 'properties': {}},
+  },
+};
+
 AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
     AppConfigLogin(
       common: json['common'] == null
@@ -379,6 +662,23 @@ Map<String, dynamic> _$FavoritesTabSchemeToJson(FavoritesTabScheme instance) =>
       'type': instance.type,
     };
 
+const _$FavoritesTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `favorites`.',
+      'default': 'favorites',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
 RecentsTabScheme _$RecentsTabSchemeFromJson(Map<String, dynamic> json) =>
     RecentsTabScheme(
       enabled: json['enabled'] as bool? ?? true,
@@ -401,6 +701,29 @@ Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
       'supportsCallHistory': instance.supportsCallHistory,
       'type': instance.type,
     };
+
+const _$RecentsTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'supportsCallHistory': {
+      'type': 'boolean',
+      'description':
+          'Local opt-in for remote call history (CDRs). Resolved against the server\n`callHistory` adapter capability in feature_access - both must be true.\n\nReads the `supportsCallHistory` key and falls back to the legacy `useCdrs`\nkey so existing configs keep their value.',
+      'default': true,
+    },
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `recents`.',
+      'default': 'recents',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
 
 ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
     ContactsTabScheme(
@@ -436,6 +759,39 @@ Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
       'type': instance.type,
     };
 
+const _$ContactsTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'contactSourceTypes': {
+      'type': 'array',
+      'items': {'type': 'string'},
+      'default': [],
+    },
+    'layout': {
+      'type': 'object',
+      'description':
+          'How the section is arranged. A deployment that says nothing keeps the\narrangement it already has.\n\nRead leniently: a configurator may offer an arrangement before an\ninstalled app knows how to draw it, and such a build has to fall back\nto the one it does know rather than fail to read its own settings.',
+    },
+    'favorites': {
+      'type': 'boolean',
+      'description':
+          "Whether the favourites are one of the lists the chooser offers.\n\nThe list behind that entry is the favourites section's own - the same\nrows, in the order a person arranged them - not this section's list\nnarrowed down. Read only where the arrangement has a chooser, which is\nthe unified one; on by default, because a deployment picking that\narrangement is picking the one favourites live in.",
+      'default': true,
+    },
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `contacts`.',
+      'default': 'contacts',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
 const _$ContactsLayoutSchemeEnumMap = {
   ContactsLayoutScheme.tabbed: 'tabbed',
   ContactsLayoutScheme.unified: 'unified',
@@ -459,6 +815,23 @@ Map<String, dynamic> _$KeypadTabSchemeToJson(KeypadTabScheme instance) =>
       'type': instance.type,
     };
 
+const _$KeypadTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `keypad`.',
+      'default': 'keypad',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
 MessagingTabScheme _$MessagingTabSchemeFromJson(Map<String, dynamic> json) =>
     MessagingTabScheme(
       enabled: json['enabled'] as bool? ?? true,
@@ -477,6 +850,23 @@ Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
       'type': instance.type,
     };
 
+const _$MessagingTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `messaging`.',
+      'default': 'messaging',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
 VoicemailTabScheme _$VoicemailTabSchemeFromJson(Map<String, dynamic> json) =>
     VoicemailTabScheme(
       enabled: json['enabled'] as bool? ?? true,
@@ -494,6 +884,23 @@ Map<String, dynamic> _$VoicemailTabSchemeToJson(VoicemailTabScheme instance) =>
       'icon': instance.icon,
       'type': instance.type,
     };
+
+const _$VoicemailTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `voicemail`.',
+      'default': 'voicemail',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
 
 EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
     EmbeddedTabScheme(
@@ -514,6 +921,27 @@ Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
       'embeddedResourceId': instance.embeddedResourceId,
       'type': instance.type,
     };
+
+const _$EmbeddedTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'embeddedResourceId': {
+      'type': 'string',
+      'description': 'Names the [EmbeddedResource] this tab shows.',
+    },
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `embedded`.',
+      'default': 'embedded',
+    },
+  },
+  'required': ['titleL10n', 'icon', 'embeddedResourceId'],
+};
 
 AppConfigSettings _$AppConfigSettingsFromJson(Map<String, dynamic> json) =>
     AppConfigSettings(

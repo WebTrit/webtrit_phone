@@ -41,6 +41,85 @@ Map<String, dynamic> _$EmbeddedResourceToJson(EmbeddedResource instance) =>
       'reconnectStrategy': instance.reconnectStrategy,
     };
 
+const _$EmbeddedResourceJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'id': {
+      'type': 'string',
+      'description': 'Unique identifier for this resource.',
+    },
+    'uri': {
+      'type': 'string',
+      'description': 'The URI that points to the embedded resource.',
+    },
+    'type': {
+      'type': 'object',
+      'description': 'The type of the resource (e.g., web, file, etc.).',
+    },
+    'attributes': {
+      'type': 'object',
+      'additionalProperties': {'type': 'object'},
+      'description':
+          'Optional key–value attributes associated with the resource.',
+      'default': {},
+    },
+    'toolbar': {
+      r'$ref': r'#/$defs/ToolbarConfig',
+      'description': 'Toolbar configuration for the resource.',
+    },
+    'metadata': {
+      r'$ref': r'#/$defs/Metadata',
+      'description': 'Metadata attached to this resource.',
+    },
+    'payload': {
+      'type': 'array',
+      'items': {'type': 'string'},
+      'description': 'Optional payload data to pass to the embedded resource.',
+      'default': [],
+    },
+    'enableConsoleLogCapture': {
+      'type': 'boolean',
+      'description':
+          'Whether to capture `console.*` logs from inside the WebView.',
+      'default': false,
+    },
+    'reconnectStrategy': {
+      'type': 'string',
+      'description': 'Strategy applied when network reconnects.',
+    },
+  },
+  'required': ['id', 'uri'],
+  r'$defs': {
+    'ToolbarConfig': {
+      'type': 'object',
+      'properties': {
+        'titleL10n': {
+          'type': 'string',
+          'description': 'The localized title for the toolbar.',
+        },
+        'showToolbar': {
+          'type': 'boolean',
+          'description': 'Whether the toolbar should be visible.',
+          'default': false,
+        },
+      },
+    },
+    'Metadata': {
+      'type': 'object',
+      'properties': {
+        'attributes': {
+          'type': 'object',
+          'additionalProperties': {'type': 'object'},
+          'description':
+              'A map storing arbitrary key-value pairs for contextual or configuration data.',
+          'default': {},
+        },
+      },
+    },
+  },
+};
+
 const _$EmbeddedResourceTypeEnumMap = {
   EmbeddedResourceType.terms: 'terms',
   EmbeddedResourceType.unknown: 'unknown',
