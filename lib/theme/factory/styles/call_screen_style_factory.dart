@@ -35,12 +35,7 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
         callInfo: _mapCallInfoStyle(infoCfg),
         list: _mapCallListStyle(pageConfig?.callList),
         hint: _mapHintStyle(pageConfig?.actingOnHint),
-        // An absent `actions` is a theme written before the page config had
-        // one, and it still has to draw nine buttons. Mapped from an empty
-        // config rather than answered with null: null reaches `TextButton` as
-        // no style at all, which takes the app's plain text-button theme and
-        // loses the circle a call button is.
-        actions: _mapActionsFromPage(pageConfig?.actions ?? const CallPageActionsConfig()),
+        actions: _mapActionsFromPage(pageConfig?.actions),
       ),
     );
   }
@@ -159,52 +154,60 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   /// anything in it was set. The two disagreed about what an unset button looks
   /// like, so the same theme drew a different call screen depending on which
   /// backend served it. One source is what makes that impossible.
-  CallScreenActionsStyle _mapActionsFromPage(CallPageActionsConfig a) {
+  /// Absent is the same as sets-nothing, and both draw nine buttons.
+  ///
+  /// A theme written before the page config had `actions` has none, and one
+  /// that has the object with every colour null has set nothing - the same
+  /// statement twice. Telling them apart is the mistake this factory used to
+  /// make, and answering null for either is a worse version of it:
+  /// `CallActionButton` hands the style to a `TextButton`, so no style is the
+  /// app's plain text-button theme rather than the default call button.
+  CallScreenActionsStyle _mapActionsFromPage(CallPageActionsConfig? a) {
     return CallScreenActionsStyle(
-      callStart: _actionStyle(a.callStart, background: colors.tertiary, foreground: colors.onTertiary),
-      hangup: _actionStyle(a.hangup, background: colors.error, foreground: colors.onError),
-      transfer: _actionStyle(a.transfer, background: colors.secondary, foreground: colors.onSecondary),
+      callStart: _actionStyle(a?.callStart, background: colors.tertiary, foreground: colors.onTertiary),
+      hangup: _actionStyle(a?.hangup, background: colors.error, foreground: colors.onError),
+      transfer: _actionStyle(a?.transfer, background: colors.secondary, foreground: colors.onSecondary),
       swap: _actionStyle(
-        a.swap,
+        a?.swap,
         background: colors.surfaceContainerHigh,
         foreground: colors.onSurface,
         icon: colors.onSurface,
       ),
       key: _actionStyle(
-        a.key,
+        a?.key,
         background: colors.surfaceContainer,
         foreground: colors.onSurface,
         icon: colors.onSurface,
       ),
       camera: _actionStyle(
-        a.camera,
+        a?.camera,
         background: colors.surfaceContainerHighest,
         foreground: colors.onSurface,
         icon: colors.onSurface,
         toggleable: true,
       ),
       muted: _actionStyle(
-        a.muted,
+        a?.muted,
         background: colors.surfaceContainerHigh,
         foreground: colors.onSurface,
         icon: colors.onSurface,
         toggleable: true,
       ),
       speaker: _actionStyle(
-        a.speaker,
+        a?.speaker,
         background: colors.surfaceContainerHigh,
         foreground: colors.onSurface,
         icon: colors.onSurface,
         toggleable: true,
       ),
       held: _actionStyle(
-        a.held,
+        a?.held,
         background: colors.surfaceContainerHigh,
         foreground: colors.onSurface,
         icon: colors.onSurface,
         toggleable: true,
       ),
-      keypadInputTextStyle: _resolveKeypadInputTextStyle(a.keypadInputStyle),
+      keypadInputTextStyle: _resolveKeypadInputTextStyle(a?.keypadInputStyle),
     );
   }
 
@@ -214,7 +217,9 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   /// the theme says nothing; [toggleable] adds the switched-on look, which the
   /// theme cannot set yet and therefore comes from the palette.
   ButtonStyle _actionStyle(
-    ButtonStyleConfig config, {
+    /// Null is a button the theme says nothing about, which resolves to
+    /// [fallback] alone - every colour of it comes from the palette.
+    ButtonStyleConfig? config, {
     required Color background,
     required Color foreground,
     Color? icon,
@@ -234,7 +239,13 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
       disabledOpacity: kDisabledOpacity,
     );
 
-    final themed = config.toButtonStyle(defaultFontFamily: defaultFontFamily, fallback: fallback);
+    // The identity element, not a stand-in: a `ButtonStyleConfig` with every
+    // field null resolves each colour to `fallback`, which is the palette. So
+    // "the theme says nothing" and "the theme sets nothing" take one path.
+    final themed = (config ?? const ButtonStyleConfig()).toButtonStyle(
+      defaultFontFamily: defaultFontFamily,
+      fallback: fallback,
+    );
 
     // Colors only, on purpose. These buttons live in a grid that sets their
     // size, so letting a theme through with a shape or a fixed size here would
