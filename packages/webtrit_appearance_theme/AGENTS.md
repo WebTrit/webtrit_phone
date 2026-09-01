@@ -34,7 +34,6 @@ Sealed unions use `@Freezed(unionKey: 'type')` with discriminated JSON (e.g. `Bo
 
 Custom JSON converters in `lib/converters/`:
 
-- `HexCodePointConverter` — `0x####` hex strings to int codepoints
 - `IntToStringConverter` / `IntToStringOptionalConverter` — legacy migration shims
 
 ## Adding a New DTO Property
