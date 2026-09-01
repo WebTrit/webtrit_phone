@@ -66,21 +66,12 @@ class ThemeStyleFactoryProvider {
     final groupTitleListTile = widgetConfig.group?.groupTitleListTile;
     final linkify = widgetConfig.text.linkify;
 
-    // Common widget styles
-    final textButtonStyle = TextButtonStyleFactory(colorScheme).create();
-
     // Specific widget styles
     final appIconStylesProvider = AppIconStyleFactory(colorScheme, appIconConfig);
-    final confirmDialogStylesProvider = ConfirmDialogStyleFactory(
-      colorScheme,
-      textButtonStyle,
-      confirmDialog,
-      defaultFontFamily,
-    );
+    final confirmDialogStylesProvider = ConfirmDialogStyleFactory(colorScheme, confirmDialog, defaultFontFamily);
     final inputDecorationStyleFactory = InputDecorationStyleFactory(colorScheme);
     final callStatusStyleFactory = CallStatusStyleFactory(colorScheme, callStatuses);
     final elevatedButtonStyleFactory = ElevatedButtonStyleFactory(colorScheme, elevatedButton, defaultFontFamily);
-    final textButtonStyleFactory = TextButtonStyleFactory(colorScheme);
     // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
     // ignore: deprecated_member_use_from_same_package
     final callActionsStyleFactory = CallActionsStyleFactory(colorScheme, callActions);
@@ -204,13 +195,11 @@ class ThemeStyleFactoryProvider {
     );
 
     return <ThemeExtension?>[
-      textButtonStyle,
       appIconStylesProvider.create(),
       confirmDialogStylesProvider.create(),
       inputDecorationStyleFactory.create(),
       callStatusStyleFactory.create(),
       elevatedButtonStyleFactory.create(),
-      textButtonStyleFactory.create(),
       callActionsStyleFactory.create(),
       linkifyStyleFactory.create(),
       outlinedButtonStyleFactory.create(),

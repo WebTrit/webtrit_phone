@@ -18,7 +18,6 @@ export 'page_background_config_extension.dart';
 export 'page_background_style.dart';
 export 'string_ext.dart';
 export 'tab_bar_extensions.dart';
-export 'text_button_styles.dart';
 export 'text_field_config.dart';
 export 'text_style_config.dart';
 export 'theme_json_serializable.dart';
