@@ -15,17 +15,13 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SeparatorStyleConfig {
 
-/// Whether to render the separator. `null` → shown (default).
- bool? get enabled;/// Separator color (hex string, e.g. `#CAC7D1`). `null` → theme default.
- String? get color;
+ bool? get enabled; String? get color;
 /// Create a copy of SeparatorStyleConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $SeparatorStyleConfigCopyWith<SeparatorStyleConfig> get copyWith => _$SeparatorStyleConfigCopyWithImpl<SeparatorStyleConfig>(this as SeparatorStyleConfig, _$identity);
 
-  /// Serializes this SeparatorStyleConfig to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -68,7 +64,7 @@ class _$SeparatorStyleConfigCopyWithImpl<$Res>
 /// Create a copy of SeparatorStyleConfig
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? enabled = freezed,Object? color = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(SeparatorStyleConfig(
 enabled: freezed == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
 as bool?,color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -92,11 +88,10 @@ extension SeparatorStyleConfigPatterns on SeparatorStyleConfig {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SeparatorStyleConfig value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _SeparatorStyleConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return orElse();
 
 }
@@ -114,11 +109,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SeparatorStyleConfig value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _SeparatorStyleConfig():
-return $default(_that);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -135,11 +129,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SeparatorStyleConfig value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _SeparatorStyleConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return null;
 
 }
@@ -156,10 +149,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool? enabled,  String? color)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _SeparatorStyleConfig() when $default != null:
-return $default(_that.enabled,_that.color);case _:
+case _:
   return orElse();
 
 }
@@ -177,10 +169,9 @@ return $default(_that.enabled,_that.color);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool? enabled,  String? color)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _SeparatorStyleConfig():
-return $default(_that.enabled,_that.color);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,87 +188,13 @@ return $default(_that.enabled,_that.color);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool? enabled,  String? color)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _SeparatorStyleConfig() when $default != null:
-return $default(_that.enabled,_that.color);case _:
+case _:
   return null;
 
 }
 }
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _SeparatorStyleConfig implements SeparatorStyleConfig {
-  const _SeparatorStyleConfig({this.enabled, this.color});
-  factory _SeparatorStyleConfig.fromJson(Map<String, dynamic> json) => _$SeparatorStyleConfigFromJson(json);
-
-/// Whether to render the separator. `null` → shown (default).
-@override final  bool? enabled;
-/// Separator color (hex string, e.g. `#CAC7D1`). `null` → theme default.
-@override final  String? color;
-
-/// Create a copy of SeparatorStyleConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$SeparatorStyleConfigCopyWith<_SeparatorStyleConfig> get copyWith => __$SeparatorStyleConfigCopyWithImpl<_SeparatorStyleConfig>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$SeparatorStyleConfigToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SeparatorStyleConfig&&(identical(other.enabled, enabled) || other.enabled == enabled)&&(identical(other.color, color) || other.color == color));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,enabled,color);
-
-@override
-String toString() {
-  return 'SeparatorStyleConfig(enabled: $enabled, color: $color)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$SeparatorStyleConfigCopyWith<$Res> implements $SeparatorStyleConfigCopyWith<$Res> {
-  factory _$SeparatorStyleConfigCopyWith(_SeparatorStyleConfig value, $Res Function(_SeparatorStyleConfig) _then) = __$SeparatorStyleConfigCopyWithImpl;
-@override @useResult
-$Res call({
- bool? enabled, String? color
-});
-
-
-
-
-}
-/// @nodoc
-class __$SeparatorStyleConfigCopyWithImpl<$Res>
-    implements _$SeparatorStyleConfigCopyWith<$Res> {
-  __$SeparatorStyleConfigCopyWithImpl(this._self, this._then);
-
-  final _SeparatorStyleConfig _self;
-  final $Res Function(_SeparatorStyleConfig) _then;
-
-/// Create a copy of SeparatorStyleConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enabled = freezed,Object? color = freezed,}) {
-  return _then(_SeparatorStyleConfig(
-enabled: freezed == enabled ? _self.enabled : enabled // ignore: cast_nullable_to_non_nullable
-as bool?,color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
-as String?,
-  ));
-}
-
 
 }
 

@@ -5129,8 +5129,6 @@ mixin _$AppBarConfig {
 @pragma('vm:prefer-inline')
 $AppBarConfigCopyWith<AppBarConfig> get copyWith => _$AppBarConfigCopyWithImpl<AppBarConfig>(this as AppBarConfig, _$identity);
 
-  /// Serializes this AppBarConfig to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -5159,7 +5157,7 @@ $Res call({
 });
 
 
-$IconThemeDataConfigCopyWith<$Res>? get iconTheme;$IconThemeDataConfigCopyWith<$Res>? get actionsIconTheme;$TextStyleConfigCopyWith<$Res>? get titleTextStyle;$TextStyleConfigCopyWith<$Res>? get toolbarTextStyle;$OverlayStyleModelCopyWith<$Res>? get systemOverlayStyle;
+
 
 }
 /// @nodoc
@@ -5173,7 +5171,7 @@ class _$AppBarConfigCopyWithImpl<$Res>
 /// Create a copy of AppBarConfig
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? primary = null,Object? showBackButton = null,Object? backgroundColor = freezed,Object? foregroundColor = freezed,Object? shadowColor = freezed,Object? surfaceTintColor = freezed,Object? elevation = freezed,Object? scrolledUnderElevation = freezed,Object? titleSpacing = freezed,Object? leadingWidth = freezed,Object? toolbarHeight = freezed,Object? centerTitle = freezed,Object? iconTheme = freezed,Object? actionsIconTheme = freezed,Object? titleTextStyle = freezed,Object? toolbarTextStyle = freezed,Object? systemOverlayStyle = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(AppBarConfig(
 primary: null == primary ? _self.primary : primary // ignore: cast_nullable_to_non_nullable
 as bool,showBackButton: null == showBackButton ? _self.showBackButton : showBackButton // ignore: cast_nullable_to_non_nullable
 as bool,backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
@@ -5194,67 +5192,7 @@ as TextStyleConfig?,systemOverlayStyle: freezed == systemOverlayStyle ? _self.sy
 as OverlayStyleModel?,
   ));
 }
-/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$IconThemeDataConfigCopyWith<$Res>? get iconTheme {
-    if (_self.iconTheme == null) {
-    return null;
-  }
 
-  return $IconThemeDataConfigCopyWith<$Res>(_self.iconTheme!, (value) {
-    return _then(_self.copyWith(iconTheme: value));
-  });
-}/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$IconThemeDataConfigCopyWith<$Res>? get actionsIconTheme {
-    if (_self.actionsIconTheme == null) {
-    return null;
-  }
-
-  return $IconThemeDataConfigCopyWith<$Res>(_self.actionsIconTheme!, (value) {
-    return _then(_self.copyWith(actionsIconTheme: value));
-  });
-}/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TextStyleConfigCopyWith<$Res>? get titleTextStyle {
-    if (_self.titleTextStyle == null) {
-    return null;
-  }
-
-  return $TextStyleConfigCopyWith<$Res>(_self.titleTextStyle!, (value) {
-    return _then(_self.copyWith(titleTextStyle: value));
-  });
-}/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TextStyleConfigCopyWith<$Res>? get toolbarTextStyle {
-    if (_self.toolbarTextStyle == null) {
-    return null;
-  }
-
-  return $TextStyleConfigCopyWith<$Res>(_self.toolbarTextStyle!, (value) {
-    return _then(_self.copyWith(toolbarTextStyle: value));
-  });
-}/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$OverlayStyleModelCopyWith<$Res>? get systemOverlayStyle {
-    if (_self.systemOverlayStyle == null) {
-    return null;
-  }
-
-  return $OverlayStyleModelCopyWith<$Res>(_self.systemOverlayStyle!, (value) {
-    return _then(_self.copyWith(systemOverlayStyle: value));
-  });
-}
 }
 
 
@@ -5272,11 +5210,10 @@ extension AppBarConfigPatterns on AppBarConfig {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _AppBarConfig value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _AppBarConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return orElse();
 
 }
@@ -5294,11 +5231,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _AppBarConfig value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _AppBarConfig():
-return $default(_that);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -5315,11 +5251,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _AppBarConfig value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _AppBarConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return null;
 
 }
@@ -5336,10 +5271,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool primary,  bool showBackButton,  String? backgroundColor,  String? foregroundColor,  String? shadowColor,  String? surfaceTintColor,  double? elevation,  double? scrolledUnderElevation,  double? titleSpacing,  double? leadingWidth,  double? toolbarHeight,  bool? centerTitle,  IconThemeDataConfig? iconTheme,  IconThemeDataConfig? actionsIconTheme,  TextStyleConfig? titleTextStyle,  TextStyleConfig? toolbarTextStyle,  OverlayStyleModel? systemOverlayStyle)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _AppBarConfig() when $default != null:
-return $default(_that.primary,_that.showBackButton,_that.backgroundColor,_that.foregroundColor,_that.shadowColor,_that.surfaceTintColor,_that.elevation,_that.scrolledUnderElevation,_that.titleSpacing,_that.leadingWidth,_that.toolbarHeight,_that.centerTitle,_that.iconTheme,_that.actionsIconTheme,_that.titleTextStyle,_that.toolbarTextStyle,_that.systemOverlayStyle);case _:
+case _:
   return orElse();
 
 }
@@ -5357,10 +5291,9 @@ return $default(_that.primary,_that.showBackButton,_that.backgroundColor,_that.f
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool primary,  bool showBackButton,  String? backgroundColor,  String? foregroundColor,  String? shadowColor,  String? surfaceTintColor,  double? elevation,  double? scrolledUnderElevation,  double? titleSpacing,  double? leadingWidth,  double? toolbarHeight,  bool? centerTitle,  IconThemeDataConfig? iconTheme,  IconThemeDataConfig? actionsIconTheme,  TextStyleConfig? titleTextStyle,  TextStyleConfig? toolbarTextStyle,  OverlayStyleModel? systemOverlayStyle)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _AppBarConfig():
-return $default(_that.primary,_that.showBackButton,_that.backgroundColor,_that.foregroundColor,_that.shadowColor,_that.surfaceTintColor,_that.elevation,_that.scrolledUnderElevation,_that.titleSpacing,_that.leadingWidth,_that.toolbarHeight,_that.centerTitle,_that.iconTheme,_that.actionsIconTheme,_that.titleTextStyle,_that.toolbarTextStyle,_that.systemOverlayStyle);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -5377,176 +5310,14 @@ return $default(_that.primary,_that.showBackButton,_that.backgroundColor,_that.f
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool primary,  bool showBackButton,  String? backgroundColor,  String? foregroundColor,  String? shadowColor,  String? surfaceTintColor,  double? elevation,  double? scrolledUnderElevation,  double? titleSpacing,  double? leadingWidth,  double? toolbarHeight,  bool? centerTitle,  IconThemeDataConfig? iconTheme,  IconThemeDataConfig? actionsIconTheme,  TextStyleConfig? titleTextStyle,  TextStyleConfig? toolbarTextStyle,  OverlayStyleModel? systemOverlayStyle)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _AppBarConfig() when $default != null:
-return $default(_that.primary,_that.showBackButton,_that.backgroundColor,_that.foregroundColor,_that.shadowColor,_that.surfaceTintColor,_that.elevation,_that.scrolledUnderElevation,_that.titleSpacing,_that.leadingWidth,_that.toolbarHeight,_that.centerTitle,_that.iconTheme,_that.actionsIconTheme,_that.titleTextStyle,_that.toolbarTextStyle,_that.systemOverlayStyle);case _:
+case _:
   return null;
 
 }
 }
 
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _AppBarConfig implements AppBarConfig {
-  const _AppBarConfig({this.primary = true, this.showBackButton = true, this.backgroundColor, this.foregroundColor, this.shadowColor, this.surfaceTintColor, this.elevation, this.scrolledUnderElevation, this.titleSpacing, this.leadingWidth, this.toolbarHeight, this.centerTitle, this.iconTheme, this.actionsIconTheme, this.titleTextStyle, this.toolbarTextStyle, this.systemOverlayStyle});
-  factory _AppBarConfig.fromJson(Map<String, dynamic> json) => _$AppBarConfigFromJson(json);
-
-@override@JsonKey() final  bool primary;
-@override@JsonKey() final  bool showBackButton;
-@override final  String? backgroundColor;
-@override final  String? foregroundColor;
-@override final  String? shadowColor;
-@override final  String? surfaceTintColor;
-@override final  double? elevation;
-@override final  double? scrolledUnderElevation;
-@override final  double? titleSpacing;
-@override final  double? leadingWidth;
-@override final  double? toolbarHeight;
-@override final  bool? centerTitle;
-@override final  IconThemeDataConfig? iconTheme;
-@override final  IconThemeDataConfig? actionsIconTheme;
-@override final  TextStyleConfig? titleTextStyle;
-@override final  TextStyleConfig? toolbarTextStyle;
-@override final  OverlayStyleModel? systemOverlayStyle;
-
-/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$AppBarConfigCopyWith<_AppBarConfig> get copyWith => __$AppBarConfigCopyWithImpl<_AppBarConfig>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$AppBarConfigToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppBarConfig&&(identical(other.primary, primary) || other.primary == primary)&&(identical(other.showBackButton, showBackButton) || other.showBackButton == showBackButton)&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.foregroundColor, foregroundColor) || other.foregroundColor == foregroundColor)&&(identical(other.shadowColor, shadowColor) || other.shadowColor == shadowColor)&&(identical(other.surfaceTintColor, surfaceTintColor) || other.surfaceTintColor == surfaceTintColor)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.scrolledUnderElevation, scrolledUnderElevation) || other.scrolledUnderElevation == scrolledUnderElevation)&&(identical(other.titleSpacing, titleSpacing) || other.titleSpacing == titleSpacing)&&(identical(other.leadingWidth, leadingWidth) || other.leadingWidth == leadingWidth)&&(identical(other.toolbarHeight, toolbarHeight) || other.toolbarHeight == toolbarHeight)&&(identical(other.centerTitle, centerTitle) || other.centerTitle == centerTitle)&&(identical(other.iconTheme, iconTheme) || other.iconTheme == iconTheme)&&(identical(other.actionsIconTheme, actionsIconTheme) || other.actionsIconTheme == actionsIconTheme)&&(identical(other.titleTextStyle, titleTextStyle) || other.titleTextStyle == titleTextStyle)&&(identical(other.toolbarTextStyle, toolbarTextStyle) || other.toolbarTextStyle == toolbarTextStyle)&&(identical(other.systemOverlayStyle, systemOverlayStyle) || other.systemOverlayStyle == systemOverlayStyle));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,primary,showBackButton,backgroundColor,foregroundColor,shadowColor,surfaceTintColor,elevation,scrolledUnderElevation,titleSpacing,leadingWidth,toolbarHeight,centerTitle,iconTheme,actionsIconTheme,titleTextStyle,toolbarTextStyle,systemOverlayStyle);
-
-@override
-String toString() {
-  return 'AppBarConfig(primary: $primary, showBackButton: $showBackButton, backgroundColor: $backgroundColor, foregroundColor: $foregroundColor, shadowColor: $shadowColor, surfaceTintColor: $surfaceTintColor, elevation: $elevation, scrolledUnderElevation: $scrolledUnderElevation, titleSpacing: $titleSpacing, leadingWidth: $leadingWidth, toolbarHeight: $toolbarHeight, centerTitle: $centerTitle, iconTheme: $iconTheme, actionsIconTheme: $actionsIconTheme, titleTextStyle: $titleTextStyle, toolbarTextStyle: $toolbarTextStyle, systemOverlayStyle: $systemOverlayStyle)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$AppBarConfigCopyWith<$Res> implements $AppBarConfigCopyWith<$Res> {
-  factory _$AppBarConfigCopyWith(_AppBarConfig value, $Res Function(_AppBarConfig) _then) = __$AppBarConfigCopyWithImpl;
-@override @useResult
-$Res call({
- bool primary, bool showBackButton, String? backgroundColor, String? foregroundColor, String? shadowColor, String? surfaceTintColor, double? elevation, double? scrolledUnderElevation, double? titleSpacing, double? leadingWidth, double? toolbarHeight, bool? centerTitle, IconThemeDataConfig? iconTheme, IconThemeDataConfig? actionsIconTheme, TextStyleConfig? titleTextStyle, TextStyleConfig? toolbarTextStyle, OverlayStyleModel? systemOverlayStyle
-});
-
-
-@override $IconThemeDataConfigCopyWith<$Res>? get iconTheme;@override $IconThemeDataConfigCopyWith<$Res>? get actionsIconTheme;@override $TextStyleConfigCopyWith<$Res>? get titleTextStyle;@override $TextStyleConfigCopyWith<$Res>? get toolbarTextStyle;@override $OverlayStyleModelCopyWith<$Res>? get systemOverlayStyle;
-
-}
-/// @nodoc
-class __$AppBarConfigCopyWithImpl<$Res>
-    implements _$AppBarConfigCopyWith<$Res> {
-  __$AppBarConfigCopyWithImpl(this._self, this._then);
-
-  final _AppBarConfig _self;
-  final $Res Function(_AppBarConfig) _then;
-
-/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? primary = null,Object? showBackButton = null,Object? backgroundColor = freezed,Object? foregroundColor = freezed,Object? shadowColor = freezed,Object? surfaceTintColor = freezed,Object? elevation = freezed,Object? scrolledUnderElevation = freezed,Object? titleSpacing = freezed,Object? leadingWidth = freezed,Object? toolbarHeight = freezed,Object? centerTitle = freezed,Object? iconTheme = freezed,Object? actionsIconTheme = freezed,Object? titleTextStyle = freezed,Object? toolbarTextStyle = freezed,Object? systemOverlayStyle = freezed,}) {
-  return _then(_AppBarConfig(
-primary: null == primary ? _self.primary : primary // ignore: cast_nullable_to_non_nullable
-as bool,showBackButton: null == showBackButton ? _self.showBackButton : showBackButton // ignore: cast_nullable_to_non_nullable
-as bool,backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,foregroundColor: freezed == foregroundColor ? _self.foregroundColor : foregroundColor // ignore: cast_nullable_to_non_nullable
-as String?,shadowColor: freezed == shadowColor ? _self.shadowColor : shadowColor // ignore: cast_nullable_to_non_nullable
-as String?,surfaceTintColor: freezed == surfaceTintColor ? _self.surfaceTintColor : surfaceTintColor // ignore: cast_nullable_to_non_nullable
-as String?,elevation: freezed == elevation ? _self.elevation : elevation // ignore: cast_nullable_to_non_nullable
-as double?,scrolledUnderElevation: freezed == scrolledUnderElevation ? _self.scrolledUnderElevation : scrolledUnderElevation // ignore: cast_nullable_to_non_nullable
-as double?,titleSpacing: freezed == titleSpacing ? _self.titleSpacing : titleSpacing // ignore: cast_nullable_to_non_nullable
-as double?,leadingWidth: freezed == leadingWidth ? _self.leadingWidth : leadingWidth // ignore: cast_nullable_to_non_nullable
-as double?,toolbarHeight: freezed == toolbarHeight ? _self.toolbarHeight : toolbarHeight // ignore: cast_nullable_to_non_nullable
-as double?,centerTitle: freezed == centerTitle ? _self.centerTitle : centerTitle // ignore: cast_nullable_to_non_nullable
-as bool?,iconTheme: freezed == iconTheme ? _self.iconTheme : iconTheme // ignore: cast_nullable_to_non_nullable
-as IconThemeDataConfig?,actionsIconTheme: freezed == actionsIconTheme ? _self.actionsIconTheme : actionsIconTheme // ignore: cast_nullable_to_non_nullable
-as IconThemeDataConfig?,titleTextStyle: freezed == titleTextStyle ? _self.titleTextStyle : titleTextStyle // ignore: cast_nullable_to_non_nullable
-as TextStyleConfig?,toolbarTextStyle: freezed == toolbarTextStyle ? _self.toolbarTextStyle : toolbarTextStyle // ignore: cast_nullable_to_non_nullable
-as TextStyleConfig?,systemOverlayStyle: freezed == systemOverlayStyle ? _self.systemOverlayStyle : systemOverlayStyle // ignore: cast_nullable_to_non_nullable
-as OverlayStyleModel?,
-  ));
-}
-
-/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$IconThemeDataConfigCopyWith<$Res>? get iconTheme {
-    if (_self.iconTheme == null) {
-    return null;
-  }
-
-  return $IconThemeDataConfigCopyWith<$Res>(_self.iconTheme!, (value) {
-    return _then(_self.copyWith(iconTheme: value));
-  });
-}/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$IconThemeDataConfigCopyWith<$Res>? get actionsIconTheme {
-    if (_self.actionsIconTheme == null) {
-    return null;
-  }
-
-  return $IconThemeDataConfigCopyWith<$Res>(_self.actionsIconTheme!, (value) {
-    return _then(_self.copyWith(actionsIconTheme: value));
-  });
-}/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TextStyleConfigCopyWith<$Res>? get titleTextStyle {
-    if (_self.titleTextStyle == null) {
-    return null;
-  }
-
-  return $TextStyleConfigCopyWith<$Res>(_self.titleTextStyle!, (value) {
-    return _then(_self.copyWith(titleTextStyle: value));
-  });
-}/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TextStyleConfigCopyWith<$Res>? get toolbarTextStyle {
-    if (_self.toolbarTextStyle == null) {
-    return null;
-  }
-
-  return $TextStyleConfigCopyWith<$Res>(_self.toolbarTextStyle!, (value) {
-    return _then(_self.copyWith(toolbarTextStyle: value));
-  });
-}/// Create a copy of AppBarConfig
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$OverlayStyleModelCopyWith<$Res>? get systemOverlayStyle {
-    if (_self.systemOverlayStyle == null) {
-    return null;
-  }
-
-  return $OverlayStyleModelCopyWith<$Res>(_self.systemOverlayStyle!, (value) {
-    return _then(_self.copyWith(systemOverlayStyle: value));
-  });
-}
 }
 
 // dart format on

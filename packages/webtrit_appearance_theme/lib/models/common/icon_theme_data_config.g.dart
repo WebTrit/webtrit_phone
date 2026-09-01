@@ -6,8 +6,8 @@ part of 'icon_theme_data_config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_IconThemeDataConfig _$IconThemeDataConfigFromJson(Map<String, dynamic> json) =>
-    _IconThemeDataConfig(
+IconThemeDataConfig _$IconThemeDataConfigFromJson(Map<String, dynamic> json) =>
+    IconThemeDataConfig(
       size: (json['size'] as num?)?.toDouble(),
       fill: (json['fill'] as num?)?.toDouble(),
       weight: (json['weight'] as num?)?.toDouble(),
@@ -22,7 +22,7 @@ _IconThemeDataConfig _$IconThemeDataConfigFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$IconThemeDataConfigToJson(
-  _IconThemeDataConfig instance,
+  IconThemeDataConfig instance,
 ) => <String, dynamic>{
   'size': instance.size,
   'fill': instance.fill,
@@ -35,27 +35,25 @@ Map<String, dynamic> _$IconThemeDataConfigToJson(
   'applyTextScaling': instance.applyTextScaling,
 };
 
-_ShadowConfig _$ShadowConfigFromJson(Map<String, dynamic> json) =>
-    _ShadowConfig(
-      color: json['color'] as String?,
-      offset: json['offset'] == null
-          ? null
-          : OffsetConfig.fromJson(json['offset'] as Map<String, dynamic>),
-      blurRadius: (json['blurRadius'] as num?)?.toDouble() ?? 0.0,
-    );
+ShadowConfig _$ShadowConfigFromJson(Map<String, dynamic> json) => ShadowConfig(
+  color: json['color'] as String?,
+  offset: json['offset'] == null
+      ? null
+      : OffsetConfig.fromJson(json['offset'] as Map<String, dynamic>),
+  blurRadius: (json['blurRadius'] as num?)?.toDouble() ?? 0.0,
+);
 
-Map<String, dynamic> _$ShadowConfigToJson(_ShadowConfig instance) =>
+Map<String, dynamic> _$ShadowConfigToJson(ShadowConfig instance) =>
     <String, dynamic>{
       'color': instance.color,
       'offset': instance.offset?.toJson(),
       'blurRadius': instance.blurRadius,
     };
 
-_OffsetConfig _$OffsetConfigFromJson(Map<String, dynamic> json) =>
-    _OffsetConfig(
-      dx: (json['dx'] as num?)?.toDouble() ?? 0.0,
-      dy: (json['dy'] as num?)?.toDouble() ?? 0.0,
-    );
+OffsetConfig _$OffsetConfigFromJson(Map<String, dynamic> json) => OffsetConfig(
+  dx: (json['dx'] as num?)?.toDouble() ?? 0.0,
+  dy: (json['dy'] as num?)?.toDouble() ?? 0.0,
+);
 
-Map<String, dynamic> _$OffsetConfigToJson(_OffsetConfig instance) =>
+Map<String, dynamic> _$OffsetConfigToJson(OffsetConfig instance) =>
     <String, dynamic>{'dx': instance.dx, 'dy': instance.dy};
