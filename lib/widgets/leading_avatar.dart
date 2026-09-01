@@ -131,7 +131,8 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
       // visibly pixelated on a large avatar, so ask for the resolution actually painted -
       // rounded up to a shared size, so the same face is not downloaded once per screen.
       final devicePixels = diameter * MediaQuery.devicePixelRatioOf(context);
-      final url = gravatarUrlWithSize(widget.thumbnailUrl, gravatarRequestSize(devicePixels)) ?? widget.thumbnailUrl!;
+      final url =
+          GravatarUrl.withSize(widget.thumbnailUrl, GravatarUrl.requestSize(devicePixels)) ?? widget.thumbnailUrl!;
 
       // Keyed by the contact's url rather than the sized one: a size change is a reload
       // inside the image, not a new child, and remounting it would flash the placeholder.

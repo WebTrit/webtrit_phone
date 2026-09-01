@@ -3,29 +3,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 void main() {
-  group('gravatarRequestSize', () {
+  group('GravatarUrl.requestSize', () {
     test('rounds up to the next shared size', () {
-      expect(gravatarRequestSize(80), 128);
-      expect(gravatarRequestSize(129), 256);
-      expect(gravatarRequestSize(300), 512);
+      expect(GravatarUrl.requestSize(80), 128);
+      expect(GravatarUrl.requestSize(129), 256);
+      expect(GravatarUrl.requestSize(300), 512);
     });
 
     test('gives sizes that are close to each other the same url', () {
       // A list row at 120 and an app bar at 144 are both asked for as one size, so the
       // second one paints the picture the first already downloaded.
-      expect(gravatarRequestSize(144), gravatarRequestSize(222));
+      expect(GravatarUrl.requestSize(144), GravatarUrl.requestSize(222));
     });
 
     test('caps at the largest shared size', () {
-      expect(gravatarRequestSize(9000), 2048);
+      expect(GravatarUrl.requestSize(9000), 2048);
     });
   });
 
-  group('gravatarUrlWithSize', () {
+  group('GravatarUrl.withSize', () {
     final gravatar = Uri.parse('https://www.gravatar.com/avatar/abc?d=404');
 
     test('asks for the size and keeps the other parameters', () {
-      final url = gravatarUrlWithSize(gravatar, 256)!;
+      final url = GravatarUrl.withSize(gravatar, 256)!;
 
       expect(url.queryParameters['s'], '256');
       expect(url.queryParameters['d'], '404');
@@ -34,7 +34,7 @@ void main() {
     test('leaves a url that is not a gravatar alone', () {
       final other = Uri.parse('https://example.com/photo.png');
 
-      expect(gravatarUrlWithSize(other, 256), other);
+      expect(GravatarUrl.withSize(other, 256), other);
     });
   });
 }

@@ -158,7 +158,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 children: <Widget>[
                                   LeadingAvatar(
                                     username: info?.name ?? info?.numbers.main,
-                                    thumbnailUrl: gravatarThumbnailUrl(info?.email),
+                                    thumbnailUrl: GravatarUrl.forEmail(info?.email),
                                     radius: kMinInteractiveDimension / 2,
                                     showLoading: true,
                                   ),
