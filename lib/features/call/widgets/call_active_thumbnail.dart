@@ -188,20 +188,14 @@ class _AvatarOverlay extends StatelessWidget {
       child: Center(
         child: FutureBuilder<Contact?>(
           future: contactResolver?.resolve(activeCall.handle.value),
-          builder: (context, snapshot) => _avatar(snapshot.data),
+          builder: (context, snapshot) => LeadingAvatar(
+            radius: _radius,
+            username: snapshot.data?.maybeName ?? activeCall.displayName ?? '',
+            thumbnailUrl: snapshot.data?.thumbnailUrl,
+            placeholderIcon: Icons.phone_in_talk_outlined,
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _avatar(Contact? contact) {
-    final name = contact?.maybeName ?? activeCall.displayName ?? '';
-
-    return LeadingAvatar(
-      radius: _radius,
-      username: name,
-      thumbnailUrl: contact?.thumbnailUrl,
-      placeholderIcon: Icons.phone_in_talk_outlined,
     );
   }
 }
