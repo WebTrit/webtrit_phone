@@ -24,7 +24,7 @@ PageBackgroundGradient _$PageBackgroundGradientFromJson(
       (json['stops'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList() ??
-      const [0.0, 1.0],
+      const <double>[],
   beginX: (json['beginX'] as num?)?.toDouble() ?? 0.0,
   beginY: (json['beginY'] as num?)?.toDouble() ?? 0.0,
   endX: (json['endX'] as num?)?.toDouble() ?? 1.0,

@@ -313,7 +313,7 @@ as String,
 @JsonSerializable()
 
 class PageBackgroundGradient implements PageBackground {
-  const PageBackgroundGradient({required final  List<String> colors, final  List<double> stops = const [0.0, 1.0], this.beginX = 0.0, this.beginY = 0.0, this.endX = 1.0, this.endY = 1.0, this.type = 'gradient'}): _colors = colors,_stops = stops;
+  const PageBackgroundGradient({required final  List<String> colors, final  List<double> stops = const <double>[], this.beginX = 0.0, this.beginY = 0.0, this.endX = 1.0, this.endY = 1.0, this.type = 'gradient'}): _colors = colors,_stops = stops;
   factory PageBackgroundGradient.fromJson(Map<String, dynamic> json) => _$PageBackgroundGradientFromJson(json);
 
  final  List<String> _colors;
@@ -323,7 +323,19 @@ class PageBackgroundGradient implements PageBackground {
   return EqualUnmodifiableListView(_colors);
 }
 
+// No default here, and none anywhere in the contract: a non-empty
+// collection default crashes the schema generator, which hands the
+// analyser's own objects to a literal writer that has no case for them.
+// The value belongs where it is read anyway - a gradient with no stops is
+// an even gradient, and saying so at the point of drawing is clearer than
+// materialising a pair into every document that never asked for one.
  final  List<double> _stops;
+// No default here, and none anywhere in the contract: a non-empty
+// collection default crashes the schema generator, which hands the
+// analyser's own objects to a literal writer that has no case for them.
+// The value belongs where it is read anyway - a gradient with no stops is
+// an even gradient, and saying so at the point of drawing is clearer than
+// materialising a pair into every document that never asked for one.
 @JsonKey() List<double> get stops {
   if (_stops is EqualUnmodifiableListView) return _stops;
   // ignore: implicit_dynamic_type

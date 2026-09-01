@@ -57,7 +57,8 @@ class AppConfigLogin with _$AppConfigLogin {
   const AppConfigLogin({
     this.common = const AppConfigLoginCommon(),
     this.modeSelect = const AppConfigLoginModeSelect(),
-    this.signinOrder = const ['passwordSignin', 'otpSignin', 'signup'],
+    // Empty, for the reason above. `signinOrderOrDefault` names what it was.
+    this.signinOrder = const [],
     this.qr = const AppConfigLoginQr(),
   });
 
@@ -73,6 +74,14 @@ class AppConfigLogin with _$AppConfigLogin {
   /// by default. Unknown or omitted names are placed last.
   @override
   final List<String> signinOrder;
+
+  /// The order the sign-in methods are offered in.
+  ///
+  /// A config that names none gets the order it used to be given. Resolved
+  /// here rather than in the constructor, so no document carries an order
+  /// nobody wrote and the published schema stays free of a collection default.
+  List<String> get signinOrderOrDefault =>
+      signinOrder.isNotEmpty ? signinOrder : const ['passwordSignin', 'otpSignin', 'signup'];
 
   @override
   final AppConfigLoginQr qr;
@@ -94,10 +103,9 @@ class AppConfigLogin with _$AppConfigLogin {
 class AppConfigLoginQr with _$AppConfigLoginQr {
   const AppConfigLoginQr({
     this.enabled = false,
-    this.formats = const [
-      AppConfigLoginQrFormat(type: 'uri', schemes: ['csc']),
-      AppConfigLoginQrFormat(type: 'json'),
-    ],
+    // Empty, for the reason every collection default here is: a non-empty one
+    // crashes the schema generator. What it used to name is `qrFormats` below.
+    this.formats = const [],
     this.expectedHost,
   });
 
@@ -109,6 +117,18 @@ class AppConfigLoginQr with _$AppConfigLoginQr {
   /// order.
   @override
   final List<AppConfigLoginQrFormat> formats;
+
+  /// The payload formats to probe, in order.
+  ///
+  /// A config that names none gets the two it used to be given: a `csc` URI
+  /// and a bare JSON payload. Resolved here rather than in the constructor, so
+  /// no document carries formats nobody wrote.
+  List<AppConfigLoginQrFormat> get qrFormats => formats.isNotEmpty
+      ? formats
+      : const [
+          AppConfigLoginQrFormat(type: 'uri', schemes: ['csc']),
+          AppConfigLoginQrFormat(type: 'json'),
+        ];
 
   /// Expected host (cloud id) of the code, shared by all formats. When set,
   /// codes issued for a different host are rejected; null accepts any host.
@@ -157,9 +177,11 @@ class AppConfigLoginCommon with _$AppConfigLoginCommon {
 class AppConfigLoginModeSelect with _$AppConfigLoginModeSelect {
   const AppConfigLoginModeSelect({
     this.greetingL10n,
-    this.actions = const [
-      AppConfigModeSelectAction(enabled: true, type: 'login', titleL10n: 'login_Button_signUpToDemoInstance'),
-    ],
+    // Empty rather than one login button, for the reason `stops` carries
+    // none: a non-empty collection default crashes the schema generator. The
+    // button it used to name is supplied by `modeSelectActions` below, which
+    // is where every reader already goes.
+    this.actions = const [],
   });
 
   @override
@@ -167,6 +189,16 @@ class AppConfigLoginModeSelect with _$AppConfigLoginModeSelect {
 
   @override
   final List<AppConfigModeSelectAction> actions;
+
+  /// The buttons the mode-select screen offers.
+  ///
+  /// A config that names none gets the one it used to be given by default:
+  /// signing in. Resolved here rather than in the constructor, so no document
+  /// carries a button nobody wrote and the published schema stays free of a
+  /// collection default.
+  List<AppConfigModeSelectAction> get modeSelectActions => actions.isNotEmpty
+      ? actions
+      : const [AppConfigModeSelectAction(enabled: true, type: 'login', titleL10n: 'login_Button_signUpToDemoInstance')];
 
   factory AppConfigLoginModeSelect.fromJson(Map<String, Object?> json) => _$AppConfigLoginModeSelectFromJson(json);
 
@@ -557,60 +589,21 @@ sealed class BottomMenuTabScheme with _$BottomMenuTabScheme {
 @JsonSerializable(explicitToJson: true)
 class AppConfigSettings with _$AppConfigSettings {
   const AppConfigSettings({
-    this.sections = const [
-      AppConfigSettingsSection(
-        titleL10n: 'settings_ListViewTileTitle_settings',
-        enabled: true,
-        items: [
-          AppConfigSettingsItem(
-            enabled: true,
-            type: 'network',
-            titleL10n: 'settings_ListViewTileTitle_network',
-            icon: '0xe424',
-          ),
-          AppConfigSettingsItem(
-            enabled: true,
-            type: 'mediaSettings',
-            titleL10n: 'settings_ListViewTileTitle_mediaSettings',
-            icon: '0xf1cf',
-          ),
-          AppConfigSettingsItem(
-            enabled: true,
-            type: 'language',
-            titleL10n: 'settings_ListViewTileTitle_language',
-            icon: '0xe366',
-          ),
-          AppConfigSettingsItem(
-            enabled: true,
-            type: 'terms',
-            titleL10n: 'settings_ListViewTileTitle_termsConditions',
-            icon: '0xeedf',
-          ),
-          AppConfigSettingsItem(
-            enabled: true,
-            type: 'about',
-            titleL10n: 'settings_ListViewTileTitle_about',
-            icon: '0xe140',
-          ),
-        ],
-      ),
-      AppConfigSettingsSection(
-        titleL10n: 'settings_ListViewTileTitle_toolbox',
-        enabled: true,
-        items: [
-          AppConfigSettingsItem(
-            enabled: true,
-            type: 'log',
-            titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
-            icon: '0xee79',
-          ),
-        ],
-      ),
-    ],
+    // Empty, for the reason every collection default here is: a non-empty one
+    // crashes the schema generator. What it used to name is `settingsSections`
+    // below, which is where the reader already goes.
+    this.sections = const [],
   });
 
   @override
   final List<AppConfigSettingsSection> sections;
+
+  /// The settings screen's sections.
+  ///
+  /// A config that names none gets the ones it used to be given. Resolved here
+  /// rather than in the constructor, so no document carries a section nobody
+  /// wrote and the published schema stays free of a collection default.
+  List<AppConfigSettingsSection> get settingsSections => sections.isNotEmpty ? sections : _defaultSections;
 
   factory AppConfigSettings.fromJson(Map<String, Object?> json) => _$AppConfigSettingsFromJson(json);
 
@@ -806,3 +799,54 @@ class AppConfigLocalization with _$AppConfigLocalization {
 
   Map<String, Object?> toJson() => _$AppConfigLocalizationToJson(this);
 }
+
+const _defaultSections = [
+  AppConfigSettingsSection(
+    titleL10n: 'settings_ListViewTileTitle_settings',
+    enabled: true,
+    items: [
+      AppConfigSettingsItem(
+        enabled: true,
+        type: 'network',
+        titleL10n: 'settings_ListViewTileTitle_network',
+        icon: '0xe424',
+      ),
+      AppConfigSettingsItem(
+        enabled: true,
+        type: 'mediaSettings',
+        titleL10n: 'settings_ListViewTileTitle_mediaSettings',
+        icon: '0xf1cf',
+      ),
+      AppConfigSettingsItem(
+        enabled: true,
+        type: 'language',
+        titleL10n: 'settings_ListViewTileTitle_language',
+        icon: '0xe366',
+      ),
+      AppConfigSettingsItem(
+        enabled: true,
+        type: 'terms',
+        titleL10n: 'settings_ListViewTileTitle_termsConditions',
+        icon: '0xeedf',
+      ),
+      AppConfigSettingsItem(
+        enabled: true,
+        type: 'about',
+        titleL10n: 'settings_ListViewTileTitle_about',
+        icon: '0xe140',
+      ),
+    ],
+  ),
+  AppConfigSettingsSection(
+    titleL10n: 'settings_ListViewTileTitle_toolbox',
+    enabled: true,
+    items: [
+      AppConfigSettingsItem(
+        enabled: true,
+        type: 'log',
+        titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
+        icon: '0xee79',
+      ),
+    ],
+  ),
+];
