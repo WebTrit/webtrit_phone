@@ -47,22 +47,8 @@ const _$ImageSourceJsonSchema = {
       'properties': {
         'scale': {'type': 'number'},
         'padding': {r'$ref': r'#/$defs/PaddingConfig'},
-        'alignment': {
-          'enum': [
-            'topLeft',
-            'topCenter',
-            'topRight',
-            'centerLeft',
-            'center',
-            'centerRight',
-            'bottomLeft',
-            'bottomCenter',
-            'bottomRight',
-          ],
-        },
-        'fit': {
-          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
-        },
+        'alignment': {'type': 'object'},
+        'fit': {'type': 'object'},
       },
     },
     'Metadata': {
@@ -103,22 +89,8 @@ const _$ImageRenderSpecJsonSchema = {
   'properties': {
     'scale': {'type': 'number'},
     'padding': {r'$ref': r'#/$defs/PaddingConfig'},
-    'alignment': {
-      'enum': [
-        'topLeft',
-        'topCenter',
-        'topRight',
-        'centerLeft',
-        'center',
-        'centerRight',
-        'bottomLeft',
-        'bottomCenter',
-        'bottomRight',
-      ],
-    },
-    'fit': {
-      'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
-    },
+    'alignment': {'type': 'object'},
+    'fit': {'type': 'object'},
   },
   r'$defs': {
     'PaddingConfig': {

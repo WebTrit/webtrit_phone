@@ -25,10 +25,9 @@ const _$BorderConfigJsonSchema = {
   'type': 'object',
   'properties': {
     'type': {
-      'enum': ['underline', 'outline', 'none'],
+      'type': 'object',
       'description':
           'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
-      'default': 'underline',
     },
     'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
     'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},

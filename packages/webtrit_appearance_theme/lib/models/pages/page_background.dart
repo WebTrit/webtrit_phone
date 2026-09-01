@@ -13,9 +13,9 @@ part 'page_background.g.dart';
 /// schema generator reads fields off source classes - a generated one has none it
 /// can see, so a union and every variant of it came out as an empty object. Each
 /// variant here is a class of its own, which the generator describes in full; the
-/// only thing left for the package to say is which classes the union is made of,
-/// and that is [variantSchemas], two lines below the decoder that dispatches on
-/// the same three words.
+/// only thing left to say is which classes the union is made of, and that is read
+/// off this file by `lib/builder.dart` - a variant added below is
+/// in the schema without a second edit.
 sealed class PageBackground {
   const PageBackground();
 
@@ -39,14 +39,6 @@ sealed class PageBackground {
     'gradient' => PageBackgroundGradient.fromJson(json),
     'image' => PageBackgroundImage.fromJson(json),
     final unknown => throw CheckedFromJsonException(json, 'type', 'PageBackground', 'Invalid union type "$unknown"!'),
-  };
-
-  /// The variants, for [assembleUnions]. Kept beside the decoder above: a new
-  /// background is added in both places or in neither.
-  static const Map<String, Map<String, Object?>> variantSchemas = {
-    'PageBackgroundSolid': PageBackgroundSolid.jsonSchema,
-    'PageBackgroundGradient': PageBackgroundGradient.jsonSchema,
-    'PageBackgroundImage': PageBackgroundImage.jsonSchema,
   };
 
   Map<String, Object?> toJson();

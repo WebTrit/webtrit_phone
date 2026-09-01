@@ -449,10 +449,9 @@ const _$ThemeSettingsJsonSchema = {
       'type': 'object',
       'properties': {
         'type': {
-          'enum': ['underline', 'outline', 'none'],
+          'type': 'object',
           'description':
               'Border type:\n- [`BorderTypeConfig.underline`]\n- [`BorderTypeConfig.outline`]\n- [`BorderTypeConfig.none`]',
-          'default': 'underline',
         },
         'borderRadius': {'type': 'number', 'description': 'Corner radius for outline borders.'},
         'borderColor': {'type': 'string', 'description': 'Border color (hex string, e.g. `#000000`).'},
@@ -471,18 +470,10 @@ const _$ThemeSettingsJsonSchema = {
         'labelPadding': {r'$ref': r'#/$defs/PaddingConfig'},
         'labelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
         'unselectedLabelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
-        'indicatorSize': {
-          'enum': ['tab', 'label'],
-        },
-        'tabAlignment': {
-          'enum': ['start', 'startOffset', 'fill', 'center'],
-        },
-        'indicatorAnimation': {
-          'enum': ['linear', 'elastic'],
-        },
-        'splashFactory': {
-          'enum': ['noSplash', 'inkRipple', 'inkSparkle'],
-        },
+        'indicatorSize': {'type': 'object'},
+        'tabAlignment': {'type': 'object'},
+        'indicatorAnimation': {'type': 'object'},
+        'splashFactory': {'type': 'object'},
         'indicatorBorder': {r'$ref': r'#/$defs/BorderConfig'},
       },
     },
@@ -499,22 +490,8 @@ const _$ThemeSettingsJsonSchema = {
       'properties': {
         'scale': {'type': 'number'},
         'padding': {r'$ref': r'#/$defs/PaddingConfig'},
-        'alignment': {
-          'enum': [
-            'topLeft',
-            'topCenter',
-            'topRight',
-            'centerLeft',
-            'center',
-            'centerRight',
-            'bottomLeft',
-            'bottomCenter',
-            'bottomRight',
-          ],
-        },
-        'fit': {
-          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
-        },
+        'alignment': {'type': 'object'},
+        'fit': {'type': 'object'},
       },
     },
     'Metadata': {
@@ -814,11 +791,7 @@ const _$ThemeSettingsJsonSchema = {
     'ThemeOverrideConfig': {
       'type': 'object',
       'properties': {
-        'mode': {
-          'enum': ['system', 'light', 'dark'],
-          'description': 'The target mode to force (e.g., ensure screen is always Dark).',
-          'default': 'system',
-        },
+        'mode': {'type': 'object', 'description': 'The target mode to force (e.g., ensure screen is always Dark).'},
         'applyToAppBar': {
           'type': 'boolean',
           'description':
@@ -827,57 +800,7 @@ const _$ThemeSettingsJsonSchema = {
         },
       },
     },
-    'PageBackground': {
-      'oneOf': [
-        {r'$ref': r'#/$defs/PageBackgroundSolid'},
-        {r'$ref': r'#/$defs/PageBackgroundGradient'},
-        {r'$ref': r'#/$defs/PageBackgroundImage'},
-      ],
-    },
-    'PageBackgroundSolid': {
-      'type': 'object',
-      'properties': {
-        'color': {'type': 'string', 'description': 'The colour to fill with (hex string, e.g. `#3A6EA5`).'},
-        'type': {'type': 'string', 'description': 'The discriminator. Always `solid`.', 'default': 'solid'},
-      },
-      'required': ['color'],
-    },
-    'PageBackgroundGradient': {
-      'type': 'object',
-      'properties': {
-        'colors': {
-          'type': 'array',
-          'items': {'type': 'string'},
-          'description': 'The colours to run between (hex strings).',
-        },
-        'stops': {
-          'type': 'array',
-          'items': {'type': 'number'},
-          'description': 'Where each colour sits, `0.0` to `1.0`. Empty means an even spread.',
-          'default': [],
-        },
-        'beginX': {'type': 'number', 'default': 0.0},
-        'beginY': {'type': 'number', 'default': 0.0},
-        'endX': {'type': 'number', 'default': 1.0},
-        'endY': {'type': 'number', 'default': 1.0},
-        'type': {'type': 'string', 'description': 'The discriminator. Always `gradient`.', 'default': 'gradient'},
-      },
-      'required': ['colors'],
-    },
-    'PageBackgroundImage': {
-      'type': 'object',
-      'properties': {
-        'imageUrl': {'type': 'string'},
-        'fit': {
-          'enum': ['fill', 'contain', 'cover', 'fitWidth', 'fitHeight', 'none', 'scaleDown'],
-          'description': 'How the image is fitted into the page.',
-          'default': 'cover',
-        },
-        'opacity': {'type': 'number', 'default': 1.0},
-        'type': {'type': 'string', 'description': 'The discriminator. Always `image`.', 'default': 'image'},
-      },
-      'required': ['imageUrl'],
-    },
+    'PageBackground': {'type': 'object', 'properties': {}},
     'BlurredSurfaceConfig': {
       'type': 'object',
       'properties': {
@@ -892,14 +815,8 @@ const _$ThemeSettingsJsonSchema = {
         'themeOverride': {r'$ref': r'#/$defs/ThemeOverrideConfig'},
         'systemUiOverlayStyle': {r'$ref': r'#/$defs/OverlayStyleModel'},
         'mainLogo': {r'$ref': r'#/$defs/ImageSource'},
-        'buttonLoginStyleType': {
-          'enum': ['primary', 'neutral', 'primaryOnDark', 'neutralOnDark'],
-          'default': 'primary',
-        },
-        'buttonSignupStyleType': {
-          'enum': ['primary', 'neutral', 'primaryOnDark', 'neutralOnDark'],
-          'default': 'primary',
-        },
+        'buttonLoginStyleType': {'type': 'object'},
+        'buttonSignupStyleType': {'type': 'object'},
         'background': {r'$ref': r'#/$defs/PageBackground'},
         'greetingTextStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
         'appBarBlurredSurface': {r'$ref': r'#/$defs/BlurredSurfaceConfig'},

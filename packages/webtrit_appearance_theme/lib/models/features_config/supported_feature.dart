@@ -10,8 +10,8 @@ part 'supported_feature.g.dart';
 /// or configures.
 ///
 /// Written as a sealed base with a class per feature rather than as a freezed
-/// union - see [PageBackground] for why. [variantSchemas] sits beside the
-/// decoder; a new feature is added in both or in neither.
+/// union - see [PageBackground] for why. A new feature needs a redirecting
+/// factory and a `fromJson` branch; the schema follows on its own.
 sealed class SupportedFeature {
   const SupportedFeature();
 
@@ -40,16 +40,6 @@ sealed class SupportedFeature {
     'hybridPresence' => SupportedHybridPresence.fromJson(json),
     'callPull' => SupportedCallPull.fromJson(json),
     final unknown => throw CheckedFromJsonException(json, 'type', 'SupportedFeature', 'Invalid union type "$unknown"!'),
-  };
-
-  /// The variants, for `assembleUnions`.
-  static const Map<String, Map<String, Object?>> variantSchemas = {
-    'SupportedThemeMode': SupportedThemeMode.jsonSchema,
-    'SupportedVideoCall': SupportedVideoCall.jsonSchema,
-    'SupportedLoggingConfig': SupportedLoggingConfig.jsonSchema,
-    'SupportedSystemNotifications': SupportedSystemNotifications.jsonSchema,
-    'SupportedHybridPresence': SupportedHybridPresence.jsonSchema,
-    'SupportedCallPull': SupportedCallPull.jsonSchema,
   };
 
   Map<String, Object?> toJson();
