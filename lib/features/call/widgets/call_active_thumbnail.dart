@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -171,10 +172,13 @@ class _AvatarOverlay extends StatelessWidget {
   /// from, so a window configured larger or smaller carries it along.
   final double smallerSide;
 
+  /// Half of what the window leaves after its padding, and never less than nothing:
+  /// a window narrower than the padding it carries would otherwise ask for a negative
+  /// radius, which is not a size any box can take.
+  double get _radius => math.max(0.0, smallerSide - _padding * 2) / 2;
+
   @override
   Widget build(BuildContext context) {
-    final number = activeCall.handle.value;
-
     // The window stretches whatever fills it to its own 9:16 shape. The avatar is a
     // circle of a fixed size, so it has to be let out of those constraints: taken
     // tight, it is drawn as an ellipse the shape of the window and the photo inside
@@ -183,20 +187,21 @@ class _AvatarOverlay extends StatelessWidget {
       padding: const EdgeInsets.all(_padding),
       child: Center(
         child: FutureBuilder<Contact?>(
-          future: contactResolver?.resolve(number),
-          builder: (context, snapshot) {
-            final displayName = activeCall.displayName ?? '';
-            final resolvedName = snapshot.data?.maybeName ?? displayName;
-
-            return LeadingAvatar(
-              radius: (smallerSide - _padding * 2) / 2,
-              username: resolvedName,
-              thumbnailUrl: snapshot.data?.thumbnailUrl,
-              placeholderIcon: Icons.phone_in_talk_outlined,
-            );
-          },
+          future: contactResolver?.resolve(activeCall.handle.value),
+          builder: (context, snapshot) => _avatar(snapshot.data),
         ),
       ),
+    );
+  }
+
+  Widget _avatar(Contact? contact) {
+    final name = contact?.maybeName ?? activeCall.displayName ?? '';
+
+    return LeadingAvatar(
+      radius: _radius,
+      username: name,
+      thumbnailUrl: contact?.thumbnailUrl,
+      placeholderIcon: Icons.phone_in_talk_outlined,
     );
   }
 }
