@@ -611,7 +611,7 @@ FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'favorites',
     );
 
 Map<String, dynamic> _$FavoritesTabSchemeToJson(FavoritesTabScheme instance) =>
@@ -620,7 +620,7 @@ Map<String, dynamic> _$FavoritesTabSchemeToJson(FavoritesTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 RecentsTabScheme _$RecentsTabSchemeFromJson(Map<String, dynamic> json) =>
@@ -633,7 +633,7 @@ RecentsTabScheme _$RecentsTabSchemeFromJson(Map<String, dynamic> json) =>
           _readRecentsSupportsCallHistory(json, 'supportsCallHistory')
               as bool? ??
           true,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'recents',
     );
 
 Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
@@ -643,7 +643,7 @@ Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
       'supportsCallHistory': instance.supportsCallHistory,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
@@ -665,7 +665,7 @@ ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
           ) ??
           ContactsLayoutScheme.tabbed,
       favorites: json['favorites'] as bool? ?? true,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'contacts',
     );
 
 Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
@@ -677,7 +677,7 @@ Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
       'contactSourceTypes': instance.contactSourceTypes,
       'layout': _$ContactsLayoutSchemeEnumMap[instance.layout]!,
       'favorites': instance.favorites,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 const _$ContactsLayoutSchemeEnumMap = {
@@ -691,7 +691,7 @@ KeypadTabScheme _$KeypadTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'keypad',
     );
 
 Map<String, dynamic> _$KeypadTabSchemeToJson(KeypadTabScheme instance) =>
@@ -700,7 +700,7 @@ Map<String, dynamic> _$KeypadTabSchemeToJson(KeypadTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 MessagingTabScheme _$MessagingTabSchemeFromJson(Map<String, dynamic> json) =>
@@ -709,7 +709,7 @@ MessagingTabScheme _$MessagingTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'messaging',
     );
 
 Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
@@ -718,7 +718,7 @@ Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 VoicemailTabScheme _$VoicemailTabSchemeFromJson(Map<String, dynamic> json) =>
@@ -727,7 +727,7 @@ VoicemailTabScheme _$VoicemailTabSchemeFromJson(Map<String, dynamic> json) =>
       initial: json['initial'] as bool? ?? false,
       titleL10n: json['titleL10n'] as String,
       icon: json['icon'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'voicemail',
     );
 
 Map<String, dynamic> _$VoicemailTabSchemeToJson(VoicemailTabScheme instance) =>
@@ -736,7 +736,7 @@ Map<String, dynamic> _$VoicemailTabSchemeToJson(VoicemailTabScheme instance) =>
       'initial': instance.initial,
       'titleL10n': instance.titleL10n,
       'icon': instance.icon,
-      'type': instance.$type,
+      'type': instance.type,
     };
 
 EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
@@ -748,7 +748,7 @@ EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
       embeddedResourceId: const IntToStringConverter().fromJson(
         json['embeddedResourceId'],
       ),
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'embedded',
     );
 
 Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
@@ -760,5 +760,5 @@ Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
       'embeddedResourceId': const IntToStringConverter().toJson(
         instance.embeddedResourceId,
       ),
-      'type': instance.$type,
+      'type': instance.type,
     };

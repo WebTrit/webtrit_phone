@@ -42,7 +42,12 @@ PageBackground _$PageBackgroundFromJson(
 /// @nodoc
 mixin _$PageBackground {
 
-
+ String get type;
+/// Create a copy of PageBackground
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PageBackgroundCopyWith<PageBackground> get copyWith => _$PageBackgroundCopyWithImpl<PageBackground>(this as PageBackground, _$identity);
 
   /// Serializes this PageBackground to a JSON map.
   Map<String, dynamic> toJson();
@@ -50,24 +55,50 @@ mixin _$PageBackground {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PageBackground);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PageBackground&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,type);
 
 @override
 String toString() {
-  return 'PageBackground()';
+  return 'PageBackground(type: $type)';
 }
 
 
 }
 
 /// @nodoc
-class $PageBackgroundCopyWith<$Res>  {
-$PageBackgroundCopyWith(PageBackground _, $Res Function(PageBackground) __);
+abstract mixin class $PageBackgroundCopyWith<$Res>  {
+  factory $PageBackgroundCopyWith(PageBackground value, $Res Function(PageBackground) _then) = _$PageBackgroundCopyWithImpl;
+@useResult
+$Res call({
+ String type
+});
+
+
+
+
+}
+/// @nodoc
+class _$PageBackgroundCopyWithImpl<$Res>
+    implements $PageBackgroundCopyWith<$Res> {
+  _$PageBackgroundCopyWithImpl(this._self, this._then);
+
+  final PageBackground _self;
+  final $Res Function(PageBackground) _then;
+
+/// Create a copy of PageBackground
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? type = null,}) {
+  return _then(_self.copyWith(
+type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
 }
 
 
@@ -152,12 +183,12 @@ return image(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String color)?  solid,TResult Function( List<String> colors,  List<double> stops,  double beginX,  double beginY,  double endX,  double endY)?  gradient,TResult Function( String imageUrl,  BoxFitConfig fit,  double opacity)?  image,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String color,  String type)?  solid,TResult Function( List<String> colors,  List<double> stops,  double beginX,  double beginY,  double endX,  double endY,  String type)?  gradient,TResult Function( String imageUrl,  BoxFitConfig fit,  double opacity,  String type)?  image,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case PageBackgroundSolid() when solid != null:
-return solid(_that.color);case PageBackgroundGradient() when gradient != null:
-return gradient(_that.colors,_that.stops,_that.beginX,_that.beginY,_that.endX,_that.endY);case PageBackgroundImage() when image != null:
-return image(_that.imageUrl,_that.fit,_that.opacity);case _:
+return solid(_that.color,_that.type);case PageBackgroundGradient() when gradient != null:
+return gradient(_that.colors,_that.stops,_that.beginX,_that.beginY,_that.endX,_that.endY,_that.type);case PageBackgroundImage() when image != null:
+return image(_that.imageUrl,_that.fit,_that.opacity,_that.type);case _:
   return orElse();
 
 }
@@ -175,12 +206,12 @@ return image(_that.imageUrl,_that.fit,_that.opacity);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String color)  solid,required TResult Function( List<String> colors,  List<double> stops,  double beginX,  double beginY,  double endX,  double endY)  gradient,required TResult Function( String imageUrl,  BoxFitConfig fit,  double opacity)  image,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String color,  String type)  solid,required TResult Function( List<String> colors,  List<double> stops,  double beginX,  double beginY,  double endX,  double endY,  String type)  gradient,required TResult Function( String imageUrl,  BoxFitConfig fit,  double opacity,  String type)  image,}) {final _that = this;
 switch (_that) {
 case PageBackgroundSolid():
-return solid(_that.color);case PageBackgroundGradient():
-return gradient(_that.colors,_that.stops,_that.beginX,_that.beginY,_that.endX,_that.endY);case PageBackgroundImage():
-return image(_that.imageUrl,_that.fit,_that.opacity);}
+return solid(_that.color,_that.type);case PageBackgroundGradient():
+return gradient(_that.colors,_that.stops,_that.beginX,_that.beginY,_that.endX,_that.endY,_that.type);case PageBackgroundImage():
+return image(_that.imageUrl,_that.fit,_that.opacity,_that.type);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -194,12 +225,12 @@ return image(_that.imageUrl,_that.fit,_that.opacity);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String color)?  solid,TResult? Function( List<String> colors,  List<double> stops,  double beginX,  double beginY,  double endX,  double endY)?  gradient,TResult? Function( String imageUrl,  BoxFitConfig fit,  double opacity)?  image,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String color,  String type)?  solid,TResult? Function( List<String> colors,  List<double> stops,  double beginX,  double beginY,  double endX,  double endY,  String type)?  gradient,TResult? Function( String imageUrl,  BoxFitConfig fit,  double opacity,  String type)?  image,}) {final _that = this;
 switch (_that) {
 case PageBackgroundSolid() when solid != null:
-return solid(_that.color);case PageBackgroundGradient() when gradient != null:
-return gradient(_that.colors,_that.stops,_that.beginX,_that.beginY,_that.endX,_that.endY);case PageBackgroundImage() when image != null:
-return image(_that.imageUrl,_that.fit,_that.opacity);case _:
+return solid(_that.color,_that.type);case PageBackgroundGradient() when gradient != null:
+return gradient(_that.colors,_that.stops,_that.beginX,_that.beginY,_that.endX,_that.endY,_that.type);case PageBackgroundImage() when image != null:
+return image(_that.imageUrl,_that.fit,_that.opacity,_that.type);case _:
   return null;
 
 }
@@ -211,18 +242,15 @@ return image(_that.imageUrl,_that.fit,_that.opacity);case _:
 @JsonSerializable()
 
 class PageBackgroundSolid implements PageBackground {
-  const PageBackgroundSolid({required this.color, final  String? $type}): $type = $type ?? 'solid';
+  const PageBackgroundSolid({required this.color, this.type = 'solid'});
   factory PageBackgroundSolid.fromJson(Map<String, dynamic> json) => _$PageBackgroundSolidFromJson(json);
 
  final  String color;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of PageBackground
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $PageBackgroundSolidCopyWith<PageBackgroundSolid> get copyWith => _$PageBackgroundSolidCopyWithImpl<PageBackgroundSolid>(this, _$identity);
 
@@ -233,16 +261,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PageBackgroundSolid&&(identical(other.color, color) || other.color == color));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PageBackgroundSolid&&(identical(other.color, color) || other.color == color)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,color);
+int get hashCode => Object.hash(runtimeType,color,type);
 
 @override
 String toString() {
-  return 'PageBackground.solid(color: $color)';
+  return 'PageBackground.solid(color: $color, type: $type)';
 }
 
 
@@ -251,9 +279,9 @@ String toString() {
 /// @nodoc
 abstract mixin class $PageBackgroundSolidCopyWith<$Res> implements $PageBackgroundCopyWith<$Res> {
   factory $PageBackgroundSolidCopyWith(PageBackgroundSolid value, $Res Function(PageBackgroundSolid) _then) = _$PageBackgroundSolidCopyWithImpl;
-@useResult
+@override @useResult
 $Res call({
- String color
+ String color, String type
 });
 
 
@@ -270,9 +298,10 @@ class _$PageBackgroundSolidCopyWithImpl<$Res>
 
 /// Create a copy of PageBackground
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? color = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? color = null,Object? type = null,}) {
   return _then(PageBackgroundSolid(
 color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -284,7 +313,7 @@ as String,
 @JsonSerializable()
 
 class PageBackgroundGradient implements PageBackground {
-  const PageBackgroundGradient({required final  List<String> colors, final  List<double> stops = const [0.0, 1.0], this.beginX = 0.0, this.beginY = 0.0, this.endX = 1.0, this.endY = 1.0, final  String? $type}): _colors = colors,_stops = stops,$type = $type ?? 'gradient';
+  const PageBackgroundGradient({required final  List<String> colors, final  List<double> stops = const [0.0, 1.0], this.beginX = 0.0, this.beginY = 0.0, this.endX = 1.0, this.endY = 1.0, this.type = 'gradient'}): _colors = colors,_stops = stops;
   factory PageBackgroundGradient.fromJson(Map<String, dynamic> json) => _$PageBackgroundGradientFromJson(json);
 
  final  List<String> _colors;
@@ -305,14 +334,11 @@ class PageBackgroundGradient implements PageBackground {
 @JsonKey() final  double beginY;
 @JsonKey() final  double endX;
 @JsonKey() final  double endY;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of PageBackground
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $PageBackgroundGradientCopyWith<PageBackgroundGradient> get copyWith => _$PageBackgroundGradientCopyWithImpl<PageBackgroundGradient>(this, _$identity);
 
@@ -323,16 +349,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PageBackgroundGradient&&const DeepCollectionEquality().equals(other._colors, _colors)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.beginX, beginX) || other.beginX == beginX)&&(identical(other.beginY, beginY) || other.beginY == beginY)&&(identical(other.endX, endX) || other.endX == endX)&&(identical(other.endY, endY) || other.endY == endY));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PageBackgroundGradient&&const DeepCollectionEquality().equals(other._colors, _colors)&&const DeepCollectionEquality().equals(other._stops, _stops)&&(identical(other.beginX, beginX) || other.beginX == beginX)&&(identical(other.beginY, beginY) || other.beginY == beginY)&&(identical(other.endX, endX) || other.endX == endX)&&(identical(other.endY, endY) || other.endY == endY)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_colors),const DeepCollectionEquality().hash(_stops),beginX,beginY,endX,endY);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_colors),const DeepCollectionEquality().hash(_stops),beginX,beginY,endX,endY,type);
 
 @override
 String toString() {
-  return 'PageBackground.gradient(colors: $colors, stops: $stops, beginX: $beginX, beginY: $beginY, endX: $endX, endY: $endY)';
+  return 'PageBackground.gradient(colors: $colors, stops: $stops, beginX: $beginX, beginY: $beginY, endX: $endX, endY: $endY, type: $type)';
 }
 
 
@@ -341,9 +367,9 @@ String toString() {
 /// @nodoc
 abstract mixin class $PageBackgroundGradientCopyWith<$Res> implements $PageBackgroundCopyWith<$Res> {
   factory $PageBackgroundGradientCopyWith(PageBackgroundGradient value, $Res Function(PageBackgroundGradient) _then) = _$PageBackgroundGradientCopyWithImpl;
-@useResult
+@override @useResult
 $Res call({
- List<String> colors, List<double> stops, double beginX, double beginY, double endX, double endY
+ List<String> colors, List<double> stops, double beginX, double beginY, double endX, double endY, String type
 });
 
 
@@ -360,7 +386,7 @@ class _$PageBackgroundGradientCopyWithImpl<$Res>
 
 /// Create a copy of PageBackground
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? colors = null,Object? stops = null,Object? beginX = null,Object? beginY = null,Object? endX = null,Object? endY = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? colors = null,Object? stops = null,Object? beginX = null,Object? beginY = null,Object? endX = null,Object? endY = null,Object? type = null,}) {
   return _then(PageBackgroundGradient(
 colors: null == colors ? _self._colors : colors // ignore: cast_nullable_to_non_nullable
 as List<String>,stops: null == stops ? _self._stops : stops // ignore: cast_nullable_to_non_nullable
@@ -368,7 +394,8 @@ as List<double>,beginX: null == beginX ? _self.beginX : beginX // ignore: cast_n
 as double,beginY: null == beginY ? _self.beginY : beginY // ignore: cast_nullable_to_non_nullable
 as double,endX: null == endX ? _self.endX : endX // ignore: cast_nullable_to_non_nullable
 as double,endY: null == endY ? _self.endY : endY // ignore: cast_nullable_to_non_nullable
-as double,
+as double,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -379,20 +406,17 @@ as double,
 @JsonSerializable()
 
 class PageBackgroundImage implements PageBackground {
-  const PageBackgroundImage({required this.imageUrl, this.fit = BoxFitConfig.cover, this.opacity = 1.0, final  String? $type}): $type = $type ?? 'image';
+  const PageBackgroundImage({required this.imageUrl, this.fit = BoxFitConfig.cover, this.opacity = 1.0, this.type = 'image'});
   factory PageBackgroundImage.fromJson(Map<String, dynamic> json) => _$PageBackgroundImageFromJson(json);
 
  final  String imageUrl;
 @JsonKey() final  BoxFitConfig fit;
 @JsonKey() final  double opacity;
-
-@JsonKey(name: 'type')
-final String $type;
-
+@override@JsonKey() final  String type;
 
 /// Create a copy of PageBackground
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $PageBackgroundImageCopyWith<PageBackgroundImage> get copyWith => _$PageBackgroundImageCopyWithImpl<PageBackgroundImage>(this, _$identity);
 
@@ -403,16 +427,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PageBackgroundImage&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.fit, fit) || other.fit == fit)&&(identical(other.opacity, opacity) || other.opacity == opacity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PageBackgroundImage&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.fit, fit) || other.fit == fit)&&(identical(other.opacity, opacity) || other.opacity == opacity)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,imageUrl,fit,opacity);
+int get hashCode => Object.hash(runtimeType,imageUrl,fit,opacity,type);
 
 @override
 String toString() {
-  return 'PageBackground.image(imageUrl: $imageUrl, fit: $fit, opacity: $opacity)';
+  return 'PageBackground.image(imageUrl: $imageUrl, fit: $fit, opacity: $opacity, type: $type)';
 }
 
 
@@ -421,9 +445,9 @@ String toString() {
 /// @nodoc
 abstract mixin class $PageBackgroundImageCopyWith<$Res> implements $PageBackgroundCopyWith<$Res> {
   factory $PageBackgroundImageCopyWith(PageBackgroundImage value, $Res Function(PageBackgroundImage) _then) = _$PageBackgroundImageCopyWithImpl;
-@useResult
+@override @useResult
 $Res call({
- String imageUrl, BoxFitConfig fit, double opacity
+ String imageUrl, BoxFitConfig fit, double opacity, String type
 });
 
 
@@ -440,12 +464,13 @@ class _$PageBackgroundImageCopyWithImpl<$Res>
 
 /// Create a copy of PageBackground
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? imageUrl = null,Object? fit = null,Object? opacity = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? imageUrl = null,Object? fit = null,Object? opacity = null,Object? type = null,}) {
   return _then(PageBackgroundImage(
 imageUrl: null == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
 as String,fit: null == fit ? _self.fit : fit // ignore: cast_nullable_to_non_nullable
 as BoxFitConfig,opacity: null == opacity ? _self.opacity : opacity // ignore: cast_nullable_to_non_nullable
-as double,
+as double,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
