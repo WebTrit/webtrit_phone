@@ -115,7 +115,7 @@ void main() {
   String snapshot() {
     final colors = _scheme();
     final dialing = ThemePageConfig.fromJson(jsonDecode(_themeJson) as Map<String, dynamic>).dialing;
-    final actions = CallScreenStyleFactory(colors, dialing, null, null).create().primary!.actions!;
+    final actions = CallScreenStyleFactory(colors, dialing, null).create().primary!.actions!;
 
     final lines = <String>[];
     for (final name in buttons) {
