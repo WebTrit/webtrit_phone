@@ -12,6 +12,18 @@ class MockSessionStatusCubit extends MockCubit<SessionStatusState> implements Se
     return mock;
   }
 
+  /// Any state the app bar can be asked to render - a signaling status, and the side
+  /// issues that ride alongside it independently of that status.
+  factory MockSessionStatusCubit.of(SessionStatus status, {List<SessionIssue> issues = const []}) {
+    final mock = MockSessionStatusCubit();
+    whenListen(
+      mock,
+      const Stream<SessionStatusState>.empty(),
+      initialState: SessionStatusState(status: status, issues: issues),
+    );
+    return mock;
+  }
+
   /// A connected session: the app bar shows its title instead of the
   /// "Connecting..." caption and renders the ready-only actions (the call pull
   /// badge, the system notifications bell).

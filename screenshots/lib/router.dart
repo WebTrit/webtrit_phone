@@ -79,6 +79,10 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
           builder: (context) => MainScreenScreenshot(MainFlavor.messaging, Text(EnvironmentConfig.APP_NAME)),
         ),
       ),
+      // Pointer events stay live: the page is a column of bars to be scrolled through
+      // and looked at, not a single frame to be captured.
+      ScreenshotApp(appBloc: appBloc, ignorePointer: false, child: const AppBarStatusesScreenshot()),
+      ScreenshotApp(appBloc: appBloc, ignorePointer: false, child: const GravatarUsageScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: const SettingScreenScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: const DialogsShowcaseScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: MediaSettingsScreenScreenshot(initialOpenSection: 1)),
