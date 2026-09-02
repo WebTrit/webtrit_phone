@@ -264,7 +264,6 @@ const _$AppConfigJsonSchema = {
         'peerConnection': {r'$ref': r'#/$defs/AppConfigPeerConnection'},
       },
     },
-    'AppConfigContactList': {'type': 'object', 'properties': {}},
     'AppConfigContactDetailsActions': {
       'type': 'object',
       'properties': {
@@ -291,11 +290,9 @@ const _$AppConfigJsonSchema = {
     'AppConfigContacts': {
       'type': 'object',
       'properties': {
-        'list': {r'$ref': r'#/$defs/AppConfigContactList'},
         'details': {r'$ref': r'#/$defs/AppConfigContactDetails'},
       },
     },
-    'AppConfigSms': {'type': 'object', 'properties': {}},
     'ChatContactInfo': {
       'type': 'object',
       'properties': {
@@ -312,7 +309,6 @@ const _$AppConfigJsonSchema = {
     'AppConfigMessaging': {
       'type': 'object',
       'properties': {
-        'sms': {r'$ref': r'#/$defs/AppConfigSms'},
         'chats': {r'$ref': r'#/$defs/AppConfigChats'},
       },
     },
@@ -1001,9 +997,6 @@ Map<String, dynamic> _$AppConfigSettingsItemToJson(
 
 AppConfigContacts _$AppConfigContactsFromJson(Map<String, dynamic> json) =>
     AppConfigContacts(
-      list: json['list'] == null
-          ? const AppConfigContactList()
-          : AppConfigContactList.fromJson(json['list'] as Map<String, dynamic>),
       details: json['details'] == null
           ? const AppConfigContactDetails()
           : AppConfigContactDetails.fromJson(
@@ -1012,18 +1005,7 @@ AppConfigContacts _$AppConfigContactsFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$AppConfigContactsToJson(AppConfigContacts instance) =>
-    <String, dynamic>{
-      'list': instance.list.toJson(),
-      'details': instance.details.toJson(),
-    };
-
-AppConfigContactList _$AppConfigContactListFromJson(
-  Map<String, dynamic> json,
-) => AppConfigContactList();
-
-Map<String, dynamic> _$AppConfigContactListToJson(
-  AppConfigContactList instance,
-) => <String, dynamic>{};
+    <String, dynamic>{'details': instance.details.toJson()};
 
 AppConfigContactDetails _$AppConfigContactDetailsFromJson(
   Map<String, dynamic> json,
@@ -1061,25 +1043,13 @@ Map<String, dynamic> _$AppConfigContactDetailsActionsToJson(
 
 AppConfigMessaging _$AppConfigMessagingFromJson(Map<String, dynamic> json) =>
     AppConfigMessaging(
-      sms: json['sms'] == null
-          ? const AppConfigSms()
-          : AppConfigSms.fromJson(json['sms'] as Map<String, dynamic>),
       chats: json['chats'] == null
           ? const AppConfigChats()
           : AppConfigChats.fromJson(json['chats'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AppConfigMessagingToJson(AppConfigMessaging instance) =>
-    <String, dynamic>{
-      'sms': instance.sms.toJson(),
-      'chats': instance.chats.toJson(),
-    };
-
-AppConfigSms _$AppConfigSmsFromJson(Map<String, dynamic> json) =>
-    AppConfigSms();
-
-Map<String, dynamic> _$AppConfigSmsToJson(AppConfigSms instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{'chats': instance.chats.toJson()};
 
 AppConfigChats _$AppConfigChatsFromJson(Map<String, dynamic> json) =>
     AppConfigChats(
