@@ -123,24 +123,6 @@ Map<String, dynamic> _$BottomNavigationBarWidgetConfigToJson(
   'unSelectedItemColor': instance.unSelectedItemColor,
 };
 
-ExtTabBarWidgetConfig _$ExtTabBarWidgetConfigFromJson(
-  Map<String, dynamic> json,
-) => ExtTabBarWidgetConfig(
-  foregroundColor: json['foregroundColor'] as String?,
-  backgroundColor: json['backgroundColor'] as String?,
-  selectedItemColor: json['selectedItemColor'] as String?,
-  unSelectedItemColor: json['unSelectedItemColor'] as String?,
-);
-
-Map<String, dynamic> _$ExtTabBarWidgetConfigToJson(
-  ExtTabBarWidgetConfig instance,
-) => <String, dynamic>{
-  'foregroundColor': instance.foregroundColor,
-  'backgroundColor': instance.backgroundColor,
-  'selectedItemColor': instance.selectedItemColor,
-  'unSelectedItemColor': instance.unSelectedItemColor,
-};
-
 GroupTitleListTileWidgetConfig _$GroupTitleListTileWidgetConfigFromJson(
   Map<String, dynamic> json,
 ) => GroupTitleListTileWidgetConfig(
