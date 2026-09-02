@@ -163,53 +163,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    // Task to normalize APK and AAB output file paths and names for CI/CD
-    tasks.register("normalizeReleaseOutputs") {
-        doLast {
-            // Locate directory where Flutter outputs APKs
-            def flutterApk = layout.buildDirectory.dir("outputs/flutter-apk").get().asFile
-            // Define standard destination path for CI to pick up the APK
-            def fixedApkDest = layout.buildDirectory.dir("outputs/apk/release").get().asFile
-            def foundApk = false
-
-            if (flutterApk.exists()) {
-                // By name, not by extension: the flutter-apk directory is not cleaned between
-                // builds, so a debug apk left there by an earlier run would otherwise be copied
-                // over the release one the destination is named after.
-                def releaseApk = new File(flutterApk, "app-release.apk")
-                if (releaseApk.exists()) {
-                    copy {
-                        from releaseApk
-                        into fixedApkDest
-                        rename { "app-release.apk" }
-                    }
-                    println "Copied APK to ${fixedApkDest}/app-release.apk"
-                    foundApk = true
-                }
-            }
-
-            // The release bundle. AGP writes it under the standard name in the standard
-            // directory now that there are no flavors, so there is nothing to copy - only to
-            // confirm. Deliberately not a scan of every directory under outputs/bundle: another
-            // variant's bundle found there would be copied over the release one.
-            def fixedBundleDest = layout.buildDirectory.dir("outputs/bundle/release").get().asFile
-            def releaseAab = new File(fixedBundleDest, "app-release.aab")
-            def foundAab = releaseAab.exists()
-            if (foundAab) {
-                println "AAB at ${releaseAab}"
-            }
-
-            if (!foundApk) println "No app-release.apk found in flutter-apk/"
-            if (!foundAab) println "No app-release.aab found in bundle/release/"
-        }
-    }
-
-    tasks.configureEach { task ->
-        if (task.name ==~ /bundle.*Release/ || task.name ==~ /assemble.*Release/) {
-            task.finalizedBy("normalizeReleaseOutputs")
-        }
-    }
-
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
