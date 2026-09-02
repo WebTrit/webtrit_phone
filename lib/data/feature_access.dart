@@ -141,7 +141,7 @@ class FeatureAccess extends Equatable {
       final loggingConfig = LoggingMapper.map(appConfig, featureOverrides);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
-      final localizationConfig = LocalizationMapper.map(appConfig);
+      final localizationConfig = LocalizationMapper.map();
 
       return FeatureAccess._(
         embeddedConfig,
@@ -715,8 +715,7 @@ abstract final class SupportedMapper {
 /// was hidden, a language named in the config but absent from the build was
 /// silently ignored.
 abstract final class LocalizationMapper {
-  static LocalizationConfig map(AppConfig appConfig) =>
-      const LocalizationConfig(supportedLocales: AppLocalizations.supportedLocales);
+  static LocalizationConfig map() => const LocalizationConfig(supportedLocales: AppLocalizations.supportedLocales);
 }
 
 abstract final class LoggingMapper {

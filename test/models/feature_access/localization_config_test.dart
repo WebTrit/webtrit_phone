@@ -2,27 +2,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/data/feature_access.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
-import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 
-/// The app offers the languages it was built with.
+/// The app offers the languages it was built with, and has nothing to decide.
 ///
-/// It used to decide instead: every language the app had ever had was bundled,
-/// and an allowlist in the brand's configuration was intersected with it at
-/// runtime. The build settles it now - a brand's build carries only the
-/// languages its theme enables - so deciding again here could only disagree
-/// with the files that are actually present.
+/// A brand's languages are settled before the app exists: the build carries
+/// only the ones its brand enables. The configuration used to name them too,
+/// and reading that at runtime could only disagree with the files on disk - a
+/// language present in the build but missing from the list was hidden, one
+/// named in the list but absent from the build was silently ignored.
 void main() {
-  test('offers what the build carries, whatever the configuration says', () {
-    final narrowed = LocalizationMapper.map(
-      const AppConfig(localization: AppConfigLocalization(enabledLanguages: ['uk'])),
-    );
-
-    expect(narrowed.supportedLocales, AppLocalizations.supportedLocales);
-  });
-
-  test('offers what the build carries when the configuration says nothing', () {
-    final open = LocalizationMapper.map(const AppConfig());
-
-    expect(open.supportedLocales, AppLocalizations.supportedLocales);
+  test('offers exactly what the build carries', () {
+    expect(LocalizationMapper.map().supportedLocales, AppLocalizations.supportedLocales);
   });
 }
