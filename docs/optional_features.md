@@ -75,19 +75,26 @@ The same holds for IDE run configurations (`melos run ide:sync`) and for a hand-
 
 ## Verifying
 
-The switches are worth checking on the artifact rather than the source. The merged manifest is
-produced by a single Gradle task, which is far cheaper than a full build:
+The switches are worth checking on the artifact rather than the source.
+
+The merged manifest is produced by a single Gradle task, far cheaper than a full build. It wants
+the dart-defines in the form Flutter passes them - a comma-separated list of base64-encoded
+`KEY=VALUE` pairs. Note that a missing or malformed value does not fail the task: it succeeds with
+both features off, which reads exactly like a fragment that refused to merge.
 
 ```bash
 cd android
-./gradlew :app:processReleaseManifest -Pdart-defines=<base64 dart-defines>
+defines="$(printf '%s' 'WEBTRIT_APP_LINK_DOMAIN=app.webtrit.com' | base64 | tr -d '\n'),$(printf '%s' 'WEBTRIT_CALL_TRIGGER_MECHANISM_SMS=true' | base64 | tr -d '\n')"
+./gradlew :app:processReleaseManifest -Pdart-defines="$defines"
 cat ../build/app/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml
 ```
 
-For a finished bundle, read the permissions straight out of it:
+For a finished bundle, read its own manifest. `aapt2 dump badging` takes an apk and rejects an
+`.aab`, and the bundle stores the manifest as protobuf, so either unpack it or use bundletool:
 
 ```bash
-aapt2 dump badging build/app/outputs/bundle/release/app-release.aab | grep uses-permission
+unzip -p build/app/outputs/bundle/release/app-release.aab base/manifest/AndroidManifest.xml \
+  | strings | grep -E 'RECEIVE_SMS|IncomingCallSmsTriggerReceiver|flutter_deeplinking_enabled'
 ```
 
 ---

@@ -591,6 +591,7 @@ melos:
       description: Sync IDE run configurations from tool/run/ to .idea/runConfigurations/.
       run: |
         mkdir -p .idea/runConfigurations
+        rm -f .idea/runConfigurations/run-android-deeplinks*.xml
         cp tool/run/*.xml .idea/runConfigurations/
 
     # ===========================

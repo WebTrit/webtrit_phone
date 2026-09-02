@@ -173,51 +173,34 @@ android {
             def foundApk = false
 
             if (flutterApk.exists()) {
-                flutterApk.eachFile { f ->
-                    if (f.name.endsWith(".apk")) {
-                        // Copy and rename to a standardized filename
-                        copy {
-                            from f
-                            into fixedApkDest
-                            rename { "app-release.apk" }
-                        }
-                        println "Copied APK to ${fixedApkDest}/app-release.apk"
-                        foundApk = true
+                // By name, not by extension: the flutter-apk directory is not cleaned between
+                // builds, so a debug apk left there by an earlier run would otherwise be copied
+                // over the release one the destination is named after.
+                def releaseApk = new File(flutterApk, "app-release.apk")
+                if (releaseApk.exists()) {
+                    copy {
+                        from releaseApk
+                        into fixedApkDest
+                        rename { "app-release.apk" }
                     }
+                    println "Copied APK to ${fixedApkDest}/app-release.apk"
+                    foundApk = true
                 }
             }
 
-            // Locate directory that contains the AAB build outputs
-            def bundleDir = layout.buildDirectory.dir("outputs/bundle").get().asFile
-            // Define standard destination path for CI to pick up the AAB
+            // The release bundle. AGP writes it under the standard name in the standard
+            // directory now that there are no flavors, so there is nothing to copy - only to
+            // confirm. Deliberately not a scan of every directory under outputs/bundle: another
+            // variant's bundle found there would be copied over the release one.
             def fixedBundleDest = layout.buildDirectory.dir("outputs/bundle/release").get().asFile
-            def foundAab = false
-
-            if (bundleDir.exists()) {
-                bundleDir.eachDir { variantDir ->
-                    variantDir.eachFile { f ->
-                        if (f.name.endsWith(".aab")) {
-                            // Without flavors the build already writes the standard name into the
-                            // standard directory, so there is nothing to copy - and copying a file
-                            // onto itself would leave two bundles for CI to choose between.
-                            if (f.canonicalFile == new File(fixedBundleDest, "app-release.aab").canonicalFile) {
-                                println "AAB already at ${f}"
-                            } else {
-                                copy {
-                                    from f
-                                    into fixedBundleDest
-                                    rename { "app-release.aab" }
-                                }
-                                println "Copied AAB to ${fixedBundleDest}/app-release.aab"
-                            }
-                            foundAab = true
-                        }
-                    }
-                }
+            def releaseAab = new File(fixedBundleDest, "app-release.aab")
+            def foundAab = releaseAab.exists()
+            if (foundAab) {
+                println "AAB at ${releaseAab}"
             }
 
-            if (!foundApk) println "No .apk found in flutter-apk/"
-            if (!foundAab) println "No .aab found in bundle/*/release/"
+            if (!foundApk) println "No app-release.apk found in flutter-apk/"
+            if (!foundAab) println "No app-release.aab found in bundle/release/"
         }
     }
 
@@ -241,7 +224,9 @@ android {
         resValue "string", "APP_NAME", dartDefine.WEBTRIT_APP_NAME
         // Referenced by the deep-link intent filter, so it is defined only alongside it.
         if (deeplinksEnabled) {
-            resValue "string", "APP_LINK_DOMAIN", dartDefine.WEBTRIT_APP_LINK_DOMAIN
+            // Trimmed, like the switch above: a domain with stray whitespace would produce an
+            // intent filter that can never verify, so deep links would silently open a browser.
+            resValue "string", "APP_LINK_DOMAIN", appLinkDomain.trim()
         }
         testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: "true"
