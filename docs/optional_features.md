@@ -1,6 +1,7 @@
-# Optional Android Features
+# Optional Features
 
-How the Android features whose permission must not ship unused are chosen at build time.
+How the features whose permission or capability must not ship unused are chosen at build time,
+on both platforms.
 
 Last reviewed: 2026-09-02
 
@@ -9,7 +10,7 @@ permission and their manifest components must be **absent from the shipped app**
 app never uses is still shown to the user, still has to be declared in the store listing, and in the
 case of SMS still has to be justified to Google. So the decision has to be made at build time.
 
-Today two features are optional in that sense:
+Today two features are optional in that sense on Android:
 
 * **deep links** - the App Links intent filter on the main activity
 * **SMS call trigger** - the `RECEIVE_SMS` permission and the broadcast receiver that turns a
@@ -112,3 +113,34 @@ and the name had to be computed and passed by every caller - a script in this re
 makefile, fastlane, and four IDE run configurations, each able to disagree with `dart_define.json`
 in silence. The manifest fragments and the merge that consumes them are unchanged; only the
 selection moved from a flavor name to the dart-define the feature already had.
+
+---
+
+## iOS
+
+One feature is optional on iOS, and it is the same one: deep links.
+
+`ios/Runner/Runner.entitlements` declares `com.apple.developer.associated-domains`, and an
+entitlement is not inert. Every provisioning profile then has to carry the matching capability, so
+a brand that does not use deep links cannot even be signed:
+
+```
+Provisioning profile ... doesn't include the Associated Domains capability
+```
+
+`tool/scripts/ios_optional_features.sh` reads the same `WEBTRIT_APP_LINK_DOMAIN` the Dart code and
+`android/app/build.gradle` read, and removes the entitlement when no domain is named. Both iOS
+build scripts run it first, so `melos run build:ios` and `melos run build:ios:config` produce a
+project that already matches the settings file:
+
+```
+sh tool/scripts/ios_optional_features.sh && flutter build ios ...
+```
+
+It needs nothing installed - `plutil` reads the JSON, `PlistBuddy` edits the plist. It used to live
+in the build pipeline as a Ruby script needing the `xcodeproj` gem, deciding a phone feature from
+outside the phone; the pipeline calls the phone's own script now, the way it does for Android.
+
+Not `ios/Flutter/Environment.xcconfig`, deliberately: it is gitignored and written by the Xcode
+scheme's pre-action at archive time, so it does not exist yet and would fall back to the hard-coded
+default domain.
