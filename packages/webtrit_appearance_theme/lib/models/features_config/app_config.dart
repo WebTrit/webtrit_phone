@@ -967,10 +967,7 @@ class AppConfigSettingsItem with _$AppConfigSettingsItem {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigContacts with _$AppConfigContacts {
-  const AppConfigContacts({this.list = const AppConfigContactList(), this.details = const AppConfigContactDetails()});
-
-  @override
-  final AppConfigContactList list;
+  const AppConfigContacts({this.details = const AppConfigContactDetails()});
 
   @override
   final AppConfigContactDetails details;
@@ -978,16 +975,6 @@ class AppConfigContacts with _$AppConfigContacts {
   factory AppConfigContacts.fromJson(Map<String, Object?> json) => _$AppConfigContactsFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigContactsToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
-class AppConfigContactList with _$AppConfigContactList {
-  const AppConfigContactList();
-
-  factory AppConfigContactList.fromJson(Map<String, Object?> json) => _$AppConfigContactListFromJson(json);
-
-  Map<String, Object?> toJson() => _$AppConfigContactListToJson(this);
 }
 
 @freezed
@@ -1026,10 +1013,7 @@ class AppConfigContactDetailsActions with _$AppConfigContactDetailsActions {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class AppConfigMessaging with _$AppConfigMessaging {
-  const AppConfigMessaging({this.sms = const AppConfigSms(), this.chats = const AppConfigChats()});
-
-  @override
-  final AppConfigSms sms;
+  const AppConfigMessaging({this.chats = const AppConfigChats()});
 
   @override
   final AppConfigChats chats;
@@ -1037,16 +1021,6 @@ class AppConfigMessaging with _$AppConfigMessaging {
   factory AppConfigMessaging.fromJson(Map<String, Object?> json) => _$AppConfigMessagingFromJson(json);
 
   Map<String, Object?> toJson() => _$AppConfigMessagingToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
-class AppConfigSms with _$AppConfigSms {
-  const AppConfigSms();
-
-  factory AppConfigSms.fromJson(Map<String, Object?> json) => _$AppConfigSmsFromJson(json);
-
-  Map<String, Object?> toJson() => _$AppConfigSmsToJson(this);
 }
 
 @freezed

@@ -273,8 +273,6 @@
     }
   },
   "contacts": {
-    "_list": {},
-    "__list": "Not implemented yet. Configuration for the Contacts List screen.",
     "_details": {
       "__details": "Configuration for the Contact Details screen, determining layout and available interactions.",
       "actions": {
@@ -300,7 +298,6 @@
     }
   },
   "messaging": {
-    "sms": {},
     "chats": {
       "groupChatButtonEnabled": true,
       "contactInfo": {

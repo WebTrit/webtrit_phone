@@ -4740,7 +4740,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigContacts {
 
- AppConfigContactList get list; AppConfigContactDetails get details;
+ AppConfigContactDetails get details;
 /// Create a copy of AppConfigContacts
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -4751,16 +4751,16 @@ $AppConfigContactsCopyWith<AppConfigContacts> get copyWith => _$AppConfigContact
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigContacts&&(identical(other.list, list) || other.list == list)&&(identical(other.details, details) || other.details == details));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigContacts&&(identical(other.details, details) || other.details == details));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,list,details);
+int get hashCode => Object.hash(runtimeType,details);
 
 @override
 String toString() {
-  return 'AppConfigContacts(list: $list, details: $details)';
+  return 'AppConfigContacts(details: $details)';
 }
 
 
@@ -4771,7 +4771,7 @@ abstract mixin class $AppConfigContactsCopyWith<$Res>  {
   factory $AppConfigContactsCopyWith(AppConfigContacts value, $Res Function(AppConfigContacts) _then) = _$AppConfigContactsCopyWithImpl;
 @useResult
 $Res call({
- AppConfigContactList list, AppConfigContactDetails details
+ AppConfigContactDetails details
 });
 
 
@@ -4788,10 +4788,9 @@ class _$AppConfigContactsCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigContacts
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? list = null,Object? details = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? details = null,}) {
   return _then(AppConfigContacts(
-list: null == list ? _self.list : list // ignore: cast_nullable_to_non_nullable
-as AppConfigContactList,details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
+details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
 as AppConfigContactDetails,
   ));
 }
@@ -4801,161 +4800,6 @@ as AppConfigContactDetails,
 
 /// Adds pattern-matching-related methods to [AppConfigContacts].
 extension AppConfigContactsPatterns on AppConfigContacts {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-
-}
-
-
-/// @nodoc
-mixin _$AppConfigContactList {
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigContactList);
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'AppConfigContactList()';
-}
-
-
-}
-
-/// @nodoc
-class $AppConfigContactListCopyWith<$Res>  {
-$AppConfigContactListCopyWith(AppConfigContactList _, $Res Function(AppConfigContactList) __);
-}
-
-
-/// Adds pattern-matching-related methods to [AppConfigContactList].
-extension AppConfigContactListPatterns on AppConfigContactList {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -5456,7 +5300,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigMessaging {
 
- AppConfigSms get sms; AppConfigChats get chats;
+ AppConfigChats get chats;
 /// Create a copy of AppConfigMessaging
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -5467,16 +5311,16 @@ $AppConfigMessagingCopyWith<AppConfigMessaging> get copyWith => _$AppConfigMessa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigMessaging&&(identical(other.sms, sms) || other.sms == sms)&&(identical(other.chats, chats) || other.chats == chats));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigMessaging&&(identical(other.chats, chats) || other.chats == chats));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,sms,chats);
+int get hashCode => Object.hash(runtimeType,chats);
 
 @override
 String toString() {
-  return 'AppConfigMessaging(sms: $sms, chats: $chats)';
+  return 'AppConfigMessaging(chats: $chats)';
 }
 
 
@@ -5487,7 +5331,7 @@ abstract mixin class $AppConfigMessagingCopyWith<$Res>  {
   factory $AppConfigMessagingCopyWith(AppConfigMessaging value, $Res Function(AppConfigMessaging) _then) = _$AppConfigMessagingCopyWithImpl;
 @useResult
 $Res call({
- AppConfigSms sms, AppConfigChats chats
+ AppConfigChats chats
 });
 
 
@@ -5504,10 +5348,9 @@ class _$AppConfigMessagingCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigMessaging
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? sms = null,Object? chats = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chats = null,}) {
   return _then(AppConfigMessaging(
-sms: null == sms ? _self.sms : sms // ignore: cast_nullable_to_non_nullable
-as AppConfigSms,chats: null == chats ? _self.chats : chats // ignore: cast_nullable_to_non_nullable
+chats: null == chats ? _self.chats : chats // ignore: cast_nullable_to_non_nullable
 as AppConfigChats,
   ));
 }
@@ -5517,161 +5360,6 @@ as AppConfigChats,
 
 /// Adds pattern-matching-related methods to [AppConfigMessaging].
 extension AppConfigMessagingPatterns on AppConfigMessaging {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
-final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
-switch (_that) {
-case _:
-  return null;
-
-}
-}
-
-}
-
-
-/// @nodoc
-mixin _$AppConfigSms {
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigSms);
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'AppConfigSms()';
-}
-
-
-}
-
-/// @nodoc
-class $AppConfigSmsCopyWith<$Res>  {
-$AppConfigSmsCopyWith(AppConfigSms _, $Res Function(AppConfigSms) __);
-}
-
-
-/// Adds pattern-matching-related methods to [AppConfigSms].
-extension AppConfigSmsPatterns on AppConfigSms {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
