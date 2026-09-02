@@ -164,7 +164,6 @@ const _$AppConfigJsonSchema = {
       'type': 'object',
       'properties': {
         'bottomMenu': {r'$ref': r'#/$defs/AppConfigBottomMenu'},
-        'systemNotificationsEnabled': {'type': 'boolean', 'default': true},
       },
     },
     'AppConfigSettingsItem': {
@@ -493,15 +492,10 @@ AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) =>
           : AppConfigBottomMenu.fromJson(
               json['bottomMenu'] as Map<String, dynamic>,
             ),
-      systemNotificationsEnabled:
-          json['systemNotificationsEnabled'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$AppConfigMainToJson(AppConfigMain instance) =>
-    <String, dynamic>{
-      'bottomMenu': instance.bottomMenu.toJson(),
-      'systemNotificationsEnabled': instance.systemNotificationsEnabled,
-    };
+    <String, dynamic>{'bottomMenu': instance.bottomMenu.toJson()};
 
 AppConfigBottomMenu _$AppConfigBottomMenuFromJson(Map<String, dynamic> json) =>
     AppConfigBottomMenu(

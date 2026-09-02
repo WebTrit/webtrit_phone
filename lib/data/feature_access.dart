@@ -599,9 +599,9 @@ abstract final class SystemNotificationsMapper {
   ) {
     final supportedFeature = appConfig.supported.whereType<SupportedSystemNotifications>().firstOrNull;
 
-    // TODO: Migrate client configurations first before fully removing this property.
-    // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-    final baseAppSupport = supportedFeature?.enabled ?? appConfig.mainConfig.systemNotificationsEnabled;
+    // One place says it. A configuration with no entry allows notifications,
+    // which is what the boolean this replaced carried as its default.
+    final baseAppSupport = supportedFeature?.enabled ?? true;
     // Apply remote config overrides
     final appSupport = featureOverrides.isSystemNotificationsEnabled ?? baseAppSupport;
     // Check if the backend supports system notifications
