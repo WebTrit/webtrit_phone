@@ -22,7 +22,6 @@ class AppConfig with _$AppConfig {
     this.callConfig = const AppConfigCall(),
     this.contacts = const AppConfigContacts(),
     this.messaging = const AppConfigMessaging(),
-    this.localization = const AppConfigLocalization(),
 
     /// List of enabled features and global app configurations.
     this.supported = const [],
@@ -45,9 +44,6 @@ class AppConfig with _$AppConfig {
 
   @override
   final AppConfigMessaging messaging;
-
-  @override
-  final AppConfigLocalization localization;
 
   @override
   final List<SupportedFeature> supported;
@@ -1050,24 +1046,6 @@ class ChatContactInfo with _$ChatContactInfo {
   factory ChatContactInfo.fromJson(Map<String, Object?> json) => _$ChatContactInfoFromJson(json);
 
   Map<String, Object?> toJson() => _$ChatContactInfoToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
-class AppConfigLocalization with _$AppConfigLocalization {
-  const AppConfigLocalization({this.enabledLanguages = const []});
-
-  /// Allowlist of language codes (ISO 639-1, e.g. 'en', 'it') the app exposes.
-  /// The app intersects this with the locales it actually bundles, so only
-  /// languages present in both are selectable and used for auto-resolution.
-  /// An empty list (the default) means "no restriction" - all bundled locales
-  /// are available, preserving the previous behavior.
-  @override
-  final List<String> enabledLanguages;
-
-  factory AppConfigLocalization.fromJson(Map<String, Object?> json) => _$AppConfigLocalizationFromJson(json);
-
-  Map<String, Object?> toJson() => _$AppConfigLocalizationToJson(this);
 }
 
 const _defaultSections = [
