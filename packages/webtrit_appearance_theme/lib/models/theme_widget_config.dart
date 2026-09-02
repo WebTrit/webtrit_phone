@@ -138,33 +138,6 @@ class BottomNavigationBarWidgetConfig with _$BottomNavigationBarWidgetConfig {
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class ExtTabBarWidgetConfig with _$ExtTabBarWidgetConfig {
-  const ExtTabBarWidgetConfig({
-    this.foregroundColor,
-    this.backgroundColor,
-    this.selectedItemColor,
-    this.unSelectedItemColor,
-  });
-
-  @override
-  final String? foregroundColor;
-
-  @override
-  final String? backgroundColor;
-
-  @override
-  final String? selectedItemColor;
-
-  @override
-  final String? unSelectedItemColor;
-
-  factory ExtTabBarWidgetConfig.fromJson(Map<String, Object?> json) => _$ExtTabBarWidgetConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$ExtTabBarWidgetConfigToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
 class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
   const GroupTitleListTileWidgetConfig({
     /// Background color in hex format.

@@ -175,7 +175,6 @@ const nullableProperties = <String, List<String>>{
     'videoBitrate',
   ],
   'EnumProperty': ['defaultValue'],
-  'ExtTabBarWidgetConfig': ['backgroundColor', 'foregroundColor', 'selectedItemColor', 'unSelectedItemColor'],
   'FavoritesPageConfig': ['appBarBlurredSurface', 'appBarStyle', 'background'],
   'FontsConfig': ['fontFamily'],
   'GroupTitleListTileWidgetConfig': ['backgroundColor', 'textStyle'],
