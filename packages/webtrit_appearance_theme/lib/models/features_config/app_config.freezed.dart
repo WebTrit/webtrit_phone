@@ -1334,7 +1334,7 @@ case _:
 /// @nodoc
 mixin _$AppConfigMain {
 
- AppConfigBottomMenu get bottomMenu; bool get systemNotificationsEnabled;
+ AppConfigBottomMenu get bottomMenu;
 /// Create a copy of AppConfigMain
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1345,16 +1345,16 @@ $AppConfigMainCopyWith<AppConfigMain> get copyWith => _$AppConfigMainCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigMain&&(identical(other.bottomMenu, bottomMenu) || other.bottomMenu == bottomMenu)&&(identical(other.systemNotificationsEnabled, systemNotificationsEnabled) || other.systemNotificationsEnabled == systemNotificationsEnabled));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfigMain&&(identical(other.bottomMenu, bottomMenu) || other.bottomMenu == bottomMenu));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,bottomMenu,systemNotificationsEnabled);
+int get hashCode => Object.hash(runtimeType,bottomMenu);
 
 @override
 String toString() {
-  return 'AppConfigMain(bottomMenu: $bottomMenu, systemNotificationsEnabled: $systemNotificationsEnabled)';
+  return 'AppConfigMain(bottomMenu: $bottomMenu)';
 }
 
 
@@ -1365,7 +1365,7 @@ abstract mixin class $AppConfigMainCopyWith<$Res>  {
   factory $AppConfigMainCopyWith(AppConfigMain value, $Res Function(AppConfigMain) _then) = _$AppConfigMainCopyWithImpl;
 @useResult
 $Res call({
- AppConfigBottomMenu bottomMenu, bool systemNotificationsEnabled
+ AppConfigBottomMenu bottomMenu
 });
 
 
@@ -1382,11 +1382,10 @@ class _$AppConfigMainCopyWithImpl<$Res>
 
 /// Create a copy of AppConfigMain
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? bottomMenu = null,Object? systemNotificationsEnabled = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? bottomMenu = null,}) {
   return _then(AppConfigMain(
 bottomMenu: null == bottomMenu ? _self.bottomMenu : bottomMenu // ignore: cast_nullable_to_non_nullable
-as AppConfigBottomMenu,systemNotificationsEnabled: null == systemNotificationsEnabled ? _self.systemNotificationsEnabled : systemNotificationsEnabled // ignore: cast_nullable_to_non_nullable
-as bool,
+as AppConfigBottomMenu,
   ));
 }
 

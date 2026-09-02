@@ -16,9 +16,7 @@ void main() {
       final config = AppConfig.fromJson(json);
 
       // sanity
-      // TODO: Migrate client configurations first before fully removing this property.
-      // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-      expect(config.mainConfig.systemNotificationsEnabled, isTrue);
+      expect(config.supported.whereType<SupportedSystemNotifications>().single.enabled, isTrue);
       expect(config.mainConfig.bottomMenu.cacheSelectedTab, isTrue);
 
       final tabs = config.mainConfig.bottomMenu.tabs;
