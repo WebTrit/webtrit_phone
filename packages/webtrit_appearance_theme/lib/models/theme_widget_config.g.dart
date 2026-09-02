@@ -183,28 +183,6 @@ Map<String, dynamic> _$ImageAssetsConfigToJson(ImageAssetsConfig instance) =>
       'leadingAvatarStyle': instance.leadingAvatarStyle.toJson(),
     };
 
-ImageAssetConfig _$ImageAssetConfigFromJson(Map<String, dynamic> json) =>
-    ImageAssetConfig(
-      imageSource: json['imageSource'] == null
-          ? null
-          : ImageSource.fromJson(json['imageSource'] as Map<String, dynamic>),
-      widthFactor: (json['widthFactor'] as num?)?.toDouble() ?? 1.0,
-      labelColor: json['labelColor'] as String? ?? '#FFFFFF',
-      metadata: json['metadata'] == null
-          ? const Metadata()
-          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
-      uri: json['uri'] as String?,
-    );
-
-Map<String, dynamic> _$ImageAssetConfigToJson(ImageAssetConfig instance) =>
-    <String, dynamic>{
-      'imageSource': instance.imageSource?.toJson(),
-      'widthFactor': instance.widthFactor,
-      'labelColor': instance.labelColor,
-      'metadata': instance.metadata.toJson(),
-      'uri': instance.uri,
-    };
-
 AppIconWidgetConfig _$AppIconWidgetConfigFromJson(Map<String, dynamic> json) =>
     AppIconWidgetConfig(color: json['color'] as String?);
 

@@ -190,7 +190,6 @@ const nullableProperties = <String, List<String>>{
     'size',
     'weight',
   ],
-  'ImageAssetConfig': ['imageSource', 'uri'],
   'ImageAssetsConfig': ['defaultPlaceholderImage'],
   'ImageRenderSpec': ['alignment', 'fit', 'padding', 'scale'],
   'ImageSource': ['id', 'render', 'uri'],
