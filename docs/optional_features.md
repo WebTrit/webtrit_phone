@@ -1,5 +1,9 @@
 # Optional Android Features
 
+How the Android features whose permission must not ship unused are chosen at build time.
+
+Last reviewed: 2026-09-02
+
 Some features must not merely stay switched off for a brand that does not use them - their Android
 permission and their manifest components must be **absent from the shipped app**. A permission the
 app never uses is still shown to the user, still has to be declared in the store listing, and in the
