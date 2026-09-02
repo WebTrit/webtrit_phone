@@ -274,7 +274,7 @@ abstract final class BottomMenuMapper {
       throw Exception('No enabled tabs found in bottom menu configuration');
     }
 
-    return BottomMenuConfig(tabs: List.unmodifiable(bottomMenuTabs));
+    return BottomMenuConfig(tabs: List.unmodifiable(bottomMenuTabs), remembersSelectedTab: bottomMenu.cacheSelectedTab);
   }
 
   static BottomMenuTab _createBottomMenuTab(
