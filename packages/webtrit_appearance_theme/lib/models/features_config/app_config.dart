@@ -287,15 +287,10 @@ class AppConfigMain with _$AppConfigMain {
         ),
       ],
     ),
-    this.systemNotificationsEnabled = true,
   });
 
   @override
   final AppConfigBottomMenu bottomMenu;
-
-  @override
-  @Deprecated('Use SupportedFeature.systemNotifications instead')
-  final bool systemNotificationsEnabled;
 
   factory AppConfigMain.fromJson(Map<String, Object?> json) => _$AppConfigMainFromJson(json);
 

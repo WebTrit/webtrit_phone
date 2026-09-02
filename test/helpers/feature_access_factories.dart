@@ -69,10 +69,6 @@ AppConfig createMockAppConfig() {
 
   when(() => main.bottomMenu).thenReturn(bottomMenu);
   when(() => bottomMenu.tabs).thenReturn([BottomMenuTabScheme.keypad(titleL10n: 'Keypad', icon: '0xe1ce')]);
-  // TODO: Migrate client configurations first before fully removing this property.
-  // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-  when(() => main.systemNotificationsEnabled).thenReturn(false);
-
   when(() => settings.settingsSections).thenReturn([]);
 
   when(() => call.videoEnabled).thenReturn(true);
