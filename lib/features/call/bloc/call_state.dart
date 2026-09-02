@@ -294,6 +294,7 @@ class ActiveCall with _$ActiveCall implements CallEntry {
     this.iceCandidates = const [],
     this.iceConnectionIssue,
     this.networkQuality,
+    this.earlyMedia = false,
   });
 
   @override
@@ -396,6 +397,18 @@ class ActiveCall with _$ActiveCall implements CallEntry {
   /// Null when the media is healthy; auto-cleared once slowlink events stop.
   @override
   final CallNetworkQuality? networkQuality;
+
+  /// Whether the remote side already streams audio to this outgoing call before
+  /// it is answered (early media: a network ringback, an announcement, an IVR).
+  ///
+  /// Set only once the remote description carrying that media has actually been
+  /// applied - an event alone is not enough, since a missing peer connection or
+  /// a failed description leaves the call silent and the local ringback needed.
+  /// Once set, the local ringback must not be started again: a provisional
+  /// ringing answer can still arrive afterwards and would otherwise play the
+  /// bundled tone on top of the network one.
+  @override
+  final bool earlyMedia;
 
   @override
   bool get isIncoming => direction == CallDirection.incoming;

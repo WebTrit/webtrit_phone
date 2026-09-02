@@ -1641,4 +1641,47 @@ void main() {
       expect(state.callsToTerminate({'c1', 'c2'}), isEmpty);
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // ActiveCall - local ringback vs early media
+  // ---------------------------------------------------------------------------
+
+  group('ActiveCall.shouldPlayLocalRingback', () {
+    test('plays by default - nothing is coming from the network yet', () {
+      expect(_makeCall(direction: CallDirection.outgoing).earlyMedia, isFalse);
+      expect(_makeCall(direction: CallDirection.outgoing).shouldPlayLocalRingback, isTrue);
+    });
+
+    test('an incoming call never wants it - it has its own ringtone', () {
+      expect(_makeCall(direction: CallDirection.incoming).shouldPlayLocalRingback, isFalse);
+    });
+
+    test('stays off once the network sends its own audio', () {
+      final call = _makeCall(direction: CallDirection.outgoing).copyWith(earlyMedia: true);
+      expect(call.shouldPlayLocalRingback, isFalse);
+    });
+
+    test('a ringing answer after the network audio does not bring it back', () {
+      final call = _makeCall(
+        direction: CallDirection.outgoing,
+        processingStatus: CallProcessingStatus.outgoingOfferSent,
+      ).copyWith(earlyMedia: true).copyWith(processingStatus: CallProcessingStatus.outgoingRinging);
+      expect(call.shouldPlayLocalRingback, isFalse);
+    });
+
+    test('an answered or ended call does not want the tone', () {
+      final answered = _makeCall(direction: CallDirection.outgoing, acceptedTime: DateTime(2024));
+      expect(answered.shouldPlayLocalRingback, isFalse);
+
+      final ended = _makeCall(direction: CallDirection.outgoing, hungUpTime: DateTime(2024));
+      expect(ended.shouldPlayLocalRingback, isFalse);
+    });
+
+    test('other calls are unaffected - the flag is per call', () {
+      final withEarlyMedia = _makeCall(callId: 'c1', direction: CallDirection.outgoing).copyWith(earlyMedia: true);
+      final plain = _makeCall(callId: 'c2', direction: CallDirection.outgoing);
+      expect(withEarlyMedia.shouldPlayLocalRingback, isFalse);
+      expect(plain.shouldPlayLocalRingback, isTrue);
+    });
+  });
 }

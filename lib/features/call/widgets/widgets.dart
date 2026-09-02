@@ -1,6 +1,8 @@
 export 'incoming_call_actions.dart';
 export 'active_call_actions.dart';
+export 'call_action_button.dart';
 export 'call_active_thumbnail.dart';
+export 'call_controls.dart';
 export 'call_info.dart';
 export 'call_remote_avatar.dart';
 export 'call_list.dart';
@@ -13,4 +15,5 @@ export 'popup_menu.dart';
 export 'remote_video_view_overlay.dart';
 export 'rtc_stream_view.dart';
 export 'stream_thumbnail.dart';
+export 'thumbnail_frame.dart';
 export 'thumbnail_overlay_manager.dart';

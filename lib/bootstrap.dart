@@ -59,12 +59,25 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
 
   // Storages
   final secureStorage = await SecureStorageImpl.init();
+  // final token = secureStorage.readToken();
+  // print('bootstrap: secureStorage token: ${token != null ? '***' : 'null'}');
   final appPreferences = await AppPreferencesImpl.init();
 
   // Network clients
   final appCertificates = await AppCertificates.init();
+
+  // Built here rather than taken from AppMetadataProvider, which needs
+  // featureAccess and is therefore created later; the format is shared.
+
+  // TODO(Vlad): Split AppMetadataProvider into AppMetadataProvider (userAgent,
+  // appInfo, deviceInfo, exportFilenamePrefix - needs only package/app/device
+  // info) and LogLabelsProvider (logLabels - the only member needing
+  // secureStorage and featureAccess). Then the metadata provider can be built
+  // here, before the API client factory, and this static call goes away.
+  final userAgent = DefaultAppMetadataProvider.buildUserAgent(packageInfo, appInfo, deviceInfo);
   final apiClientFactory = WebtritApiClientFactory(
     trustedCertificates: appCertificates.trustedCertificates,
+    userAgent: userAgent,
     getTenantId: () => secureStorage.readTenantId() ?? '',
     getCoreUrl: () =>
         Uri.parse(secureStorage.readCoreUrl() ?? EnvironmentConfig.CORE_URL ?? EnvironmentConfig.DEMO_CORE_URL),
@@ -135,7 +148,7 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
 
   final appPermissions = await _createAppPermissions(featureAccess, contactsAgreementStatusRepository);
   final appTime = await AppTime.init();
-  final appLabels = await DefaultAppMetadataProvider.init(
+  final metadataProvider = await DefaultAppMetadataProvider.init(
     packageInfo,
     deviceInfo,
     appInfo,
@@ -147,7 +160,7 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   final appLogger = await AppLogger.init(
     featureAccess.loggingConfig,
     LogzioLoggingService.fromEnvironment(featureAccess.loggingConfig.remoteLoggingEnabled),
-    () => appLabels.logLabels,
+    () => metadataProvider.logLabels,
   );
   // File-based log storage uses dart:io and is unavailable on web; fall back to
   // the in-memory log repository there. TODO(web): persistent web logging.
@@ -213,7 +226,7 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   // Logic & Features
   registry.register<FeatureAccess>(featureAccess);
   registry.register<FeatureAccessStreamFactory>(featureAccessStreamFactory);
-  registry.register<AppMetadataProvider>(appLabels);
+  registry.register<AppMetadataProvider>(metadataProvider);
   registry.register<AppPermissions>(appPermissions);
   registry.register<AppCertificates>(appCertificates);
   registry.register<AppLogger>(appLogger);
@@ -227,6 +240,14 @@ Future<InstanceRegistry> bootstrap({FirebaseIntegration firebase = const Firebas
   registry.register<RemoteConfigService>(cachedRemoteConfigService);
   registry.register<ConnectivityService>(connectivityService);
   registry.register<AppAnalyticsRepository>(firebase.analytics);
+
+  // Call-integration handles of the authenticated shell, registered here so
+  // widgets receive them from the composition root instead of constructing
+  // them inline (widget tests substitute them by providing their own above
+  // the shell). Both are process-wide singletons behind their factory
+  // constructors.
+  registry.register<Callkeep>(Callkeep());
+  registry.register<CallkeepConnections>(CallkeepConnections());
 
   // Final side-effect initializations that rely on registered components
   await _initCallkeep(featureAccess);

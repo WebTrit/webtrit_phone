@@ -22,6 +22,7 @@ class AudioProcessingContent extends StatelessWidget {
           children: [
             InlineChoosableSection<bool>(
               title: context.l10n.settings_audioProcessing_Section_VP_title,
+              sectionId: 'audioProcessingVp',
               buildOptionTitle: (option) {
                 if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
                 if (option == false) return Text(context.l10n.settings_encoding_Section_value_off);
@@ -35,6 +36,7 @@ class AudioProcessingContent extends StatelessWidget {
             ),
             InlineChoosableSection<bool>(
               title: context.l10n.settings_audioProcessing_Section_EC_title,
+              sectionId: 'audioProcessingEc',
               buildOptionTitle: (option) {
                 if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
                 if (option == false) return Text(context.l10n.settings_encoding_Section_value_off);
@@ -48,6 +50,7 @@ class AudioProcessingContent extends StatelessWidget {
             ),
             InlineChoosableSection<bool>(
               title: context.l10n.settings_audioProcessing_Section_AGC_title,
+              sectionId: 'audioProcessingAgc',
               buildOptionTitle: (option) {
                 if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
                 if (option == false) return Text(context.l10n.settings_encoding_Section_value_off);
@@ -61,6 +64,7 @@ class AudioProcessingContent extends StatelessWidget {
             ),
             InlineChoosableSection<bool>(
               title: context.l10n.settings_audioProcessing_Section_NS_title,
+              sectionId: 'audioProcessingNs',
               buildOptionTitle: (option) {
                 if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
                 if (option == false) return Text(context.l10n.settings_encoding_Section_value_off);
@@ -74,6 +78,7 @@ class AudioProcessingContent extends StatelessWidget {
             ),
             InlineChoosableSection<bool>(
               title: context.l10n.settings_audioProcessing_Section_HPF_title,
+              sectionId: 'audioProcessingHpf',
               buildOptionTitle: (option) {
                 if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
                 if (option == false) return Text(context.l10n.settings_encoding_Section_value_off);
@@ -87,6 +92,7 @@ class AudioProcessingContent extends StatelessWidget {
             ),
             InlineChoosableSection<bool>(
               title: context.l10n.settings_audioProcessing_Section_AM_title,
+              sectionId: 'audioProcessingAm',
               buildOptionTitle: (option) {
                 if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
                 if (option == false) return Text(context.l10n.settings_encoding_Section_value_off);

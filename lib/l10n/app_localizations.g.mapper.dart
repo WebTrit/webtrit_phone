@@ -24,6 +24,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'localeName' => localeName,
       'account_selfCarePasswordExpired_message' =>
         account_selfCarePasswordExpired_message,
+      'actionpad_SemanticsLabel_backspace' =>
+        actionpad_SemanticsLabel_backspace,
       'alertDialogActions_no' => alertDialogActions_no,
       'alertDialogActions_ok' => alertDialogActions_ok,
       'alertDialogActions_yes' => alertDialogActions_yes,
@@ -46,6 +48,26 @@ extension AppLocalizationsExtension on AppLocalizations {
       'cacheManagement_Widget_screenTitle' =>
         cacheManagement_Widget_screenTitle,
       'callTileActions_more' => callTileActions_more,
+      'call_SemanticsLabel_hideControls' => call_SemanticsLabel_hideControls,
+      'call_SemanticsLabel_showControls' => call_SemanticsLabel_showControls,
+      'keypad_SemanticsLabel_number' => keypad_SemanticsLabel_number,
+      'keypad_SemanticsAction_paste' => keypad_SemanticsAction_paste,
+      'callCameraPreview_SemanticsLabel_switchCamera' =>
+        callCameraPreview_SemanticsLabel_switchCamera,
+      'callThumbnail_SemanticsAction_moveTopLeft' =>
+        callThumbnail_SemanticsAction_moveTopLeft,
+      'callThumbnail_SemanticsAction_moveTopRight' =>
+        callThumbnail_SemanticsAction_moveTopRight,
+      'callThumbnail_SemanticsAction_moveMiddleLeft' =>
+        callThumbnail_SemanticsAction_moveMiddleLeft,
+      'callThumbnail_SemanticsAction_moveMiddleRight' =>
+        callThumbnail_SemanticsAction_moveMiddleRight,
+      'callThumbnail_SemanticsAction_moveBottomLeft' =>
+        callThumbnail_SemanticsAction_moveBottomLeft,
+      'callThumbnail_SemanticsAction_moveBottomRight' =>
+        callThumbnail_SemanticsAction_moveBottomRight,
+      'callThumbnail_SemanticsLabel_returnToCall' =>
+        callThumbnail_SemanticsLabel_returnToCall,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
         call_CallActionsTooltip_accept_inviteToAttendedTransfer,
@@ -139,6 +161,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'callStatus_ready' => callStatus_ready,
       'call_SystemErrorDialog_description' =>
         call_SystemErrorDialog_description,
+      'callStatus_serviceUnavailable' => callStatus_serviceUnavailable,
       'call_SystemErrorDialog_title' => call_SystemErrorDialog_title,
       'call_ThumbnailAvatar_currentlyNoActiveCall' =>
         call_ThumbnailAvatar_currentlyNoActiveCall,
@@ -150,6 +173,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'call_videoView_actionLabel_fit' => call_videoView_actionLabel_fit,
       'cdrs_noMissedCalls_message' => cdrs_noMissedCalls_message,
       'cdrs_noRecentCalls_message' => cdrs_noRecentCalls_message,
+      'common_SemanticsLabel_loading' => common_SemanticsLabel_loading,
       'common_noInternetConnection_message' =>
         common_noInternetConnection_message,
       'common_noInternetConnection_retryButton' =>
@@ -265,6 +289,16 @@ extension AppLocalizationsExtension on AppLocalizations {
         diagnostic_callingMode_standalone_caption,
       'diagnostic_callingMode_standalone_description' =>
         diagnostic_callingMode_standalone_description,
+      'diagnostic_fullScreenIntent_tile_title' =>
+        diagnostic_fullScreenIntent_tile_title,
+      'diagnostic_fullScreenIntent_navigate_section' =>
+        diagnostic_fullScreenIntent_navigate_section,
+      'diagnostic_fullScreenIntent_groupTitle' =>
+        diagnostic_fullScreenIntent_groupTitle,
+      'diagnostic_fullScreenIntent_caption' =>
+        diagnostic_fullScreenIntent_caption,
+      'diagnostic_fullScreenIntent_description' =>
+        diagnostic_fullScreenIntent_description,
       'diagnostic_permission_camera_description' =>
         diagnostic_permission_camera_description,
       'diagnostic_permission_camera_title' =>
@@ -404,6 +438,9 @@ extension AppLocalizationsExtension on AppLocalizations {
         favorites_DeleteConfirmDialog_content,
       'favorites_DeleteConfirmDialog_title' =>
         favorites_DeleteConfirmDialog_title,
+      'favorites_SemanticsLabel_reorderDone' =>
+        favorites_SemanticsLabel_reorderDone,
+      'favorites_SemanticsLabel_reorder' => favorites_SemanticsLabel_reorder,
       'favorites_Text_blingTransferInitiated' =>
         favorites_Text_blingTransferInitiated,
       'locale_default' => locale_default,
@@ -457,6 +494,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         login_RequestFailureUserNotFoundError,
       'login_RequestFailureUnconfiguredBundleIdError' =>
         login_RequestFailureUnconfiguredBundleIdError,
+      'login_SemanticsLabel_hidePassword' => login_SemanticsLabel_hidePassword,
+      'login_SemanticsLabel_showPassword' => login_SemanticsLabel_showPassword,
       'login_SupportedLoginTypeMissedExceptionError' =>
         login_SupportedLoginTypeMissedExceptionError,
       'login_Text_coreUrlAssignPreDescription' =>
@@ -766,7 +805,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'numberActions_transfer' => numberActions_transfer,
       'numberActions_videoCall' => numberActions_videoCall,
       'numberActions_viewContact' => numberActions_viewContact,
+      'permission_Button_notNow' => permission_Button_notNow,
       'permission_Button_request' => permission_Button_request,
+      'permission_fullScreenNotification_Text_optional' =>
+        permission_fullScreenNotification_Text_optional,
       'permission_manageFullScreenNotificationInstructions_step1' =>
         permission_manageFullScreenNotificationInstructions_step1,
       'permission_manageFullScreenNotificationInstructions_step2' =>
@@ -902,9 +944,44 @@ extension AppLocalizationsExtension on AppLocalizations {
         sessionStatus_AppBar_waitingForConnection,
       'sessionStatus_AppBar_disconnected' => sessionStatus_AppBar_disconnected,
       'sessionStatus_AppBar_connecting' => sessionStatus_AppBar_connecting,
+      'sessionStatus_AppBar_serviceUnavailable' =>
+        sessionStatus_AppBar_serviceUnavailable,
       'sessionStatus_pushNotificationServiceProblem' =>
         sessionStatus_pushNotificationServiceProblem,
+      'sessionStatus_subtitle_connectivityNone' =>
+        sessionStatus_subtitle_connectivityNone,
+      'sessionStatus_subtitle_diagnostic' => sessionStatus_subtitle_diagnostic,
+      'sessionStatus_subtitle_inProgress' => sessionStatus_subtitle_inProgress,
+      'sessionStatus_subtitle_ready' => sessionStatus_subtitle_ready,
+      'sessionStatus_subtitle_registrationOff' =>
+        sessionStatus_subtitle_registrationOff,
+      'sessionStatus_subtitle_serviceUnavailable' =>
+        sessionStatus_subtitle_serviceUnavailable,
       'session_Teardown_progressText' => session_Teardown_progressText,
+      'sessions_AppBar_title' => sessions_AppBar_title,
+      'sessions_AppType_android' => sessions_AppType_android,
+      'sessions_AppType_ios' => sessions_AppType_ios,
+      'sessions_AppType_linux' => sessions_AppType_linux,
+      'sessions_AppType_macos' => sessions_AppType_macos,
+      'sessions_AppType_smart' => sessions_AppType_smart,
+      'sessions_AppType_unknown' => sessions_AppType_unknown,
+      'sessions_AppType_web' => sessions_AppType_web,
+      'sessions_AppType_windows' => sessions_AppType_windows,
+      'sessions_Button_retry' => sessions_Button_retry,
+      'sessions_Button_revokeAllOthers' => sessions_Button_revokeAllOthers,
+      'sessions_Placeholder_empty' => sessions_Placeholder_empty,
+      'sessions_Placeholder_failure' => sessions_Placeholder_failure,
+      'sessions_RevokeAllConfirmDialog_content' =>
+        sessions_RevokeAllConfirmDialog_content,
+      'sessions_RevokeAllConfirmDialog_title' =>
+        sessions_RevokeAllConfirmDialog_title,
+      'sessions_RevokeConfirmDialog_content' =>
+        sessions_RevokeConfirmDialog_content,
+      'sessions_RevokeConfirmDialog_title' =>
+        sessions_RevokeConfirmDialog_title,
+      'sessions_SnackBar_revokeFailed' => sessions_SnackBar_revokeFailed,
+      'sessions_Tile_currentSession' => sessions_Tile_currentSession,
+      'sessions_Tile_revokeTooltip' => sessions_Tile_revokeTooltip,
       'settings_AboutText_ApplicationEmbeddedLinks' =>
         settings_AboutText_ApplicationEmbeddedLinks,
       'settings_AboutText_ThirdPartyLicenses' =>
@@ -1136,6 +1213,16 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_iceSettings_Section_trfilter_skipUdp,
       'settings_iceSettings_Section_trfilter_title' =>
         settings_iceSettings_Section_trfilter_title,
+      'settings_ListViewTileSubtitle_registeredNeedsConnection' =>
+        settings_ListViewTileSubtitle_registeredNeedsConnection,
+      'settings_ListViewTileSubtitle_registeredOff' =>
+        settings_ListViewTileSubtitle_registeredOff,
+      'settings_ListViewTileSubtitle_registeredOn' =>
+        settings_ListViewTileSubtitle_registeredOn,
+      'settings_ListViewTileSubtitle_registeredUpdating' =>
+        settings_ListViewTileSubtitle_registeredUpdating,
+      'settings_ListViewTileSubtitle_registeredWaitingForConnection' =>
+        settings_ListViewTileSubtitle_registeredWaitingForConnection,
       'settings_ListViewTileTitle_about' => settings_ListViewTileTitle_about,
       'settings_ListViewTileTitle_accountDelete' =>
         settings_ListViewTileTitle_accountDelete,
@@ -1165,6 +1252,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_ListViewTileTitle_registered,
       'settings_ListViewTileTitle_self_config' =>
         settings_ListViewTileTitle_self_config,
+      'settings_ListViewTileTitle_sessions' =>
+        settings_ListViewTileTitle_sessions,
       'settings_ListViewTileTitle_settings' =>
         settings_ListViewTileTitle_settings,
       'settings_ListViewTileTitle_termsConditions' =>
@@ -1197,6 +1286,10 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_network_incomingCallType_title,
       'settings_network_smsFallback_toggle' =>
         settings_network_smsFallback_toggle,
+      'settings_registerStatusSnackBar_requestFailed' =>
+        settings_registerStatusSnackBar_requestFailed,
+      'settings_registerStatusSnackBar_unavailable' =>
+        settings_registerStatusSnackBar_unavailable,
       'settings_videoCapturing_Section_framerate_prefix' =>
         settings_videoCapturing_Section_framerate_prefix,
       'settings_videoCapturing_Section_framerate_title' =>
@@ -1356,6 +1449,11 @@ extension AppLocalizationsExtension on AppLocalizations {
       'voicemail_Label_markAsNew' => voicemail_Label_markAsNew,
       'voicemail_Label_playbackError' => voicemail_Label_playbackError,
       'voicemail_Label_retry' => voicemail_Label_retry,
+      'voicemail_SemanticsLabel_loading' => voicemail_SemanticsLabel_loading,
+      'voicemail_SemanticsLabel_moreActions' =>
+        voicemail_SemanticsLabel_moreActions,
+      'voicemail_SemanticsLabel_pause' => voicemail_SemanticsLabel_pause,
+      'voicemail_SemanticsLabel_play' => voicemail_SemanticsLabel_play,
       'voicemail_Snackbar_notConfigured' => voicemail_Snackbar_notConfigured,
       'voicemail_Title_notSupported' => voicemail_Title_notSupported,
       'voicemail_Widget_screenTitle' => voicemail_Widget_screenTitle,
@@ -1565,6 +1663,37 @@ extension AppLocalizationsExtension on AppLocalizations {
         devTools_signalingService_simulateKill_confirm,
       'devTools_signalingService_simulateKill_cancel' =>
         devTools_signalingService_simulateKill_cancel,
+      'common_SemanticsLabel_refresh' => common_SemanticsLabel_refresh,
+      'common_SemanticsLabel_scrollToBottom' =>
+        common_SemanticsLabel_scrollToBottom,
+      'common_SemanticsLabel_scrollToTop' => common_SemanticsLabel_scrollToTop,
+      'contacts_SemanticsLabel_clearSearch' =>
+        contacts_SemanticsLabel_clearSearch,
+      'messaging_SemanticsLabel_newChat' => messaging_SemanticsLabel_newChat,
+      'messaging_SemanticsLabel_newSms' => messaging_SemanticsLabel_newSms,
+      'messaging_SemanticsLabel_call' => messaging_SemanticsLabel_call,
+      'messaging_SemanticsLabel_videoCall' =>
+        messaging_SemanticsLabel_videoCall,
+      'messaging_SemanticsLabel_message' => messaging_SemanticsLabel_message,
+      'messaging_SemanticsLabel_send' => messaging_SemanticsLabel_send,
+      'messaging_SemanticsLabel_conversationDetails' =>
+        messaging_SemanticsLabel_conversationDetails,
+      'messaging_SemanticsLabel_conversationOptions' =>
+        messaging_SemanticsLabel_conversationOptions,
+      'messaging_SemanticsLabel_replying' => messaging_SemanticsLabel_replying,
+      'messaging_SemanticsLabel_editing' => messaging_SemanticsLabel_editing,
+      'messaging_SemanticsLabel_forwarding' =>
+        messaging_SemanticsLabel_forwarding,
+      'messaging_SemanticsLabel_stopReplying' =>
+        messaging_SemanticsLabel_stopReplying,
+      'messaging_SemanticsLabel_stopEditing' =>
+        messaging_SemanticsLabel_stopEditing,
+      'messaging_SemanticsLabel_stopForwarding' =>
+        messaging_SemanticsLabel_stopForwarding,
+      'messaging_SemanticsLabel_sendForward' =>
+        messaging_SemanticsLabel_sendForward,
+      'diagnosticNetworkTest_SemanticsLabel_refresh' =>
+        diagnosticNetworkTest_SemanticsLabel_refresh,
       'agoTicker_daysAgo' => switch (args) {
         [final int days] => agoTicker_daysAgo(days),
         _ => throw ArgumentError('agoTicker_daysAgo requires 1 arguments'),
@@ -1587,6 +1716,18 @@ extension AppLocalizationsExtension on AppLocalizations {
           'cacheManagement_Label_itemsCount requires 1 arguments',
         ),
       },
+      'callTile_SemanticsLabel_call' => switch (args) {
+        [final String name] => callTile_SemanticsLabel_call(name),
+        _ => throw ArgumentError(
+          'callTile_SemanticsLabel_call requires 1 arguments',
+        ),
+      },
+      'callTile_SemanticsLabel_videoCall' => switch (args) {
+        [final String name] => callTile_SemanticsLabel_videoCall(name),
+        _ => throw ArgumentError(
+          'callTile_SemanticsLabel_videoCall requires 1 arguments',
+        ),
+      },
       'call_CallList_header' => switch (args) {
         [final int count] => call_CallList_header(count),
         _ => throw ArgumentError('call_CallList_header requires 1 arguments'),
@@ -1607,6 +1748,36 @@ extension AppLocalizationsExtension on AppLocalizations {
         [final String name] => call_FocusedActionHint_willBeHeld(name),
         _ => throw ArgumentError(
           'call_FocusedActionHint_willBeHeld requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_addFavorite' => switch (args) {
+        [final String number] => contact_SemanticsLabel_addFavorite(number),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_addFavorite requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_optionInfo' => switch (args) {
+        [final String option] => contact_SemanticsLabel_optionInfo(option),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_optionInfo requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_removeFavorite' => switch (args) {
+        [final String number] => contact_SemanticsLabel_removeFavorite(number),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_removeFavorite requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_sendEmail' => switch (args) {
+        [final String address] => contact_SemanticsLabel_sendEmail(address),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_sendEmail requires 1 arguments',
+        ),
+      },
+      'contact_SemanticsLabel_transfer' => switch (args) {
+        [final String number] => contact_SemanticsLabel_transfer(number),
+        _ => throw ArgumentError(
+          'contact_SemanticsLabel_transfer requires 1 arguments',
         ),
       },
       'contacts_ContactTile_inCall' => switch (args) {
@@ -1809,6 +1980,16 @@ extension AppLocalizationsExtension on AppLocalizations {
         [final DateTime time] => recentTimeBeforeMidnight(time),
         _ => throw ArgumentError(
           'recentTimeBeforeMidnight requires 1 arguments',
+        ),
+      },
+      'sessions_Tile_created' => switch (args) {
+        [final String time] => sessions_Tile_created(time),
+        _ => throw ArgumentError('sessions_Tile_created requires 1 arguments'),
+      },
+      'sessions_Tile_lastActivity' => switch (args) {
+        [final String time] => sessions_Tile_lastActivity(time),
+        _ => throw ArgumentError(
+          'sessions_Tile_lastActivity requires 1 arguments',
         ),
       },
       'socketError_defaultDescription' => switch (args) {

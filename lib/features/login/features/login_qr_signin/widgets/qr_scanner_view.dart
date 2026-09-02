@@ -52,10 +52,16 @@ class QrScannerView extends StatelessWidget {
         ),
         const SizedBox(height: kInset / 2),
         // Reserve the line so the layout does not jump when an error appears.
-        Text(
-          parseError != null ? context.l10n.login_Text_qrSigninInvalidCodeError : '',
-          textAlign: TextAlign.center,
-          style: themeData.textTheme.bodyMedium?.copyWith(color: themeData.colorScheme.error),
+        // A rejected code is the only feedback the scanner gives, so the line
+        // has to speak up when it fills in - and stay quiet while it is empty.
+        Semantics(
+          liveRegion: parseError != null,
+          excludeSemantics: parseError == null,
+          child: Text(
+            parseError != null ? context.l10n.login_Text_qrSigninInvalidCodeError : '',
+            textAlign: TextAlign.center,
+            style: themeData.textTheme.bodyMedium?.copyWith(color: themeData.colorScheme.error),
+          ),
         ),
       ],
     );

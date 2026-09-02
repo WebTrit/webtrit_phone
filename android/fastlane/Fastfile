@@ -1,0 +1,46 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build the Android app bundle"
+  lane :build do
+    args = [
+      "build",
+      ENV['ANDROID_BUILD_TARGET'] || "appbundle",
+      "--dart-define-from-file=#{File.join(project_root, 'dart_define.json')}",
+      "--no-tree-shake-icons",
+    ]
+
+    args.push("--flavor", ENV['ANDROID_FLAVOR'].to_s.empty? ? "deeplinkssmsReceiver" : ENV['ANDROID_FLAVOR'])
+    args.push("--build-name=#{ENV['ANDROID_BUILD_NAME']}")
+    args.push("--build-number=#{ENV['ANDROID_BUILD_NUMBER']}")
+
+
+    # flutter must run from the project root, while fastlane actions run in android/.
+    Dir.chdir(project_root) do
+      sh("flutter", "pub", "get")
+      sh("flutter", *args)
+    end
+  end
+
+  desc "Upload the Android app to Play Store"
+  lane :upload do
+
+    upload_to_play_store(
+      track: ENV['ANDROID_PLAY_STORE_TRACK'].to_s.empty? ? "internal" : ENV['ANDROID_PLAY_STORE_TRACK'],
+      release_status: ENV['ANDROID_PLAY_STORE_RELEASE_STATUS'].to_s.empty? ? "draft" : ENV['ANDROID_PLAY_STORE_RELEASE_STATUS'],
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: true,
+      skip_upload_apk: true,
+      aab: ENV['ANDROID_AAB_PATH'],
+      json_key: ENV['ANDROID_PLAY_STORE_JSON_KEY_PATH'],
+      package_name: ENV['ANDROID_PLAY_STORE_PACKAGE_NAME'],
+    )
+
+  end
+end
+
+def project_root
+  File.expand_path('../..', __dir__)
+end

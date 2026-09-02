@@ -19,6 +19,21 @@ dart run build_runner build --delete-conflicting-outputs      # codegen
 dart run bin/create_new_schema_dump_and_test_migration.dart   # after Drift table changes
 ```
 
+Every build needs `--dart-define-from-file=dart_define.json` **and** `--no-tree-shake-icons`
+(`String.toIconData()` builds `IconData` at runtime, which the icon tree-shaker rejects in release
+mode — and every `flutter build` is release by default). The failure lands only after the full
+Dart compile, so a missing flag costs a whole build cycle: measured 256 s to fail, 381 s for a
+successful web build. The `melos run build:*` scripts already pass both flags; web has no script
+yet, so type them:
+
+```bash
+flutter build web --dart-define-from-file=dart_define.json --no-tree-shake-icons
+```
+
+Before any build, run the cheap checks — `dart format` → `analyze` → `test`. Which check for which
+change, measured costs, and how to drive a long build without wasted retries:
+[`docs/build_verification.md`](docs/build_verification.md).
+
 ## Code Standards
 
 - No Cyrillic in source, comments, logs, strings, or keys, except translation values in localization ARB files (`lib/l10n/arb/*.arb`).
@@ -35,6 +50,28 @@ dart run bin/create_new_schema_dump_and_test_migration.dart   # after Drift tabl
   4. Internal packages
   5. `package:webtrit_phone/...`
   6. Relative
+
+## Accessibility
+
+Mandatory for any UI you add or touch - a control shipped without this is a defect.
+Full guide, wrapper choice and the traps: [`docs/accessibility.md`](docs/accessibility.md).
+
+- Every interactive control carries a name and, where automation must reach it, a stable
+  identifier: wrap it in `SemanticAction` (`.button` for a bare `GestureDetector`/`InkWell`),
+  or in `SemanticId` for a screen anchor or a text field. Never wrap a tap target in a plain
+  `Semantics(identifier: ...)` - the id then lands on a node above the one carrying the action
+  (a raw `Semantics` that declares name, id and action itself is fine, but only with
+  `excludeSemantics: true`, or the tappable widgets below keep their own nameless nodes). In-call buttons go
+  through `CallActionButton`; `context.showSnackBar` already anchors the snackbar itself.
+- Identifiers come from `lib/app/keys.dart` as a `const String ...Id` (paired with a widget `Key`
+  built from it when a widget test needs that anchor too); names come from l10n (`<bloc>_SemanticsLabel_<control>`, all four arb files), never a
+  hardcoded string. Omit a name only when the framework already provides one (the Android back
+  button does) - a second one is announced twice.
+- Every screen with controls has a `*_semantics_test.dart`: `expectTapTargetSemantics` per
+  control, activation via `tapViaSemantics` (never `tester.tap` - a pointer tap passes while the
+  semantics path is broken), and `meetsGuideline(labeledTapTargetGuideline)` over the screen.
+- After renaming anything in `keys.dart`, grep `patrol_test/` and `integration_test/`:
+  `patrol_test/**` is excluded from analysis, so `analyze` stays green and the E2E run breaks.
 
 ## Architecture
 

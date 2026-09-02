@@ -41,7 +41,11 @@
         }
       },
       "buttonLoginStyleType": "neutralOnDark",
-      "buttonSignupStyleType": "neutralOnDark"
+      "buttonSignupStyleType": "neutralOnDark",
+      "__appBarStyle": "Page-level app bar override; unset fields fall back to the global bar config.",
+      "appBarStyle": {
+        "backgroundColor": "#00000000"
+      }
     },
     "switchPage": {
       "__themeOverride": "Configuration to force a specific theme mode (Light/Dark) for this screen, overriding the system or global app theme. Contains 'mode' (system/light/dark) and 'applyToAppBar' (bool).",
@@ -82,6 +86,10 @@
           "type": "rounded",
           "borderRadius": 4.0
         }
+      },
+      "__appBarStyle": "Page-level app bar override; unset fields fall back to the global bar config.",
+      "appBarStyle": {
+        "backgroundColor": "#00000000"
       }
     },
     "otpSignin": {
@@ -135,6 +143,16 @@
     },
     "signupVerify": {
       "countdownRepeatIntervalSeconds": 30
+    },
+    "coreUrlAssign": {
+      "__appBarStyle": "Page-level app bar override; unset fields fall back to the global bar config.",
+      "appBarStyle": {
+        "backgroundColor": "#00000000"
+      },
+      "systemUiOverlayStyle": {
+        "statusBarIconBrightness": "dark",
+        "statusBarBrightness": "light"
+      }
     }
   },
   "dialing": {
@@ -171,8 +189,8 @@
       "systemNavigationBarIconBrightness": "dark"
     },
     "appBarStyle": {
-      "backgroundColor": null,
-      "foregroundColor": null,
+      "backgroundColor": "#00000000",
+      "foregroundColor": "#EEF3F6",
       "primary": false
     },
     "callInfo": {
@@ -209,7 +227,6 @@
       "callStart": {
         "backgroundColor": "#75B943",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#66DDE0E3",
         "disabledForegroundColor": "#848581",
@@ -218,7 +235,6 @@
       "hangup": {
         "backgroundColor": "#E74C3C",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#66DDE0E3",
         "disabledForegroundColor": "#848581",
@@ -227,7 +243,6 @@
       "transfer": {
         "backgroundColor": "#123752",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#66DDE0E3",
         "disabledForegroundColor": "#848581",
@@ -236,7 +251,6 @@
       "camera": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -245,7 +259,6 @@
       "muted": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -254,7 +267,6 @@
       "speaker": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -263,7 +275,6 @@
       "held": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -272,7 +283,6 @@
       "swap": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -281,7 +291,6 @@
       "key": {
         "backgroundColor": "#66FFFFFF",
         "foregroundColor": "#FFFFFFFF",
-        "textColor": "#FFFFFFFF",
         "iconColor": "#FFFFFFFF",
         "disabledBackgroundColor": "#33FFFFFF",
         "disabledForegroundColor": "#848581",
@@ -512,6 +521,12 @@
       "beginY": 0.0,
       "endX": 0.0,
       "endY": 1.0
+    }
+  },
+  "numberCdrs": {
+    "__appBarStyle": "Deliberately chrome-less: the bar only floats the back button over the number header.",
+    "appBarStyle": {
+      "backgroundColor": "#00000000"
     }
   }
 }

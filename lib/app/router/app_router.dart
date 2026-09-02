@@ -267,6 +267,7 @@ class AppRouter extends RootStackRouter {
                 ),
                 AutoRoute(page: PresenceSettingsScreenPageRoute.page, path: 'presence'),
                 AutoRoute(page: CallerIdSettingsScreenPageRoute.page, path: 'caller-id'),
+                AutoRoute(page: SessionsScreenPageRoute.page, path: 'sessions'),
               ],
             ),
           ],

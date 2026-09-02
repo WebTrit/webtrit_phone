@@ -13,6 +13,9 @@ class AppLocalizationsUk extends AppLocalizations {
       'Термін дії вашого пароля самообслуговування минув. Оновіть його за допомогою самообслуговування.\nДоки пароль не буде змінено, доступ до служби буде обмежено.';
 
   @override
+  String get actionpad_SemanticsLabel_backspace => 'Стерти';
+
+  @override
   String agoTicker_daysAgo(int days) {
     String _temp0 = intl.Intl.pluralLogic(
       days,
@@ -137,6 +140,52 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get callTileActions_more => 'Більше';
+
+  @override
+  String get call_SemanticsLabel_hideControls => 'Сховати керування дзвінком';
+
+  @override
+  String get call_SemanticsLabel_showControls => 'Показати керування дзвінком';
+
+  @override
+  String get keypad_SemanticsLabel_number => 'Номер телефону';
+
+  @override
+  String get keypad_SemanticsAction_paste => 'Вставити номер';
+
+  @override
+  String get callCameraPreview_SemanticsLabel_switchCamera => 'Перемкнути камеру';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveTopLeft => 'Перемістити у верхній лівий кут';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveTopRight => 'Перемістити у верхній правий кут';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleLeft => 'Перемістити ліворуч по центру';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleRight => 'Перемістити праворуч по центру';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomLeft => 'Перемістити у нижній лівий кут';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomRight => 'Перемістити у нижній правий кут';
+
+  @override
+  String get callThumbnail_SemanticsLabel_returnToCall => 'Повернутися до дзвінка';
+
+  @override
+  String callTile_SemanticsLabel_call(String name) {
+    return 'Подзвонити $name';
+  }
+
+  @override
+  String callTile_SemanticsLabel_videoCall(String name) {
+    return 'Відеодзвінок $name';
+  }
 
   @override
   String get call_CallActionsTooltip_accept => 'Прийняти';
@@ -362,6 +411,9 @@ class AppLocalizationsUk extends AppLocalizations {
       'Щоб відновити можливість здійснювати дзвінки, необхідно перезавантажити телефон. Це виправить тимчасову системну помилку.';
 
   @override
+  String get callStatus_serviceUnavailable => 'Сервіс тимчасово недоступний';
+
+  @override
   String get call_SystemErrorDialog_title => 'Системна помилка';
 
   @override
@@ -386,6 +438,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'Немає останніх дзвінків';
 
   @override
+  String get common_SemanticsLabel_loading => 'Завантаження';
+
+  @override
   String get common_noInternetConnection_message =>
       'Схоже, ви не підключені до Інтернету. Перевірте своє підключення і спробуйте ще раз.';
 
@@ -397,6 +452,31 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get common_problemWithLoadingPage => 'Виникла проблема з завантаженням сторінки.';
+
+  @override
+  String contact_SemanticsLabel_addFavorite(String number) {
+    return 'Додати $number до обраних';
+  }
+
+  @override
+  String contact_SemanticsLabel_optionInfo(String option) {
+    return 'Що означає $option';
+  }
+
+  @override
+  String contact_SemanticsLabel_removeFavorite(String number) {
+    return 'Прибрати $number з обраних';
+  }
+
+  @override
+  String contact_SemanticsLabel_sendEmail(String address) {
+    return 'Написати листа на $address';
+  }
+
+  @override
+  String contact_SemanticsLabel_transfer(String number) {
+    return 'Перевести поточний дзвінок на $number';
+  }
 
   @override
   String get contacts_agreement_button_text => 'Продовжити';
@@ -632,6 +712,22 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get diagnostic_callingMode_standalone_description =>
       'Цей пристрій не підтримує системний механізм дзвінків (Telecom), тому вхідні дзвінки використовують обмежену фонову службу. Дзвінки можуть затримуватися або не надходити, коли система обмежує фонові застосунки. Вибір Bluetooth- чи дротової гарнітури в цьому режимі недоступний.';
+
+  @override
+  String get diagnostic_fullScreenIntent_tile_title => 'Повноекранні дзвінки';
+
+  @override
+  String get diagnostic_fullScreenIntent_navigate_section => 'Перейдіть до розділу повноекранних сповіщень';
+
+  @override
+  String get diagnostic_fullScreenIntent_groupTitle => 'Дзвінки на заблокованому екрані';
+
+  @override
+  String get diagnostic_fullScreenIntent_caption => 'Дзвінки приходять сповіщенням, а не на весь екран';
+
+  @override
+  String get diagnostic_fullScreenIntent_description =>
+      'Дозволяє вхідному дзвінку відкриватися на весь екран поверх заблокованого екрана і відповідати просто там. Без цього дзвінок приходить сповіщенням, а відповідь із захищеного заблокованого екрана спершу просить розблокувати телефон.';
 
   @override
   String get diagnostic_permission_camera_description =>
@@ -870,6 +966,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get favorites_DeleteConfirmDialog_title => 'Підтвердити видалення';
 
   @override
+  String get favorites_SemanticsLabel_reorderDone => 'Завершити впорядкування';
+
+  @override
+  String get favorites_SemanticsLabel_reorder => 'Змінити порядок обраних';
+
+  @override
   String favorites_SnackBar_deleted(String name) {
     return '$name видалено';
   }
@@ -1005,6 +1107,12 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get login_RequestFailureUnconfiguredBundleIdError =>
       'Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг';
+
+  @override
+  String get login_SemanticsLabel_hidePassword => 'Сховати пароль';
+
+  @override
+  String get login_SemanticsLabel_showPassword => 'Показати пароль';
 
   @override
   String get login_SupportedLoginTypeMissedExceptionError =>
@@ -1667,7 +1775,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String get numberActions_viewContact => 'Переглянути контакт';
 
   @override
+  String get permission_Button_notNow => 'Не зараз';
+
+  @override
   String get permission_Button_request => 'Продовжити';
+
+  @override
+  String get permission_fullScreenNotification_Text_optional =>
+      'Можна продовжити без цього. Вхідні дзвінки приходитимуть сповіщенням, а не на весь екран, і якщо телефон захищено PIN-кодом, графічним ключем або відбитком, для відповіді з заблокованого екрана його доведеться спершу розблокувати.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
@@ -2022,10 +2137,102 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sessionStatus_AppBar_connecting => 'Підключення...';
 
   @override
+  String get sessionStatus_AppBar_serviceUnavailable => 'Сервіс тимчасово недоступний';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem => 'Проблема з налаштуванням служби пуш-сповіщень';
 
   @override
+  String get sessionStatus_subtitle_connectivityNone => 'Перевірте Wi-Fi або мобільні дані';
+
+  @override
+  String get sessionStatus_subtitle_diagnostic => 'Торкніться для діагностики';
+
+  @override
+  String get sessionStatus_subtitle_inProgress => 'З\'єднуємося з сервером...';
+
+  @override
+  String get sessionStatus_subtitle_ready => 'Дзвінки надходять на цей акаунт';
+
+  @override
+  String get sessionStatus_subtitle_registrationOff => 'Реєстрацію вимкнено';
+
+  @override
+  String get sessionStatus_subtitle_serviceUnavailable => 'Зі зʼєднанням усе гаразд, натисніть для деталей';
+
+  @override
   String get session_Teardown_progressText => 'Вихід із системи...';
+
+  @override
+  String get sessions_AppBar_title => 'Активні сесії';
+
+  @override
+  String get sessions_AppType_android => 'Застосунок Android';
+
+  @override
+  String get sessions_AppType_ios => 'Застосунок iOS';
+
+  @override
+  String get sessions_AppType_linux => 'Застосунок Linux';
+
+  @override
+  String get sessions_AppType_macos => 'Застосунок macOS';
+
+  @override
+  String get sessions_AppType_smart => 'Розумний пристрій';
+
+  @override
+  String get sessions_AppType_unknown => 'Невідомий пристрій';
+
+  @override
+  String get sessions_AppType_web => 'Вебзастосунок';
+
+  @override
+  String get sessions_AppType_windows => 'Застосунок Windows';
+
+  @override
+  String get sessions_Button_retry => 'Спробувати ще раз';
+
+  @override
+  String get sessions_Button_revokeAllOthers => 'Вийти з інших сесій';
+
+  @override
+  String get sessions_Placeholder_empty => 'Немає активних сесій';
+
+  @override
+  String get sessions_Placeholder_failure => 'Не вдалося завантажити активні сесії';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_content =>
+      'Інші пристрої, у яких виконано вхід із цим акаунтом, буде відключено.';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_title => 'Вийти з інших сесій?';
+
+  @override
+  String get sessions_RevokeConfirmDialog_content => 'Цей пристрій буде відключено від акаунта.';
+
+  @override
+  String get sessions_RevokeConfirmDialog_title => 'Вийти з цієї сесії?';
+
+  @override
+  String get sessions_SnackBar_revokeFailed => 'Не вдалося завершити сесію';
+
+  @override
+  String sessions_Tile_created(String time) {
+    return 'Вхід $time';
+  }
+
+  @override
+  String get sessions_Tile_currentSession => 'Цей пристрій';
+
+  @override
+  String sessions_Tile_lastActivity(String time) {
+    return 'Останнє використання $time';
+  }
+
+  @override
+  String get sessions_Tile_revokeTooltip => 'Вийти';
 
   @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Вбудовані посилання застосунку';
@@ -2417,6 +2624,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_title => 'Транспортний протокол';
 
   @override
+  String get settings_ListViewTileSubtitle_registeredNeedsConnection => 'Потрібен зв\'язок';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOff => 'Вхідні дзвінки відхиляються';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOn => 'Акаунт приймає дзвінки';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredUpdating => 'Оновлюємо...';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredWaitingForConnection => 'Очікуємо зв\'язок...';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Про застосунок';
 
   @override
@@ -2463,6 +2685,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_self_config => 'Сторінка спец-налаштувань';
+
+  @override
+  String get settings_ListViewTileTitle_sessions => 'Сесії';
 
   @override
   String get settings_ListViewTileTitle_settings => 'НАЛАШТУВАННЯ';
@@ -2515,6 +2740,13 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settings_network_smsFallback_toggle => 'SMS як резервний канал';
+
+  @override
+  String get settings_registerStatusSnackBar_requestFailed => 'Не вдалося зв\'язатися з сервером - спробуйте ще раз';
+
+  @override
+  String get settings_registerStatusSnackBar_unavailable =>
+      'Немає зв\'язку з сервером - це налаштування зараз не змінити';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'кадрів: ';
@@ -2865,6 +3097,18 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get voicemail_Label_retry => 'Спробувати ще раз';
+
+  @override
+  String get voicemail_SemanticsLabel_loading => 'Завантаження';
+
+  @override
+  String get voicemail_SemanticsLabel_moreActions => 'Більше';
+
+  @override
+  String get voicemail_SemanticsLabel_pause => 'Пауза';
+
+  @override
+  String get voicemail_SemanticsLabel_play => 'Відтворити';
 
   @override
   String get voicemail_Snackbar_notConfigured => 'Зверніться до адміністратора, щоб активувати голосову пошту.';
@@ -3234,4 +3478,64 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get devTools_signalingService_simulateKill_cancel => 'Cancel';
+
+  @override
+  String get common_SemanticsLabel_refresh => 'Оновити';
+
+  @override
+  String get common_SemanticsLabel_scrollToBottom => 'Прокрутити донизу';
+
+  @override
+  String get common_SemanticsLabel_scrollToTop => 'Прокрутити догори';
+
+  @override
+  String get contacts_SemanticsLabel_clearSearch => 'Очистити пошук';
+
+  @override
+  String get messaging_SemanticsLabel_newChat => 'Start a new chat';
+
+  @override
+  String get messaging_SemanticsLabel_newSms => 'Write a new message';
+
+  @override
+  String get messaging_SemanticsLabel_call => 'Call';
+
+  @override
+  String get messaging_SemanticsLabel_videoCall => 'Video call';
+
+  @override
+  String get messaging_SemanticsLabel_message => 'Message';
+
+  @override
+  String get messaging_SemanticsLabel_send => 'Send';
+
+  @override
+  String get messaging_SemanticsLabel_conversationDetails => 'Conversation details';
+
+  @override
+  String get messaging_SemanticsLabel_conversationOptions => 'Conversation options';
+
+  @override
+  String get messaging_SemanticsLabel_replying => 'Replying to';
+
+  @override
+  String get messaging_SemanticsLabel_editing => 'Editing';
+
+  @override
+  String get messaging_SemanticsLabel_forwarding => 'Forwarding';
+
+  @override
+  String get messaging_SemanticsLabel_stopReplying => 'Stop replying';
+
+  @override
+  String get messaging_SemanticsLabel_stopEditing => 'Stop editing';
+
+  @override
+  String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
+
+  @override
+  String get messaging_SemanticsLabel_sendForward => 'Forward the message';
+
+  @override
+  String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
 }

@@ -37,7 +37,7 @@ class ActionPadStyleFactory implements ThemeStyleFactory<ActionpadStyles> {
       primary: ActionpadStyle(
         primary: _resolveStyle(source: config?.callStart, fallback: filledStyle, scale: callStartScale),
         secondary: _resolveStyle(source: config?.callTransfer, fallback: filledStyle, scale: defaultScale),
-        backspace: _resolveStyle(source: config?.backspacePressed, fallback: filledStyle, scale: defaultScale),
+        backspace: _resolveStyle(source: config?.backspace, fallback: filledStyle, scale: defaultScale),
       ),
     );
   }

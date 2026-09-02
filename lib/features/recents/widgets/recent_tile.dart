@@ -103,6 +103,7 @@ class RecentTile extends StatelessWidget {
       expanded: expanded,
       onDialPressed: onDialPressed,
       dialIcon: (callLogEntry.video && videoEnabled) ? Icons.videocam : Icons.call,
+      dialIsVideo: callLogEntry.video && videoEnabled,
       callNumbers: callNumbers,
       onAudioCallPressed: onAudioCallPressed,
       onVideoCallPressed: onVideoCallPressed,

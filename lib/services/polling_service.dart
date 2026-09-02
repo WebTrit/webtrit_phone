@@ -71,7 +71,7 @@ class PollingOptions {
 /// - polling a backend or repository on a base interval,
 /// - immediate refresh when network is restored / app resumes,
 /// - load control: backoff on errors + jitter.
-class PollingService implements Disposable {
+class PollingService with WidgetsBindingObserver implements Disposable {
   PollingService({
     required ConnectivityService connectivityService,
     List<PollingRegistration> registrations = const [],
@@ -90,6 +90,11 @@ class PollingService implements Disposable {
     }
 
     _initializePollingIfConnected();
+
+    // The service observes app lifecycle itself (registered for its own
+    // lifetime, released in [dispose]) so its owner does not have to forward
+    // [didChangeAppLifecycleState] by hand.
+    WidgetsBinding.instance.addObserver(this);
   }
 
   final ConnectivityService _connectivityService;
@@ -148,6 +153,7 @@ class PollingService implements Disposable {
   /// Handle app lifecycle transitions. By default:
   /// - background → stop all schedules,
   /// - foreground resume → run **group-leading** (a single fresh reachability check shared across listeners).
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (!_options.pauseInBackground) return;
 
@@ -168,6 +174,7 @@ class PollingService implements Disposable {
 
   @override
   Future<void> dispose() async {
+    WidgetsBinding.instance.removeObserver(this);
     _disposed = true;
     _stopAllTimers();
     _pollingConfigs.clear();

@@ -11,6 +11,9 @@ import '../mocks/fake_connectivity_service.dart';
 import '../mocks/mock_refreshable_repository.dart';
 
 void main() {
+  // PollingService registers itself as a WidgetsBindingObserver on
+  // construction, which needs a live binding even in plain tests.
+  TestWidgetsFlutterBinding.ensureInitialized();
   Logger.root.level = Level.OFF;
 
   group('PollingService', () {

@@ -37,6 +37,7 @@ The application offers extensive customization options:
  - **Flavors**: See the [Build Flavors](docs/flavors.md) documentation for details on how to configure and use build flavors.
  - **Melos Commands**: See the [Melos Commands](docs/make_file.md) for all available build, run, and automation commands.
  - **Development Workflow and Git Hooks**: See the [Development Guide](docs/development.md) for details on commit conventions, hook setup, and workflow tools.
+ - **Accessibility**: See the [Accessibility Guide](docs/accessibility.md) for what every interactive control must expose to screen readers and UI automation, and how to verify it.
 
 # Testing
 
@@ -58,6 +59,10 @@ Integration tests are located in the `patrol_test` folder.
 - **Commands**: See [Integration Test Commands](docs/integration_test_commands.md) for all patrol build, run, Firebase Test Lab, and local companion commands.
 
 - **Coverage**: See [Integration Test Coverage](docs/integration_test_coverage.md) for a description of every test file and its steps.
+
+### Manual testing on real devices
+
+- **BrowserStack App Live**: See [BrowserStack App Live Upload](docs/browserstack_upload.md) for uploading builds to BrowserStack and testing them manually on real devices.
 
 ## Contributing
 

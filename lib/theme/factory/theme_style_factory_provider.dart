@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/theme/extension/extension.dart';
 import 'package:webtrit_phone/theme/factory/styles/conversations_screen_style_factory.dart';
 import 'package:webtrit_phone/theme/factory/styles/embedded_screen_style_factory.dart';
 import 'package:webtrit_phone/theme/factory/styles/favorites_screen_style_factory.dart';
@@ -92,6 +93,10 @@ class ThemeStyleFactoryProvider {
       loginPageScheme.modeSelect,
       colorScheme,
       defaultFontFamily,
+      appBarTheme: _pageAppBarThemeWithDefault(
+        loginPageScheme.modeSelect.appBarStyle,
+        const AppBarConfig(backgroundColor: '#00000000'),
+      ),
     );
     final leadingAvatarStyleFactory = LeadingAvatarStyleFactory(
       colorScheme,
@@ -107,13 +112,17 @@ class ThemeStyleFactoryProvider {
     final embeddedRequestErrorDialogFactory = EmbeddedRequestErrorDialogFactory(imageAssetsConfig);
 
     // Screen-specific styles
-    final aboutScreenStyleFactory = AboutScreenStyleFactory(pageConfig.about);
+    final aboutScreenStyleFactory = AboutScreenStyleFactory(
+      pageConfig.about,
+      appBarTheme: _pageAppBarTheme(pageConfig.about.appBarStyle),
+    );
     final callScreenStyleFactory = CallScreenStyleFactory(colorScheme, callPageScheme, callActions, defaultFontFamily);
     final keypadScreenStyleFactory = KeypadScreenStyleFactory(
       colorScheme,
       defaultFontFamily,
       config: pageConfig.keypad,
       textTheme: defaultTextTheme,
+      appBarTheme: _pageAppBarTheme(pageConfig.keypad.appBarStyle),
     );
     final loginOtpSigninVerifyScreenStyleFactory = LoginOtpSigninVerifyScreenStyleFactory(
       colorScheme,
@@ -127,6 +136,10 @@ class ThemeStyleFactoryProvider {
       loginPageScheme.switchPage,
       colorScheme,
       defaultFontFamily,
+      appBarTheme: _pageAppBarThemeWithDefault(
+        loginPageScheme.switchPage.appBarStyle,
+        const AppBarConfig(backgroundColor: '#00000000'),
+      ),
     );
     final loginOtpSigninPageStyleFactory = LoginOtpSigninPageStyleFactory(
       colorScheme,
@@ -140,12 +153,55 @@ class ThemeStyleFactoryProvider {
       config: loginPageScheme.passwordSignin,
       textTheme: defaultTextTheme,
     );
-    final settingsScreenStyleFactory = SettingsScreenStyleFactory(colorScheme, pageConfig.settings, defaultFontFamily);
-    final contactsScreenStyleFactory = ContactsScreenStyleFactory(colorScheme, pageConfig.contacts);
-    final recentsScreenStyleFactory = RecentsScreenStyleFactory(colorScheme, pageConfig.recents);
-    final favoritesScreenStyleFactory = FavoritesScreenStyleFactory(colorScheme, pageConfig.favorites);
-    final conversationsScreenStyleFactory = ConversationsScreenStyleFactory(colorScheme, pageConfig.conversations);
-    final embeddedScreenStyleFactory = EmbeddedScreenStyleFactory(colorScheme, pageConfig.embedded);
+    final settingsScreenStyleFactory = SettingsScreenStyleFactory(
+      colorScheme,
+      pageConfig.settings,
+      defaultFontFamily,
+      appBarTheme: _pageAppBarTheme(pageConfig.settings.appBarStyle),
+    );
+    final contactsScreenStyleFactory = ContactsScreenStyleFactory(
+      colorScheme,
+      pageConfig.contacts,
+      appBarTheme: _pageAppBarTheme(pageConfig.contacts.appBarStyle),
+    );
+    final recentsScreenStyleFactory = RecentsScreenStyleFactory(
+      colorScheme,
+      pageConfig.recents,
+      appBarTheme: _pageAppBarTheme(pageConfig.recents.appBarStyle),
+    );
+    final favoritesScreenStyleFactory = FavoritesScreenStyleFactory(
+      colorScheme,
+      pageConfig.favorites,
+      appBarTheme: _pageAppBarTheme(pageConfig.favorites.appBarStyle),
+    );
+    final conversationsScreenStyleFactory = ConversationsScreenStyleFactory(
+      colorScheme,
+      pageConfig.conversations,
+      appBarTheme: _pageAppBarTheme(pageConfig.conversations.appBarStyle),
+    );
+    final embeddedScreenStyleFactory = EmbeddedScreenStyleFactory(
+      colorScheme,
+      pageConfig.embedded,
+      appBarTheme: _pageAppBarTheme(pageConfig.embedded.appBarStyle),
+    );
+    final numberCdrsScreenStyleFactory = NumberCdrsScreenStyleFactory(
+      colorScheme,
+      pageConfig.numberCdrs,
+      // A deliberately chrome-less screen: when the theme does not configure
+      // this page's bar, default to a transparent one.
+      appBarTheme: _pageAppBarThemeWithDefault(
+        pageConfig.numberCdrs.appBarStyle,
+        const AppBarConfig(backgroundColor: '#00000000'),
+      ),
+    );
+    final loginCoreUrlAssignScreenStyleFactory = LoginCoreUrlAssignScreenStyleFactory(
+      loginPageScheme.coreUrlAssign,
+      colorScheme,
+      appBarTheme: _pageAppBarThemeWithDefault(
+        loginPageScheme.coreUrlAssign.appBarStyle,
+        const AppBarConfig(backgroundColor: '#00000000'),
+      ),
+    );
 
     return <ThemeExtension?>[
       textButtonStyle,
@@ -181,7 +237,24 @@ class ThemeStyleFactoryProvider {
       favoritesScreenStyleFactory.create(),
       conversationsScreenStyleFactory.create(),
       embeddedScreenStyleFactory.create(),
+      numberCdrsScreenStyleFactory.create(),
+      loginCoreUrlAssignScreenStyleFactory.create(),
     ].nonNulls.toList();
+  }
+
+  AppBarTheme? _pageAppBarTheme(AppBarConfig? pageStyle) {
+    if (pageStyle == null) return null;
+    return AppBarThemeDataFactory(
+      colorScheme,
+      pageStyle.mergeOver(widgetConfig.bar.appBarConfig),
+      defaultTextTheme.bodyMedium?.fontFamily,
+    ).create();
+  }
+
+  /// Like [_pageAppBarTheme], but a screen's design default sits UNDER the
+  /// page style, so a partial page override keeps the default's other fields.
+  AppBarTheme? _pageAppBarThemeWithDefault(AppBarConfig? pageStyle, AppBarConfig designDefault) {
+    return _pageAppBarTheme(pageStyle == null ? designDefault : pageStyle.mergeOver(designDefault));
   }
 
   ElevatedButtonThemeData createElevatedButtonThemeData() {
@@ -226,9 +299,9 @@ class ThemeStyleFactoryProvider {
 
   AppBarTheme createAppBarTheme() {
     return AppBarThemeDataFactory(
+      colorScheme,
       widgetConfig.bar.appBarConfig,
       defaultTextTheme.bodyMedium?.fontFamily,
-      colorScheme.brightness,
     ).create();
   }
 

@@ -55,6 +55,7 @@ class _AboutScreenState extends State<AboutScreen> {
     final bottomPadding = mediaQuery.padding.bottom;
 
     return ThemedScaffold(
+      appBarTheme: localStyle?.appBarTheme,
       background: localStyle?.background,
       extendBodyBehindAppBar: true,
       appBar: AppBar(

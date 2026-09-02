@@ -81,90 +81,113 @@ class _LoginPasswordSigninScreenState extends State<LoginPasswordSigninScreen> {
           fallback: context.l10n.login_TextFieldLabelText_passwordSigninUserRef,
         );
 
-        return Container(
-          padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-          color: themeData.scaffoldBackgroundColor,
-          child: AutofillGroup(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (passwordSigninPreDescriptionText.isNotEmpty) ...[
-                  Description(text: passwordSigninPreDescriptionText),
-                  const SizedBox(height: kInset / 2),
-                ],
-                ExtendedTextFormField(
-                  key: passwordUserInputKey,
-                  enabled: !state.processing,
-                  includePrefixInData: userRefStyle?.inputValue?.includePrefixInData ?? false,
-                  initialValue: state.passwordSigninUserRefInput.value,
-                  decoration: userRefDecoration.copyWith(
-                    labelText: decorationLabelText,
-                    helperText: '',
-                    // reserve space for validator message
-                    errorText: state.passwordSigninUserRefInput.displayError?.l10n(context),
-                    errorMaxLines: 3,
-                    hintText: userRefDecoration.hintText ?? maskConfig?.pattern,
-                  ),
-                  inputFormatters: maskConfig != null ? [_maskFormatter] : [],
-                  style: userRefStyle?.textStyle,
-                  textAlign: userRefStyle?.textAlign ?? TextAlign.start,
-                  keyboardType: userRefStyle?.keyboardType ?? TextInputType.text,
-                  autofillHints: const [AutofillHints.email, AutofillHints.telephoneNumber],
-                  onChanged: context.read<LoginCubit>().passwordSigninUserRefInputChanged,
-                  onFieldSubmitted: !state.passwordSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
-                ),
-                TextFormField(
-                  key: passwordPasswordInputKey,
-                  enabled: !state.processing,
-                  initialValue: state.passwordSigninPasswordInput.value,
-                  decoration: passwordDecoration.copyWith(
-                    labelText: context.l10n.login_TextFieldLabelText_passwordSigninPassword,
-                    helperText: '',
-                    // reserve space for validator message
-                    errorText: state.passwordSigninPasswordInput.displayError?.l10n(context),
-                    errorMaxLines: 3,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        state.passwordSigninPasswordInputObscureText ? Icons.visibility : Icons.visibility_off,
-                        size: 24,
+        return SemanticId(
+          identifier: loginPasswordScreenId,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+            color: themeData.scaffoldBackgroundColor,
+            child: AutofillGroup(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (passwordSigninPreDescriptionText.isNotEmpty) ...[
+                    Description(text: passwordSigninPreDescriptionText),
+                    const SizedBox(height: kInset / 2),
+                  ],
+                  SemanticId(
+                    identifier: passwordUserInputId,
+                    child: ExtendedTextFormField(
+                      key: passwordUserInputKey,
+                      enabled: !state.processing,
+                      includePrefixInData: userRefStyle?.inputValue?.includePrefixInData ?? false,
+                      initialValue: state.passwordSigninUserRefInput.value,
+                      decoration: userRefDecoration.copyWith(
+                        labelText: decorationLabelText,
+                        helperText: '',
+                        // reserve space for validator message
+                        errorText: state.passwordSigninUserRefInput.displayError?.l10n(context),
+                        errorMaxLines: 3,
+                        hintText: userRefDecoration.hintText ?? maskConfig?.pattern,
                       ),
-                      onPressed: state.processing
-                          ? null
-                          : context.read<LoginCubit>().passwordSigninPasswordInputObscureTextToggled,
+                      inputFormatters: maskConfig != null ? [_maskFormatter] : [],
+                      style: userRefStyle?.textStyle,
+                      textAlign: userRefStyle?.textAlign ?? TextAlign.start,
+                      keyboardType: userRefStyle?.keyboardType ?? TextInputType.text,
+                      autofillHints: const [AutofillHints.email, AutofillHints.telephoneNumber],
+                      onChanged: context.read<LoginCubit>().passwordSigninUserRefInputChanged,
+                      onFieldSubmitted: !state.passwordSigninUserRefInput.isValid ? null : (_) => _onSubmitted(context),
                     ),
                   ),
-                  style: passwordStyle?.textStyle,
-                  textAlign: passwordStyle?.textAlign ?? TextAlign.start,
-                  obscureText: state.passwordSigninPasswordInputObscureText,
-                  keyboardType: passwordStyle?.keyboardType ?? TextInputType.visiblePassword,
-                  autofillHints: const [AutofillHints.password],
-                  onChanged: context.read<LoginCubit>().passwordSigninPasswordInputChanged,
-                  onFieldSubmitted: !state.passwordSigninPasswordInput.isValid ? null : (_) => _onSubmitted(context),
-                ),
-                if (passwordSigninPostDescriptionText.isNotEmpty) ...[
-                  const SizedBox(height: kInset / 8),
-                  Description(text: passwordSigninPostDescriptionText),
-                ],
-                const Spacer(),
-                const SizedBox(height: kInset),
-                ElevatedButton(
-                  key: passwordButtonKey,
-                  onPressed:
-                      state.processing ||
-                          !state.passwordSigninUserRefInput.isValid ||
-                          !state.passwordSigninPasswordInput.isValid
-                      ? null
-                      : () => _onSubmitted(context),
-                  style: elevatedButtonStyles?.primary,
-                  child: !state.processing
-                      ? Text(context.l10n.login_Button_passwordSigninProceed)
-                      : SizedCircularProgressIndicator(
-                          size: 16,
-                          strokeWidth: 2,
-                          color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                  SemanticId(
+                    identifier: passwordPasswordInputId,
+                    child: TextFormField(
+                      key: passwordPasswordInputKey,
+                      enabled: !state.processing,
+                      initialValue: state.passwordSigninPasswordInput.value,
+                      decoration: passwordDecoration.copyWith(
+                        labelText: context.l10n.login_TextFieldLabelText_passwordSigninPassword,
+                        helperText: '',
+                        // reserve space for validator message
+                        errorText: state.passwordSigninPasswordInput.displayError?.l10n(context),
+                        errorMaxLines: 3,
+                        // Nothing but the glyph told what this button does or which
+                        // way it is currently set, so the name has to carry both.
+                        suffixIcon: SemanticAction(
+                          label: state.passwordSigninPasswordInputObscureText
+                              ? context.l10n.login_SemanticsLabel_showPassword
+                              : context.l10n.login_SemanticsLabel_hidePassword,
+                          identifier: passwordObscureToggleId,
+                          child: IconButton(
+                            icon: Icon(
+                              state.passwordSigninPasswordInputObscureText ? Icons.visibility : Icons.visibility_off,
+                              size: 24,
+                            ),
+                            onPressed: state.processing
+                                ? null
+                                : context.read<LoginCubit>().passwordSigninPasswordInputObscureTextToggled,
+                          ),
                         ),
-                ),
-              ],
+                      ),
+                      style: passwordStyle?.textStyle,
+                      textAlign: passwordStyle?.textAlign ?? TextAlign.start,
+                      obscureText: state.passwordSigninPasswordInputObscureText,
+                      keyboardType: passwordStyle?.keyboardType ?? TextInputType.visiblePassword,
+                      autofillHints: const [AutofillHints.password],
+                      onChanged: context.read<LoginCubit>().passwordSigninPasswordInputChanged,
+                      onFieldSubmitted: !state.passwordSigninPasswordInput.isValid
+                          ? null
+                          : (_) => _onSubmitted(context),
+                    ),
+                  ),
+                  if (passwordSigninPostDescriptionText.isNotEmpty) ...[
+                    const SizedBox(height: kInset / 8),
+                    Description(text: passwordSigninPostDescriptionText),
+                  ],
+                  const Spacer(),
+                  const SizedBox(height: kInset),
+                  SemanticAction(
+                    identifier: passwordButtonId,
+                    child: ElevatedButton(
+                      key: passwordButtonKey,
+                      onPressed:
+                          state.processing ||
+                              !state.passwordSigninUserRefInput.isValid ||
+                              !state.passwordSigninPasswordInput.isValid
+                          ? null
+                          : () => _onSubmitted(context),
+                      style: elevatedButtonStyles?.primary,
+                      child: !state.processing
+                          ? Text(context.l10n.login_Button_passwordSigninProceed)
+                          : SizedCircularProgressIndicator(
+                              size: 16,
+                              strokeWidth: 2,
+                              color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                              semanticsLabel: context.l10n.common_SemanticsLabel_loading,
+                            ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

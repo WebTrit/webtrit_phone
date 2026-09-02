@@ -5,6 +5,7 @@ import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 
 import 'call_status.dart';
+import 'registration_rejection.dart';
 import 'signaling_client_status.dart';
 
 part 'call_service_state.freezed.dart';
@@ -49,6 +50,13 @@ class CallServiceState with _$CallServiceState {
 
   @override
   final int? lastSignalingDisconnectCode;
+
+  /// The recognised reason behind a failed registration, if the refusal is one
+  /// the app knows how to describe. Meaningful only while [status] reports a
+  /// registration problem; every other state leaves it unspecified.
+  RegistrationRejection get registrationRejection => registration?.status.isFailed == true
+      ? RegistrationRejection.of(registration?.code, registration?.reason)
+      : RegistrationRejection.unspecified;
 
   CallStatus get status {
     final lastSignalingDisconnectCode = this.lastSignalingDisconnectCode;

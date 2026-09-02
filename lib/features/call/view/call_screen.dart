@@ -70,17 +70,24 @@ class _CallScreenState extends State<CallScreen> with AutoRouteAwareStateMixin {
       },
       builder: (context, state) {
         if (state.isActive) {
-          return CallActiveScaffold(
-            callStatus: state.status,
-            activeCalls: state.activeCalls,
-            // isActive guarantees at least one call, so focusedCall is non-null.
-            focusedCall: state.focusedCall!,
-            audioDevice: state.audioDevice,
-            availableAudioDevices: state.availableAudioDevices,
-            callConfig: widget.callConfig,
-            localePlaceholderBuilder: widget.localePlaceholderBuilder,
-            remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
-            contactResolver: widget.contactResolver,
+          return ScreenReaderBuilder(
+            builder: (context, screenReaderOn) => CallActiveScaffold(
+              callStatus: state.status,
+              activeCalls: state.activeCalls,
+              // isActive guarantees at least one call, so focusedCall is non-null.
+              focusedCall: state.focusedCall!,
+              audioDevice: state.audioDevice,
+              availableAudioDevices: state.availableAudioDevices,
+              callConfig: widget.callConfig,
+              localePlaceholderBuilder: widget.localePlaceholderBuilder,
+              remotePlaceholderBuilder: widget.remotePlaceholderBuilder,
+              // The controls have to stay while a screen reader is in use:
+              // hidden ones are gone from the accessibility tree, and five
+              // seconds is far less than it takes to step through them one
+              // swipe at a time.
+              keepControlsVisible: screenReaderOn,
+              contactResolver: widget.contactResolver,
+            ),
           );
         } else {
           return const CallInitScaffold();

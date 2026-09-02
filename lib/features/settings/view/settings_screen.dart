@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call_routing/cubit/call_routing_cubit.dart';
 import 'package:webtrit_phone/features/register_status/register_status.dart';
 import 'package:webtrit_phone/features/user_info/user_info.dart';
@@ -21,15 +21,19 @@ export 'settings_screen_style.dart';
 export 'settings_screen_styles.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key, required this.sections, this.style});
+  const SettingsScreen({super.key, required this.sections, required this.sessionsEnabled, this.style});
 
   final List<SettingsSection> sections;
+
+  /// Whether the backend can list and revoke sessions; the row is not part of
+  /// [sections] because it is not configurable.
+  final bool sessionsEnabled;
+
   final SettingScreenStyle? style;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final colorScheme = themeData.colorScheme;
     final effectiveStyle = style ?? themeData.extension<SettingsScreenStyles>()?.primary;
 
     final showSeparators = effectiveStyle?.showSeparators ?? true;
@@ -41,18 +45,13 @@ class SettingsScreen extends StatelessWidget {
       background: effectiveStyle?.background,
       contentThemeOverride: effectiveStyle?.contentThemeOverride,
       applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+      appBarTheme: effectiveStyle?.appBarTheme,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: const AutoLeadingButton(),
         title: Text(context.l10n.settings_AppBarTitle_myAccount),
         flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            style: IconButton.styleFrom(foregroundColor: colorScheme.onSurface),
-            onPressed: () => _onRefreshTap(context),
-          ),
-        ],
+        actions: [IconButton(icon: const Icon(Icons.refresh), onPressed: () => _onRefreshTap(context))],
       ),
       body: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
@@ -78,38 +77,34 @@ class SettingsScreen extends StatelessWidget {
                       builder: (context, sessionState) => SessionStatusListTile(
                         status: sessionState.status,
                         topIssue: sessionState.topIssue,
+                        registered: context.select<RegisterStatusCubit, bool>((cubit) => cubit.state.value),
+                        updating: context.select<RegisterStatusCubit, bool>((cubit) => cubit.state.isUpdating),
                         onTap: () => _onDiagnosticTap(context),
                       ),
                     ),
                     if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
                     BlocBuilder<RegisterStatusCubit, RegisterStatus>(
-                      builder: (context, registerState) => SwitchListTile(
-                        title: Text(
-                          context.l10n.settings_ListViewTileTitle_registered,
-                          style: effectiveStyle?.itemTextStyle,
-                        ),
-                        value: registerState.value,
-                        onChanged: registerState.isUpdating
-                            ? null
-                            : (value) => _onRegisterStatusChanged(context, value),
-                        secondary: registerState.isUpdating
-                            ? const SizedCircularProgressIndicator(size: 24, strokeWidth: 2)
-                            : Icon(
-                                Icons.account_circle_outlined,
-                                color: effectiveStyle?.userIconColor ?? effectiveStyle?.leadingIconsColor,
-                              ),
+                      builder: (context, registerState) => RegisterStatusListTile(
+                        sessionStatus: context.select<SessionStatusCubit, SessionStatus>((cubit) => cubit.state.status),
+                        registerStatus: registerState,
+                        onChanged: (value) => _onRegisterStatusChanged(context, value),
+                        onUnavailableTap: () => _onRegisterStatusUnavailableTap(context),
+                        textStyle: effectiveStyle?.itemTextStyle,
+                        iconColor: effectiveStyle?.userIconColor ?? effectiveStyle?.leadingIconsColor,
                       ),
                     ),
                     if (showSeparators) ListTileSeparator(color: effectiveStyle?.separatorColor),
-                    SettingsTile(
-                      key: settingsLogoutButtonKey,
-                      title: context.l10n.settings_ListViewTileTitle_logout,
-                      icon: Icons.logout,
-                      iconColor: effectiveStyle?.logoutIconColor ?? effectiveStyle?.leadingIconsColor,
+                    AccountActionsTile(
+                      sessionsCount: sessionsEnabled
+                          ? context.select<SessionsCubit, int>((cubit) => cubit.state.sessions.length)
+                          : null,
+                      logoutIconColor: effectiveStyle?.logoutIconColor ?? effectiveStyle?.leadingIconsColor,
+                      sessionsIconColor: effectiveStyle?.leadingIconsColor,
                       textStyle: effectiveStyle?.itemTextStyle,
                       showSeparator: showSeparators,
                       separatorColor: effectiveStyle?.separatorColor,
-                      onTap: () => _onLogoutTap(context),
+                      onLogoutTap: () => _onLogoutTap(context),
+                      onSessionsTap: () => _onSessionsTap(context),
                     ),
                     for (final section in sections) ...[
                       GroupTitleListTile(
@@ -179,12 +174,30 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _onRefreshTap(BuildContext context) => context.read<RegisterStatusCubit>().fetchStatus();
+  Future<void> _onRefreshTap(BuildContext context) async {
+    final succeeded = await context.read<RegisterStatusCubit>().fetchStatus();
+    if (!succeeded && context.mounted) {
+      context.showErrorSnackBar(context.l10n.settings_registerStatusSnackBar_requestFailed);
+    }
+  }
 
   void _onDiagnosticTap(BuildContext context) => context.router.navigate(const DiagnosticScreenPageRoute());
 
-  void _onRegisterStatusChanged(BuildContext context, bool value) =>
-      context.read<RegisterStatusCubit>().setStatus(value);
+  void _onSessionsTap(BuildContext context) => context.router.navigate(const SessionsScreenPageRoute());
+
+  /// A failure rolls the switch back, so it must be explained: without a
+  /// message the flip-back reads as the app ignoring the tap.
+  Future<void> _onRegisterStatusChanged(BuildContext context, bool value) async {
+    final succeeded = await context.read<RegisterStatusCubit>().setStatus(value);
+    if (!succeeded && context.mounted) {
+      context.showErrorSnackBar(context.l10n.settings_registerStatusSnackBar_requestFailed);
+    }
+  }
+
+  void _onRegisterStatusUnavailableTap(BuildContext context) => context.showSnackBar(
+    context.l10n.settings_registerStatusSnackBar_unavailable,
+    action: SnackBarAction(label: context.l10n.diagnostic_AppBar_title, onPressed: () => _onDiagnosticTap(context)),
+  );
 
   void _onItemTap(BuildContext context, SettingItem item) {
     switch (item.flavor) {

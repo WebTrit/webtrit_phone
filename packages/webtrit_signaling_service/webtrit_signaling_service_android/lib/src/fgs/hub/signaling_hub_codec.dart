@@ -1,3 +1,18 @@
+/// Wire codec of the FGS signaling hub.
+///
+/// Used ONLY in the persistent/`socket` mode (a user opt-in, Android 14+): the
+/// foreground service owns the signaling connection in its own isolate, and
+/// every [SignalingModuleEvent] - including each protocol [Event] - crosses the
+/// isolate boundary through this codec as JSON. In the default push-bound mode
+/// signaling events never pass through here.
+///
+/// Consequence for the event types themselves: an event MUST round-trip through
+/// its own `toJson`/`fromJson` without losing information, including fields
+/// that are resolved client-side rather than received from the wire - anything
+/// dropped here silently disappears in this mode only, which makes such a bug
+/// easy to miss on every other configuration.
+library;
+
 import 'package:logging/logging.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service_platform_interface/webtrit_signaling_service_platform_interface.dart';

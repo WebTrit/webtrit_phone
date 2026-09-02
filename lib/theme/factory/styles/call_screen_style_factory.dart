@@ -163,70 +163,90 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
 
   CallScreenActionsStyle _mapActionsFromPage(CallPageActionsConfig a) {
     return CallScreenActionsStyle(
-      callStart: buildFixedButtonStyle(
-        a.callStart,
-        colors: colors,
-        fg: colors.onTertiary,
-        bg: colors.tertiary,
-        icon: colors.surface,
-      ),
-      hangup: buildFixedButtonStyle(
-        a.hangup,
-        colors: colors,
-        fg: colors.onError,
-        bg: colors.error,
-        icon: colors.surface,
-      ),
-      transfer: buildFixedButtonStyle(
-        a.transfer,
-        colors: colors,
-        fg: colors.onSecondary,
-        bg: colors.secondary,
-        icon: colors.surface,
-      ),
-      swap: buildFixedButtonStyle(
+      callStart: _actionStyle(a.callStart, background: colors.tertiary, foreground: colors.onTertiary),
+      hangup: _actionStyle(a.hangup, background: colors.error, foreground: colors.onError),
+      transfer: _actionStyle(a.transfer, background: colors.secondary, foreground: colors.onSecondary),
+      swap: _actionStyle(
         a.swap,
-        colors: colors,
-        fg: colors.onSurface,
-        bg: colors.surfaceContainerHigh,
+        background: colors.surfaceContainerHigh,
+        foreground: colors.onSurface,
         icon: colors.onSurface,
       ),
-      key: buildFixedButtonStyle(
+      key: _actionStyle(
         a.key,
-        colors: colors,
-        fg: colors.onSurface,
-        bg: colors.surfaceContainer,
+        background: colors.surfaceContainer,
+        foreground: colors.onSurface,
         icon: colors.onSurface,
       ),
-      camera: buildToggleButtonStyle(
+      camera: _actionStyle(
         a.camera,
-        colors: colors,
-        baseFg: colors.onSurface,
-        baseBg: colors.surfaceContainerHighest,
-        baseIcon: colors.onSurface,
+        background: colors.surfaceContainerHighest,
+        foreground: colors.onSurface,
+        icon: colors.onSurface,
+        toggleable: true,
       ),
-      muted: buildToggleButtonStyle(
+      muted: _actionStyle(
         a.muted,
-        colors: colors,
-        baseFg: colors.onSurface,
-        baseBg: colors.surfaceContainerHigh,
-        baseIcon: colors.onSurface,
+        background: colors.surfaceContainerHigh,
+        foreground: colors.onSurface,
+        icon: colors.onSurface,
+        toggleable: true,
       ),
-      speaker: buildToggleButtonStyle(
+      speaker: _actionStyle(
         a.speaker,
-        colors: colors,
-        baseFg: colors.onSurface,
-        baseBg: colors.surfaceContainerHigh,
-        baseIcon: colors.onSurface,
+        background: colors.surfaceContainerHigh,
+        foreground: colors.onSurface,
+        icon: colors.onSurface,
+        toggleable: true,
       ),
-      held: buildToggleButtonStyle(
+      held: _actionStyle(
         a.held,
-        colors: colors,
-        baseFg: colors.onSurface,
-        baseBg: colors.surfaceContainerHigh,
-        baseIcon: colors.onSurface,
+        background: colors.surfaceContainerHigh,
+        foreground: colors.onSurface,
+        icon: colors.onSurface,
+        toggleable: true,
       ),
       keypadInputTextStyle: _resolveKeypadInputTextStyle(a.keypadInputStyle),
+    );
+  }
+
+  /// One call-action button.
+  ///
+  /// [background], [foreground] and [icon] are what the button looks like when
+  /// the theme says nothing; [toggleable] adds the switched-on look, which the
+  /// theme cannot set yet and therefore comes from the palette.
+  ButtonStyle _actionStyle(
+    ButtonStyleConfig config, {
+    required Color background,
+    required Color foreground,
+    Color? icon,
+    bool toggleable = false,
+    Color? selectedBackground,
+    Color? disabledBackground,
+  }) {
+    final fallback = ButtonStyleFallback(
+      background: background,
+      foreground: foreground,
+      icon: icon ?? colors.surface,
+      selectedBackground: toggleable ? selectedBackground ?? colors.surface : null,
+      selectedForeground: toggleable ? colors.onSurface : null,
+      selectedIcon: toggleable ? colors.onSecondaryFixedVariant : null,
+      disabledBackground: disabledBackground,
+      disabledIcon: colors.surface.withValues(alpha: kDisabledOpacity),
+      disabledOpacity: kDisabledOpacity,
+    );
+
+    final themed = config.toButtonStyle(defaultFontFamily: defaultFontFamily, fallback: fallback);
+
+    // Colors only, on purpose. These buttons live in a grid that sets their
+    // size, so letting a theme through with a shape or a fixed size here would
+    // let it pull the grid apart.
+    return ButtonStyle(
+      backgroundColor: themed.backgroundColor,
+      foregroundColor: themed.foregroundColor,
+      iconColor: themed.iconColor,
+      overlayColor: themed.overlayColor,
+      padding: const WidgetStatePropertyAll(EdgeInsets.zero),
     );
   }
 
@@ -234,7 +254,6 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
   // ignore: deprecated_member_use
   CallScreenActionsStyle _mapActionsFromLegacy(CallActionsWidgetConfig c) {
     final inactiveIcon = colors.surface;
-    final activeIcon = colors.onSecondaryFixedVariant;
 
     final actionBg = colors.surface.withValues(alpha: kDisabledOpacity);
     final activeActionBg = colors.surface;
@@ -258,186 +277,30 @@ class CallScreenStyleFactory implements ThemeStyleFactory<CallScreenStyles> {
     final swapBg = c.swapBackgroundColor?.toColor() ?? actionBg;
     final keyBg = c.keyBackgroundColor?.toColor() ?? actionBg;
 
+    ButtonStyle legacy(Color background, {Color? foreground, Color? selectedBackground}) {
+      return _actionStyle(
+        const ButtonStyleConfig(),
+        background: background,
+        foreground: foreground ?? colors.surface,
+        icon: inactiveIcon,
+        toggleable: selectedBackground != null,
+        // The retired config had no disabled colors, and the buttons it styled
+        // kept their background while unavailable. Keep that.
+        disabledBackground: background,
+        selectedBackground: selectedBackground,
+      );
+    }
+
     return CallScreenActionsStyle(
-      callStart: buildFilledLikeStyle(colors: colors, fg: colors.onTertiary, bg: callStartBg, icon: inactiveIcon),
-      hangup: buildFilledLikeStyle(colors: colors, fg: colors.onError, bg: hangupBg, icon: inactiveIcon),
-      transfer: buildFilledLikeStyle(colors: colors, fg: colors.onSecondary, bg: transferBg, icon: inactiveIcon),
-      camera: buildToggleLikeStyle(
-        colors: colors,
-        bg: cameraBg,
-        activeBg: cameraActiveBg,
-        icon: inactiveIcon,
-        activeIcon: activeIcon,
-        fg: colors.surface,
-        activeFg: colors.onSurface,
-      ),
-      muted: buildToggleLikeStyle(
-        colors: colors,
-        bg: mutedBg,
-        activeBg: mutedActiveBg,
-        icon: inactiveIcon,
-        activeIcon: activeIcon,
-        fg: colors.surface,
-        activeFg: colors.onSurface,
-      ),
-      speaker: buildToggleLikeStyle(
-        colors: colors,
-        bg: speakerBg,
-        activeBg: speakerActiveBg,
-        icon: inactiveIcon,
-        activeIcon: activeIcon,
-        fg: colors.surface,
-        activeFg: colors.onSurface,
-      ),
-      held: buildToggleLikeStyle(
-        colors: colors,
-        bg: heldBg,
-        activeBg: heldActiveBg,
-        icon: inactiveIcon,
-        activeIcon: activeIcon,
-        fg: colors.surface,
-        activeFg: colors.onSurface,
-      ),
-      swap: buildFilledLikeStyle(colors: colors, fg: colors.surface, bg: swapBg, icon: inactiveIcon),
-      key: buildFilledLikeStyle(colors: colors, fg: colors.surface, bg: keyBg, icon: inactiveIcon),
-    );
-  }
-
-  ButtonStyle buildFixedButtonStyle(
-    ElevatedButtonWidgetConfig cfg, {
-    required ColorScheme colors,
-    required Color fg,
-    required Color bg,
-    required Color icon,
-    EdgeInsetsGeometry padding = EdgeInsets.zero,
-  }) {
-    final resolvedFg = cfg.foregroundColor?.toColor() ?? fg;
-    final resolvedFgDisabled = cfg.disabledForegroundColor?.toColor() ?? resolvedFg.withValues(alpha: kDisabledOpacity);
-
-    final resolvedBg = cfg.backgroundColor?.toColor() ?? bg;
-    final resolvedBgDisabled = cfg.disabledBackgroundColor?.toColor() ?? resolvedBg.withValues(alpha: kDisabledOpacity);
-
-    final resolvedIcon = cfg.iconColor?.toColor() ?? icon;
-    final resolvedIconDisabled = cfg.disabledIconColor?.toColor() ?? colors.surface.withValues(alpha: kDisabledOpacity);
-
-    final base = TextButton.styleFrom(
-      foregroundColor: resolvedFg,
-      backgroundColor: resolvedBg,
-      disabledForegroundColor: resolvedFgDisabled,
-      iconColor: resolvedIcon,
-      disabledIconColor: resolvedIconDisabled,
-      padding: padding,
-    );
-
-    return base.copyWith(
-      backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-        (states) => states.contains(WidgetState.disabled) ? resolvedBgDisabled : resolvedBg,
-      ),
-    );
-  }
-
-  ButtonStyle buildToggleButtonStyle(
-    ElevatedButtonWidgetConfig cfg, {
-    required ColorScheme colors,
-    required Color baseFg,
-    required Color baseBg,
-    required Color baseIcon,
-    Color? activeFg,
-    Color? activeBg,
-    Color? activeIcon,
-    EdgeInsetsGeometry padding = EdgeInsets.zero,
-  }) {
-    final disFg = cfg.disabledForegroundColor?.toColor() ?? baseFg.withValues(alpha: kDisabledOpacity);
-    final disBg = cfg.disabledBackgroundColor?.toColor() ?? baseBg.withValues(alpha: kDisabledOpacity);
-    final disIcon = cfg.disabledIconColor?.toColor() ?? colors.surface.withValues(alpha: kDisabledOpacity);
-
-    final selFg = activeFg ?? colors.onSurface;
-    final selBg = activeBg ?? colors.surface;
-    final selIcon = activeIcon ?? colors.onSecondaryFixedVariant;
-
-    Color? bg(Set<WidgetState> s) {
-      if (s.contains(WidgetState.disabled)) return disBg;
-      if (s.contains(WidgetState.selected)) return selBg;
-      return cfg.backgroundColor?.toColor() ?? baseBg;
-    }
-
-    Color? fg(Set<WidgetState> s) {
-      if (s.contains(WidgetState.disabled)) return disFg;
-      if (s.contains(WidgetState.selected)) return selFg;
-      return cfg.foregroundColor?.toColor() ?? baseFg;
-    }
-
-    Color? ic(Set<WidgetState> s) {
-      if (s.contains(WidgetState.disabled)) return disIcon;
-      if (s.contains(WidgetState.selected)) return selIcon;
-      return cfg.iconColor?.toColor() ?? baseIcon;
-    }
-
-    return ButtonStyle(
-      backgroundColor: WidgetStateProperty.resolveWith(bg),
-      foregroundColor: WidgetStateProperty.resolveWith(fg),
-      iconColor: WidgetStateProperty.resolveWith(ic),
-      padding: WidgetStatePropertyAll(padding),
-    );
-  }
-
-  ButtonStyle buildFilledLikeStyle({
-    required ColorScheme colors,
-    required Color fg,
-    required Color bg,
-    required Color icon,
-    EdgeInsetsGeometry padding = EdgeInsets.zero,
-  }) {
-    return TextButton.styleFrom(
-      foregroundColor: fg,
-      backgroundColor: bg,
-      disabledForegroundColor: fg.withValues(alpha: kDisabledOpacity),
-      iconColor: icon,
-      disabledIconColor: colors.surface.withValues(alpha: kDisabledOpacity),
-      padding: padding,
-    );
-  }
-
-  ButtonStyle buildToggleLikeStyle({
-    required ColorScheme colors,
-    required Color bg,
-    required Color activeBg,
-    required Color icon,
-    required Color activeIcon,
-    required Color fg,
-    required Color activeFg,
-    EdgeInsetsGeometry padding = EdgeInsets.zero,
-    Color? disabledBackground,
-    Color? disabledForeground,
-    Color? disabledIcon,
-  }) {
-    final disabledBg = disabledBackground ?? bg.withValues(alpha: kDisabledOpacity);
-    final disabledFg = disabledForeground ?? fg.withValues(alpha: kDisabledOpacity);
-    final disabledIcon0 = disabledIcon ?? icon.withValues(alpha: kDisabledOpacity);
-
-    Color? resolveBg(Set<WidgetState> s) {
-      if (s.contains(WidgetState.disabled)) return disabledBg;
-      if (s.contains(WidgetState.selected)) return activeBg;
-      return bg;
-    }
-
-    Color? resolveFg(Set<WidgetState> s) {
-      if (s.contains(WidgetState.disabled)) return disabledFg;
-      if (s.contains(WidgetState.selected)) return activeFg;
-      return fg;
-    }
-
-    Color? resolveIcon(Set<WidgetState> s) {
-      if (s.contains(WidgetState.disabled)) return disabledIcon0;
-      if (s.contains(WidgetState.selected)) return activeIcon;
-      return icon;
-    }
-
-    return ButtonStyle(
-      backgroundColor: WidgetStateProperty.resolveWith(resolveBg),
-      foregroundColor: WidgetStateProperty.resolveWith(resolveFg),
-      iconColor: WidgetStateProperty.resolveWith(resolveIcon),
-      padding: WidgetStatePropertyAll(padding),
+      callStart: legacy(callStartBg, foreground: colors.onTertiary),
+      hangup: legacy(hangupBg, foreground: colors.onError),
+      transfer: legacy(transferBg, foreground: colors.onSecondary),
+      camera: legacy(cameraBg, selectedBackground: cameraActiveBg),
+      muted: legacy(mutedBg, selectedBackground: mutedActiveBg),
+      speaker: legacy(speakerBg, selectedBackground: speakerActiveBg),
+      held: legacy(heldBg, selectedBackground: heldActiveBg),
+      swap: legacy(swapBg),
+      key: legacy(keyBg),
     );
   }
 }

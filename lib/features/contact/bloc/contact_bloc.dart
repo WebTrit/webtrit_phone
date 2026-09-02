@@ -4,9 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 part 'contact_bloc.freezed.dart';
@@ -60,10 +60,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   }
 
   FutureOr<void> _onEmailSend(ContactEmailSend event, Emitter<ContactState> emit) async {
-    final emailLaunchUri = Uri(scheme: 'mailto', path: event.contactEmail.address);
-    if (await canLaunchUrl(emailLaunchUri)) {
-      await launchUrl(emailLaunchUri);
-    }
+    await launchMailTo(event.contactEmail.address);
   }
 
   FutureOr<void> _onSipSubscriptionToggled(ContactSipSubscriptionToggled event, Emitter<ContactState> emit) async {

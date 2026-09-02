@@ -52,7 +52,8 @@ class _ContactsAgreementScreenState extends State<ContactsAgreementScreen> {
                           const Spacer(),
                           const SizedBox(height: kInset),
                           AgreementCheckbox(
-                            key: contactsAgreementCheckboxKey,
+                            checkboxKey: contactsAgreementCheckboxKey,
+                            identifier: contactsAgreementCheckboxId,
                             agreementAccepted: agreementStatus.isAccepted,
                             onChanged: _handleAgreementStatusChange,
                             text: context.l10n.contacts_agreement_checkbox_text,
@@ -60,11 +61,14 @@ class _ContactsAgreementScreenState extends State<ContactsAgreementScreen> {
                           const SizedBox(height: kInset / 2),
                           InertSafeArea(
                             bottom: true,
-                            child: OutlinedButton(
-                              key: contactsAgreementAcceptButtonKey,
-                              onPressed: _submitAgreement,
-                              style: elevatedButtonStyles?.primary,
-                              child: Text(context.l10n.contacts_agreement_button_text),
+                            child: SemanticAction(
+                              identifier: contactsAgreementAcceptButtonId,
+                              child: OutlinedButton(
+                                key: contactsAgreementAcceptButtonKey,
+                                onPressed: _submitAgreement,
+                                style: elevatedButtonStyles?.primary,
+                                child: Text(context.l10n.contacts_agreement_button_text),
+                              ),
                             ),
                           ),
                         ],

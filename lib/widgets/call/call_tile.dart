@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/widgets/call/number_actions.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class TileMenuButton extends StatelessWidget {
   const TileMenuButton({super.key, required this.onTap});
@@ -13,16 +14,20 @@ class TileMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 32,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: themeData.colorScheme.surface.withAlpha(1),
-          borderRadius: BorderRadius.circular(16),
+    return SemanticAction.button(
+      label: context.l10n.callTileActions_more,
+      identifier: callTileMenuId,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 32,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: themeData.colorScheme.surface.withAlpha(1),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Icon(Icons.more_vert, size: 20, color: themeData.textTheme.labelMedium?.color),
         ),
-        child: Icon(Icons.more_vert, size: 20, color: themeData.textTheme.labelMedium?.color),
       ),
     );
   }
@@ -65,18 +70,20 @@ class _CallTileAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 22, color: themeData.colorScheme.primary),
-            const SizedBox(height: 2),
-            Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: themeData.textTheme.labelSmall),
-          ],
+    return SemanticAction.button(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 22, color: themeData.colorScheme.primary),
+              const SizedBox(height: 2),
+              Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: themeData.textTheme.labelSmall),
+            ],
+          ),
         ),
       ),
     );
@@ -97,6 +104,7 @@ class CallTile extends StatefulWidget {
     this.expanded = false,
     this.onDialPressed,
     this.dialIcon,
+    this.dialIsVideo = false,
     this.gesturesEnabled = true,
     this.dismissible = false,
     this.dismissibleObject,
@@ -128,6 +136,11 @@ class CallTile extends StatefulWidget {
   final bool expanded;
   final VoidCallback? onDialPressed;
   final IconData? dialIcon;
+
+  /// Whether the trailing dial shortcut places a video call; drives both the
+  /// spoken name of the button and which inline call action it supersedes.
+  final bool dialIsVideo;
+
   final bool gesturesEnabled;
 
   final bool dismissible;
@@ -210,7 +223,7 @@ class _CallTileState extends State<CallTile> {
     // duplicate it; the dial button stays visible and keeps that action.
     final suppressedInlineIcon = widget.onDialPressed == null
         ? null
-        : (widget.dialIcon == Icons.videocam ? Icons.videocam_outlined : Icons.call_outlined);
+        : (widget.dialIsVideo ? Icons.videocam_outlined : Icons.call_outlined);
     final primaryActions = actions
         .where((action) => action.primary)
         .where((action) => !(widget.expanded && action.icon == suppressedInlineIcon))
@@ -301,9 +314,15 @@ class _CallTileState extends State<CallTile> {
                     const SizedBox(width: 4),
                     if (widget.gesturesEnabled)
                       if (widget.onDialPressed != null)
-                        IconButton(
-                          onPressed: widget.onDialPressed,
-                          icon: Icon(widget.dialIcon ?? Icons.call, color: colorScheme.primary),
+                        SemanticAction(
+                          label: widget.dialIsVideo
+                              ? context.l10n.callTile_SemanticsLabel_videoCall(widget.name)
+                              : context.l10n.callTile_SemanticsLabel_call(widget.name),
+                          identifier: callTileDialId,
+                          child: IconButton(
+                            onPressed: widget.onDialPressed,
+                            icon: Icon(widget.dialIcon ?? Icons.call, color: colorScheme.primary),
+                          ),
                         )
                       else if (actions.isNotEmpty)
                         TileMenuButton(onTap: () => showMenuPopup()),

@@ -83,45 +83,6 @@ class ButtonWidgetConfig with _$ButtonWidgetConfig {
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class ElevatedButtonWidgetConfig with _$ElevatedButtonWidgetConfig {
-  const ElevatedButtonWidgetConfig({
-    this.backgroundColor,
-    this.foregroundColor,
-    this.textColor,
-    this.iconColor,
-    this.disabledIconColor,
-    this.disabledBackgroundColor,
-    this.disabledForegroundColor,
-  });
-
-  @override
-  final String? backgroundColor;
-
-  @override
-  final String? foregroundColor;
-
-  @override
-  final String? textColor;
-
-  @override
-  final String? iconColor;
-
-  @override
-  final String? disabledIconColor;
-
-  @override
-  final String? disabledBackgroundColor;
-
-  @override
-  final String? disabledForegroundColor;
-
-  factory ElevatedButtonWidgetConfig.fromJson(Map<String, Object?> json) => _$ElevatedButtonWidgetConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$ElevatedButtonWidgetConfigToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
 class GroupWidgetConfig with _$GroupWidgetConfig {
   const GroupWidgetConfig({
     this.groupTitleListTile = const GroupTitleListTileWidgetConfig(),

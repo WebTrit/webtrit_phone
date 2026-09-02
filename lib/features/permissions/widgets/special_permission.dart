@@ -19,14 +19,18 @@ class SpecialPermission extends StatelessWidget {
   final CallkeepSpecialPermissions specialPermissions;
 
   final VoidCallback onGoToAppSettings;
-  final VoidCallback? onPop;
+  final VoidCallback onPop;
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
+      // Popping is routed through [onPop] instead of the navigator so that leaving
+      // the screen with the system back gesture counts as the same deliberate
+      // "later" as the button does.
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) return;
+        onPop();
       },
       child: switch (specialPermissions) {
         CallkeepSpecialPermissions.fullScreenIntent => PermissionTips(
@@ -34,6 +38,8 @@ class SpecialPermission extends StatelessWidget {
           instruction: specialPermissions.tips(context),
           onGoToAppSettings: onGoToAppSettings,
           onPop: onPop,
+          note: context.l10n.permission_fullScreenNotification_Text_optional,
+          dismissLabel: context.l10n.permission_Button_notNow,
         ),
         // backgroundActivityStart is surfaced through ManufacturerPermission, not
         // this pipeline (it is not in AppPermissions._specialPermissions), so this

@@ -41,77 +41,88 @@ class LoginOtpSigninVerifyScreen extends StatelessWidget {
                   : context.l10n.login_Text_otpSigninVerifyPostDescriptionFromEmail(otpFromEmail)
             : '';
 
-        return Container(
-          padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-          color: themeData.scaffoldBackgroundColor,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (otpSigninVerifyPreDescriptionText.isNotEmpty) ...[
-                Description(text: otpSigninVerifyPreDescriptionText),
-                const SizedBox(height: kInset / 2),
-              ],
-              TextFormField(
-                key: otpVerifyInputKey,
-                enabled: !state.processing,
-                initialValue: state.otpSigninCodeInput.value,
-                decoration: InputDecoration(
-                  labelText: context.l10n.login_TextFieldLabelText_otpSigninCode,
-                  helperText: '', // reserve space for validator message
-                  errorText: state.otpSigninCodeInput.displayError?.l10n(context),
-                  errorMaxLines: 3,
-                ),
-                keyboardType: TextInputType.number,
-                autofillHints: const [AutofillHints.oneTimeCode, AutofillHints.password],
-                onChanged: context.read<LoginCubit>().otpSigninCodeInputChanged,
-                onFieldSubmitted: !state.otpSigninCodeInput.isValid ? null : (_) => _onSubmitted(context),
-              ),
-              if (otpSigninVerifyPostDescriptionText.isNotEmpty) ...[
-                const SizedBox(height: kInset / 8),
-                Description(text: otpSigninVerifyPostDescriptionText),
-              ],
-              const Spacer(),
-              const SizedBox(height: kInset),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CountDownBuilder(
-                    start: state.otpSigninSessionOtpProvisionalWithDateTime!.$2,
-                    interval: countdownRepeatIntervalSeconds,
-                    builder: (context, seconds) {
-                      if (seconds == 0) {
-                        return OutlinedButton(
-                          onPressed: state.processing ? null : () => _onRepeat(context),
-                          style: outlinedButtonStyles?.neutral,
-                          child: Text(context.l10n.login_Button_otpSigninVerifyRepeat),
-                        );
-                      } else {
-                        return OutlinedButton(
-                          onPressed: null,
-                          style: outlinedButtonStyles?.neutral,
-                          child: Text(context.l10n.login_Button_otpSigninVerifyRepeatInterval(seconds)),
-                        );
-                      }
-                    },
-                  ),
-                  const SizedBox(height: kInset / 4),
-                  ElevatedButton(
-                    key: otpVerifyButtonKey,
-                    onPressed: state.processing || !state.otpSigninCodeInput.isValid
-                        ? null
-                        : () => _onSubmitted(context),
-                    style: elevatedButtonStyles?.primary,
-                    child: !state.processing
-                        ? Text(context.l10n.login_Button_otpSigninVerifyProceed)
-                        : SizedCircularProgressIndicator(
-                            size: 16,
-                            strokeWidth: 2,
-                            color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                          ),
-                  ),
+        return SemanticId(
+          identifier: loginOtpVerifyScreenId,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+            color: themeData.scaffoldBackgroundColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (otpSigninVerifyPreDescriptionText.isNotEmpty) ...[
+                  Description(text: otpSigninVerifyPreDescriptionText),
+                  const SizedBox(height: kInset / 2),
                 ],
-              ),
-            ],
+                SemanticId(
+                  identifier: otpVerifyInputId,
+                  child: TextFormField(
+                    key: otpVerifyInputKey,
+                    enabled: !state.processing,
+                    initialValue: state.otpSigninCodeInput.value,
+                    decoration: InputDecoration(
+                      labelText: context.l10n.login_TextFieldLabelText_otpSigninCode,
+                      helperText: '', // reserve space for validator message
+                      errorText: state.otpSigninCodeInput.displayError?.l10n(context),
+                      errorMaxLines: 3,
+                    ),
+                    keyboardType: TextInputType.number,
+                    autofillHints: const [AutofillHints.oneTimeCode, AutofillHints.password],
+                    onChanged: context.read<LoginCubit>().otpSigninCodeInputChanged,
+                    onFieldSubmitted: !state.otpSigninCodeInput.isValid ? null : (_) => _onSubmitted(context),
+                  ),
+                ),
+                if (otpSigninVerifyPostDescriptionText.isNotEmpty) ...[
+                  const SizedBox(height: kInset / 8),
+                  Description(text: otpSigninVerifyPostDescriptionText),
+                ],
+                const Spacer(),
+                const SizedBox(height: kInset),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CountDownBuilder(
+                      start: state.otpSigninSessionOtpProvisionalWithDateTime!.$2,
+                      interval: countdownRepeatIntervalSeconds,
+                      builder: (context, seconds) {
+                        final waiting = seconds > 0;
+
+                        return SemanticAction(
+                          identifier: otpVerifyResendButtonId,
+                          child: OutlinedButton(
+                            onPressed: waiting || state.processing ? null : () => _onRepeat(context),
+                            style: outlinedButtonStyles?.neutral,
+                            child: Text(
+                              waiting
+                                  ? context.l10n.login_Button_otpSigninVerifyRepeatInterval(seconds)
+                                  : context.l10n.login_Button_otpSigninVerifyRepeat,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: kInset / 4),
+                    SemanticAction(
+                      identifier: otpVerifyButtonId,
+                      child: ElevatedButton(
+                        key: otpVerifyButtonKey,
+                        onPressed: state.processing || !state.otpSigninCodeInput.isValid
+                            ? null
+                            : () => _onSubmitted(context),
+                        style: elevatedButtonStyles?.primary,
+                        child: !state.processing
+                            ? Text(context.l10n.login_Button_otpSigninVerifyProceed)
+                            : SizedCircularProgressIndicator(
+                                size: 16,
+                                strokeWidth: 2,
+                                color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                semanticsLabel: context.l10n.common_SemanticsLabel_loading,
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

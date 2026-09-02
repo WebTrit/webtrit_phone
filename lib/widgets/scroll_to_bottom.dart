@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/semantic_action.dart';
+
 class ScrollToBottomOverlay extends StatelessWidget {
   const ScrollToBottomOverlay({
     required this.child,
@@ -57,11 +61,15 @@ class ScrollToBottomButton extends StatelessWidget {
                   ],
                 ),
                 margin: const EdgeInsets.all(8),
-                child: IconButton(
-                  key: const Key('scrollToBottomButton'),
-                  onPressed: onTap,
-                  icon: const Icon(Icons.expand_circle_down_outlined),
-                  padding: const EdgeInsets.all(0),
+                child: SemanticAction(
+                  label: context.l10n.common_SemanticsLabel_scrollToBottom,
+                  identifier: scrollToBottomId,
+                  child: IconButton(
+                    key: scrollToBottomKey,
+                    onPressed: onTap,
+                    icon: const Icon(Icons.expand_circle_down_outlined),
+                    padding: const EdgeInsets.all(0),
+                  ),
                 ),
               )
             : const SizedBox(),

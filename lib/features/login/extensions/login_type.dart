@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 
@@ -30,12 +31,16 @@ extension LoginTypePageRouteInfo on LoginType {
 }
 
 extension LoginTypeLoginSegmentKey on LoginType {
-  Key toLoginSegmentKey() {
+  /// Derived from the id so the widget-test anchor and the accessibility one
+  /// cannot drift apart, the way two hand-written switches would.
+  Key toLoginSegmentKey() => Key(toLoginSegmentId());
+
+  String toLoginSegmentId() {
     return switch (this) {
-      LoginType.otpSignin => const Key('loginTypeSegment_otpSignin'),
-      LoginType.passwordSignin => const Key('loginTypeSegment_passwordSignin'),
-      LoginType.signup => const Key('loginTypeSegment_signup'),
-      LoginType.qrSignin => const Key('loginTypeSegment_qrSignin'),
+      LoginType.otpSignin => loginTypeSegmentOtpSigninId,
+      LoginType.passwordSignin => loginTypeSegmentPasswordSigninId,
+      LoginType.signup => loginTypeSegmentSignupId,
+      LoginType.qrSignin => loginTypeSegmentQrSigninId,
     };
   }
 }

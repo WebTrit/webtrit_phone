@@ -8,9 +8,12 @@ import 'package:drift/drift.dart';
 import 'package:drift/isolate.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+
+import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/app/app.dart';
 import 'package:webtrit_phone/bootstrap.dart';
@@ -183,6 +186,23 @@ class RootApp extends StatelessWidget {
         Provider<AppMetadataProvider>(create: (_) => instanceRegistry.get()),
         Provider<WebtritApiClientFactory>(create: (_) => instanceRegistry.get()),
         Provider<PushEnvironment>(create: (_) => instanceRegistry.get()),
+        // Platform-backed collaborators of the main shell, so the shell reads
+        // them like every other dependency instead of constructing them
+        // inline. The substitution seam this opens is for widget tests that
+        // pump the shell under their own providers; a host embedding RootApp
+        // still gets the production set.
+        Provider<Callkeep>(create: (_) => instanceRegistry.get()),
+        Provider<CallkeepConnections>(create: (_) => instanceRegistry.get()),
+        // Const and stateless, so no bootstrap registration needed (the
+        // AppCompatibilityResolver precedent above).
+        Provider<SignalingServiceFactory>(create: (_) => const SignalingServiceFactory()),
+        // Not in the bootstrap registry: resolving the messaging singleton
+        // requires the default Firebase app, so it stays lazy and resolves on
+        // first read - the moment the direct call used to happen. Note the
+        // provider caches a throwing create for its lifetime, so this relies
+        // on both hosts initializing Firebase before the shell mounts (both
+        // do today).
+        Provider<FirebaseMessaging>(create: (_) => FirebaseMessaging.instance),
         // Provides a lifecycle-aware holder that attaches a WidgetsBindingObserver and owns the DB instance.
         // This provider may stay lazy; it will be created when `AppDatabase` is first requested.
         Provider<AppDatabaseLifecycleHolder>(
@@ -212,6 +232,7 @@ class RootApp extends StatelessWidget {
           final iceSettingsRepository = IceSettingsRepositoryPrefsImpl(prefs);
           final incomingCallTypeRepository = IncomingCallTypeRepositoryPrefsImpl(prefs);
           final peerConnectionSettingsRepository = PeerConnectionSettingsRepositoryPrefsImpl(prefs);
+          final specialPermissionsRepository = SpecialPermissionsRepositoryPrefsImpl(prefs);
           final videoCapturingSettingsRepository = VideoCapturingSettingsRepositoryPrefsImpl(prefs);
           final encodingSettingsRepository = EncodingSettingsRepositoryPrefsImpl(prefs);
           final localeRepository = LocaleRepositoryPrefsImpl(prefs);
@@ -250,6 +271,7 @@ class RootApp extends StatelessWidget {
               RepositoryProvider<IceSettingsRepository>.value(value: iceSettingsRepository),
               RepositoryProvider<IncomingCallTypeRepository>.value(value: incomingCallTypeRepository),
               RepositoryProvider<PeerConnectionSettingsRepository>.value(value: peerConnectionSettingsRepository),
+              RepositoryProvider<SpecialPermissionsRepository>.value(value: specialPermissionsRepository),
               RepositoryProvider<VideoCapturingSettingsRepository>.value(value: videoCapturingSettingsRepository),
               RepositoryProvider<EncodingSettingsRepository>.value(value: encodingSettingsRepository),
               RepositoryProvider<LocaleRepository>.value(value: localeRepository),

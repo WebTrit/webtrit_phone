@@ -13,6 +13,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'La tua password di self-care è scaduta. Ti preghiamo di aggiornarla utilizzando il self-care.\nFino a quando la password non sarà cambiata, l\'accesso al servizio sarà limitato.';
 
   @override
+  String get actionpad_SemanticsLabel_backspace => 'Cancella';
+
+  @override
   String agoTicker_daysAgo(int days) {
     String _temp0 = intl.Intl.pluralLogic(
       days,
@@ -122,6 +125,52 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get callTileActions_more => 'Altro';
+
+  @override
+  String get call_SemanticsLabel_hideControls => 'Nascondi i comandi della chiamata';
+
+  @override
+  String get call_SemanticsLabel_showControls => 'Mostra i comandi della chiamata';
+
+  @override
+  String get keypad_SemanticsLabel_number => 'Numero di telefono';
+
+  @override
+  String get keypad_SemanticsAction_paste => 'Incolla un numero';
+
+  @override
+  String get callCameraPreview_SemanticsLabel_switchCamera => 'Cambia fotocamera';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveTopLeft => 'Sposta in alto a sinistra';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveTopRight => 'Sposta in alto a destra';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleLeft => 'Sposta a sinistra al centro';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveMiddleRight => 'Sposta a destra al centro';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomLeft => 'Sposta in basso a sinistra';
+
+  @override
+  String get callThumbnail_SemanticsAction_moveBottomRight => 'Sposta in basso a destra';
+
+  @override
+  String get callThumbnail_SemanticsLabel_returnToCall => 'Torna alla chiamata';
+
+  @override
+  String callTile_SemanticsLabel_call(String name) {
+    return 'Chiama $name';
+  }
+
+  @override
+  String callTile_SemanticsLabel_videoCall(String name) {
+    return 'Videochiamata a $name';
+  }
 
   @override
   String get call_CallActionsTooltip_accept => 'Accetta chiamata';
@@ -347,6 +396,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Per riprendere a effettuare chiamate, è necessario riavviare il telefono. Questo risolverà un errore temporaneo di sistema.';
 
   @override
+  String get callStatus_serviceUnavailable => 'Servizio temporaneamente non disponibile';
+
+  @override
   String get call_SystemErrorDialog_title => 'Errore di sistema';
 
   @override
@@ -371,6 +423,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'Nessuna chiamata recente';
 
   @override
+  String get common_SemanticsLabel_loading => 'Caricamento';
+
+  @override
   String get common_noInternetConnection_message =>
       'Sembra che tu non sia connesso a Internet. Controlla la tua connessione e riprova.';
 
@@ -382,6 +437,31 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get common_problemWithLoadingPage => 'Si è verificato un problema durante il caricamento della pagina.';
+
+  @override
+  String contact_SemanticsLabel_addFavorite(String number) {
+    return 'Aggiungi $number ai preferiti';
+  }
+
+  @override
+  String contact_SemanticsLabel_optionInfo(String option) {
+    return 'Che cosa significa $option';
+  }
+
+  @override
+  String contact_SemanticsLabel_removeFavorite(String number) {
+    return 'Rimuovi $number dai preferiti';
+  }
+
+  @override
+  String contact_SemanticsLabel_sendEmail(String address) {
+    return 'Invia un\'email a $address';
+  }
+
+  @override
+  String contact_SemanticsLabel_transfer(String number) {
+    return 'Trasferisci la chiamata corrente a $number';
+  }
 
   @override
   String get contacts_agreement_button_text => 'Continue';
@@ -622,6 +702,22 @@ class AppLocalizationsIt extends AppLocalizations {
       'Questo dispositivo non supporta il framework di chiamata di sistema (Telecom), quindi le chiamate in arrivo usano un servizio in background limitato. Le chiamate possono essere ritardate o perse quando il sistema limita le app in background. In questa modalità non è disponibile la selezione dell\'auricolare Bluetooth o cablato.';
 
   @override
+  String get diagnostic_fullScreenIntent_tile_title => 'Chiamate a schermo intero';
+
+  @override
+  String get diagnostic_fullScreenIntent_navigate_section => 'Vai alla sezione Notifiche a schermo intero';
+
+  @override
+  String get diagnostic_fullScreenIntent_groupTitle => 'Chiamate sulla schermata di blocco';
+
+  @override
+  String get diagnostic_fullScreenIntent_caption => 'Le chiamate arrivano come notifica, non a schermo intero';
+
+  @override
+  String get diagnostic_fullScreenIntent_description =>
+      'Consente a una chiamata in arrivo di aprirsi a schermo intero sulla schermata di blocco e di essere accettata da li. Senza questa autorizzazione la chiamata arriva come notifica e, per rispondere da una schermata di blocco protetta da PIN, sequenza o impronta, viene chiesto di sbloccare il telefono.';
+
+  @override
   String get diagnostic_permission_camera_description =>
       'Questa app richiede il permesso di accedere alla fotocamera per effettuare videochiamate.';
 
@@ -858,6 +954,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get favorites_DeleteConfirmDialog_title => 'Confermare l\'eliminazione';
 
   @override
+  String get favorites_SemanticsLabel_reorderDone => 'Termina il riordino';
+
+  @override
+  String get favorites_SemanticsLabel_reorder => 'Riordina i preferiti';
+
+  @override
   String favorites_SnackBar_deleted(String name) {
     return '$name cancellato';
   }
@@ -993,6 +1095,12 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get login_RequestFailureUnconfiguredBundleIdError =>
       'Errore di configurazione del backend dell\'app - avvisare il proprio fornitore di servizi';
+
+  @override
+  String get login_SemanticsLabel_hidePassword => 'Nascondi la password';
+
+  @override
+  String get login_SemanticsLabel_showPassword => 'Mostra la password';
 
   @override
   String get login_SupportedLoginTypeMissedExceptionError =>
@@ -1658,7 +1766,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get numberActions_viewContact => 'Visualizza contatto';
 
   @override
+  String get permission_Button_notNow => 'Non ora';
+
+  @override
   String get permission_Button_request => 'Continua';
+
+  @override
+  String get permission_fullScreenNotification_Text_optional =>
+      'Puoi continuare senza. Le chiamate in arrivo arriveranno come notifica invece di aprirsi a schermo intero e, se il telefono e protetto da PIN, sequenza o impronta, dovrai sbloccarlo per rispondere dalla schermata di blocco.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
@@ -2014,11 +2129,103 @@ class AppLocalizationsIt extends AppLocalizations {
   String get sessionStatus_AppBar_connecting => 'Connessione in corso...';
 
   @override
+  String get sessionStatus_AppBar_serviceUnavailable => 'Servizio temporaneamente non disponibile';
+
+  @override
   String get sessionStatus_pushNotificationServiceProblem =>
       'Problema con la configurazione del servizio di notifiche push';
 
   @override
+  String get sessionStatus_subtitle_connectivityNone => 'Controlla Wi-Fi o dati mobili';
+
+  @override
+  String get sessionStatus_subtitle_diagnostic => 'Tocca per la diagnostica';
+
+  @override
+  String get sessionStatus_subtitle_inProgress => 'Connessione al server...';
+
+  @override
+  String get sessionStatus_subtitle_ready => 'Le chiamate raggiungono questo account';
+
+  @override
+  String get sessionStatus_subtitle_registrationOff => 'Registrazione disattivata';
+
+  @override
+  String get sessionStatus_subtitle_serviceUnavailable => 'La connessione è a posto, tocca per i dettagli';
+
+  @override
   String get session_Teardown_progressText => 'Disconnessione in corso...';
+
+  @override
+  String get sessions_AppBar_title => 'Sessioni attive';
+
+  @override
+  String get sessions_AppType_android => 'App Android';
+
+  @override
+  String get sessions_AppType_ios => 'App iOS';
+
+  @override
+  String get sessions_AppType_linux => 'App Linux';
+
+  @override
+  String get sessions_AppType_macos => 'App macOS';
+
+  @override
+  String get sessions_AppType_smart => 'Dispositivo smart';
+
+  @override
+  String get sessions_AppType_unknown => 'Dispositivo sconosciuto';
+
+  @override
+  String get sessions_AppType_web => 'App web';
+
+  @override
+  String get sessions_AppType_windows => 'App Windows';
+
+  @override
+  String get sessions_Button_retry => 'Riprova';
+
+  @override
+  String get sessions_Button_revokeAllOthers => 'Disconnetti le altre sessioni';
+
+  @override
+  String get sessions_Placeholder_empty => 'Nessuna sessione attiva';
+
+  @override
+  String get sessions_Placeholder_failure => 'Impossibile caricare le sessioni attive';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_content =>
+      'Gli altri dispositivi collegati a questo account verranno disconnessi.';
+
+  @override
+  String get sessions_RevokeAllConfirmDialog_title => 'Disconnettere le altre sessioni?';
+
+  @override
+  String get sessions_RevokeConfirmDialog_content => 'Questo dispositivo verra\' disconnesso dall\'account.';
+
+  @override
+  String get sessions_RevokeConfirmDialog_title => 'Disconnettere questa sessione?';
+
+  @override
+  String get sessions_SnackBar_revokeFailed => 'Impossibile disconnettere la sessione';
+
+  @override
+  String sessions_Tile_created(String time) {
+    return 'Accesso il $time';
+  }
+
+  @override
+  String get sessions_Tile_currentSession => 'Questo dispositivo';
+
+  @override
+  String sessions_Tile_lastActivity(String time) {
+    return 'Ultimo utilizzo $time';
+  }
+
+  @override
+  String get sessions_Tile_revokeTooltip => 'Disconnetti';
 
   @override
   String get settings_AboutText_ApplicationEmbeddedLinks => 'Collegamenti incorporati dell\'applicazione';
@@ -2412,6 +2619,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_iceSettings_Section_trfilter_title => 'Protocollo di trasporto';
 
   @override
+  String get settings_ListViewTileSubtitle_registeredNeedsConnection => 'Richiede connessione';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOff => 'Chiamate in arrivo rifiutate';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredOn => 'L\'account riceve le chiamate';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredUpdating => 'Aggiornamento...';
+
+  @override
+  String get settings_ListViewTileSubtitle_registeredWaitingForConnection => 'In attesa di connessione...';
+
+  @override
   String get settings_ListViewTileTitle_about => 'Riguardo a';
 
   @override
@@ -2458,6 +2680,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_ListViewTileTitle_self_config => 'Self-config pagina';
+
+  @override
+  String get settings_ListViewTileTitle_sessions => 'Sessioni';
 
   @override
   String get settings_ListViewTileTitle_settings => 'IMPOSTAZIONI';
@@ -2510,6 +2735,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_network_smsFallback_toggle => 'SMS come canale di riserva';
+
+  @override
+  String get settings_registerStatusSnackBar_requestFailed => 'Impossibile raggiungere il server - riprova';
+
+  @override
+  String get settings_registerStatusSnackBar_unavailable =>
+      'Nessuna connessione al server - impossibile modificare ora';
 
   @override
   String get settings_videoCapturing_Section_framerate_prefix => 'cornici: ';
@@ -2859,6 +3091,18 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get voicemail_Label_retry => 'Riprova';
+
+  @override
+  String get voicemail_SemanticsLabel_loading => 'Caricamento';
+
+  @override
+  String get voicemail_SemanticsLabel_moreActions => 'Altro';
+
+  @override
+  String get voicemail_SemanticsLabel_pause => 'Pausa';
+
+  @override
+  String get voicemail_SemanticsLabel_play => 'Riproduci';
 
   @override
   String get voicemail_Snackbar_notConfigured =>
@@ -3235,4 +3479,64 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get devTools_signalingService_simulateKill_cancel => 'Cancel';
+
+  @override
+  String get common_SemanticsLabel_refresh => 'Aggiorna';
+
+  @override
+  String get common_SemanticsLabel_scrollToBottom => 'Scorri in fondo';
+
+  @override
+  String get common_SemanticsLabel_scrollToTop => 'Scorri in cima';
+
+  @override
+  String get contacts_SemanticsLabel_clearSearch => 'Cancella la ricerca';
+
+  @override
+  String get messaging_SemanticsLabel_newChat => 'Start a new chat';
+
+  @override
+  String get messaging_SemanticsLabel_newSms => 'Write a new message';
+
+  @override
+  String get messaging_SemanticsLabel_call => 'Call';
+
+  @override
+  String get messaging_SemanticsLabel_videoCall => 'Video call';
+
+  @override
+  String get messaging_SemanticsLabel_message => 'Message';
+
+  @override
+  String get messaging_SemanticsLabel_send => 'Send';
+
+  @override
+  String get messaging_SemanticsLabel_conversationDetails => 'Conversation details';
+
+  @override
+  String get messaging_SemanticsLabel_conversationOptions => 'Conversation options';
+
+  @override
+  String get messaging_SemanticsLabel_replying => 'Replying to';
+
+  @override
+  String get messaging_SemanticsLabel_editing => 'Editing';
+
+  @override
+  String get messaging_SemanticsLabel_forwarding => 'Forwarding';
+
+  @override
+  String get messaging_SemanticsLabel_stopReplying => 'Stop replying';
+
+  @override
+  String get messaging_SemanticsLabel_stopEditing => 'Stop editing';
+
+  @override
+  String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
+
+  @override
+  String get messaging_SemanticsLabel_sendForward => 'Forward the message';
+
+  @override
+  String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
 }

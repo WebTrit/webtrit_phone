@@ -4,6 +4,10 @@
   "@account_selfCarePasswordExpired_message": {
     "description": "Shown when a web self-care password is expired. By default, such passwords may be created in an expired state or set to expire after a period of time. The user must log in to the self-care portal and set a new password. Until refreshed, access to related services is restricted."
   },
+  "actionpad_SemanticsLabel_backspace": "ลบ",
+  "@actionpad_SemanticsLabel_backspace": {
+    "description": "Accessibility name of the keypad backspace button."
+  },
   "agoTicker_daysAgo": "{days, plural, zero{} one{{days} วันที่แล้ว} other{{days} วันที่แล้ว}}",
   "@agoTicker_daysAgo": {
     "description": "Elapsed time relative to now, shown in days.",
@@ -86,6 +90,48 @@
   "callTileActions_more": "เพิ่มเติม",
   "@callTileActions_more": {
     "description": "Label of the expanded call tile action that opens the full actions menu."
+  },
+  "call_SemanticsLabel_hideControls": "ซ่อนตัวควบคุมการโทร",
+  "@call_SemanticsLabel_hideControls": {},
+  "call_SemanticsLabel_showControls": "แสดงตัวควบคุมการโทร",
+  "@call_SemanticsLabel_showControls": {},
+  "keypad_SemanticsLabel_number": "หมายเลขโทรศัพท์",
+  "@keypad_SemanticsLabel_number": {},
+  "keypad_SemanticsAction_paste": "วางหมายเลข",
+  "@keypad_SemanticsAction_paste": {},
+  "callCameraPreview_SemanticsLabel_switchCamera": "สลับกล้อง",
+  "@callCameraPreview_SemanticsLabel_switchCamera": {},
+  "callThumbnail_SemanticsAction_moveTopLeft": "ย้ายไปมุมบนซ้าย",
+  "@callThumbnail_SemanticsAction_moveTopLeft": {},
+  "callThumbnail_SemanticsAction_moveTopRight": "ย้ายไปมุมบนขวา",
+  "@callThumbnail_SemanticsAction_moveTopRight": {},
+  "callThumbnail_SemanticsAction_moveMiddleLeft": "ย้ายไปกลางซ้าย",
+  "@callThumbnail_SemanticsAction_moveMiddleLeft": {},
+  "callThumbnail_SemanticsAction_moveMiddleRight": "ย้ายไปกลางขวา",
+  "@callThumbnail_SemanticsAction_moveMiddleRight": {},
+  "callThumbnail_SemanticsAction_moveBottomLeft": "ย้ายไปมุมล่างซ้าย",
+  "@callThumbnail_SemanticsAction_moveBottomLeft": {},
+  "callThumbnail_SemanticsAction_moveBottomRight": "ย้ายไปมุมล่างขวา",
+  "@callThumbnail_SemanticsAction_moveBottomRight": {},
+  "callThumbnail_SemanticsLabel_returnToCall": "กลับไปที่สายสนทนา",
+  "@callThumbnail_SemanticsLabel_returnToCall": {},
+  "callTile_SemanticsLabel_call": "โทรหา {name}",
+  "@callTile_SemanticsLabel_call": {
+    "description": "Accessibility name of the call button in a call history or contact row.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callTile_SemanticsLabel_videoCall": "วิดีโอคอลหา {name}",
+  "@callTile_SemanticsLabel_videoCall": {
+    "description": "Accessibility name of the video call button in a call history or contact row.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "call_CallActionsTooltip_accept": "รับสาย",
   "@call_CallActionsTooltip_accept": {},
@@ -270,6 +316,10 @@
   "callStatus_ready": "เชื่อมต่อสำเร็จแล้ว",
   "@callStatus_ready": {},
   "call_SystemErrorDialog_description": "หากต้องการโทรต่อ จำเป็นต้องรีสตาร์ทโทรศัพท์ ซึ่งจะแก้ไขข้อผิดพลาดชั่วคราวของระบบ",
+  "callStatus_serviceUnavailable": "บริการไม่พร้อมใช้งานชั่วคราว",
+  "@callStatus_serviceUnavailable": {
+    "description": "Shown when the phone system answered the registration attempt and refused to serve it, so the device and its network are working correctly and only the calling service is unavailable. Tell the user the outage is on the service side and expected to be temporary, and that no action on their device will speed it up."
+  },
   "@call_SystemErrorDialog_description": {},
   "call_SystemErrorDialog_title": "ข้อผิดพลาดของระบบ",
   "@call_SystemErrorDialog_title": {},
@@ -295,6 +345,10 @@
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "ไม่มีการโทรล่าสุด",
   "@cdrs_noRecentCalls_message": {},
+  "common_SemanticsLabel_loading": "กำลังโหลด",
+  "@common_SemanticsLabel_loading": {
+    "description": "Accessibility name announced while a screen waits for a request to finish."
+  },
   "common_noInternetConnection_message": "ดูเหมือนว่าคุณไม่ได้เชื่อมต่ออินเทอร์เน็ต กรุณาตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
   "@common_noInternetConnection_message": {},
   "common_noInternetConnection_retryButton": "ลองอีกครั้ง",
@@ -303,6 +357,51 @@
   "@common_noInternetConnection_title": {},
   "common_problemWithLoadingPage": "เกิดปัญหาในการโหลดหน้า",
   "@common_problemWithLoadingPage": {},
+  "contact_SemanticsLabel_addFavorite": "เพิ่ม {number} ในรายการโปรด",
+  "@contact_SemanticsLabel_addFavorite": {
+    "description": "Accessibility name of the star that adds a number of the contact card to favorites.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_optionInfo": "{option} คืออะไร",
+  "@contact_SemanticsLabel_optionInfo": {
+    "description": "Accessibility name of the button that explains an option of the contact card; the caption of the option keeps the two buttons apart.",
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_removeFavorite": "นำ {number} ออกจากรายการโปรด",
+  "@contact_SemanticsLabel_removeFavorite": {
+    "description": "Accessibility name of the star that removes a number of the contact card from favorites.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_sendEmail": "ส่งอีเมลถึง {address}",
+  "@contact_SemanticsLabel_sendEmail": {
+    "description": "Accessibility name of the button that opens the mail app on the address of the contact card.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "contact_SemanticsLabel_transfer": "โอนสายปัจจุบันไปที่ {number}",
+  "@contact_SemanticsLabel_transfer": {
+    "description": "Accessibility name of the transfer shortcut on a number of the contact card; the number is what the call is transferred to.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
   "contacts_agreement_button_text": "ดำเนินการต่อ",
   "@contacts_agreement_button_text": {},
   "contacts_agreement_checkbox_text": "ฉันยินยอมให้แอปเข้าถึงรายชื่อผู้ติดต่อของฉันเพื่อยกระดับประสบการณ์การใช้งาน",
@@ -518,6 +617,16 @@
   "@diagnostic_callingMode_standalone_caption": {},
   "diagnostic_callingMode_standalone_description": "อุปกรณ์นี้ไม่รองรับเฟรมเวิร์กการโทรของระบบ (Telecom) ดังนั้นสายเรียกเข้าจะใช้บริการเบื้องหลังแบบจำกัด สายอาจล่าช้าหรือพลาดเมื่อระบบจำกัดแอปที่ทำงานเบื้องหลัง การเลือกหูฟังบลูทูธหรือแบบมีสายไม่สามารถใช้งานได้ในโหมดนี้",
   "@diagnostic_callingMode_standalone_description": {},
+  "diagnostic_fullScreenIntent_tile_title": "สายเรียกเข้าแบบเต็มหน้าจอ",
+  "@diagnostic_fullScreenIntent_tile_title": {},
+  "diagnostic_fullScreenIntent_navigate_section": "ไปที่ส่วนการแจ้งเตือนแบบเต็มหน้าจอ",
+  "@diagnostic_fullScreenIntent_navigate_section": {},
+  "diagnostic_fullScreenIntent_groupTitle": "สายเรียกเข้าบนหน้าจอล็อก",
+  "@diagnostic_fullScreenIntent_groupTitle": {},
+  "diagnostic_fullScreenIntent_caption": "สายเรียกเข้าจะมาถึงเป็นการแจ้งเตือน ไม่ใช่เต็มหน้าจอ",
+  "@diagnostic_fullScreenIntent_caption": {},
+  "diagnostic_fullScreenIntent_description": "ให้สายเรียกเข้าเปิดแบบเต็มหน้าจอบนหน้าจอล็อกและรับสายได้จากตรงนั้น หากไม่มีสิทธิ์นี้ สายจะมาถึงในรูปแบบการแจ้งเตือน และการรับสายจากหน้าจอล็อกที่ป้องกันด้วย PIN รูปแบบ หรือลายนิ้วมือ จะขอให้ปลดล็อกโทรศัพท์ก่อน",
+  "@diagnostic_fullScreenIntent_description": {},
   "diagnostic_permission_camera_description": "แอปนี้ต้องการสิทธิ์เข้าถึงกล้องเพื่อโทรแบบวิดีโอ",
   "@diagnostic_permission_camera_description": {},
   "diagnostic_permission_camera_title": "กล้อง",
@@ -686,6 +795,14 @@
   "@favorites_DeleteConfirmDialog_content": {},
   "favorites_DeleteConfirmDialog_title": "ยืนยันการลบ",
   "@favorites_DeleteConfirmDialog_title": {},
+  "favorites_SemanticsLabel_reorderDone": "เสร็จสิ้นการจัดเรียง",
+  "@favorites_SemanticsLabel_reorderDone": {
+    "description": "Accessibility name of the same button once rearranging is under way."
+  },
+  "favorites_SemanticsLabel_reorder": "จัดเรียงรายการโปรด",
+  "@favorites_SemanticsLabel_reorder": {
+    "description": "Accessibility name of the button that starts rearranging the favorites."
+  },
   "favorites_SnackBar_deleted": "ลบ {name} แล้ว",
   "@favorites_SnackBar_deleted": {
     "placeholders": {
@@ -847,6 +964,14 @@
   "login_RequestFailureUnconfiguredBundleIdError": "WebTrit Cloud Backend ของคุณไม่รองรับแอปนี้",
   "@login_RequestFailureUnconfiguredBundleIdError": {
     "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
+  },
+  "login_SemanticsLabel_hidePassword": "ซ่อนรหัสผ่าน",
+  "@login_SemanticsLabel_hidePassword": {
+    "description": "Accessibility name of the button that hides the typed password again."
+  },
+  "login_SemanticsLabel_showPassword": "แสดงรหัสผ่าน",
+  "@login_SemanticsLabel_showPassword": {
+    "description": "Accessibility name of the button that reveals the typed password."
   },
   "login_SupportedLoginTypeMissedExceptionError": "WebTrit Cloud Backend ปัจจุบันไม่รองรับประเภทการเข้าสู่ระบบใด ๆ ที่ใช้งานได้กับแอปนี้",
   "@login_SupportedLoginTypeMissedExceptionError": {
@@ -1420,8 +1545,12 @@
   "@numberActions_videoCall": {},
   "numberActions_viewContact": "ดูรายชื่อติดต่อ",
   "@numberActions_viewContact": {},
+  "permission_Button_notNow": "ยังไม่ใช่ตอนนี้",
+  "@permission_Button_notNow": {},
   "permission_Button_request": "ดำเนินการต่อ",
   "@permission_Button_request": {},
+  "permission_fullScreenNotification_Text_optional": "คุณสามารถดำเนินการต่อได้โดยไม่ต้องใช้สิทธิ์นี้ สายเรียกเข้าจะมาถึงในรูปแบบการแจ้งเตือนแทนที่จะเปิดแบบเต็มหน้าจอ และหากโทรศัพท์ล็อกด้วย PIN รูปแบบ หรือลายนิ้วมือ คุณจะต้องปลดล็อกก่อนจึงจะรับสายจากหน้าจอล็อกได้",
+  "@permission_fullScreenNotification_Text_optional": {},
   "permission_manageFullScreenNotificationInstructions_step1": "ไปที่การตั้งค่าของโทรศัพท์",
   "@permission_manageFullScreenNotificationInstructions_step1": {},
   "permission_manageFullScreenNotificationInstructions_step2": "ไปที่ 'Special App Access' ในส่วน 'Apps & notifications'",
@@ -1683,12 +1812,86 @@
   "@sessionStatus_AppBar_connecting": {
     "description": "Shown in the main app bar while the app is actively connecting to backend services."
   },
+  "sessionStatus_AppBar_serviceUnavailable": "บริการไม่พร้อมใช้งานชั่วคราว",
+  "@sessionStatus_AppBar_serviceUnavailable": {
+    "description": "App bar line shown while the phone system is refusing to register the account. Keep it short: it shares the bar with a progress indicator and is truncated on narrow screens."
+  },
   "sessionStatus_pushNotificationServiceProblem": "เกิดปัญหากับการตั้งค่าบริการ push notification",
   "@sessionStatus_pushNotificationServiceProblem": {},
+  "sessionStatus_subtitle_connectivityNone": "ตรวจสอบ Wi-Fi หรือเน็ตมือถือ",
+  "@sessionStatus_subtitle_connectivityNone": {},
+  "sessionStatus_subtitle_diagnostic": "แตะเพื่อวินิจฉัย",
+  "@sessionStatus_subtitle_diagnostic": {},
+  "sessionStatus_subtitle_inProgress": "กำลังเชื่อมต่อกับเซิร์ฟเวอร์...",
+  "@sessionStatus_subtitle_inProgress": {},
+  "sessionStatus_subtitle_ready": "สายเรียกเข้าถึงบัญชีนี้ได้",
+  "@sessionStatus_subtitle_ready": {},
+  "sessionStatus_subtitle_registrationOff": "ปิดการลงทะเบียนแล้ว",
+  "@sessionStatus_subtitle_registrationOff": {},
+  "sessionStatus_subtitle_serviceUnavailable": "การเชื่อมต่อของคุณปกติ แตะเพื่อดูรายละเอียด",
+  "@sessionStatus_subtitle_serviceUnavailable": {
+    "description": "One-line explanation under the service-unavailable status. Reassures the user that their internet connection is not the cause, and points to the diagnostics screen for details."
+  },
   "session_Teardown_progressText": "กำลังออกจากระบบ...",
   "@session_Teardown_progressText": {
     "description": "Status message displayed while the application is performing cleanup during the logout process."
   },
+  "sessions_AppBar_title": "เซสชันที่ใช้งานอยู่",
+  "@sessions_AppBar_title": {},
+  "sessions_AppType_android": "แอป Android",
+  "@sessions_AppType_android": {},
+  "sessions_AppType_ios": "แอป iOS",
+  "@sessions_AppType_ios": {},
+  "sessions_AppType_linux": "แอป Linux",
+  "@sessions_AppType_linux": {},
+  "sessions_AppType_macos": "แอป macOS",
+  "@sessions_AppType_macos": {},
+  "sessions_AppType_smart": "อุปกรณ์สมาร์ท",
+  "@sessions_AppType_smart": {},
+  "sessions_AppType_unknown": "อุปกรณ์ที่ไม่รู้จัก",
+  "@sessions_AppType_unknown": {},
+  "sessions_AppType_web": "เว็บแอป",
+  "@sessions_AppType_web": {},
+  "sessions_AppType_windows": "แอป Windows",
+  "@sessions_AppType_windows": {},
+  "sessions_Button_retry": "ลองอีกครั้ง",
+  "@sessions_Button_retry": {},
+  "sessions_Button_revokeAllOthers": "ออกจากระบบเซสชันอื่น",
+  "@sessions_Button_revokeAllOthers": {},
+  "sessions_Placeholder_empty": "ไม่มีเซสชันที่ใช้งานอยู่",
+  "@sessions_Placeholder_empty": {},
+  "sessions_Placeholder_failure": "ไม่สามารถโหลดเซสชันที่ใช้งานอยู่ได้",
+  "@sessions_Placeholder_failure": {},
+  "sessions_RevokeAllConfirmDialog_content": "อุปกรณ์อื่นที่ลงชื่อเข้าใช้ด้วยบัญชีนี้จะถูกออกจากระบบ",
+  "@sessions_RevokeAllConfirmDialog_content": {},
+  "sessions_RevokeAllConfirmDialog_title": "ออกจากระบบเซสชันอื่นหรือไม่",
+  "@sessions_RevokeAllConfirmDialog_title": {},
+  "sessions_RevokeConfirmDialog_content": "อุปกรณ์นี้จะถูกออกจากระบบของบัญชี",
+  "@sessions_RevokeConfirmDialog_content": {},
+  "sessions_RevokeConfirmDialog_title": "ออกจากระบบเซสชันนี้หรือไม่",
+  "@sessions_RevokeConfirmDialog_title": {},
+  "sessions_SnackBar_revokeFailed": "ไม่สามารถออกจากระบบเซสชันได้",
+  "@sessions_SnackBar_revokeFailed": {},
+  "sessions_Tile_created": "ลงชื่อเข้าใช้ {time}",
+  "@sessions_Tile_created": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_currentSession": "อุปกรณ์นี้",
+  "@sessions_Tile_currentSession": {},
+  "sessions_Tile_lastActivity": "ใช้ล่าสุด {time}",
+  "@sessions_Tile_lastActivity": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessions_Tile_revokeTooltip": "ออกจากระบบ",
+  "@sessions_Tile_revokeTooltip": {},
   "settings_AboutText_ApplicationEmbeddedLinks": "ลิงก์ที่ฝังในแอปพลิเคชัน",
   "@settings_AboutText_ApplicationEmbeddedLinks": {},
   "settings_AboutText_ThirdPartyLicenses": "ใบอนุญาตของบุคคลที่สาม",
@@ -1933,6 +2136,16 @@
   "@settings_iceSettings_Section_trfilter_skipUdp": {},
   "settings_iceSettings_Section_trfilter_title": "โปรโตคอลการขนส่ง",
   "@settings_iceSettings_Section_trfilter_title": {},
+  "settings_ListViewTileSubtitle_registeredNeedsConnection": "ต้องมีการเชื่อมต่อ",
+  "@settings_ListViewTileSubtitle_registeredNeedsConnection": {},
+  "settings_ListViewTileSubtitle_registeredOff": "สายเรียกเข้าจะถูกปฏิเสธ",
+  "@settings_ListViewTileSubtitle_registeredOff": {},
+  "settings_ListViewTileSubtitle_registeredOn": "บัญชีรับสายได้",
+  "@settings_ListViewTileSubtitle_registeredOn": {},
+  "settings_ListViewTileSubtitle_registeredUpdating": "กำลังอัปเดต...",
+  "@settings_ListViewTileSubtitle_registeredUpdating": {},
+  "settings_ListViewTileSubtitle_registeredWaitingForConnection": "กำลังรอการเชื่อมต่อ...",
+  "@settings_ListViewTileSubtitle_registeredWaitingForConnection": {},
   "settings_ListViewTileTitle_about": "เกี่ยวกับ",
   "@settings_ListViewTileTitle_about": {},
   "settings_ListViewTileTitle_accountDelete": "ลบบัญชี",
@@ -1965,6 +2178,8 @@
   "@settings_ListViewTileTitle_registered": {},
   "settings_ListViewTileTitle_self_config": "หน้าตั้งค่าด้วยตนเอง",
   "@settings_ListViewTileTitle_self_config": {},
+  "settings_ListViewTileTitle_sessions": "เซสชัน",
+  "@settings_ListViewTileTitle_sessions": {},
   "settings_ListViewTileTitle_settings": "การตั้งค่า",
   "@settings_ListViewTileTitle_settings": {},
   "settings_ListViewTileTitle_termsConditions": "ข้อกำหนดและเงื่อนไข",
@@ -2003,6 +2218,10 @@
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
   },
+  "settings_registerStatusSnackBar_requestFailed": "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ - โปรดลองอีกครั้ง",
+  "@settings_registerStatusSnackBar_requestFailed": {},
+  "settings_registerStatusSnackBar_unavailable": "ไม่มีการเชื่อมต่อกับเซิร์ฟเวอร์ - เปลี่ยนการตั้งค่านี้ไม่ได้",
+  "@settings_registerStatusSnackBar_unavailable": {},
   "settings_videoCapturing_Section_framerate_prefix": "เฟรม: ",
   "@settings_videoCapturing_Section_framerate_prefix": {},
   "settings_videoCapturing_Section_framerate_title": "อัตราเฟรมของภาพ",
@@ -2349,6 +2568,22 @@
   "@voicemail_Label_playbackError": {},
   "voicemail_Label_retry": "ลองอีกครั้ง",
   "@voicemail_Label_retry": {},
+  "voicemail_SemanticsLabel_loading": "กำลังโหลด",
+  "@voicemail_SemanticsLabel_loading": {
+    "description": "Announced while a voicemail is being prepared for playback."
+  },
+  "voicemail_SemanticsLabel_moreActions": "เพิ่มเติม",
+  "@voicemail_SemanticsLabel_moreActions": {
+    "description": "Accessibility name of the button that opens the actions menu of a voicemail."
+  },
+  "voicemail_SemanticsLabel_pause": "หยุดชั่วคราว",
+  "@voicemail_SemanticsLabel_pause": {
+    "description": "Accessibility name of the button that pauses voicemail playback."
+  },
+  "voicemail_SemanticsLabel_play": "เล่น",
+  "@voicemail_SemanticsLabel_play": {
+    "description": "Accessibility name of the button that starts or resumes voicemail playback."
+  },
   "voicemail_Snackbar_notConfigured": "ติดต่อผู้ดูแลระบบของคุณเพื่อเปิดใช้งานข้อความเสียง",
   "@voicemail_Snackbar_notConfigured": {},
   "voicemail_Title_notSupported": "ไม่รองรับฟีเจอร์นี้",
@@ -2518,5 +2753,85 @@
   "devTools_signalingService_simulateKill_confirm": "หยุดการทำงาน",
   "@devTools_signalingService_simulateKill_confirm": {},
   "devTools_signalingService_simulateKill_cancel": "ยกเลิก",
-  "@devTools_signalingService_simulateKill_cancel": {}
+  "@devTools_signalingService_simulateKill_cancel": {},
+  "common_SemanticsLabel_refresh": "รีเฟรช",
+  "@common_SemanticsLabel_refresh": {
+    "description": "Accessibility name of a button that reloads the content of the screen."
+  },
+  "common_SemanticsLabel_scrollToBottom": "เลื่อนไปด้านล่าง",
+  "@common_SemanticsLabel_scrollToBottom": {
+    "description": "Accessibility name of the button that jumps to the end of a long list."
+  },
+  "common_SemanticsLabel_scrollToTop": "เลื่อนขึ้นบนสุด",
+  "@common_SemanticsLabel_scrollToTop": {
+    "description": "Accessibility name of the button that jumps to the beginning of a long list."
+  },
+  "contacts_SemanticsLabel_clearSearch": "ล้างการค้นหา",
+  "@contacts_SemanticsLabel_clearSearch": {
+    "description": "Accessibility name of the button that empties the contact search field."
+  },
+  "messaging_SemanticsLabel_newChat": "Start a new chat",
+  "@messaging_SemanticsLabel_newChat": {
+    "description": "Accessibility name of the button that starts a new chat conversation."
+  },
+  "messaging_SemanticsLabel_newSms": "Write a new message",
+  "@messaging_SemanticsLabel_newSms": {
+    "description": "Accessibility name of the button that starts a new SMS conversation."
+  },
+  "messaging_SemanticsLabel_call": "Call",
+  "@messaging_SemanticsLabel_call": {
+    "description": "Accessibility name of the button that calls the person the chat is with."
+  },
+  "messaging_SemanticsLabel_videoCall": "Video call",
+  "@messaging_SemanticsLabel_videoCall": {
+    "description": "Accessibility name of the button that starts a video call with the person the chat is with."
+  },
+  "messaging_SemanticsLabel_message": "Message",
+  "@messaging_SemanticsLabel_message": {
+    "description": "Accessibility name of the field a message is written in; the hint disappears as soon as something is typed."
+  },
+  "messaging_SemanticsLabel_send": "Send",
+  "@messaging_SemanticsLabel_send": {
+    "description": "Accessibility name of the arrow that sends the written message."
+  },
+  "messaging_SemanticsLabel_conversationDetails": "Conversation details",
+  "@messaging_SemanticsLabel_conversationDetails": {
+    "description": "Accessibility name of the button that opens who the chat is with, or the members of a group."
+  },
+  "messaging_SemanticsLabel_conversationOptions": "Conversation options",
+  "@messaging_SemanticsLabel_conversationOptions": {
+    "description": "Accessibility name of the button that opens what can be done with a text conversation."
+  },
+  "messaging_SemanticsLabel_replying": "Replying to",
+  "@messaging_SemanticsLabel_replying": {
+    "description": "Read before the quoted message in the bar above the field, when a reply is being written."
+  },
+  "messaging_SemanticsLabel_editing": "Editing",
+  "@messaging_SemanticsLabel_editing": {
+    "description": "Read before the quoted message in the bar above the field, when a sent message is being changed."
+  },
+  "messaging_SemanticsLabel_forwarding": "Forwarding",
+  "@messaging_SemanticsLabel_forwarding": {
+    "description": "Read before the quoted message in the bar above the field, when a message is being passed on to someone else."
+  },
+  "messaging_SemanticsLabel_stopReplying": "Stop replying",
+  "@messaging_SemanticsLabel_stopReplying": {
+    "description": "Accessibility name of the cross that drops the message being replied to."
+  },
+  "messaging_SemanticsLabel_stopEditing": "Stop editing",
+  "@messaging_SemanticsLabel_stopEditing": {
+    "description": "Accessibility name of the cross that leaves a sent message as it was."
+  },
+  "messaging_SemanticsLabel_stopForwarding": "Stop forwarding",
+  "@messaging_SemanticsLabel_stopForwarding": {
+    "description": "Accessibility name of the cross that drops the message being passed on."
+  },
+  "messaging_SemanticsLabel_sendForward": "Forward the message",
+  "@messaging_SemanticsLabel_sendForward": {
+    "description": "Accessibility name of the tick that passes the message on to this conversation."
+  },
+  "diagnosticNetworkTest_SemanticsLabel_refresh": "Run the network test again",
+  "@diagnosticNetworkTest_SemanticsLabel_refresh": {
+    "description": "Accessibility name of the button that repeats the network check on the diagnostics screen."
+  }
 }

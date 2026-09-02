@@ -10,10 +10,11 @@ import 'package:webtrit_phone/theme/extension/extension.dart';
 import '../theme_style_factory.dart';
 
 class FavoritesScreenStyleFactory implements ThemeStyleFactory<FavoritesScreenStyles> {
-  FavoritesScreenStyleFactory(this.colors, this.config);
+  FavoritesScreenStyleFactory(this.colors, this.config, {this.appBarTheme});
 
   final ColorScheme colors;
   final FavoritesPageConfig config;
+  final AppBarTheme? appBarTheme;
 
   @override
   FavoritesScreenStyles create() {
@@ -25,6 +26,7 @@ class FavoritesScreenStyleFactory implements ThemeStyleFactory<FavoritesScreenSt
         appBarBlurredSurface: config.appBarBlurredSurface?.toStyle(),
         contentThemeOverride: config.themeOverride.mode.toThemeMode(),
         applyToAppBar: config.themeOverride.applyToAppBar,
+        appBarTheme: appBarTheme,
       ),
     );
   }

@@ -191,7 +191,7 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
                   Flexible(
                     child: ParsedText(
                       parse: TextMatchers.matchers(textStyle, theme.strongQuoteDecoration(true)),
-                      regexOptions: const RegexOptions(multiLine: true, dotAll: true),
+                      regexOptions: const RegexOptions(multiLine: true, dotAll: true, caseSensitive: false),
                       style: textStyle,
                       text: lastMessage.content,
                       textWidthBasis: TextWidthBasis.longestLine,

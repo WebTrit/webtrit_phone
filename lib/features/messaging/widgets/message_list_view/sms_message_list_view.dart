@@ -9,6 +9,7 @@ import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
+import 'package:webtrit_phone/app/constants.dart';
 
 import 'message_text_field.dart';
 import 'typing_indicator.dart';
@@ -150,6 +151,7 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
                         controller: inputController,
                         onSend: handleSend,
                         onChanged: (value) => context.read<SmsTypingCubit>().sendTyping(),
+                        maxLength: kSmsMessagingMaxLength,
                       ),
                       Container(
                         height: MediaQuery.of(context).padding.bottom,
@@ -168,6 +170,10 @@ class _SmsMessageListViewState extends State<SmsMessageListView> {
 
   Widget list() {
     return GestureDetector(
+      // A tap anywhere puts the keyboard away. It is a convenience for a
+      // finger and nothing a screen reader should be taken to - left in the
+      // tree it turns the whole screen into one nameless stop.
+      excludeFromSemantics: true,
       onTap: () => FocusScope.of(context).unfocus(),
       child: ListView(
         controller: scrollController,

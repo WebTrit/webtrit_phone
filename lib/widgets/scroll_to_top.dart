@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/semantic_action.dart';
+
 class ScrollToTopOverlay extends StatelessWidget {
   const ScrollToTopOverlay({required this.child, required this.scrolledAway, required this.onScrollToTop, super.key});
 
@@ -9,10 +13,17 @@ class ScrollToTopOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The tab bar of the main screen floats over the lists this button belongs
+    // to; pinned to the bottom the button is drawn underneath it, where nothing
+    // can press it. The shell reports the room the bar takes - its own height
+    // plus the system inset below it - as the page's bottom padding, so that is
+    // exactly what has to be left free.
+    final barAndInset = MediaQuery.paddingOf(context).bottom;
+
     return Stack(
       children: [
         child,
-        Positioned(bottom: 16, right: 16, child: ScrollToTopButton(scrolledAway, onScrollToTop)),
+        Positioned(bottom: 16 + barAndInset, right: 16, child: ScrollToTopButton(scrolledAway, onScrollToTop)),
       ],
     );
   }
@@ -46,11 +57,15 @@ class ScrollToTopButton extends StatelessWidget {
                 ],
               ),
               margin: const EdgeInsets.all(8),
-              child: IconButton(
-                key: const Key('scrollToTopButton'),
-                onPressed: onTap,
-                icon: const Icon(Icons.arrow_circle_up_outlined),
-                padding: const EdgeInsets.all(0),
+              child: SemanticAction(
+                label: context.l10n.common_SemanticsLabel_scrollToTop,
+                identifier: scrollToTopId,
+                child: IconButton(
+                  key: scrollToTopKey,
+                  onPressed: onTap,
+                  icon: const Icon(Icons.arrow_circle_up_outlined),
+                  padding: const EdgeInsets.all(0),
+                ),
               ),
             )
           : const SizedBox(),

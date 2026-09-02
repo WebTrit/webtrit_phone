@@ -139,6 +139,14 @@ class EncodingCustomContent extends StatelessWidget {
             ),
             InlineChoosableSection<bool>(
               title: context.l10n.settings_encoding_Section_opus_channels,
+              sectionId: 'encodingOpusChannels',
+              // This section is not an on/off switch, so its options say what
+              // they actually are.
+              optionIdValue: (option) => switch (option) {
+                true => 'stereo',
+                false => 'mono',
+                _ => 'auto',
+              },
               buildOptionTitle: (option) {
                 if (option == true) return Text(context.l10n.settings_encoding_Section_value_stereo);
                 if (option == false) return Text(context.l10n.settings_encoding_Section_value_mono);
@@ -151,6 +159,7 @@ class EncodingCustomContent extends StatelessWidget {
             ),
             InlineChoosableSection<bool>(
               title: context.l10n.settings_encoding_Section_opus_dtx,
+              sectionId: 'encodingOpusDtx',
               buildOptionTitle: (option) {
                 if (option == true) return Text(context.l10n.settings_encoding_Section_value_on);
                 if (option == false) return Text(context.l10n.settings_encoding_Section_value_off);

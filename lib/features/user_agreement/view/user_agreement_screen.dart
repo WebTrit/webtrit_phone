@@ -60,11 +60,14 @@ class _UserAgreementScreenState extends State<UserAgreementScreen> {
                       ),
                     ),
                     const SizedBox(height: kInset / 2),
-                    OutlinedButton(
-                      key: userAgreementAcceptButtonKey,
-                      onPressed: agreementStatus.isAccepted ? _submitAgreement : null,
-                      style: elevatedButtonStyles?.primary,
-                      child: Text(context.l10n.user_agreement_button_text),
+                    SemanticAction(
+                      identifier: userAgreementAcceptButtonId,
+                      child: OutlinedButton(
+                        key: userAgreementAcceptButtonKey,
+                        onPressed: agreementStatus.isAccepted ? _submitAgreement : null,
+                        style: elevatedButtonStyles?.primary,
+                        child: Text(context.l10n.user_agreement_button_text),
+                      ),
                     ),
                   ],
                 ),

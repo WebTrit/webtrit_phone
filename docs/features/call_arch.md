@@ -73,7 +73,8 @@ outgoingInitializingMedia getting mic/camera
 outgoingRestoringMedia    call restored after reconnect; re-establishing ICE via renegotiation
 outgoingOfferPreparing    creating RTCPeerConnection + offer
 outgoingOfferSent         OutgoingCallRequest sent
-outgoingRinging           remote side ringing (RingingEvent received, no early media)
+outgoingRinging           remote side ringing (RingingEvent; the local ringback
+                          is governed by OutgoingRingbackController - see below)
 ─────────────────────────────────────────────────────────────
 connected                 media flowing (both directions)
 disconnecting             hangup sent, cleanup in progress
@@ -108,9 +109,70 @@ UI: CallController.createCall(number, video)
   → _CallPerformEvent.started
   → wait signaling ready → get user media → RTCPeerConnection
   → createOffer → OutgoingCallRequest to signaling
-  → Signaling: RingingEvent → outgoingRinging (ringback played)
+  → Signaling: RingingEvent → outgoingRinging (local tone start SCHEDULED, not played)
+  → Signaling: ProceedingEvent (SIP code): 180 → no early media coming, tone starts now;
+      183 → the switch may follow with its own audio, the short wait stays on
+  → Signaling: ProgressEvent (early media) → setRemoteDescription →
+      ActiveCall.earlyMedia = true, local tone stays off for the rest of setup
   → Signaling: AcceptedEvent (remote answer) → setRemoteDescription → connected
 ```
+
+### Ringback: whose tone the caller hears
+
+All start/stop rules live in `OutgoingRingbackController`
+(`features/call/utils/`). The app cannot know upfront whether the network will
+play a ringback of its own, so a ringing answer only ARMS a short delayed start
+and the following signals decide:
+
+| Signal | Meaning | Effect on the tone |
+|--------|---------|--------------------|
+| `RingingEvent` | 180 or 183 without a session description | arms the delayed start (repeats keep the first deadline) |
+| `ProceedingEvent` 180 | plain alerting, no network audio coming | starts the tone right away |
+| `ProceedingEvent` 183 | the switch is still working on it | keeps the wait |
+| `ProgressEvent` | early media (a description arrived) | `ActiveCall.earlyMedia = true`, tone silenced for the rest of the setup |
+| answer / hangup / failure | the ringing phase is over | tone silenced, pending start dropped |
+
+Whatever fires last, the controller asks
+[ActiveCall.shouldPlayLocalRingback] again at the moment it would actually
+play, so a call that was answered, ended or picked up network audio in the
+meantime stays silent.
+
+Network plays its own ringback (the interesting case - a switch may report
+plain ringing AFTER it already started streaming, which used to put both tones
+on top of each other):
+
+```
++1.4s  RingingEvent            → start armed (+1s)
++1.4s  ProceedingEvent 183     → wait kept
++2.2s  ProgressEvent           → setRemoteDescription → earlyMedia = true
+                                 → tone silenced, armed start dropped
++2.3s  RingingEvent            → start armed again
++2.3s  ProceedingEvent 180     → start now → shouldPlayLocalRingback == false
+                                 → suppressed; only the network tone is heard
+```
+
+No network ringback (the ordinary call):
+
+```
++1.2s  RingingEvent            → start armed (+1s)
++1.24s ProceedingEvent 180     → start now → the app's own tone plays
++18s   AcceptedEvent           → tone silenced, media flows
+```
+
+The ~40 ms gap between the two events is why an ordinary call does not wait out
+the full second. A backend that sends no `ProceedingEvent` at all falls back to
+the armed deadline - one second of silence, then the tone.
+
+#### Redesign / in progress
+
+Forked calls with mixed answers are not settled yet. When a switch alerts
+several branches under one call id, a plain 180 from the first branch starts
+the tone even if another branch already answered 183 and is about to send early
+media - the tone then plays until that early media arrives and silences it. It
+is not the double-tone the rework was about (the two never overlap), but the
+tone sounds where it arguably should not. The candidate rule is to let a 183
+seen for a call make it cautious for the rest of the setup, so a later 180
+keeps waiting instead of starting immediately.
 
 ## Isolates
 

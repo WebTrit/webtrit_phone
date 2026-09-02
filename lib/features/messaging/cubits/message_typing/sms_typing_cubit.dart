@@ -78,7 +78,7 @@ class SmsTypingCubit extends Cubit<TypingNumbers> {
         final channel = client.getSmsConversationChannel(conversationId);
         if (channel == null || channel.state != PhoenixChannelState.joined) throw Exception('Channel not ready yet');
 
-        await for (var event in channel.chatEvents) {
+        await for (var event in channel.smsEvents) {
           switch (event) {
             case SmsChannelTyping event:
               _addTypingNumber((event).number);

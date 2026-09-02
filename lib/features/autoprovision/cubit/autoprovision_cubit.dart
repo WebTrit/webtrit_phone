@@ -24,6 +24,7 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
     required this.appInfo,
     required this.packageInfo,
     required this.appCompatibilityResolver,
+    required this.userAgent,
     required this.config,
   }) : super(AutoprovisionState.initial());
 
@@ -32,12 +33,21 @@ class AutoprovisionCubit extends Cubit<AutoprovisionState> with SystemInfoApiMap
   final PackageInfo packageInfo;
   final AppCompatibilityResolver appCompatibilityResolver;
 
+  /// Sent as the `User-Agent` header, so the session created by autoprovisioning
+  /// is labelled like one created by an ordinary login.
+  final String userAgent;
+
   String get _identifier => appInfo.identifier;
 
   String get _bundleId => EnvironmentConfig.resolveBundleId(packageInfo.packageName);
 
   WebtritApiClient _apiClient(String coreUrl, String tenantId) {
-    return WebtritApiClient(Uri.parse(coreUrl), tenantId, connectionTimeout: kApiClientConnectionTimeout);
+    return WebtritApiClient(
+      Uri.parse(coreUrl),
+      tenantId,
+      connectionTimeout: kApiClientConnectionTimeout,
+      userAgent: userAgent,
+    );
   }
 
   Future<WebtritSystemInfo> _retrieveSystemInfo(WebtritApiClient webtritApiClient) async {

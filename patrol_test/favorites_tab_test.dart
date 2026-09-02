@@ -44,14 +44,14 @@ void main() {
       await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
       final contactAVisible = $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)).visible;
       if (!contactAVisible) {
-        await $(contactsSerchInputKey).enterText(contactAUniqueName);
+        await $(contactsSearchInputKey).enterText(contactAUniqueName);
         await pumpFor(const Duration(seconds: 1), $);
       }
       await $(contactsExtContactTileKey).containing(RegExp(contactAUniqueName)).tap();
       await $(contactPhoneTileKey).containing(contactAUniqueNumber).waitUntilVisible();
       await $(contactPhoneTileKey).containing(contactAUniqueNumber).$(contactPhoneTileFavIconKey).tap();
       await $(BackButtonIcon).tap();
-      if (!contactAVisible) await $(contactsSerchInputClearKey).tap();
+      if (!contactAVisible) await $(contactsSearchInputClearKey).tap();
     }
 
     if (!contactBAlreadyFavorited) {
@@ -59,14 +59,14 @@ void main() {
       await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
       final contactBVisible = $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)).visible;
       if (!contactBVisible) {
-        await $(contactsSerchInputKey).enterText(contactBUniqueName);
+        await $(contactsSearchInputKey).enterText(contactBUniqueName);
         await pumpFor(const Duration(seconds: 1), $);
       }
       await $(contactsExtContactTileKey).containing(RegExp(contactBUniqueName)).tap();
       await $(contactPhoneTileKey).containing(contactBUniqueNumber).waitUntilVisible();
       await $(contactPhoneTileKey).containing(contactBUniqueNumber).$(contactPhoneTileFavIconKey).tap();
       await $(BackButtonIcon).tap();
-      if (!contactBVisible) await $(contactsSerchInputClearKey).tap();
+      if (!contactBVisible) await $(contactsSearchInputClearKey).tap();
     }
 
     // Verify both contacts appear in the favorites tab.

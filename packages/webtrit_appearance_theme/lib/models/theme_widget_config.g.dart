@@ -71,30 +71,6 @@ Map<String, dynamic> _$ButtonWidgetConfigToJson(ButtonWidgetConfig instance) =>
       'primaryElevatedButton': instance.primaryElevatedButton?.toJson(),
     };
 
-ElevatedButtonWidgetConfig _$ElevatedButtonWidgetConfigFromJson(
-  Map<String, dynamic> json,
-) => ElevatedButtonWidgetConfig(
-  backgroundColor: json['backgroundColor'] as String?,
-  foregroundColor: json['foregroundColor'] as String?,
-  textColor: json['textColor'] as String?,
-  iconColor: json['iconColor'] as String?,
-  disabledIconColor: json['disabledIconColor'] as String?,
-  disabledBackgroundColor: json['disabledBackgroundColor'] as String?,
-  disabledForegroundColor: json['disabledForegroundColor'] as String?,
-);
-
-Map<String, dynamic> _$ElevatedButtonWidgetConfigToJson(
-  ElevatedButtonWidgetConfig instance,
-) => <String, dynamic>{
-  'backgroundColor': instance.backgroundColor,
-  'foregroundColor': instance.foregroundColor,
-  'textColor': instance.textColor,
-  'iconColor': instance.iconColor,
-  'disabledIconColor': instance.disabledIconColor,
-  'disabledBackgroundColor': instance.disabledBackgroundColor,
-  'disabledForegroundColor': instance.disabledForegroundColor,
-};
-
 GroupWidgetConfig _$GroupWidgetConfigFromJson(Map<String, dynamic> json) =>
     GroupWidgetConfig(
       groupTitleListTile: json['groupTitleListTile'] == null

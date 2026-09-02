@@ -4,8 +4,11 @@ import 'settings_feature.dart';
 
 /// Configuration for the app settings screen, organized into sections and items.
 class SettingsConfig extends Equatable {
-  SettingsConfig({required this.voicemailsEnabled, required List<SettingsSection> sections})
-    : _sections = List.unmodifiable(sections);
+  SettingsConfig({
+    required this.voicemailsEnabled,
+    required this.sessionsEnabled,
+    required List<SettingsSection> sections,
+  }) : _sections = List.unmodifiable(sections);
 
   final List<SettingsSection> _sections;
 
@@ -15,6 +18,10 @@ class SettingsConfig extends Equatable {
   /// Check if the voicemail setting is available in any section.
   final bool voicemailsEnabled;
 
+  /// Whether the active-sessions row is available. It is not a configurable
+  /// item - it is shown whenever the backend can list and revoke sessions.
+  final bool sessionsEnabled;
+
   @override
-  List<Object?> get props => [_sections, voicemailsEnabled];
+  List<Object?> get props => [_sections, voicemailsEnabled, sessionsEnabled];
 }

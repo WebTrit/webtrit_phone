@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 
 import 'package:webtrit_phone/data/data.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../models/models.dart';
 
@@ -16,11 +17,14 @@ part 'permissions_state.dart';
 final _logger = Logger('PermissionsCubit');
 
 class PermissionsCubit extends Cubit<PermissionsState> {
-  PermissionsCubit({required this.appPermissions, required this.deviceInfo}) : super(const PermissionsState());
+  PermissionsCubit({required this.appPermissions, required this.deviceInfo, required this.specialPermissionsRepository})
+    : super(const PermissionsState());
 
   final AppPermissions appPermissions;
 
   final DeviceInfo deviceInfo;
+
+  final SpecialPermissionsRepository specialPermissionsRepository;
 
   /// Verifies the current permission status without triggering a system prompt.
   ///
@@ -34,8 +38,8 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     final isDenied = await appPermissions.isDenied;
     _logger.info('Is denied: $isDenied');
 
-    final missingSpecialPermissions = await _getDeniedSpecialPermissions();
-    _logger.info('Denied special permissions: $missingSpecialPermissions');
+    final missingSpecialPermissions = await _resolveSpecialPermissions();
+    _logger.info('Special permissions to handle: $missingSpecialPermissions');
 
     final manufacturerTip = await _resolveManufacturerTip();
     _logger.info('Manufacturer tip: $manufacturerTip');
@@ -75,8 +79,8 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       await _requestFirebaseMessagingPermission();
       _logger.info('Firebase messaging permission requested');
 
-      final missingSpecialPermissions = await _getDeniedSpecialPermissions();
-      _logger.info('Denied special permissions: $missingSpecialPermissions');
+      final missingSpecialPermissions = await _resolveSpecialPermissions();
+      _logger.info('Special permissions to handle: $missingSpecialPermissions');
 
       final manufacturerTip = await _resolveManufacturerTip();
       _logger.info('Manufacturer tip: $manufacturerTip');
@@ -135,6 +139,17 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     }
   }
 
+  /// The denied special permissions the flow still has to walk the user through.
+  ///
+  /// One the user already skipped is dropped, so the instructions are not repeated
+  /// on every pass through the flow.
+  Future<List<CallkeepSpecialPermissions>> _resolveSpecialPermissions() async {
+    final denied = await _getDeniedSpecialPermissions();
+    final acknowledged = specialPermissionsRepository.getAcknowledged();
+
+    return denied.where((permission) => !acknowledged.contains(permission)).toList();
+  }
+
   /// Fetches the list of special permissions that are currently denied by the user.
   /// This is used to identify which specific special permissions need to be requested or have their settings opened.
   Future<List<CallkeepSpecialPermissions>> _getDeniedSpecialPermissions() async {
@@ -163,6 +178,23 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
   void dismissManufacturerTip() {
     emit(state.copyWith(manufacturerTip: state.manufacturerTip?.copyWith(shown: true)));
+  }
+
+  /// Records that the user chose to move on without granting a special [permission]
+  /// and lets the flow continue.
+  Future<void> skipSpecialPermission(CallkeepSpecialPermissions permission) async {
+    // Nothing to remember when the permission is not pending anymore - it was
+    // granted while the user was in the system settings.
+    if (!state.missingSpecialPermissions.contains(permission)) return;
+
+    _logger.info('Special permission skipped: $permission');
+    await specialPermissionsRepository.acknowledge(permission);
+
+    if (isClosed) return;
+
+    emit(
+      state.copyWith(missingSpecialPermissions: state.missingSpecialPermissions.where((p) => p != permission).toList()),
+    );
   }
 
   void openAppSettings() {

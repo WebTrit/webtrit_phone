@@ -27,81 +27,98 @@ class _LoginCoreUrlAssignScreenState extends State<LoginCoreUrlAssignScreen> {
     final themeData = Theme.of(context);
     final ElevatedButtonStyles? elevatedButtonStyles = themeData.extension<ElevatedButtonStyles>();
 
-    // TODO: Add separate style for this screen
+    // The logo is still borrowed from the switch screen style; the bar and
+    // status bar are owned by this screen's own style.
     final LoginSwitchScreenStyles? loginPageStyles = themeData.extension<LoginSwitchScreenStyles>();
     final LoginSwitchScreenStyle? localStyle = loginPageStyles?.primary;
+    final ownStyle = themeData.extension<LoginCoreUrlAssignScreenStyles>()?.primary;
 
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => whenLoginCoreUrlAssignScreenPageActive(current),
       builder: (context, state) => LoginScaffold(
+        contentThemeOverride: ownStyle?.contentThemeOverride,
+        applyToAppBar: ownStyle?.applyToAppBar,
+        appBarTheme: ownStyle?.appBarTheme,
         appBar: AppBar(
           leading: ExtBackButton(disabled: state.processing),
-          backgroundColor: Colors.transparent,
-          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          flexibleSpace: BlurredSurface.fromStyle(ownStyle?.appBarBlurredSurface),
+          // Themes saved before this screen had its own style get the historic
+          // dark status icons over the light login background.
+          systemOverlayStyle: ownStyle?.systemUiOverlayStyle ?? SystemUiOverlayStyle.dark,
         ),
-        body: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (context.l10n.login_Text_coreUrlAssignPreDescription.isNotEmpty) ...[
-                        Description(text: context.l10n.login_Text_coreUrlAssignPreDescription),
-                        const SizedBox(height: kInset / 2),
-                      ],
-                      HistoryAutocompleteField(
-                        storageKey: 'recent_core_urls',
-                        labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
-                        key: coreUrlInputKey,
-                        controller: _historyController,
-                        initialValue: state.coreUrlInput.value,
-                        errorText:
-                            state.coreUrlInput.displayError?.l10n(context) ??
-                            (state.coreUrlAssignError != null
-                                ? context.l10n.login_validationCoreUrlUnreachableError
-                                : null),
-                        keyboardType: TextInputType.url,
-                        textInputAction: TextInputAction.done,
-                        autofillHints: const [AutofillHints.url],
-                        enabled: !state.processing,
-                        onChanged: context.read<LoginCubit>().coreUrlInputChanged,
-                        onSubmit: !state.coreUrlInput.isValid ? null : () => _onCoreUrlAssignSubmitted(context),
-                      ),
-                      if (context.l10n
-                          .login_Text_coreUrlAssignPostDescription(EnvironmentConfig.SALES_EMAIL)
-                          .isNotEmpty) ...[
-                        const SizedBox(height: kInset / 8),
-                        Description(
-                          text: context.l10n.login_Text_coreUrlAssignPostDescription(EnvironmentConfig.SALES_EMAIL),
-                          launchLinkableElement: true,
+        body: SemanticId(
+          identifier: loginCoreUrlScreenId,
+          child: SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                ConfigurableThemeImage(style: localStyle?.pictureLogoStyle),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(kInset, kInset / 2, kInset, kInset),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (context.l10n.login_Text_coreUrlAssignPreDescription.isNotEmpty) ...[
+                          Description(text: context.l10n.login_Text_coreUrlAssignPreDescription),
+                          const SizedBox(height: kInset / 2),
+                        ],
+                        SemanticId(
+                          identifier: coreUrlInputId,
+                          child: HistoryAutocompleteField(
+                            storageKey: 'recent_core_urls',
+                            labelText: context.l10n.login_TextFieldLabelText_coreUrlAssign,
+                            key: coreUrlInputKey,
+                            controller: _historyController,
+                            initialValue: state.coreUrlInput.value,
+                            errorText:
+                                state.coreUrlInput.displayError?.l10n(context) ??
+                                (state.coreUrlAssignError != null
+                                    ? context.l10n.login_validationCoreUrlUnreachableError
+                                    : null),
+                            keyboardType: TextInputType.url,
+                            textInputAction: TextInputAction.done,
+                            autofillHints: const [AutofillHints.url],
+                            enabled: !state.processing,
+                            onChanged: context.read<LoginCubit>().coreUrlInputChanged,
+                            onSubmit: !state.coreUrlInput.isValid ? null : () => _onCoreUrlAssignSubmitted(context),
+                          ),
+                        ),
+                        if (context.l10n
+                            .login_Text_coreUrlAssignPostDescription(EnvironmentConfig.SALES_EMAIL)
+                            .isNotEmpty) ...[
+                          const SizedBox(height: kInset / 8),
+                          Description(
+                            text: context.l10n.login_Text_coreUrlAssignPostDescription(EnvironmentConfig.SALES_EMAIL),
+                            launchLinkableElement: true,
+                          ),
+                        ],
+                        const Spacer(),
+                        const SizedBox(height: kInset),
+                        SemanticAction(
+                          identifier: coreUrlButtonId,
+                          child: ElevatedButton(
+                            key: coreUrlButtonKey,
+                            onPressed: state.processing || !state.coreUrlInput.isValid
+                                ? null
+                                : () => _onCoreUrlAssignSubmitted(context),
+                            style: elevatedButtonStyles?.primary,
+                            child: !state.processing
+                                ? Text(context.l10n.login_Button_coreUrlAssignProceed)
+                                : SizedCircularProgressIndicator(
+                                    size: 16,
+                                    strokeWidth: 2,
+                                    color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
+                                    semanticsLabel: context.l10n.common_SemanticsLabel_loading,
+                                  ),
+                          ),
                         ),
                       ],
-                      const Spacer(),
-                      const SizedBox(height: kInset),
-                      ElevatedButton(
-                        key: coreUrlButtonKey,
-                        onPressed: state.processing || !state.coreUrlInput.isValid
-                            ? null
-                            : () => _onCoreUrlAssignSubmitted(context),
-                        style: elevatedButtonStyles?.primary,
-                        child: !state.processing
-                            ? Text(context.l10n.login_Button_coreUrlAssignProceed)
-                            : SizedCircularProgressIndicator(
-                                size: 16,
-                                strokeWidth: 2,
-                                color: elevatedButtonStyles?.primary?.foregroundColor?.resolve({}),
-                              ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

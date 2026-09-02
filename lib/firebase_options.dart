@@ -54,20 +54,18 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAq1cn3u6oeWVHTdAAhwdsy78tRpb4ab2Y',
-    appId: '1:973049735976:android:3b8774082803ad8f547e1d',
-    messagingSenderId: '973049735976',
-    projectId: 'webtrit-app',
-    storageBucket: 'webtrit-app.appspot.com',
+    apiKey: 'AIzaSyBiHZTx8_6-kdgVXwKoIxgfPAXL7ug6tVQ',
+    appId: '1:524910534863:android:8035f3b2f5b319c14ad7ba',
+    messagingSenderId: '524910534863',
+    projectId: 'webtrit-69559',
+    storageBucket: 'webtrit-69559.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDDRXt-svULnPAy7K_sMgC0tGB3Tj_PNFc',
-    appId: '1:973049735976:ios:c8fdad3d4a4bc81a547e1d',
-    messagingSenderId: '973049735976',
-    projectId: 'webtrit-app',
-    storageBucket: 'webtrit-app.appspot.com',
-    iosClientId: '973049735976-t0te56rlsu1putg89pt2b8c4qq8f80c1.apps.googleusercontent.com',
-    iosBundleId: 'com.webtrit.app',
+    apiKey: 'AIzaSyADReAZ-JT7QMiTtfhR-oVGfv42lqQwFEM',
+    appId: '1:524910534863:ios:ecdcf7348f2d1d914ad7ba',
+    messagingSenderId: '524910534863',
+    projectId: 'webtrit-69559',
+    storageBucket: 'webtrit-69559.firebasestorage.app',
+    iosBundleId: 'com.webtrit.phone',
   );
 }

@@ -105,7 +105,10 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
           builder: (context, state) {
             final contactsSearchBloc = context.read<ContactsBloc>();
             return ClearedTextField(
-              key: contactsSerchInputKey,
+              key: contactsSearchInputKey,
+              identifier: contactsSearchInputId,
+              clearButtonKey: contactsSearchInputClearKey,
+              clearButtonIdentifier: contactsSearchInputClearId,
               initialValue: state.search,
               onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
               onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
@@ -122,7 +125,8 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
       child: ThemedScaffold(
         background: effectiveStyle?.background,
         contentThemeOverride: effectiveStyle?.contentThemeOverride ?? ThemeMode.system,
-        applyToAppBar: effectiveStyle?.applyToAppBar ?? false,
+        applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
+        appBarTheme: effectiveStyle?.appBarTheme,
         extendBodyBehindAppBar: true,
         appBar: MainAppBar(
           title: widget.title,

@@ -100,6 +100,12 @@ abstract class AppLocalizations {
   /// **'Your self-care password has expired. Please update it using your self-care.\nUntil the password is changed, access to the service will be limited.'**
   String get account_selfCarePasswordExpired_message;
 
+  /// Accessibility name of the keypad backspace button.
+  ///
+  /// In en, this message translates to:
+  /// **'Backspace'**
+  String get actionpad_SemanticsLabel_backspace;
+
   /// Elapsed time relative to now, shown in days.
   ///
   /// In en, this message translates to:
@@ -231,6 +237,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More'**
   String get callTileActions_more;
+
+  /// Accessibility name of the whole-screen tap during a video call while the controls are on screen; pressing it puts them away so the picture is not covered.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide call controls'**
+  String get call_SemanticsLabel_hideControls;
+
+  /// Accessibility name of the whole-screen tap during a video call while the controls are hidden; pressing it brings them back.
+  ///
+  /// In en, this message translates to:
+  /// **'Show call controls'**
+  String get call_SemanticsLabel_showControls;
+
+  /// Accessibility name of the field on the keypad that holds the number being dialled; it looks like plain text on the screen and needs a name of its own.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get keypad_SemanticsLabel_number;
+
+  /// Accessibility action on the keypad number field that puts the copied number into it; for everyone else the same thing happens on a long press.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a number'**
+  String get keypad_SemanticsAction_paste;
+
+  /// Accessibility name of the self-view floating over the call screen; pressing it switches between the front and the rear camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch camera'**
+  String get callCameraPreview_SemanticsLabel_switchCamera;
+
+  /// Accessibility action of the small window that floats over the app during a call: moves it to the top left corner.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the top left'**
+  String get callThumbnail_SemanticsAction_moveTopLeft;
+
+  /// Accessibility action of the floating call window: moves it to the top right corner.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the top right'**
+  String get callThumbnail_SemanticsAction_moveTopRight;
+
+  /// Accessibility action of the floating call window: moves it to the left edge, halfway down.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the middle left'**
+  String get callThumbnail_SemanticsAction_moveMiddleLeft;
+
+  /// Accessibility action of the floating call window: moves it to the right edge, halfway down.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the middle right'**
+  String get callThumbnail_SemanticsAction_moveMiddleRight;
+
+  /// Accessibility action of the floating call window: moves it to the bottom left corner.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the bottom left'**
+  String get callThumbnail_SemanticsAction_moveBottomLeft;
+
+  /// Accessibility action of the floating call window: moves it to the bottom right corner.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to the bottom right'**
+  String get callThumbnail_SemanticsAction_moveBottomRight;
+
+  /// Accessibility name of the small window that floats over the app during a call and leads back to the call screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to the call'**
+  String get callThumbnail_SemanticsLabel_returnToCall;
+
+  /// Accessibility name of the call button in a call history or contact row.
+  ///
+  /// In en, this message translates to:
+  /// **'Call {name}'**
+  String callTile_SemanticsLabel_call(String name);
+
+  /// Accessibility name of the video call button in a call history or contact row.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call {name}'**
+  String callTile_SemanticsLabel_videoCall(String name);
 
   /// No description provided for @call_CallActionsTooltip_accept.
   ///
@@ -640,6 +730,12 @@ abstract class AppLocalizations {
   /// **'To resume making calls, a phone restart is required. This will resolve a temporary system error.'**
   String get call_SystemErrorDialog_description;
 
+  /// Shown when the phone system answered the registration attempt and refused to serve it, so the device and its network are working correctly and only the calling service is unavailable. Tell the user the outage is on the service side and expected to be temporary, and that no action on their device will speed it up.
+  ///
+  /// In en, this message translates to:
+  /// **'Service temporarily unavailable'**
+  String get callStatus_serviceUnavailable;
+
   /// No description provided for @call_SystemErrorDialog_title.
   ///
   /// In en, this message translates to:
@@ -688,6 +784,12 @@ abstract class AppLocalizations {
   /// **'No recent calls'**
   String get cdrs_noRecentCalls_message;
 
+  /// Accessibility name announced while a screen waits for a request to finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get common_SemanticsLabel_loading;
+
   /// No description provided for @common_noInternetConnection_message.
   ///
   /// In en, this message translates to:
@@ -711,6 +813,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'There was an issue loading the page.'**
   String get common_problemWithLoadingPage;
+
+  /// Accessibility name of the star that adds a number of the contact card to favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {number} to favorites'**
+  String contact_SemanticsLabel_addFavorite(String number);
+
+  /// Accessibility name of the button that explains an option of the contact card; the caption of the option keeps the two buttons apart.
+  ///
+  /// In en, this message translates to:
+  /// **'What {option} means'**
+  String contact_SemanticsLabel_optionInfo(String option);
+
+  /// Accessibility name of the star that removes a number of the contact card from favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {number} from favorites'**
+  String contact_SemanticsLabel_removeFavorite(String number);
+
+  /// Accessibility name of the button that opens the mail app on the address of the contact card.
+  ///
+  /// In en, this message translates to:
+  /// **'Send an email to {address}'**
+  String contact_SemanticsLabel_sendEmail(String address);
+
+  /// Accessibility name of the transfer shortcut on a number of the contact card; the number is what the call is transferred to.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer current call to {number}'**
+  String contact_SemanticsLabel_transfer(String number);
 
   /// No description provided for @contacts_agreement_button_text.
   ///
@@ -1150,6 +1282,36 @@ abstract class AppLocalizations {
   /// **'This device does not support the system call framework (Telecom), so incoming calls use a limited background service. Calls may be delayed or missed when the system restricts background apps. Bluetooth and wired headset selection is not available in this mode.'**
   String get diagnostic_callingMode_standalone_description;
 
+  /// No description provided for @diagnostic_fullScreenIntent_tile_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Full-screen calls'**
+  String get diagnostic_fullScreenIntent_tile_title;
+
+  /// No description provided for @diagnostic_fullScreenIntent_navigate_section.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to the Full-screen notifications section'**
+  String get diagnostic_fullScreenIntent_navigate_section;
+
+  /// No description provided for @diagnostic_fullScreenIntent_groupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock screen calls'**
+  String get diagnostic_fullScreenIntent_groupTitle;
+
+  /// No description provided for @diagnostic_fullScreenIntent_caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls arrive as a notification, not full screen'**
+  String get diagnostic_fullScreenIntent_caption;
+
+  /// No description provided for @diagnostic_fullScreenIntent_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets an incoming call open full screen over the lock screen and be answered right there. Without it the call arrives as a notification, and answering from a locked screen protected by a PIN, pattern or fingerprint asks to unlock the phone first.'**
+  String get diagnostic_fullScreenIntent_description;
+
   /// No description provided for @diagnostic_permission_camera_description.
   ///
   /// In en, this message translates to:
@@ -1588,6 +1750,18 @@ abstract class AppLocalizations {
   /// **'Confirm deleting'**
   String get favorites_DeleteConfirmDialog_title;
 
+  /// Accessibility name of the same button once rearranging is under way.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish reordering'**
+  String get favorites_SemanticsLabel_reorderDone;
+
+  /// Accessibility name of the button that starts rearranging the favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder favorites'**
+  String get favorites_SemanticsLabel_reorder;
+
   /// No description provided for @favorites_SnackBar_deleted.
   ///
   /// In en, this message translates to:
@@ -1815,6 +1989,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The app is not supported by your WebTrit Cloud Backend'**
   String get login_RequestFailureUnconfiguredBundleIdError;
+
+  /// Accessibility name of the button that hides the typed password again.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get login_SemanticsLabel_hidePassword;
+
+  /// Accessibility name of the button that reveals the typed password.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get login_SemanticsLabel_showPassword;
 
   /// Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods.
   ///
@@ -3007,11 +3193,23 @@ abstract class AppLocalizations {
   /// **'View Contact'**
   String get numberActions_viewContact;
 
+  /// No description provided for @permission_Button_notNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get permission_Button_notNow;
+
   /// No description provided for @permission_Button_request.
   ///
   /// In en, this message translates to:
   /// **'Continue'**
   String get permission_Button_request;
+
+  /// No description provided for @permission_fullScreenNotification_Text_optional.
+  ///
+  /// In en, this message translates to:
+  /// **'You can continue without this. Incoming calls will arrive as a notification instead of opening full screen, and if your phone is locked with a PIN, pattern or fingerprint, you will have to unlock it to answer from the lock screen.'**
+  String get permission_fullScreenNotification_Text_optional;
 
   /// No description provided for @permission_manageFullScreenNotificationInstructions_step1.
   ///
@@ -3655,17 +3853,191 @@ abstract class AppLocalizations {
   /// **'Connecting...'**
   String get sessionStatus_AppBar_connecting;
 
+  /// App bar line shown while the phone system is refusing to register the account. Keep it short: it shares the bar with a progress indicator and is truncated on narrow screens.
+  ///
+  /// In en, this message translates to:
+  /// **'Service temporarily unavailable'**
+  String get sessionStatus_AppBar_serviceUnavailable;
+
   /// No description provided for @sessionStatus_pushNotificationServiceProblem.
   ///
   /// In en, this message translates to:
   /// **'Problem with configuration push notification service'**
   String get sessionStatus_pushNotificationServiceProblem;
 
+  /// Subtitle of the connection status row on the account screen when the device has no internet access. Tells the user where to look for the cause.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Wi-Fi or mobile data'**
+  String get sessionStatus_subtitle_connectivityNone;
+
+  /// Subtitle of the connection status row when the cause is not obvious from the status itself (connection error, connection issue, push notification problem). Points the user to the diagnostic screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap for diagnostics'**
+  String get sessionStatus_subtitle_diagnostic;
+
+  /// Subtitle of the connection status row while the app is establishing a connection to the server.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to the server...'**
+  String get sessionStatus_subtitle_inProgress;
+
+  /// Subtitle of the connection status row when the app is connected and the account can be called.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls can reach this account'**
+  String get sessionStatus_subtitle_ready;
+
+  /// Subtitle of the connection status row when the account is unregistered because the user turned the registration setting off, as opposed to a connection problem.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration is off'**
+  String get sessionStatus_subtitle_registrationOff;
+
+  /// One-line explanation under the service-unavailable status. Reassures the user that their internet connection is not the cause, and points to the diagnostics screen for details.
+  ///
+  /// In en, this message translates to:
+  /// **'Your connection is fine, tap for details'**
+  String get sessionStatus_subtitle_serviceUnavailable;
+
   /// Status message displayed while the application is performing cleanup during the logout process.
   ///
   /// In en, this message translates to:
   /// **'Signing out...'**
   String get session_Teardown_progressText;
+
+  /// Title of the screen listing the devices the account is currently signed in on.
+  ///
+  /// In en, this message translates to:
+  /// **'Active sessions'**
+  String get sessions_AppBar_title;
+
+  /// No description provided for @sessions_AppType_android.
+  ///
+  /// In en, this message translates to:
+  /// **'Android app'**
+  String get sessions_AppType_android;
+
+  /// No description provided for @sessions_AppType_ios.
+  ///
+  /// In en, this message translates to:
+  /// **'iOS app'**
+  String get sessions_AppType_ios;
+
+  /// No description provided for @sessions_AppType_linux.
+  ///
+  /// In en, this message translates to:
+  /// **'Linux app'**
+  String get sessions_AppType_linux;
+
+  /// No description provided for @sessions_AppType_macos.
+  ///
+  /// In en, this message translates to:
+  /// **'macOS app'**
+  String get sessions_AppType_macos;
+
+  /// No description provided for @sessions_AppType_smart.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart device'**
+  String get sessions_AppType_smart;
+
+  /// Session row title used when the backend did not report which kind of app the session belongs to.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown device'**
+  String get sessions_AppType_unknown;
+
+  /// No description provided for @sessions_AppType_web.
+  ///
+  /// In en, this message translates to:
+  /// **'Web app'**
+  String get sessions_AppType_web;
+
+  /// No description provided for @sessions_AppType_windows.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows app'**
+  String get sessions_AppType_windows;
+
+  /// No description provided for @sessions_Button_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get sessions_Button_retry;
+
+  /// Action that revokes every session except the one on this device.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out other sessions'**
+  String get sessions_Button_revokeAllOthers;
+
+  /// No description provided for @sessions_Placeholder_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No active sessions'**
+  String get sessions_Placeholder_empty;
+
+  /// No description provided for @sessions_Placeholder_failure.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the active sessions'**
+  String get sessions_Placeholder_failure;
+
+  /// No description provided for @sessions_RevokeAllConfirmDialog_content.
+  ///
+  /// In en, this message translates to:
+  /// **'The other devices signed in with this account will be signed out.'**
+  String get sessions_RevokeAllConfirmDialog_content;
+
+  /// No description provided for @sessions_RevokeAllConfirmDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out other sessions?'**
+  String get sessions_RevokeAllConfirmDialog_title;
+
+  /// No description provided for @sessions_RevokeConfirmDialog_content.
+  ///
+  /// In en, this message translates to:
+  /// **'This device will be signed out of the account.'**
+  String get sessions_RevokeConfirmDialog_content;
+
+  /// No description provided for @sessions_RevokeConfirmDialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out this session?'**
+  String get sessions_RevokeConfirmDialog_title;
+
+  /// No description provided for @sessions_SnackBar_revokeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sign out the session'**
+  String get sessions_SnackBar_revokeFailed;
+
+  /// Session row detail with the formatted date and time the session was created.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in {time}'**
+  String sessions_Tile_created(String time);
+
+  /// Badge marking the session the app itself is signed in with, which cannot be revoked here.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get sessions_Tile_currentSession;
+
+  /// Session row detail with the formatted date and time of the last recorded activity.
+  ///
+  /// In en, this message translates to:
+  /// **'Last used {time}'**
+  String sessions_Tile_lastActivity(String time);
+
+  /// No description provided for @sessions_Tile_revokeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get sessions_Tile_revokeTooltip;
 
   /// No description provided for @settings_AboutText_ApplicationEmbeddedLinks.
   ///
@@ -4399,6 +4771,36 @@ abstract class AppLocalizations {
   /// **'Transport protocol'**
   String get settings_iceSettings_Section_trfilter_title;
 
+  /// Subtitle of the account registration toggle while the server is out of reach, so the setting cannot be read or changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs connection'**
+  String get settings_ListViewTileSubtitle_registeredNeedsConnection;
+
+  /// Subtitle of the account registration toggle when it is switched off, explaining that incoming calls are rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming calls are rejected'**
+  String get settings_ListViewTileSubtitle_registeredOff;
+
+  /// Subtitle of the account registration toggle when it is switched on, explaining that the account can receive calls.
+  ///
+  /// In en, this message translates to:
+  /// **'Account can receive calls'**
+  String get settings_ListViewTileSubtitle_registeredOn;
+
+  /// Subtitle of the account registration toggle while the change is being sent to the server.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating...'**
+  String get settings_ListViewTileSubtitle_registeredUpdating;
+
+  /// Subtitle of the account registration toggle while the app is still connecting, so the setting is not confirmed yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for connection...'**
+  String get settings_ListViewTileSubtitle_registeredWaitingForConnection;
+
   /// No description provided for @settings_ListViewTileTitle_about.
   ///
   /// In en, this message translates to:
@@ -4495,6 +4897,12 @@ abstract class AppLocalizations {
   /// **'Self-config page'**
   String get settings_ListViewTileTitle_self_config;
 
+  /// No description provided for @settings_ListViewTileTitle_sessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions'**
+  String get settings_ListViewTileTitle_sessions;
+
   /// No description provided for @settings_ListViewTileTitle_settings.
   ///
   /// In en, this message translates to:
@@ -4590,6 +4998,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SMS as a backup channel'**
   String get settings_network_smsFallback_toggle;
+
+  /// Shown in an error snackbar when a register-status request fails: an explicit refresh of the account registration setting, or a change of it (in which case the switch also rolls back to its previous value).
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server - please try again'**
+  String get settings_registerStatusSnackBar_requestFailed;
+
+  /// Shown in a snackbar when the user taps the account registration toggle while the server is out of reach. Offers a shortcut to the diagnostic screen.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection to the server - this setting can\'t be changed now'**
+  String get settings_registerStatusSnackBar_unavailable;
 
   /// No description provided for @settings_videoCapturing_Section_framerate_prefix.
   ///
@@ -5202,6 +5622,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get voicemail_Label_retry;
+
+  /// Announced while a voicemail is being prepared for playback.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get voicemail_SemanticsLabel_loading;
+
+  /// Accessibility name of the button that opens the actions menu of a voicemail.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get voicemail_SemanticsLabel_moreActions;
+
+  /// Accessibility name of the button that pauses voicemail playback.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get voicemail_SemanticsLabel_pause;
+
+  /// Accessibility name of the button that starts or resumes voicemail playback.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get voicemail_SemanticsLabel_play;
 
   /// No description provided for @voicemail_Snackbar_notConfigured.
   ///
@@ -5886,6 +6330,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get devTools_signalingService_simulateKill_cancel;
+
+  /// Accessibility name of a button that reloads the content of the screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get common_SemanticsLabel_refresh;
+
+  /// Accessibility name of the button that jumps to the end of a long list.
+  ///
+  /// In en, this message translates to:
+  /// **'Scroll to bottom'**
+  String get common_SemanticsLabel_scrollToBottom;
+
+  /// Accessibility name of the button that jumps to the beginning of a long list.
+  ///
+  /// In en, this message translates to:
+  /// **'Scroll to top'**
+  String get common_SemanticsLabel_scrollToTop;
+
+  /// Accessibility name of the button that empties the contact search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get contacts_SemanticsLabel_clearSearch;
+
+  /// Accessibility name of the button that starts a new chat conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new chat'**
+  String get messaging_SemanticsLabel_newChat;
+
+  /// Accessibility name of the button that starts a new SMS conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a new message'**
+  String get messaging_SemanticsLabel_newSms;
+
+  /// Accessibility name of the button that calls the person the chat is with.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get messaging_SemanticsLabel_call;
+
+  /// Accessibility name of the button that starts a video call with the person the chat is with.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call'**
+  String get messaging_SemanticsLabel_videoCall;
+
+  /// Accessibility name of the field a message is written in; the hint disappears as soon as something is typed.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get messaging_SemanticsLabel_message;
+
+  /// Accessibility name of the arrow that sends the written message.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get messaging_SemanticsLabel_send;
+
+  /// Accessibility name of the button that opens who the chat is with, or the members of a group.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation details'**
+  String get messaging_SemanticsLabel_conversationDetails;
+
+  /// Accessibility name of the button that opens what can be done with a text conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation options'**
+  String get messaging_SemanticsLabel_conversationOptions;
+
+  /// Read before the quoted message in the bar above the field, when a reply is being written.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying to'**
+  String get messaging_SemanticsLabel_replying;
+
+  /// Read before the quoted message in the bar above the field, when a sent message is being changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Editing'**
+  String get messaging_SemanticsLabel_editing;
+
+  /// Read before the quoted message in the bar above the field, when a message is being passed on to someone else.
+  ///
+  /// In en, this message translates to:
+  /// **'Forwarding'**
+  String get messaging_SemanticsLabel_forwarding;
+
+  /// Accessibility name of the cross that drops the message being replied to.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop replying'**
+  String get messaging_SemanticsLabel_stopReplying;
+
+  /// Accessibility name of the cross that leaves a sent message as it was.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop editing'**
+  String get messaging_SemanticsLabel_stopEditing;
+
+  /// Accessibility name of the cross that drops the message being passed on.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop forwarding'**
+  String get messaging_SemanticsLabel_stopForwarding;
+
+  /// Accessibility name of the tick that passes the message on to this conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Forward the message'**
+  String get messaging_SemanticsLabel_sendForward;
+
+  /// Accessibility name of the button that repeats the network check on the diagnostics screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Run the network test again'**
+  String get diagnosticNetworkTest_SemanticsLabel_refresh;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

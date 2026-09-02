@@ -1,16 +1,16 @@
-import 'dart:ui';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
-import 'package:webtrit_phone/widgets/fade_id.dart';
-import 'package:webtrit_phone/widgets/no_data_placeholder.dart';
+// Messaging has a confirm dialog of its own, and it is the one this screen
+// has always shown.
+import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
 import 'package:webtrit_phone/l10n/l10n.dart';
 
 class SmsConversationScreen extends StatefulWidget {
@@ -42,8 +42,6 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return BlocProvider(
       create: (context) => SmsTypingCubit(messagingBloc.state.client),
       child: BlocConsumer<SmsConversationCubit, SmsConversationState>(
@@ -71,13 +69,10 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
                 extendBodyBehindAppBar: true,
                 appBar: AppBar(
                   centerTitle: true,
-                  backgroundColor: theme.canvasColor.withAlpha(150),
-                  flexibleSpace: ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(color: theme.canvasColor.withAlpha(150)),
-                    ),
-                  ),
+                  flexibleSpace: BlurredSurface.adaptive(context),
+                  // Themes that configure no bar color keep the historic translucent bar
+                  // (the adaptive frost on top), instead of the opaque framework default.
+                  backgroundColor: Theme.of(context).appBarTheme.backgroundColor ?? Colors.transparent,
                   title: Builder(
                     builder: (context) {
                       if (recipientNumber != null) {
@@ -112,56 +107,68 @@ class _SmsConversationScreenState extends State<SmsConversationScreen> {
                     },
                   ),
                   actions: [
-                    PopupMenuButton(
-                      itemBuilder: (context) {
-                        return [
-                          PopupMenuItem(
-                            onTap: onDeleteDialog,
-                            child: ListTile(
-                              title: Text(context.l10n.messaging_DialogInfo_deleteBtn),
-                              leading: const Icon(Icons.playlist_remove_rounded),
-                              dense: true,
+                    SemanticAction(
+                      label: context.l10n.messaging_SemanticsLabel_conversationOptions,
+                      identifier: conversationMenuId,
+                      child: PopupMenuButton(
+                        // Without this the built-in "Show menu" tooltip is
+                        // merged in and spoken on top of the name.
+                        tooltip: '',
+                        itemBuilder: (context) {
+                          return [
+                            PopupMenuItem(
+                              onTap: onDeleteDialog,
+                              child: ListTile(
+                                title: Text(context.l10n.messaging_DialogInfo_deleteBtn),
+                                leading: const Icon(Icons.playlist_remove_rounded),
+                                dense: true,
+                              ),
                             ),
-                          ),
-                        ];
-                      },
-                      icon: const Icon(Icons.menu),
+                          ];
+                        },
+                        icon: const Icon(Icons.menu),
+                      ),
                     ),
                   ],
                 ),
-                body: Builder(
-                  builder: (context) {
-                    if (state is SCSReady) {
-                      return SmsMessageListView(
-                        userId: userId,
-                        userNumber: userNumber,
-                        messages: state.messages,
-                        outboxMessages: state.outboxMessages,
-                        outboxMessageDeletes: state.outboxMessageDeletes,
-                        readCursors: state.readCursors,
-                        fetchingHistory: state.fetchingHistory,
-                        historyEndReached: state.historyEndReached,
-                        onSendMessage: (content) => conversationCubit.sendMessage(content),
-                        onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
-                        userReadedUntilUpdate: (date) => conversationCubit.userReadedUntilUpdate(date),
-                        onFetchHistory: conversationCubit.fetchHistory,
-                      );
-                    }
+                // Anchor of the screen: text conversations look like chats and
+                // a flow has to be able to tell the two apart.
+                body: SemanticId(
+                  identifier: smsConversationScreenId,
+                  child: Builder(
+                    builder: (context) {
+                      if (state is SCSReady) {
+                        return SmsMessageListView(
+                          userId: userId,
+                          userNumber: userNumber,
+                          messages: state.messages,
+                          outboxMessages: state.outboxMessages,
+                          outboxMessageDeletes: state.outboxMessageDeletes,
+                          readCursors: state.readCursors,
+                          fetchingHistory: state.fetchingHistory,
+                          historyEndReached: state.historyEndReached,
+                          onSendMessage: (content) => conversationCubit.sendMessage(content),
+                          onDelete: (refMessage) => conversationCubit.deleteMessage(refMessage),
+                          userReadedUntilUpdate: (date) => conversationCubit.userReadedUntilUpdate(date),
+                          onFetchHistory: conversationCubit.fetchHistory,
+                        );
+                      }
 
-                    if (state is SCSError) {
-                      return NoDataPlaceholder(
-                        content: Text(context.l10n.messaging_Conversation_failure),
-                        actions: [
-                          TextButton(
-                            onPressed: conversationCubit.restart,
-                            child: Text(context.l10n.messaging_ActionBtn_retry),
-                          ),
-                        ],
-                      );
-                    }
+                      if (state is SCSError) {
+                        return NoDataPlaceholder(
+                          content: Text(context.l10n.messaging_Conversation_failure),
+                          actions: [
+                            TextButton(
+                              onPressed: conversationCubit.restart,
+                              child: Text(context.l10n.messaging_ActionBtn_retry),
+                            ),
+                          ],
+                        );
+                      }
 
-                    return const Center(child: CircularProgressIndicator());
-                  },
+                      return const Center(child: CircularProgressIndicator());
+                    },
+                  ),
                 ),
               );
             },

@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../bloc/bloc.dart';
 import '../models/models.dart';
 import 'audio_player_interface.dart';
 import 'audio_slider.dart';
+import 'playback_button.dart';
 
 class AudioView extends StatelessWidget {
   const AudioView({required this.path, super.key, this.cacheKey, this.onPlaybackStarted});
@@ -27,7 +30,7 @@ class AudioView extends StatelessWidget {
     final isActive = controller.activeId == _id;
 
     if (isActive && controller.isLoading) {
-      return const _AudioLoadingView();
+      return const AudioLoadingView();
     }
     if (isActive && controller.error != null) {
       return _AudioErrorView(onRetry: () => _startPlayback(context));
@@ -76,22 +79,18 @@ class _InactiveAudioView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       children: [
-        GestureDetector(
-          onTap: onPlay,
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: colorScheme.primary),
-            child: Icon(Icons.play_arrow, color: colorScheme.onPrimary, size: 24),
-          ),
-        ),
+        PlaybackButton(playing: false, onPressed: onPlay),
         const SizedBox(width: 16),
         Expanded(
-          child: IgnorePointer(
-            child: AudioSlider(position: Duration.zero, duration: Duration.zero, onSeek: (_) {}),
+          // A placeholder for the real slider: it neither moves nor accepts
+          // input until playback starts, so assistive technology must not
+          // offer it as a control at all.
+          child: ExcludeSemantics(
+            child: IgnorePointer(
+              child: AudioSlider(position: Duration.zero, duration: Duration.zero, onSeek: (_) {}),
+            ),
           ),
         ),
       ],
@@ -99,15 +98,26 @@ class _InactiveAudioView extends StatelessWidget {
   }
 }
 
-class _AudioLoadingView extends StatelessWidget {
-  const _AudioLoadingView();
+/// Shown while the message is being prepared for playback.
+///
+/// Activating play replaces the button with this view, so the node the user
+/// was focused on disappears: it is named and marked as a live region, which
+/// is what makes a screen reader say that something is happening instead of
+/// silently dropping focus to the top of the screen.
+@visibleForTesting
+class AudioLoadingView extends StatelessWidget {
+  const AudioLoadingView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return SizedBox(
-      height: 40,
-      child: Center(child: LinearProgressIndicator(color: colorScheme.primaryContainer)),
+    return Semantics(
+      label: context.l10n.voicemail_SemanticsLabel_loading,
+      liveRegion: true,
+      child: SizedBox(
+        height: 40,
+        child: Center(child: LinearProgressIndicator(color: colorScheme.primaryContainer)),
+      ),
     );
   }
 }
@@ -134,7 +144,11 @@ class _AudioErrorView extends StatelessWidget {
               style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.error),
             ),
           ),
-          IconButton(onPressed: onRetry, icon: const Icon(Icons.refresh)),
+          SemanticAction(
+            label: context.l10n.voicemail_Label_retry,
+            identifier: voicemailRetryId,
+            child: IconButton(onPressed: onRetry, icon: const Icon(Icons.refresh)),
+          ),
         ],
       ),
     );

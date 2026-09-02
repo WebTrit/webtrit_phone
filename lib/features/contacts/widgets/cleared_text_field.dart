@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
 
-import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ClearedTextField extends StatefulWidget {
-  const ClearedTextField({super.key, this.initialValue, this.onChanged, this.onSubmitted, this.iconConstraints});
+  const ClearedTextField({
+    super.key,
+    this.identifier,
+    this.clearButtonKey,
+    this.clearButtonIdentifier,
+    this.initialValue,
+    this.onChanged,
+    this.onSubmitted,
+    this.iconConstraints,
+  });
+
+  /// Automation id of the search field itself, read from the accessibility
+  /// tree by the on-device tests.
+  ///
+  /// Supplied by the screen rather than baked in here: the same field serves
+  /// the contact list and the conversation list, and two controls answering to
+  /// one id is a trap for whoever writes the test. Left out, the field simply
+  /// carries no id - which is what the conversation list does until its own
+  /// naming lands.
+  final String? identifier;
+
+  /// Widget key of the clear button, used by the tests that run inside the app
+  /// (they address widgets by key, not by accessibility id).
+  final Key? clearButtonKey;
+
+  /// Automation id of the clear button, kept apart from [identifier] so a test
+  /// can tell the box from the cross that empties it - merging the two into one
+  /// control would leave no way to press just the cross.
+  ///
+  /// Its spoken name is not a parameter: "clear search" reads the same on every
+  /// screen, so it lives in this widget.
+  final String? clearButtonIdentifier;
 
   final String? initialValue;
   final ValueChanged<String>? onChanged;
@@ -37,7 +69,7 @@ class ClearedTextFieldState extends State<ClearedTextField> {
     final themeData = Theme.of(context);
     final InputDecorations? inputDecorations = themeData.extension<InputDecorations>();
     final iconConstraints = widget.iconConstraints;
-    return Ink(
+    final field = Ink(
       decoration: BoxDecoration(
         color: themeData.colorScheme.surfaceBright,
         borderRadius: iconConstraints == null ? null : BorderRadius.circular(iconConstraints.minHeight / 2),
@@ -50,17 +82,21 @@ class ClearedTextFieldState extends State<ClearedTextField> {
           prefixIconConstraints: iconConstraints,
           suffixIcon: _isEmpty
               ? null
-              : IconButton(
-                  key: contactsSerchInputClearKey,
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    setState(() {
-                      _isEmpty = true;
-                    });
-                    _controller.clear();
-                    widget.onChanged?.call('');
-                  },
-                  constraints: iconConstraints,
+              : SemanticAction(
+                  label: context.l10n.contacts_SemanticsLabel_clearSearch,
+                  identifier: widget.clearButtonIdentifier,
+                  child: IconButton(
+                    key: widget.clearButtonKey,
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        _isEmpty = true;
+                      });
+                      _controller.clear();
+                      widget.onChanged?.call('');
+                    },
+                    constraints: iconConstraints,
+                  ),
                 ),
           suffixIconConstraints: iconConstraints,
         ),
@@ -71,8 +107,16 @@ class ClearedTextFieldState extends State<ClearedTextField> {
           });
           widget.onChanged?.call(value);
         },
-        onSubmitted: (value) => widget.onSubmitted,
+        onSubmitted: (value) => widget.onSubmitted?.call(value),
       ),
     );
+
+    final identifier = widget.identifier;
+    if (identifier == null) return field;
+
+    // Plain Semantics rather than a merging wrapper: merging would pull the
+    // clear button into the field and leave the search box with no way to be
+    // typed into by name.
+    return SemanticId(identifier: identifier, child: field);
   }
 }

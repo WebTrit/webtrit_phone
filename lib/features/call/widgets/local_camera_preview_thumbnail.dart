@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../utils/utils.dart';
 import 'stream_thumbnail.dart';
+import 'thumbnail_frame.dart';
 
 /// Local camera preview thumbnail intended for use inside a draggable overlay.
 ///
@@ -41,8 +43,6 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final frameSize = ThumbnailLayout.calcFrameSize(orientation: orientation, smallerSide: smallerSide);
-
     final hasFrontCamera = frontCamera != null;
     final isSwitchEnabled = hasFrontCamera && onSwitchCameraPressed != null;
 
@@ -58,29 +58,26 @@ class LocalCameraPreviewThumbnail extends StatelessWidget {
           )
         : Icon(Icons.flip_camera_ios, size: switchCameraIconSize, color: themeData.colorScheme.surface);
 
-    return SizedBox.fromSize(
-      size: frameSize,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: isSwitchEnabled ? onSwitchCameraPressed : null,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              StreamThumbnail(
-                key: callFrontCameraPreviewKey,
-                stream: hasFrontCamera ? localStream : null,
-                mirror: frontCamera ?? false,
-                placeholderBuilder: (context) => Shimmer(
-                  baseColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
-                  highlightColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.15),
-                ),
-              ),
-              Positioned(top: 8, right: 8, child: indicatorWidget),
-            ],
+    return ThumbnailFrame(
+      orientation: orientation,
+      smallerSide: smallerSide,
+      onTap: isSwitchEnabled ? onSwitchCameraPressed : null,
+      label: context.l10n.callCameraPreview_SemanticsLabel_switchCamera,
+      identifier: callFrontCameraPreviewId,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          StreamThumbnail(
+            key: callFrontCameraPreviewKey,
+            stream: hasFrontCamera ? localStream : null,
+            mirror: frontCamera ?? false,
+            placeholderBuilder: (context) => Shimmer(
+              baseColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
+              highlightColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.15),
+            ),
           ),
-        ),
+          Positioned(top: 8, right: 8, child: indicatorWidget),
+        ],
       ),
     );
   }

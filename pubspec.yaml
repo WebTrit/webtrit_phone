@@ -32,7 +32,7 @@ version: 0.0.0+0
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 # app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
-app_version: 1.16.3+0
+app_version: 1.16.4+0
 
 environment:
   sdk: ^3.12.0
@@ -137,10 +137,10 @@ dependencies:
   webtrit_appearance_theme:
     path: ./packages/webtrit_appearance_theme
   webtrit_callkeep:
-   # Release branches pin callkeep to a published tag (see docs/release_versioning.md).
+    # Release branches pin callkeep to a published tag (see docs/release_versioning.md).
     git:
       url: https://github.com/WebTrit/webtrit_callkeep.git
-      ref: 1.3.2
+      ref: 1.3.3
       path: webtrit_callkeep
   webtrit_phone_number:
     path: ./packages/webtrit_phone_number
@@ -160,7 +160,7 @@ dependencies:
   flutter_webrtc:
     git:
       url: https://github.com/WebTrit/flutter-webrtc.git
-      ref: main_ext_rebase_06.05.26
+      ref: main_ext_rebase_11.08.26
 
 dev_dependencies:
   integration_test:
@@ -397,6 +397,64 @@ melos:
       description: Configure Xcode project without building.
       run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only
 
+    browserstack:upload:
+      description: >-
+        Upload an apk to BrowserStack App Live for manual testing on real devices.
+        Reads BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY from .env.
+        Set BS_ARGS for extra flags (e.g. --build, --list, a file path).
+      run: tool/scripts/browserstack_upload.sh ${BS_ARGS:-}
+
+    # ===========================
+    # Fastlane - melos run fastlane:ios:build | fastlane:android:upload
+    # ===========================
+
+    fastlane:install:
+      description: Install fastlane if it is missing (brew on macOS, gem elsewhere).
+      run: |
+        set -eo pipefail
+        if command -v fastlane >/dev/null 2>&1; then
+          echo "fastlane already installed: $(fastlane --version | tail -n 1)"
+        elif [ "$(uname -s)" = "Darwin" ]; then
+          brew install fastlane
+        else
+          gem install fastlane
+        fi
+
+    fastlane:ios:build:
+      description: >
+        Build and sign the iOS ipa via ios/fastlane. Reads IOS_CERTIFICATE_PATH,
+        IOS_PROVISIONING_PROFILE_PATH, IOS_CODE_SIGNING_IDENTITY, IOS_TEAM_ID, IOS_BUILD_NAME,
+        IOS_BUILD_NUMBER, IOS_BUILD_FILE_NAME from the environment.
+      steps:
+        - fastlane:install
+        - cd ios && fastlane ios build
+
+    fastlane:ios:upload:
+      description: >
+        Upload the built ipa to TestFlight. Reads IOS_APP_STORE_CONNECT_API_KEY_ID,
+        IOS_APP_STORE_CONNECT_API_KEY_ISSUER_ID, IOS_APP_STORE_CONNECT_API_KEY_P8_PATH,
+        IOS_BUILD_FILE_NAME from the environment.
+      steps:
+        - fastlane:install
+        - cd ios && fastlane ios upload
+
+    fastlane:android:build:
+      description: >
+        Build the Android app bundle via android/fastlane. Reads ANDROID_BUILD_TARGET,
+        ANDROID_FLAVOR, ANDROID_BUILD_NAME, ANDROID_BUILD_NUMBER from the environment.
+      steps:
+        - fastlane:install
+        - cd android && fastlane android build
+
+    fastlane:android:upload:
+      description: >
+        Upload the built aab to Google Play. Reads ANDROID_PLAY_STORE_TRACK,
+        ANDROID_PLAY_STORE_RELEASE_STATUS, ANDROID_PLAY_STORE_JSON_KEY_PATH,
+        ANDROID_PLAY_STORE_PACKAGE_NAME, ANDROID_AAB_PATH from the environment.
+      steps:
+        - fastlane:install
+        - cd android && fastlane android upload
+
     # ===========================
     # Clean - melos run clean | clean:git
     # ===========================
@@ -443,14 +501,22 @@ melos:
         APP_ID=$(grep -E '^(export[[:space:]]+)?APP_ID=' .env | cut -d '=' -f2-)
         CONFIGURATOR_TOKEN=$(grep -E '^(export[[:space:]]+)?CONFIGURATOR_TOKEN=' .env | cut -d '=' -f2-)
         KEYSTORE_APP_PATH="../webtrit_phone_keystores/applications/${APP_ID:?APP_ID not found in .env}"
-        dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
+        # `dart run` streams a "Running build hooks..." progress fragment on stderr, and melos
+        # labels everything a script writes to stderr as ERROR - which reads as a failed run even
+        # though the command succeeded. Strip just that fragment; any other stderr text, the exit
+        # code and stdout pass through untouched.
+        phone_tools() {
+          { dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart "$@" 2>&1 1>&3 \
+            | sed -e 's/Running build hooks\.\.\.//g' -e '/^[[:space:]]*$/d' >&2; } 3>&1
+        }
+        phone_tools \
           configurator-resources \
           --applicationId="$APP_ID" \
           --keystores-path=../webtrit_phone_keystores/applications \
           --token="${CONFIGURATOR_TOKEN:?CONFIGURATOR_TOKEN not found in .env}"
-        dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
+        phone_tools \
           configurator-generate
-        dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart \
+        phone_tools \
           configurator-setup \
           --platform ios \
           --platform android \

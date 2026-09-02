@@ -26,11 +26,11 @@ class AppPermissions {
   /// web; camera + microphone cover the call use case.)
   static const _webSupportedPermissions = [Permission.microphone, Permission.camera];
 
-  /// A list of special permissions that are absolutely required for the app to function correctly.
-  static const _requiredSpecialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
-
-  /// A list of special permissions required by the app, handled via `webtrit_callkeep`.
-  static const _specialPermissions = [..._requiredSpecialPermissions];
+  /// A list of special permissions the app may ask for, handled via `webtrit_callkeep`.
+  ///
+  /// Being on this list only means the app explains the permission and offers a way
+  /// to grant it - none of them keeps the user out of the app.
+  static const _specialPermissions = [CallkeepSpecialPermissions.fullScreenIntent];
 
   /// [CallkeepPermission.readPhoneState] and [CallkeepPermission.readPhoneNumbers]
   /// are included here to verify if the user has granted the necessary access for:
@@ -86,9 +86,11 @@ class AppPermissions {
   /// The list of permissions that the app may request, excluding those specified by [_excludePermissions].
   List<Permission> get permissions => _permissionsCache.value;
 
-  /// Returns `true` if any of the required permissions are not granted.
+  /// Returns `true` if any of the [_requiredPermissions] is not granted.
   ///
-  /// This checks the status of both [_requiredPermissions] and [_requiredSpecialPermissions].
+  /// Special permissions are deliberately not part of this: they change how a call
+  /// is presented, not whether the app works, so a missing one must never keep the
+  /// user out.
   Future<bool> get isDenied async {
     for (final permission in _requiredPermissions) {
       final status = await permission.status;
@@ -97,24 +99,12 @@ class AppPermissions {
       }
     }
 
-    for (final permission in _requiredSpecialPermissions) {
-      final status = await permission.status();
-      if (!status.isGranted) {
-        return true;
-      }
-    }
-
     return false;
   }
 
-  /// Checks the status of special permissions.
-  ///
-  /// [onlyRequired] - If true, checks only [_requiredSpecialPermissions].
-  ///                  If false (default), checks all [_specialPermissions].
-  Future<Map<CallkeepSpecialPermissions, CallkeepSpecialPermissionStatus>> getSpecialPermissionStatuses({
-    bool onlyRequired = false,
-  }) async {
-    final targetPermissions = onlyRequired ? _requiredSpecialPermissions : _specialPermissions;
+  /// Checks the status of all [_specialPermissions].
+  Future<Map<CallkeepSpecialPermissions, CallkeepSpecialPermissionStatus>> getSpecialPermissionStatuses() async {
+    const targetPermissions = _specialPermissions;
 
     if (targetPermissions.isEmpty) return {};
 
@@ -188,6 +178,11 @@ class AppPermissions {
 
   /// Opens the app settings page.
   Future<void> toAppSettings() => openAppSettings();
+
+  /// Status of the permission that lets an incoming call take over the lock screen.
+  /// Reports granted where it does not apply (Android below 14, iOS, web).
+  Future<CallkeepSpecialPermissionStatus> fullScreenIntentStatus() =>
+      _webtritCallkeepPermissions.getFullScreenIntentPermissionStatus();
 
   /// Status of the OEM "display pop-up windows while running in background"
   /// capability (MIUI/HyperOS), which gates showing the incoming-call UI over

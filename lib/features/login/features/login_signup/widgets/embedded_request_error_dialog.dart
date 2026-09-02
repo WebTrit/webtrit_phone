@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
 
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import 'embedded_request_error_style.dart';
 import 'embedded_request_error_styles.dart';
@@ -53,36 +55,42 @@ class EmbeddedRequestErrorDialog extends StatelessWidget {
       },
       child: Scaffold(
         appBar: appBar,
-        body: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (logo?.picture != null) logo!.picture!.svg(),
-                Text(
-                  title,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    color: theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
+        body: SemanticId(
+          identifier: loginSignupEmbeddedErrorScreenId,
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (logo?.picture != null) logo!.picture!.svg(),
+                  Text(
+                    title,
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  error,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  const SizedBox(height: 8),
+                  Text(
+                    error,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: kInset),
-                ElevatedButton.icon(
-                  onPressed: onRetry,
-                  icon: const Icon(Icons.refresh),
-                  label: Text(context.l10n.common_noInternetConnection_retryButton),
-                ),
-              ],
+                  const SizedBox(height: kInset),
+                  SemanticAction(
+                    identifier: loginSignupEmbeddedRetryButtonId,
+                    child: ElevatedButton.icon(
+                      onPressed: onRetry,
+                      icon: const Icon(Icons.refresh),
+                      label: Text(context.l10n.common_noInternetConnection_retryButton),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

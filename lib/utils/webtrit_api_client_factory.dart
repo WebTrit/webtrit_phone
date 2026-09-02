@@ -9,11 +9,20 @@ typedef CoreUrlCallback = Uri Function();
 typedef TenantIdCallback = String Function();
 
 class WebtritApiClientFactory {
-  WebtritApiClientFactory({required this.getTenantId, required this.getCoreUrl, required this.trustedCertificates});
+  WebtritApiClientFactory({
+    required this.getTenantId,
+    required this.getCoreUrl,
+    required this.trustedCertificates,
+    this.userAgent,
+  });
 
   final CoreUrlCallback getCoreUrl;
   final TenantIdCallback getTenantId;
   final TrustedCertificates trustedCertificates;
+
+  /// Sent as the `User-Agent` header, so the session the backend creates on
+  /// login is labelled with this app build and device.
+  final String? userAgent;
 
   WebtritApiClient? _cachedClient;
   Uri? _lastCoreUrl;
@@ -35,6 +44,7 @@ class WebtritApiClientFactory {
       connectionTimeout: kApiClientConnectionTimeout,
       certs: trustedCertificates,
       isDebug: kDebugMode,
+      userAgent: userAgent,
     );
 
     _cachedClient = newClient;

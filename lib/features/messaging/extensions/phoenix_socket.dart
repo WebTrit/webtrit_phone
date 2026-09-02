@@ -998,6 +998,12 @@ sealed class SmsChannelEvent {
         return SmsChannelMessageUpdate(SmsMessagePhxMapper.fromMap(m.payload as Map<String, dynamic>));
       case 'sms_conversation_cursor_set':
         return SmsChannelCursorSet(SmsMessageReadCursorPhxMapper.fromMap(m.payload as Map<String, dynamic>));
+      case 'typing':
+        final number = m.payload?['number'];
+        if (number is String) {
+          return SmsChannelTyping(number: number);
+        }
+        return SmsChannelUnknown(event: m.event.value);
       case 'phx_error':
         return SmsChannelDisconnect();
       default:
@@ -1042,8 +1048,8 @@ class SmsChannelCursorSet extends SmsChannelEvent with EquatableMixin {
   bool get stringify => true;
 }
 
-class SmsChannelTyping extends ChatChannelEvent with EquatableMixin {
-  SmsChannelTyping(this.number);
+class SmsChannelTyping extends SmsChannelEvent with EquatableMixin {
+  SmsChannelTyping({required this.number});
 
   final String number;
 

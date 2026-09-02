@@ -95,18 +95,24 @@ class _PermissionsScreenState extends State<PermissionsScreen> with WidgetsBindi
                   const Spacer(),
                   const SizedBox(height: kInset),
                   if (!state.isPermanentlyDenied)
-                    OutlinedButton(
-                      key: permissionsInitButtonKey,
-                      onPressed: _onRequestPermissions(context, isRequesting, isFlowCompleted),
-                      style: elevatedButtonStyles?.primary,
-                      child: button,
+                    SemanticAction(
+                      identifier: permissionsInitButtonId,
+                      child: OutlinedButton(
+                        key: permissionsInitButtonKey,
+                        onPressed: _onRequestPermissions(context, isRequesting, isFlowCompleted),
+                        style: elevatedButtonStyles?.primary,
+                        child: button,
+                      ),
                     ),
 
                   if (state.isPermanentlyDenied)
-                    OutlinedButton(
-                      onPressed: context.read<PermissionsCubit>().openAppSettings,
-                      style: elevatedButtonStyles?.neutral,
-                      child: Text(context.l10n.permission_manufacturer_Button_toSettings),
+                    SemanticAction(
+                      identifier: permissionsSettingsButtonId,
+                      child: OutlinedButton(
+                        onPressed: context.read<PermissionsCubit>().openAppSettings,
+                        style: elevatedButtonStyles?.neutral,
+                        child: Text(context.l10n.permission_manufacturer_Button_toSettings),
+                      ),
                     ),
                 ],
               ),
@@ -176,16 +182,22 @@ class _PermissionsScreenState extends State<PermissionsScreen> with WidgetsBindi
     final view = BlocBuilder<PermissionsCubit, PermissionsState>(
       bloc: permissionCubit,
       builder: (context, state) {
-        VoidCallback? onPopCallback() {
-          if (state.requiresSpecialPermissionsAction) return null;
-          if (state.isFlowCompleted) return () => _navigateToMain();
-          return () => Navigator.of(context).pop();
+        // The permission can always be left for later, from the very first frame.
+        Future<void> onPop() async {
+          await permissionCubit.skipSpecialPermission(permission);
+          if (!context.mounted) return;
+
+          if (permissionCubit.state.isFlowCompleted) {
+            _navigateToMain();
+          } else {
+            Navigator.of(context).pop();
+          }
         }
 
         return SpecialPermission(
           specialPermissions: permission,
           onGoToAppSettings: () => permissionCubit.openAppSpecialPermissionSettings(permission),
-          onPop: onPopCallback(),
+          onPop: onPop,
         );
       },
     );
