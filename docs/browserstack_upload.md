@@ -22,17 +22,15 @@ The tooling consists of `tool/scripts/browserstack_upload.sh` and the
 
 ## Usage
 
-Build a debug apk and upload it in one step (default flavor
-`deeplinksDisabledSmsReceiverDisabled`):
+Build a debug apk and upload it in one step (optional features follow `dart_define.json`):
 
 ```bash
 tool/scripts/browserstack_upload.sh --build
 ```
 
-Build with a specific flavor, or in release mode:
+Build in release mode:
 
 ```bash
-tool/scripts/browserstack_upload.sh --build someFlavor
 tool/scripts/browserstack_upload.sh --build --release
 ```
 

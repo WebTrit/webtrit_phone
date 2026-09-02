@@ -6,7 +6,7 @@ known-mandatory flag, and launching it again.
 
 Last reviewed: 2026-08-18
 
-For build/run commands, flavors, signing and SDK pinning see [Build & Development](build.md).
+For build/run commands, optional features, signing and SDK pinning see [Build & Development](build.md).
 For what works on web and the web-specific dart-defines see [Flutter web support](web.md).
 
 ---
@@ -62,45 +62,32 @@ The `melos run build:*` and `fastlane:*` scripts already pass both flags (`pubsp
 `tool/scripts/browserstack_upload.sh`). A hand-written `flutter build ...` command is the only
 place they go missing - prefer the melos script.
 
-Android builds need one more flag on top of these - see the next section.
+## Optional Android features
 
-## Android builds and flavors
+Android has no build flavors, so an APK/AAB build needs no `--flavor` and there is only one
+variant per build type. Two features are decided at build time because their permission and
+components must be absent when they are off - deep links and the SMS call trigger. Both follow
+`dart_define.json`:
 
-Android declares two flavor dimensions (`deeplinks` x `smsReceiver`,
-`android/app/build.gradle`), so every `flutter build apk` / `appbundle` needs a combined
-`--flavor` - one value per dimension, concatenated:
+| Dart define (`dart_define.json`)     | Value           | Effect                                       |
+|--------------------------------------|-----------------|----------------------------------------------|
+| `WEBTRIT_APP_LINK_DOMAIN`            | non-empty       | deep-link intent filter is merged in         |
+|                                      | empty/missing   | no intent filter                             |
+| `WEBTRIT_CALL_TRIGGER_MECHANISM_SMS` | `"true"`        | `RECEIVE_SMS` and the receiver are merged in |
+|                                      | anything else   | neither is declared                          |
 
-| Dart define (`dart_define.json`)     | Value           | Flavor part           |
-|--------------------------------------|-----------------|-----------------------|
-| `WEBTRIT_APP_LINK_DOMAIN`            | non-empty       | `deeplinks`           |
-|                                      | empty/missing   | `deeplinksDisabled`   |
-| `WEBTRIT_CALL_TRIGGER_MECHANISM_SMS` | `"true"`        | `smsReceiver`         |
-|                                      | anything else   | `smsReceiverDisabled` |
+Every build prints what it resolved (`Deep links: enabled, SMS call trigger: disabled`), so a
+build log is enough to tell which features the artifact carries.
 
-`melos run build:apk` / `build:appbundle` resolve the flavor automatically from
-`dart_define.json` (`tool/scripts/android_flavor.sh`, same rule as `makefile.shared`) - prefer
-them. A hand-typed command must pass the flag itself:
+Checking the result does not need a full build. The merged manifest is one Gradle task:
 
 ```bash
-flutter build apk --debug --flavor deeplinkssmsReceiverDisabled \
-  --dart-define-from-file=dart_define.json --no-tree-shake-icons
+cd android
+./gradlew :app:processReleaseManifest -Pdart-defines=<base64 dart-defines>
+cat ../build/app/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml
 ```
 
-What a missing `--flavor` costs: Gradle assembles ALL four flavor combinations (measured 569 s
-for a debug build) and the Flutter tool then fails with the misleading
-
-```
-Gradle build failed to produce an .apk file. It's likely that this file was generated
-under .../build, but the tool couldn't find it.
-```
-
-The build actually succeeded - all four APKs are in `build/app/outputs/flutter-apk/` under
-flavor-suffixed names (e.g. `app-deeplinkssmsreceiver-debug.apk`). Take the one you need from
-there instead of re-running the build.
-
-The "flavor is selected automatically" note in the `WEBTRIT_APP_LINK_DOMAIN` dart-define
-description refers to the `makefile.shared` build path (Makefile/fastlane), not to a plain
-`flutter build`. Flavor background: [flavors.md](flavors.md).
+Background: [optional_features.md](optional_features.md).
 
 ## Web builds
 
