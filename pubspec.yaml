@@ -391,14 +391,21 @@ melos:
       run: flutter build appbundle --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:ios:
-      description: Build iOS app. Set FLUTTER_FLAGS for extra flags (e.g. --release --no-codesign).
-      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+      description: >-
+        Build iOS app. Optional features are resolved from dart_define.json, as on Android.
+        Set FLUTTER_FLAGS for extra flags (e.g. --release --no-codesign).
+      run: >-
+        sh tool/scripts/ios_optional_features.sh &&
+        flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:ios:config:
       description: >-
-        Configure the Xcode project without building it. Set FLUTTER_FLAGS for extra flags
+        Configure the Xcode project without building it. Optional features are resolved from
+        dart_define.json, as on Android. Set FLUTTER_FLAGS for extra flags
         (e.g. --build-name, --build-number, --no-codesign).
-      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only ${FLUTTER_FLAGS:-}
+      run: >-
+        sh tool/scripts/ios_optional_features.sh &&
+        flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only ${FLUTTER_FLAGS:-}
 
     browserstack:upload:
       description: >-
