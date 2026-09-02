@@ -30,14 +30,10 @@ yet, so type them:
 flutter build web --dart-define-from-file=dart_define.json --no-tree-shake-icons
 ```
 
-Android APK/AAB builds additionally need `--flavor` (two flavor dimensions in
-`android/app/build.gradle`). Without it Gradle builds all four flavor combinations (measured
-569 s) and the tool then reports the misleading "Gradle build failed to produce an .apk file" -
-even though the APKs are in `build/app/outputs/flutter-apk/` under flavor-suffixed names; take
-one from there instead of re-running. `melos run build:apk` / `build:appbundle` resolve the
-flavor from `dart_define.json` (`tool/scripts/android_flavor.sh`); a hand-typed command must pass
-it, e.g. `--flavor deeplinkssmsReceiverDisabled`. Selection rule and background:
-[`docs/build_verification.md`](docs/build_verification.md).
+Android APK/AAB builds need no `--flavor` - the project has no build flavors. Two features are
+optional at the manifest level (deep links, SMS call trigger) and follow the dart-defines the build
+already carries, so `dart_define.json` alone decides them; the build prints which ones it resolved.
+Background: [`docs/optional_features.md`](docs/optional_features.md).
 
 Before any build, run the cheap checks — `dart format` → `analyze` → `test`. Which check for which
 change, measured costs, and how to drive a long build without wasted retries:

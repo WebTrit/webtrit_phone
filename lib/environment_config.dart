@@ -78,8 +78,12 @@ class EnvironmentConfig {
   );
 
   static const APP_LINK_DOMAIN__NAME = 'WEBTRIT_APP_LINK_DOMAIN';
+
+  /// Trimmed, because the build decides on the trimmed value whether to declare the App Links
+  /// intent filter at all and which host it names. Comparing incoming links against an untrimmed
+  /// value here would reject the very hosts the manifest was generated for.
   static String get APP_LINK_DOMAIN =>
-      _env.string(APP_LINK_DOMAIN__NAME, const String.fromEnvironment(APP_LINK_DOMAIN__NAME, defaultValue: ''));
+      _env.string(APP_LINK_DOMAIN__NAME, const String.fromEnvironment(APP_LINK_DOMAIN__NAME, defaultValue: '')).trim();
 
   static const APP_NAME__NAME = 'WEBTRIT_APP_NAME';
   static String get APP_NAME =>

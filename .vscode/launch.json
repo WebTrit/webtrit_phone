@@ -7,10 +7,6 @@
             "type": "dart",
             "args": [
                 "--dart-define-from-file=dart_define.json",
-                "--flavor=deeplinkssmsReceiver",
-                // "--flavor=deeplinksDisabledsmsReceiverDisabled",
-                // "--flavor=deeplinksDisabledsmsReceiver",
-                // "--flavor=deeplinkssmsReceiverDisabled",
             ]
         },
         {
@@ -20,10 +16,6 @@
             "flutterMode": "profile",
             "args": [
                 "--dart-define-from-file=dart_define.json",
-                "--flavor=deeplinkssmsReceiver",
-                // "--flavor=deeplinksDisabledsmsReceiverDisabled",
-                // "--flavor=deeplinksDisabledsmsReceiver",
-                // "--flavor=deeplinkssmsReceiverDisabled",
             ]
         },
         {
@@ -33,10 +25,6 @@
             "flutterMode": "release",
             "args": [
                 "--dart-define-from-file=dart_define.json",
-                "--flavor=deeplinkssmsReceiver",
-                // "--flavor=deeplinksDisabledsmsReceiverDisabled",
-                // "--flavor=deeplinksDisabledsmsReceiver",
-                // "--flavor=deeplinkssmsReceiverDisabled",
             ]
         },
     ]

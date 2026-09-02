@@ -22,8 +22,5 @@ patrol test \
   -t "$target_file" \
   --dart-define-from-file=dart_define.json \
   --dart-define-from-file=dart_define.integration_test.json \
-  --flavor=deeplinkssmsReceiver \
   --verbose \
   --show-flutter-logs
-
-# TODO: add default flavor resolution and remove this flag
