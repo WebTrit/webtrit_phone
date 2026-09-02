@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:icon_decoration/icon_decoration.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
 
@@ -17,43 +16,47 @@ class SipPresenceIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final style = Theme.of(context).extension<LeadingAvatarStyles>()?.primary ?? LeadingAvatarStyle();
+    final badge = LeadingAvatarStyles.of(context).presenceBadge!;
 
     final anyAvailable = presenceInfo.anyAvailable;
-    final color = anyAvailable
-        ? (style.presenceBadge?.availableColor ?? colorScheme.tertiary)
-        : (style.presenceBadge?.unavailableColor ?? colorScheme.onSurfaceVariant);
+
+    // Asking not to be called outranks reachability: a contact on "do not
+    // disturb" is reachable by definition - they just published something -
+    // and the point of the state is to stop the call, not to describe the
+    // connection. Only a published activity gets this colour; a reported call
+    // deliberately does not, because Core publishes one from the moment of
+    // dialling and would paint people as busy over calls nobody answered.
+    final color = switch (presenceInfo.primaryActivity) {
+      PresenceActivity.busy || PresenceActivity.doNotDisturb => badge.busyColor,
+      _ => anyAvailable ? badge.availableColor : badge.unavailableColor,
+    };
 
     final activityIcon = _activityIcon(presenceInfo, dialogInfo);
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-            border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 2),
-          ),
-        ),
-        if (activityIcon != null)
-          Positioned(
-            top: -_presenceRect.width * 0.2,
-            right: 0,
-            child: DecoratedIcon(
-              decoration: IconDecoration(
-                border: IconBorder(color: Theme.of(context).scaffoldBackgroundColor, width: 2.5),
-              ),
-              icon: Icon(activityIcon, color: color, size: _presenceRect.width * 0.6),
+    // The glyph sits inside the mark rather than on top of it: an icon laid
+    // over the dot cuts into its outline and the mark reads as smaller and
+    // busier than it is. Ring and glyph are proportional to the mark, so the
+    // availability colour keeps the same share of it at every size - this
+    // widget is also rendered at 16 px in the presence pickers, where a fixed
+    // ring plus a fixed glyph would leave the colour a sliver.
+    final side = _presenceRect.width;
+
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: side * 0.1),
+      ),
+      child: activityIcon == null
+          ? null
+          : Center(
+              child: Icon(activityIcon, color: badge.iconColor, size: side * 0.55),
             ),
-          ),
-      ],
     );
   }
 
   IconData? _activityIcon(List<PresenceInfo> presenceInfo, List<DialogInfo> dialogInfo) {
-    if (dialogInfo.isNotEmpty) {
+    if (dialogInfo.established != null) {
       return Icons.phone_in_talk_rounded;
     }
 

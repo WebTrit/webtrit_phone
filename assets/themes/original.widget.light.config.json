@@ -76,9 +76,26 @@
     "defaultPlaceholderImage": {
       "uri": "asset://assets/images/secondary_onboarding_logo.svg"
     },
+    "__leadingAvatarStyle": "Contact avatar and the status marks drawn on it. A key written here pins that value for this theme for good; a key left out follows the app and improves with it. The `_`-prefixed entries inside are disabled examples: they show what can be set and the value the app uses today - drop the underscore to take one over.",
     "leadingAvatarStyle": {
+      "_radius": 20.0,
+      "presenceBadge": {
+        "availableColor": null,
+        "unavailableColor": null,
+        "busyColor": null,
+        "iconColor": null,
+        "sizeFactor": 0.4
+      },
+      "registeredBadge": {
+        "registeredColor": null,
+        "unregisteredColor": null,
+        "sizeFactor": 0.4
+      },
+      "_nameColors": {
+        "enabled": true,
+        "palette": null
+      },
       "backgroundColor": "#EEF3F6",
-      "radius": 20.0,
       "initialsTextStyle": {
         "fontFamily": "Montserrat",
         "fontSize": 16,
@@ -93,37 +110,23 @@
         "matchTextDirection": false
       },
       "loading": {
-        "showByDefault": false,
+        "_showByDefault": false,
+        "_strokeWidth": 1.0,
         "padding": {
           "left": 2.0,
           "top": 2.0,
           "right": 2.0,
           "bottom": 2.0
-        },
-        "strokeWidth": 1.0
+        }
       },
       "smartIndicator": {
         "backgroundColor": "#F8FBFD",
+        "_sizeFactor": 0.4,
         "icon": {
           "codePoint": "0xe491",
           "fontFamily": "MaterialIcons",
           "matchTextDirection": false
-        },
-        "sizeFactor": 0.4
-      },
-      "registeredBadge": {
-        "registeredColor": null,
-        "unregisteredColor": null,
-        "sizeFactor": 0.2
-      },
-      "presenceBadge": {
-        "availableColor": null,
-        "unavailableColor": null,
-        "sizeFactor": 0.325
-      },
-      "nameColors": {
-        "enabled": true,
-        "palette": null
+        }
       }
     }
   },

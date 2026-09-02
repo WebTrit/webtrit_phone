@@ -47,6 +47,35 @@ class LeadingAvatarStyle with Diagnosticable {
   /// Pseudorandom, name-derived background/initials colors.
   final NameColorsStyle? nameColors;
 
+  /// The app's own appearance for the avatar and its overlays.
+  ///
+  /// This is the single place these values live: a theme names only what it
+  /// wants different, and everything it leaves out comes from here, so a new
+  /// app build carries new appearance to every deployment that did not opt out.
+  static LeadingAvatarStyle defaults(ColorScheme colors) {
+    return LeadingAvatarStyle(
+      backgroundColor: colors.secondaryContainer,
+      radius: 20,
+      initialsTextStyle: TextStyle(color: colors.onSecondaryContainer),
+      loadingOverlay: const LoadingOverlayStyle(padding: EdgeInsets.zero, strokeWidth: 1),
+      smartIndicator: SmartIndicatorStyle(
+        backgroundColor: colors.surfaceContainerLowest,
+        icon: Icons.person,
+        sizeFactor: 0.4,
+      ),
+      // The dot's colors keep coming from RegisteredStatusStyles.
+      registeredBadge: const RegisteredBadgeStyle(sizeFactor: 0.4),
+      presenceBadge: PresenceBadgeStyle(
+        availableColor: colors.tertiary,
+        unavailableColor: colors.onSurfaceVariant,
+        busyColor: colors.error,
+        iconColor: colors.surface,
+        sizeFactor: 0.4,
+      ),
+      nameColors: const NameColorsStyle(),
+    );
+  }
+
   static LeadingAvatarStyle merge(LeadingAvatarStyle? base, LeadingAvatarStyle? override) {
     if (base == null && override == null) return const LeadingAvatarStyle();
     base ??= const LeadingAvatarStyle();

@@ -35,10 +35,10 @@ lefthook install
 | Hook         | Purpose                                                                                      |
 |--------------|----------------------------------------------------------------------------------------------|
 | `pre-commit` | Runs `dart format` on staged Dart files (generated files excluded)                           |
-| `pre-push`   | Runs `flutter analyze`, `flutter test`, and checks branch name                               |
+| `pre-push`   | Runs `flutter analyze`, `flutter test`, `dart tool/check_l10n.dart`, and checks branch name |
 | `commit-msg` | Validates commit messages using [Conventional Commits](https://www.conventionalcommits.org/) |
 
-The hook logic is defined in `.lefthook.yml` and shell scripts under `tool/scripts/`.
+The hook logic is defined in `lefthook.yml` and shell scripts under `tool/scripts/`.
 
 ### Skipping Hooks
 

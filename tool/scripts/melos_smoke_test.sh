@@ -29,6 +29,7 @@ run_test "fmt:check"
 run_test "analyze"
 run_test "outdated"
 run_test "l10n:generate"
+run_test "l10n:check"
 run_test "ide:sync"
 
 echo ""

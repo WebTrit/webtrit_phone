@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.g.dart';
 
 // ignore_for_file: type=lint
@@ -170,6 +171,30 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String callTile_SemanticsLabel_videoCall(String name) {
     return 'Videochiamata a $name';
+  }
+
+  @override
+  String get callerId_SemanticsLabel_addMatch => 'Aggiungi una corrispondenza di prefisso';
+
+  @override
+  String get callerId_SemanticsLabel_matchNumber => 'Numero da mostrare per questo prefisso';
+
+  @override
+  String get callerId_SemanticsLabel_defaultNumber => 'Numero predefinito da cui chiamare';
+
+  @override
+  String callerId_SemanticsLabel_matchPrefix(String country) {
+    return 'Prefisso da abbinare, attualmente $country';
+  }
+
+  @override
+  String callerId_SemanticsLabel_removeMatch(String dialCode) {
+    return 'Rimuovi la corrispondenza per $dialCode';
+  }
+
+  @override
+  String callerId_SemanticsLabel_matchRule(String dialCode, String number) {
+    return 'Le chiamate verso $dialCode mostrano $number';
   }
 
   @override
@@ -464,21 +489,31 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get contacts_agreement_button_text => 'Continue';
+  String get contacts_ContactsScreen_emptyFavorites =>
+      'Non ci sono ancora preferiti tra i tuoi contatti.\nAggiungine uno dalla scheda del contatto con la stella';
+
+  @override
+  String get contacts_ContactsScreen_searchSemanticsLabel => 'Cerca contatti';
+
+  @override
+  String get contacts_ContactsScreen_sourceSemanticsLabel => 'Origine dei contatti';
+
+  @override
+  String get contacts_agreement_button_text => 'Continua';
 
   @override
   String get contacts_agreement_checkbox_text =>
-      'I agree to allow the app to access my contacts to enhance my user experience.';
+      'Accetto di consentire all\'app di accedere ai miei contatti per migliorare la mia esperienza d\'uso.';
 
   @override
   String get contacts_agreement_description =>
-      'This app requires access to your contact list to display your contacts in the app\'s Contacts tab. \n\nThe contact data is temporarily stored locally on your device to enable features like making calls directly from the app. \n\nThis data is not collected, transmitted, or shared outside the app.';
+      'Questa app richiede l\'accesso alla tua rubrica per mostrare i tuoi contatti nella scheda Contatti dell\'app. \n\nI dati dei contatti vengono memorizzati temporaneamente sul tuo dispositivo per abilitare funzioni come le chiamate direttamente dall\'app. \n\nQuesti dati non vengono raccolti, trasmessi né condivisi al di fuori dell\'app.';
 
   @override
-  String get contacts_agreement_title => 'Data collection';
+  String get contacts_agreement_title => 'Raccolta dati';
 
   @override
-  String get contacts_ExternalTabButton_refresh => 'Refresh';
+  String get contacts_ExternalTabButton_refresh => 'Aggiorna';
 
   @override
   String get contacts_ExternalTabText_empty => 'Nessun contatto';
@@ -493,10 +528,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_LocalTabButton_contactsAgreement => 'Apri Impostazioni';
 
   @override
-  String get contacts_LocalTabButton_openAppSettings => 'Grant access to your phone contacts';
+  String get contacts_LocalTabButton_openAppSettings => 'Consenti l\'accesso ai contatti del telefono';
 
   @override
-  String get contacts_LocalTabButton_refresh => 'Refresh';
+  String get contacts_LocalTabButton_refresh => 'Aggiorna';
 
   @override
   String get contacts_LocalTabText_contactsAgreementFailure =>
@@ -516,13 +551,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'Non ci sono i permessi per ottenere i tuoi contatti telefonici';
 
   @override
+  String get contactsSourceFavorites => 'Preferiti';
+
+  @override
   String get contactsSourceExternal => 'Centralino cloud';
 
   @override
   String get contactsSourceLocal => 'Il tuo telefono';
-
-  @override
-  String get contacts_Text_blingTransferInitiated => 'Trasferimento senza vedere';
 
   @override
   String get contacts_DialogsInfoView_title => 'Informazioni chiamate (BLF):';
@@ -581,7 +616,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get default_ErrorMessage => 'Messaggio di errore';
 
   @override
-  String get default_ErrorPath => 'Error path';
+  String get default_ErrorPath => 'Percorso di errore';
 
   @override
   String get default_ErrorTransactionId => 'ID transazione';
@@ -965,9 +1000,6 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'Trasferimento senza vedere';
-
-  @override
   String formatPhone(String style, String main, String ext) {
     String _temp0 = intl.Intl.selectLogic(style, {
       'full': '$main (int.: $ext)',
@@ -1252,7 +1284,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get logRecordsConsole_AppBarTitle => 'Console dei log';
 
   @override
-  String get logRecordsConsole_Button_failureRefresh => 'Refresh';
+  String get logRecordsConsole_Button_failureRefresh => 'Aggiorna';
 
   @override
   String get logRecordsConsole_Text_failure => 'Si è verificato un errore imprevisto';
@@ -1281,6 +1313,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_chats => 'Le chat';
 
   @override
+  String get main_Text_blindTransferInitiated => 'Trasferimento senza vedere';
+
+  @override
   String get main_BottomNavigationBarItemLabel_contacts => 'Contatti';
 
   @override
@@ -1291,6 +1326,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get main_BottomNavigationBarItemLabel_recents => 'Recenti';
+
+  @override
+  String get main_BottomNavigationBarItemLabel_voicemail => 'Segreteria';
 
   @override
   String get main_CompatibilityIssueDialogActions_logout => 'Esci';
@@ -1341,15 +1379,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messaging_ChooseContact_title => 'Scegli il contatto:';
-
-  @override
-  String get messaging_ConfirmDialog_ask => 'SÌ?';
-
-  @override
-  String get messaging_ConfirmDialog_cancel => 'No';
-
-  @override
-  String get messaging_ConfirmDialog_confirm => 'SÌ';
 
   @override
   String get messaging_ConversationBuilders_back => 'Dopo';
@@ -1478,6 +1507,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get messaging_Conversations_tile_you => 'Voi';
 
   @override
+  String get messaging_DeleteConversationDialog_content => 'Sarà rimossa da questo dispositivo e dall\'account.';
+
+  @override
+  String get messaging_DeleteConversationDialog_title => 'Eliminare questa conversazione?';
+
+  @override
   String get messaging_DialogInfo_deleteAsk => 'Sei sicuro di voler eliminare questa finestra di dialogo?';
 
   @override
@@ -1503,6 +1538,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get messaging_GroupInfo_groupMembersHeadline => 'Membri del gruppo';
+
+  @override
+  String get messaging_LeaveGroupDialog_content =>
+      'Non riceverai piu i suoi messaggi. La conversazione resta per gli altri.';
+
+  @override
+  String get messaging_LeaveGroupDialog_title => 'Uscire da questo gruppo?';
 
   @override
   String get messaging_GroupInfo_leaveAndDeleteAsk => 'Vuoi davvero uscire ed eliminare questo gruppo?';
@@ -1776,26 +1818,27 @@ class AppLocalizationsIt extends AppLocalizations {
       'Puoi continuare senza. Le chiamate in arrivo arriveranno come notifica invece di aprirsi a schermo intero e, se il telefono e protetto da PIN, sequenza o impronta, dovrai sbloccarlo per rispondere dalla schermata di blocco.';
 
   @override
-  String get permission_manageFullScreenNotificationInstructions_step1 => 'Go to your phone\'s Settings.';
+  String get permission_manageFullScreenNotificationInstructions_step1 => 'Vai alle Impostazioni del telefono.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step2 =>
-      'Navigate to \'Special App Access\' under the \'Apps & notifications\' section.';
+      'Vai ad \'Accesso speciale alle app\' nella sezione \'App e notifiche\'.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step3 =>
-      'Find and tap on \'Manage full screen intents\'.';
+      'Trova e tocca \'Gestisci intent a schermo intero\'.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step4 =>
-      'Select the app for which you want to manage full-screen notifications.';
+      'Seleziona l\'app per cui vuoi gestire le notifiche a schermo intero.';
 
   @override
   String get permission_manageFullScreenNotificationInstructions_step5 =>
-      'Toggle the permission to enable or disable full-screen notifications for that app.';
+      'Attiva o disattiva il permesso per le notifiche a schermo intero di quell\'app.';
 
   @override
-  String get permission_manageFullScreenNotificationPermissions => 'Manage Full-Screen Notification Permissions';
+  String get permission_manageFullScreenNotificationPermissions =>
+      'Gestisci i permessi delle notifiche a schermo intero';
 
   @override
   String get permission_manufacturer_Button_gotIt => 'Capito';
@@ -1882,6 +1925,21 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get presence_activity_vacation_name => 'In vacanza';
+
+  @override
+  String get presence_badge_state_available => 'Disponibile';
+
+  @override
+  String get presence_badge_state_onCall => 'In chiamata';
+
+  @override
+  String get presence_badge_state_registered => 'Registrato';
+
+  @override
+  String get presence_badge_state_unavailable => 'Non disponibile';
+
+  @override
+  String get presence_badge_state_unregistered => 'Non registrato';
 
   @override
   String get presence_infoView_activity => 'Attività:';
@@ -2063,9 +2121,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String recents_snackBar_deleted(String name) {
     return '$name cancellato';
   }
-
-  @override
-  String get recents_Text_blingTransferInitiated => 'Trasferimento senza vedere';
 
   @override
   String get recentsVisibilityFilter_all => 'Tutto';
@@ -2271,6 +2326,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_AppBarTitle_myAccount => 'Il mio account';
 
   @override
+  String get settings_SemanticsLabel_editAccount => 'Modifica i dettagli dell\'account';
+
+  @override
   String get settings_audioProcessing_Section_AGC_title => 'Controllo automatico del guadagno';
 
   @override
@@ -2316,29 +2374,28 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_call_codecs_preferred_video_title => 'Codec video preferito';
 
   @override
-  String get settings_callerId_cancel_button => 'Cancel';
+  String get settings_callerId_cancel_button => 'Annulla';
 
   @override
-  String get settings_callerId_defaultTitle => 'Default Caller ID';
+  String get settings_callerId_defaultTitle => 'ID chiamante predefinito';
 
   @override
-  String get settings_callerId_dialcode => 'Dial code:';
+  String get settings_callerId_dialcode => 'Prefisso:';
 
   @override
-  String get settings_callerId_dialCodeMatching_title => 'Dial code matching';
+  String get settings_callerId_dialCodeMatching_title => 'Corrispondenza prefissi';
 
   @override
-  String get settings_callerId_duplicate_dialcode_error =>
-      'Please choose a different dial code, this one is already in use.';
+  String get settings_callerId_duplicate_dialcode_error => 'Scegli un prefisso diverso: questo è già in uso.';
 
   @override
-  String get settings_callerId_number => 'Number:';
+  String get settings_callerId_number => 'Numero:';
 
   @override
-  String get settings_callerId_number_hint => 'Select a number';
+  String get settings_callerId_number_hint => 'Seleziona un numero';
 
   @override
-  String get settings_callerId_save_button => 'Save';
+  String get settings_callerId_save_button => 'Salva';
 
   @override
   String get settings_connectionSection_title => 'Comportamento della connessione e delle chiamate';
@@ -2694,7 +2751,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_ListViewTileTitle_themeMode => 'Modalità tema';
 
   @override
-  String get settings_ListViewTileTitle_toolbox => 'TOOLBOX';
+  String get settings_ListViewTileTitle_toolbox => 'STRUMENTI';
 
   @override
   String get settings_ListViewTileTitle_voicemail => 'Segreteria telefonica';
@@ -3115,13 +3172,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get voicemail_Widget_screenTitle => 'Segreteria telefonica';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Retry';
+  String get webRegistration_ErrorAcknowledgeDialogActions_retry => 'Riprova';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Skip';
+  String get webRegistration_ErrorAcknowledgeDialogActions_skip => 'Salta';
 
   @override
-  String get webRegistration_ErrorAcknowledgeDialog_title => 'Web resource error';
+  String get webRegistration_ErrorAcknowledgeDialog_title => 'Errore risorsa web';
 
   @override
   String webview_defaultError_details(String description, int code) {
@@ -3458,27 +3515,27 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cdr_disconnectReason_dtlTransitIsNotMyNodeId => 'Il transito DTL non corrisponde al mio ID nodo';
 
   @override
-  String get devTools_AppBarTitle => 'Dev Tools';
+  String get devTools_AppBarTitle => 'Strumenti sviluppatore';
 
   @override
-  String get devTools_signalingService_groupTitle => 'Signaling Service';
+  String get devTools_signalingService_groupTitle => 'Servizio di segnalazione';
 
   @override
-  String get devTools_signalingService_simulateKill_title => 'Simulate service kill';
+  String get devTools_signalingService_simulateKill_title => 'Simula arresto del servizio';
 
   @override
   String get devTools_signalingService_simulateKill_subtitle =>
-      'Stops the foreground service without graceful disconnect';
+      'Arresta il servizio in primo piano senza disconnessione controllata';
 
   @override
   String get devTools_signalingService_simulateKill_confirmMessage =>
-      'The signaling service will stop immediately. It will restart automatically if credentials are valid.';
+      'Il servizio di segnalazione verrà arrestato immediatamente. Si riavvierà automaticamente se le credenziali sono valide.';
 
   @override
-  String get devTools_signalingService_simulateKill_confirm => 'Kill';
+  String get devTools_signalingService_simulateKill_confirm => 'Arresta';
 
   @override
-  String get devTools_signalingService_simulateKill_cancel => 'Cancel';
+  String get devTools_signalingService_simulateKill_cancel => 'Annulla';
 
   @override
   String get common_SemanticsLabel_refresh => 'Aggiorna';
@@ -3490,53 +3547,136 @@ class AppLocalizationsIt extends AppLocalizations {
   String get common_SemanticsLabel_scrollToTop => 'Scorri in cima';
 
   @override
+  String common_SemanticsValue_unreadCount(int count) {
+    return '$count da leggere';
+  }
+
+  @override
+  String common_SemanticsValue_totalCount(int count) {
+    return '$count in totale';
+  }
+
+  @override
+  String common_SemanticsValue_selectedCount(int count) {
+    return '$count selezionati';
+  }
+
+  @override
   String get contacts_SemanticsLabel_clearSearch => 'Cancella la ricerca';
 
   @override
-  String get messaging_SemanticsLabel_newChat => 'Start a new chat';
+  String get contacts_SemanticsLabel_closeSearch => 'Chiudi ricerca';
 
   @override
-  String get messaging_SemanticsLabel_newSms => 'Write a new message';
+  String get messaging_SemanticsLabel_newChat => 'Avvia una nuova chat';
 
   @override
-  String get messaging_SemanticsLabel_call => 'Call';
+  String get messaging_SemanticsLabel_newSms => 'Scrivi un nuovo messaggio';
 
   @override
-  String get messaging_SemanticsLabel_videoCall => 'Video call';
+  String get messaging_SemanticsLabel_call => 'Chiama';
 
   @override
-  String get messaging_SemanticsLabel_message => 'Message';
+  String get messaging_SemanticsLabel_videoCall => 'Videochiamata';
 
   @override
-  String get messaging_SemanticsLabel_send => 'Send';
+  String get messaging_SemanticsLabel_message => 'Messaggio';
 
   @override
-  String get messaging_SemanticsLabel_conversationDetails => 'Conversation details';
+  String get messaging_SemanticsLabel_send => 'Invia';
 
   @override
-  String get messaging_SemanticsLabel_conversationOptions => 'Conversation options';
+  String get messaging_SemanticsLabel_conversationDetails => 'Dettagli della conversazione';
 
   @override
-  String get messaging_SemanticsLabel_replying => 'Replying to';
+  String get messaging_SemanticsLabel_conversationOptions => 'Opzioni della conversazione';
 
   @override
-  String get messaging_SemanticsLabel_editing => 'Editing';
+  String get messaging_SemanticsLabel_replying => 'In risposta a';
 
   @override
-  String get messaging_SemanticsLabel_forwarding => 'Forwarding';
+  String get messaging_SemanticsLabel_editing => 'Modifica in corso';
 
   @override
-  String get messaging_SemanticsLabel_stopReplying => 'Stop replying';
+  String get messaging_SemanticsLabel_forwarding => 'Inoltro in corso';
 
   @override
-  String get messaging_SemanticsLabel_stopEditing => 'Stop editing';
+  String get messaging_SemanticsLabel_stopReplying => 'Annulla la risposta';
 
   @override
-  String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
+  String get messaging_SemanticsLabel_stopEditing => 'Annulla la modifica';
 
   @override
-  String get messaging_SemanticsLabel_sendForward => 'Forward the message';
+  String get messaging_SemanticsLabel_stopForwarding => 'Annulla l\'inoltro';
 
   @override
-  String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
+  String get messaging_SemanticsLabel_sendForward => 'Inoltra il messaggio';
+
+  @override
+  String callPull_SemanticsLabel_badge(String name) {
+    return 'Prendi in carico la chiamata con $name';
+  }
+
+  @override
+  String callPull_SemanticsLabel_badgeSeveral(int count) {
+    return 'Prendi in carico una delle $count chiamate';
+  }
+
+  @override
+  String callPull_SemanticsLabel_pickup(String name) {
+    return 'Rispondi alla chiamata con $name';
+  }
+
+  @override
+  String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Esegui di nuovo il test di rete';
+
+  @override
+  String get presence_settings_statusIcon_searchHint => 'Cerca icone';
+
+  @override
+  String presenceSettings_SemanticsLabel_optionInfo(String option) {
+    return 'Cosa significa $option';
+  }
+
+  @override
+  String get presenceSettings_SemanticsLabel_preset => 'Preimpostazione dello stato';
+
+  @override
+  String get presenceSettings_SemanticsLabel_pickStatusIcon => 'Scegli un\'icona di stato';
+
+  @override
+  String get presenceSettings_SemanticsLabel_clearStatusIcon => 'Rimuovi l\'icona di stato';
+
+  @override
+  String get presenceSettings_SemanticsLabel_searchIcons => 'Cerca icone';
+
+  @override
+  String get presenceSettings_SemanticsLabel_stopSearchingIcons => 'Interrompi la ricerca delle icone';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryRecent => 'Usate di recente';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategorySmileys => 'Faccine e persone';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryAnimals => 'Animali e natura';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryFoods => 'Cibo e bevande';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryActivities => 'Attività';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryTravel => 'Viaggi e luoghi';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryObjects => 'Oggetti';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategorySymbols => 'Simboli';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryFlags => 'Bandiere';
 }

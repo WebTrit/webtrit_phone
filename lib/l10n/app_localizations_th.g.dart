@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.g.dart';
 
 // ignore_for_file: type=lint
@@ -169,6 +170,30 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String callTile_SemanticsLabel_videoCall(String name) {
     return 'วิดีโอคอลหา $name';
+  }
+
+  @override
+  String get callerId_SemanticsLabel_addMatch => 'เพิ่มการจับคู่รหัสโทรศัพท์';
+
+  @override
+  String get callerId_SemanticsLabel_matchNumber => 'หมายเลขที่จะแสดงสำหรับรหัสโทรศัพท์นี้';
+
+  @override
+  String get callerId_SemanticsLabel_defaultNumber => 'หมายเลขที่ใช้โทรออกโดยค่าเริ่มต้น';
+
+  @override
+  String callerId_SemanticsLabel_matchPrefix(String country) {
+    return 'รหัสโทรศัพท์ที่จะจับคู่ ปัจจุบันคือ $country';
+  }
+
+  @override
+  String callerId_SemanticsLabel_removeMatch(String dialCode) {
+    return 'ลบการจับคู่สำหรับ $dialCode';
+  }
+
+  @override
+  String callerId_SemanticsLabel_matchRule(String dialCode, String number) {
+    return 'สายไปยัง $dialCode จะแสดง $number';
   }
 
   @override
@@ -459,6 +484,16 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
+  String get contacts_ContactsScreen_emptyFavorites =>
+      'ยังไม่มีรายการโปรดในรายชื่อของคุณ\nเพิ่มได้จากการ์ดรายชื่อโดยแตะไอคอนดาว';
+
+  @override
+  String get contacts_ContactsScreen_searchSemanticsLabel => 'ค้นหารายชื่อ';
+
+  @override
+  String get contacts_ContactsScreen_sourceSemanticsLabel => 'แหล่งที่มาของรายชื่อ';
+
+  @override
   String get contacts_agreement_button_text => 'ดำเนินการต่อ';
 
   @override
@@ -510,13 +545,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get contacts_LocalTabText_permissionFailure => 'ไม่มีสิทธิ์ในการเข้าถึงรายชื่อติดต่อในโทรศัพท์ของคุณ';
 
   @override
+  String get contactsSourceFavorites => 'รายการโปรด';
+
+  @override
   String get contactsSourceExternal => 'Cloud PBX';
 
   @override
   String get contactsSourceLocal => 'โทรศัพท์ของคุณ';
-
-  @override
-  String get contacts_Text_blingTransferInitiated => 'กำลังโอนสายแบบไม่แจ้ง';
 
   @override
   String get contacts_DialogsInfoView_title => 'ข้อมูลการโทร (BLF):';
@@ -951,9 +986,6 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'กำลังโอนสายแบบไม่แจ้ง';
-
-  @override
   String formatPhone(String style, String main, String ext) {
     String _temp0 = intl.Intl.selectLogic(style, {
       'full': '$main (ต่อ: $ext)',
@@ -1264,6 +1296,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_chats => 'แชท';
 
   @override
+  String get main_Text_blindTransferInitiated => 'กำลังโอนสายแบบไม่แจ้ง';
+
+  @override
   String get main_BottomNavigationBarItemLabel_contacts => 'รายชื่อ';
 
   @override
@@ -1274,6 +1309,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get main_BottomNavigationBarItemLabel_recents => 'ล่าสุด';
+
+  @override
+  String get main_BottomNavigationBarItemLabel_voicemail => 'ข้อความเสียง';
 
   @override
   String get main_CompatibilityIssueDialogActions_logout => 'ออกจากระบบ';
@@ -1324,15 +1362,6 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get messaging_ChooseContact_title => 'เลือกรายชื่อติดต่อ:';
-
-  @override
-  String get messaging_ConfirmDialog_ask => 'คุณแน่ใจหรือไม่?';
-
-  @override
-  String get messaging_ConfirmDialog_cancel => 'ไม่';
-
-  @override
-  String get messaging_ConfirmDialog_confirm => 'ใช่';
 
   @override
   String get messaging_ConversationBuilders_back => 'ย้อนกลับ';
@@ -1459,6 +1488,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get messaging_Conversations_tile_you => 'คุณ';
 
   @override
+  String get messaging_DeleteConversationDialog_content => 'ระบบจะลบออกจากอุปกรณ์นี้และจากบัญชี';
+
+  @override
+  String get messaging_DeleteConversationDialog_title => 'ลบการสนทนานี้หรือไม่';
+
+  @override
   String get messaging_DialogInfo_deleteAsk => 'คุณแน่ใจหรือไม่ว่าต้องการลบบทสนทนานี้?';
 
   @override
@@ -1484,6 +1519,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get messaging_GroupInfo_groupMembersHeadline => 'สมาชิกกลุ่ม';
+
+  @override
+  String get messaging_LeaveGroupDialog_content =>
+      'คุณจะไม่ได้รับข้อความของกลุ่มอีกต่อไป การสนทนายังคงอยู่สำหรับคนอื่น';
+
+  @override
+  String get messaging_LeaveGroupDialog_title => 'ออกจากกลุ่มนี้หรือไม่';
 
   @override
   String get messaging_GroupInfo_leaveAndDeleteAsk => 'คุณแน่ใจหรือไม่ว่าต้องการออกและลบกลุ่มนี้?';
@@ -1856,6 +1898,21 @@ class AppLocalizationsTh extends AppLocalizations {
   String get presence_activity_vacation_name => 'ลาพักร้อน';
 
   @override
+  String get presence_badge_state_available => 'ว่าง';
+
+  @override
+  String get presence_badge_state_onCall => 'อยู่ในสาย';
+
+  @override
+  String get presence_badge_state_registered => 'ลงทะเบียนแล้ว';
+
+  @override
+  String get presence_badge_state_unavailable => 'ไม่ว่าง';
+
+  @override
+  String get presence_badge_state_unregistered => 'ไม่ได้ลงทะเบียน';
+
+  @override
   String get presence_infoView_activity => 'กิจกรรม:';
 
   @override
@@ -2035,9 +2092,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String recents_snackBar_deleted(String name) {
     return 'ลบ $name แล้ว';
   }
-
-  @override
-  String get recents_Text_blingTransferInitiated => 'กำลังโอนสายแบบไม่รอรับ';
 
   @override
   String get recentsVisibilityFilter_all => 'ทั้งหมด';
@@ -2238,6 +2292,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get settings_AppBarTitle_myAccount => 'บัญชีของฉัน';
+
+  @override
+  String get settings_SemanticsLabel_editAccount => 'แก้ไขรายละเอียดบัญชี';
 
   @override
   String get settings_audioProcessing_Section_AGC_title => 'ปรับระดับเสียงอัตโนมัติ';
@@ -3433,53 +3490,136 @@ class AppLocalizationsTh extends AppLocalizations {
   String get common_SemanticsLabel_scrollToTop => 'เลื่อนขึ้นบนสุด';
 
   @override
+  String common_SemanticsValue_unreadCount(int count) {
+    return 'ยังไม่ได้อ่าน $count';
+  }
+
+  @override
+  String common_SemanticsValue_totalCount(int count) {
+    return 'ทั้งหมด $count';
+  }
+
+  @override
+  String common_SemanticsValue_selectedCount(int count) {
+    return 'เลือกแล้ว $count';
+  }
+
+  @override
   String get contacts_SemanticsLabel_clearSearch => 'ล้างการค้นหา';
 
   @override
-  String get messaging_SemanticsLabel_newChat => 'Start a new chat';
+  String get contacts_SemanticsLabel_closeSearch => 'ปิดการค้นหา';
 
   @override
-  String get messaging_SemanticsLabel_newSms => 'Write a new message';
+  String get messaging_SemanticsLabel_newChat => 'เริ่มแชทใหม่';
 
   @override
-  String get messaging_SemanticsLabel_call => 'Call';
+  String get messaging_SemanticsLabel_newSms => 'เขียนข้อความใหม่';
 
   @override
-  String get messaging_SemanticsLabel_videoCall => 'Video call';
+  String get messaging_SemanticsLabel_call => 'โทร';
 
   @override
-  String get messaging_SemanticsLabel_message => 'Message';
+  String get messaging_SemanticsLabel_videoCall => 'วิดีโอคอล';
 
   @override
-  String get messaging_SemanticsLabel_send => 'Send';
+  String get messaging_SemanticsLabel_message => 'ข้อความ';
 
   @override
-  String get messaging_SemanticsLabel_conversationDetails => 'Conversation details';
+  String get messaging_SemanticsLabel_send => 'ส่ง';
 
   @override
-  String get messaging_SemanticsLabel_conversationOptions => 'Conversation options';
+  String get messaging_SemanticsLabel_conversationDetails => 'รายละเอียดการสนทนา';
 
   @override
-  String get messaging_SemanticsLabel_replying => 'Replying to';
+  String get messaging_SemanticsLabel_conversationOptions => 'ตัวเลือกการสนทนา';
 
   @override
-  String get messaging_SemanticsLabel_editing => 'Editing';
+  String get messaging_SemanticsLabel_replying => 'กำลังตอบกลับ';
 
   @override
-  String get messaging_SemanticsLabel_forwarding => 'Forwarding';
+  String get messaging_SemanticsLabel_editing => 'กำลังแก้ไข';
 
   @override
-  String get messaging_SemanticsLabel_stopReplying => 'Stop replying';
+  String get messaging_SemanticsLabel_forwarding => 'กำลังส่งต่อ';
 
   @override
-  String get messaging_SemanticsLabel_stopEditing => 'Stop editing';
+  String get messaging_SemanticsLabel_stopReplying => 'ยกเลิกการตอบกลับ';
 
   @override
-  String get messaging_SemanticsLabel_stopForwarding => 'Stop forwarding';
+  String get messaging_SemanticsLabel_stopEditing => 'ยกเลิกการแก้ไข';
 
   @override
-  String get messaging_SemanticsLabel_sendForward => 'Forward the message';
+  String get messaging_SemanticsLabel_stopForwarding => 'ยกเลิกการส่งต่อ';
 
   @override
-  String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
+  String get messaging_SemanticsLabel_sendForward => 'ส่งต่อข้อความ';
+
+  @override
+  String callPull_SemanticsLabel_badge(String name) {
+    return 'รับช่วงสายกับ $name';
+  }
+
+  @override
+  String callPull_SemanticsLabel_badgeSeveral(int count) {
+    return 'รับช่วงหนึ่งใน $count สาย';
+  }
+
+  @override
+  String callPull_SemanticsLabel_pickup(String name) {
+    return 'รับสายกับ $name';
+  }
+
+  @override
+  String get diagnosticNetworkTest_SemanticsLabel_refresh => 'เรียกใช้การทดสอบเครือข่ายอีกครั้ง';
+
+  @override
+  String get presence_settings_statusIcon_searchHint => 'ค้นหาไอคอน';
+
+  @override
+  String presenceSettings_SemanticsLabel_optionInfo(String option) {
+    return 'ความหมายของ $option';
+  }
+
+  @override
+  String get presenceSettings_SemanticsLabel_preset => 'สถานะสำเร็จรูป';
+
+  @override
+  String get presenceSettings_SemanticsLabel_pickStatusIcon => 'เลือกไอคอนสถานะ';
+
+  @override
+  String get presenceSettings_SemanticsLabel_clearStatusIcon => 'ลบไอคอนสถานะ';
+
+  @override
+  String get presenceSettings_SemanticsLabel_searchIcons => 'ค้นหาไอคอน';
+
+  @override
+  String get presenceSettings_SemanticsLabel_stopSearchingIcons => 'หยุดค้นหาไอคอน';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryRecent => 'ใช้ล่าสุด';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategorySmileys => 'หน้ายิ้มและผู้คน';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryAnimals => 'สัตว์และธรรมชาติ';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryFoods => 'อาหารและเครื่องดื่ม';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryActivities => 'กิจกรรม';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryTravel => 'การเดินทางและสถานที่';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryObjects => 'สิ่งของ';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategorySymbols => 'สัญลักษณ์';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryFlags => 'ธง';
 }

@@ -24,6 +24,25 @@ abstract class ResourceLoader {
     throw ArgumentError('Unsupported resource scheme: ${uri.scheme}');
   }
 
+  /// Whether [ResourceLoader.fromUri] can build a loader for [uri].
+  ///
+  /// [ResourceLoader.fromUri] throws, and callers that resolve a resource while
+  /// building a widget cannot catch that. Ask this first to decide whether the
+  /// resource can be opened at all.
+  ///
+  /// Answered by building the loader rather than by listing the schemes again:
+  /// a claimed scheme is not enough on its own, since a loader may also reject
+  /// the rest of the URI - [MemoryResourceLoader] decodes its payload eagerly.
+  /// Deriving the answer this way also keeps it true for a loader added later.
+  static bool supportsUri(Uri uri) {
+    try {
+      ResourceLoader.fromUri(uri.toString());
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// Loads the content of the resource (network, asset, or memory).
   Future<String> loadContent();
 }
@@ -60,7 +79,24 @@ class MemoryResourceLoader extends ResourceLoader {
 
   final Uint8List bytes;
 
-  MemoryResourceLoader(super.resourceUri) : bytes = base64Decode(resourceUri.removeScheme().toString());
+  /// Carries its content inline, so it must be written as `memory:<base64>`.
+  ///
+  /// The `memory://<base64>` spelling cannot work and is rejected rather than
+  /// decoded: everything after `//` is the authority, which is case-folded when
+  /// the URI is parsed, so the payload arrives here already ruined. Refusing it
+  /// keeps the damage visible instead of decoding it into silent nonsense.
+  MemoryResourceLoader(super.resourceUri) : bytes = base64Decode(_payloadOf(resourceUri));
+
+  static String _payloadOf(Uri resourceUri) {
+    if (resourceUri.hasAuthority) {
+      throw ArgumentError.value(
+        resourceUri.toString(),
+        'resourceUri',
+        'inline content must follow a single colon, as its capitals are lost after "//"',
+      );
+    }
+    return resourceUri.removeScheme().toString();
+  }
 
   @override
   Future<String> loadContent() async {

@@ -78,17 +78,11 @@ GroupWidgetConfig _$GroupWidgetConfigFromJson(Map<String, dynamic> json) =>
           : GroupTitleListTileWidgetConfig.fromJson(
               json['groupTitleListTile'] as Map<String, dynamic>,
             ),
-      callActions: json['callActions'] == null
-          ? const CallActionsWidgetConfig()
-          : CallActionsWidgetConfig.fromJson(
-              json['callActions'] as Map<String, dynamic>,
-            ),
     );
 
 Map<String, dynamic> _$GroupWidgetConfigToJson(GroupWidgetConfig instance) =>
     <String, dynamic>{
       'groupTitleListTile': instance.groupTitleListTile.toJson(),
-      'callActions': instance.callActions.toJson(),
     };
 
 BarWidgetConfig _$BarWidgetConfigFromJson(Map<String, dynamic> json) =>
@@ -129,24 +123,6 @@ Map<String, dynamic> _$BottomNavigationBarWidgetConfigToJson(
   'unSelectedItemColor': instance.unSelectedItemColor,
 };
 
-ExtTabBarWidgetConfig _$ExtTabBarWidgetConfigFromJson(
-  Map<String, dynamic> json,
-) => ExtTabBarWidgetConfig(
-  foregroundColor: json['foregroundColor'] as String?,
-  backgroundColor: json['backgroundColor'] as String?,
-  selectedItemColor: json['selectedItemColor'] as String?,
-  unSelectedItemColor: json['unSelectedItemColor'] as String?,
-);
-
-Map<String, dynamic> _$ExtTabBarWidgetConfigToJson(
-  ExtTabBarWidgetConfig instance,
-) => <String, dynamic>{
-  'foregroundColor': instance.foregroundColor,
-  'backgroundColor': instance.backgroundColor,
-  'selectedItemColor': instance.selectedItemColor,
-  'unSelectedItemColor': instance.unSelectedItemColor,
-};
-
 GroupTitleListTileWidgetConfig _$GroupTitleListTileWidgetConfigFromJson(
   Map<String, dynamic> json,
 ) => GroupTitleListTileWidgetConfig(
@@ -161,46 +137,6 @@ Map<String, dynamic> _$GroupTitleListTileWidgetConfigToJson(
 ) => <String, dynamic>{
   'backgroundColor': instance.backgroundColor,
   'textStyle': instance.textStyle?.toJson(),
-};
-
-CallActionsWidgetConfig _$CallActionsWidgetConfigFromJson(
-  Map<String, dynamic> json,
-) => CallActionsWidgetConfig(
-  callStartBackgroundColor: json['callStartBackgroundColor'] as String?,
-  hangupBackgroundColor: json['hangupBackgroundColor'] as String?,
-  transferBackgroundColor: json['transferBackgroundColor'] as String?,
-  cameraBackgroundColor: json['cameraBackgroundColor'] as String?,
-  cameraActiveBackgroundColor: json['cameraActiveBackgroundColor'] as String?,
-  mutedBackgroundColor: json['mutedBackgroundColor'] as String?,
-  mutedActiveBackgroundColor: json['mutedActiveBackgroundColor'] as String?,
-  speakerBackgroundColor: json['speakerBackgroundColor'] as String?,
-  speakerActiveBackgroundColor: json['speakerActiveBackgroundColor'] as String?,
-  heldBackgroundColor: json['heldBackgroundColor'] as String?,
-  heldActiveBackgroundColor: json['heldActiveBackgroundColor'] as String?,
-  swapBackgroundColor: json['swapBackgroundColor'] as String?,
-  keyBackgroundColor: json['keyBackgroundColor'] as String?,
-  keypadBackgroundColor: json['keypadBackgroundColor'] as String?,
-  keypadActiveBackgroundColor: json['keypadActiveBackgroundColor'] as String?,
-);
-
-Map<String, dynamic> _$CallActionsWidgetConfigToJson(
-  CallActionsWidgetConfig instance,
-) => <String, dynamic>{
-  'callStartBackgroundColor': instance.callStartBackgroundColor,
-  'hangupBackgroundColor': instance.hangupBackgroundColor,
-  'transferBackgroundColor': instance.transferBackgroundColor,
-  'cameraBackgroundColor': instance.cameraBackgroundColor,
-  'cameraActiveBackgroundColor': instance.cameraActiveBackgroundColor,
-  'mutedBackgroundColor': instance.mutedBackgroundColor,
-  'mutedActiveBackgroundColor': instance.mutedActiveBackgroundColor,
-  'speakerBackgroundColor': instance.speakerBackgroundColor,
-  'speakerActiveBackgroundColor': instance.speakerActiveBackgroundColor,
-  'heldBackgroundColor': instance.heldBackgroundColor,
-  'heldActiveBackgroundColor': instance.heldActiveBackgroundColor,
-  'swapBackgroundColor': instance.swapBackgroundColor,
-  'keyBackgroundColor': instance.keyBackgroundColor,
-  'keypadBackgroundColor': instance.keypadBackgroundColor,
-  'keypadActiveBackgroundColor': instance.keypadActiveBackgroundColor,
 };
 
 ImageAssetsConfig _$ImageAssetsConfigFromJson(Map<String, dynamic> json) =>
@@ -227,28 +163,6 @@ Map<String, dynamic> _$ImageAssetsConfigToJson(ImageAssetsConfig instance) =>
       'defaultPlaceholderImage': instance.defaultPlaceholderImage?.toJson(),
       'appIcon': instance.appIcon.toJson(),
       'leadingAvatarStyle': instance.leadingAvatarStyle.toJson(),
-    };
-
-ImageAssetConfig _$ImageAssetConfigFromJson(Map<String, dynamic> json) =>
-    ImageAssetConfig(
-      imageSource: json['imageSource'] == null
-          ? null
-          : ImageSource.fromJson(json['imageSource'] as Map<String, dynamic>),
-      widthFactor: (json['widthFactor'] as num?)?.toDouble() ?? 1.0,
-      labelColor: json['labelColor'] as String? ?? '#FFFFFF',
-      metadata: json['metadata'] == null
-          ? const Metadata()
-          : Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
-      uri: json['uri'] as String?,
-    );
-
-Map<String, dynamic> _$ImageAssetConfigToJson(ImageAssetConfig instance) =>
-    <String, dynamic>{
-      'imageSource': instance.imageSource?.toJson(),
-      'widthFactor': instance.widthFactor,
-      'labelColor': instance.labelColor,
-      'metadata': instance.metadata.toJson(),
-      'uri': instance.uri,
     };
 
 AppIconWidgetConfig _$AppIconWidgetConfigFromJson(Map<String, dynamic> json) =>
@@ -624,9 +538,7 @@ const _$TabSplashFactoryConfigEnumMap = {
   TabSplashFactoryConfig.inkSparkle: 'inkSparkle',
 };
 
-_AppBarConfig _$AppBarConfigFromJson(
-  Map<String, dynamic> json,
-) => _AppBarConfig(
+AppBarConfig _$AppBarConfigFromJson(Map<String, dynamic> json) => AppBarConfig(
   primary: json['primary'] as bool? ?? true,
   showBackButton: json['showBackButton'] as bool? ?? true,
   backgroundColor: json['backgroundColor'] as String?,
@@ -664,7 +576,7 @@ _AppBarConfig _$AppBarConfigFromJson(
         ),
 );
 
-Map<String, dynamic> _$AppBarConfigToJson(_AppBarConfig instance) =>
+Map<String, dynamic> _$AppBarConfigToJson(AppBarConfig instance) =>
     <String, dynamic>{
       'primary': instance.primary,
       'showBackButton': instance.showBackButton,
@@ -678,9 +590,9 @@ Map<String, dynamic> _$AppBarConfigToJson(_AppBarConfig instance) =>
       'leadingWidth': instance.leadingWidth,
       'toolbarHeight': instance.toolbarHeight,
       'centerTitle': instance.centerTitle,
-      'iconTheme': instance.iconTheme,
-      'actionsIconTheme': instance.actionsIconTheme,
-      'titleTextStyle': instance.titleTextStyle,
-      'toolbarTextStyle': instance.toolbarTextStyle,
-      'systemOverlayStyle': instance.systemOverlayStyle,
+      'iconTheme': instance.iconTheme?.toJson(),
+      'actionsIconTheme': instance.actionsIconTheme?.toJson(),
+      'titleTextStyle': instance.titleTextStyle?.toJson(),
+      'toolbarTextStyle': instance.toolbarTextStyle?.toJson(),
+      'systemOverlayStyle': instance.systemOverlayStyle?.toJson(),
     };

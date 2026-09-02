@@ -13,32 +13,36 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
   final LeadingAvatarStyleConfig? config;
   final String? defaultFontFamily;
 
+  /// The theme is read as overrides only: every method below translates what
+  /// the config actually names, and whatever it leaves out is filled in from
+  /// [LeadingAvatarStyle.defaults] by the merge - never by a value invented
+  /// here or in a widget.
   @override
   LeadingAvatarStyles create() {
-    return LeadingAvatarStyles(
-      primary: LeadingAvatarStyle(
-        backgroundColor: _bgColor(),
-        radius: config?.radius,
-        initialsTextStyle: _mapInitialsTextStyle(config?.initialsTextStyle),
-        placeholderIcon: null,
-        loadingOverlay: _mapLoading(config?.loading),
-        smartIndicator: _mapSmart(config?.smartIndicator),
-        registeredBadge: _mapRegistered(config?.registeredBadge),
-        presenceBadge: _mapPresence(config?.presenceBadge),
-        nameColors: _mapNameColors(config?.nameColors),
-      ),
+    return LeadingAvatarStyles(primary: LeadingAvatarStyle.merge(LeadingAvatarStyle.defaults(colors), _fromConfig()));
+  }
+
+  LeadingAvatarStyle? _fromConfig() {
+    final config = this.config;
+    if (config == null) return null;
+
+    return LeadingAvatarStyle(
+      backgroundColor: config.backgroundColor?.toColor(),
+      radius: config.radius,
+      initialsTextStyle: _mapInitialsTextStyle(config.initialsTextStyle),
+      loadingOverlay: _mapLoading(config.loading),
+      smartIndicator: _mapSmart(config.smartIndicator),
+      registeredBadge: _mapRegistered(config.registeredBadge),
+      presenceBadge: _mapPresence(config.presenceBadge),
+      nameColors: _mapNameColors(config.nameColors),
     );
   }
 
   TextStyle? _mapInitialsTextStyle(TextStyleConfig? config) {
     if (config == null) return null;
 
-    return config
-        .toTextStyle(defaultFontFamily: defaultFontFamily)
-        .copyWith(color: config.color?.toColor() ?? colors.onSecondaryContainer);
+    return config.toTextStyle(defaultFontFamily: defaultFontFamily).copyWith(color: config.color?.toColor());
   }
-
-  Color _bgColor() => config?.backgroundColor?.toColor() ?? colors.secondaryContainer;
 
   LoadingOverlayStyle? _mapLoading(LoadingOverlayStyleConfig? c) {
     if (c == null) return null;
@@ -51,11 +55,7 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
 
   SmartIndicatorStyle? _mapSmart(SmartIndicatorStyleConfig? c) {
     if (c == null) return null;
-    return SmartIndicatorStyle(
-      backgroundColor: c.backgroundColor?.toColor() ?? colors.surfaceContainerLowest,
-      icon: null,
-      sizeFactor: c.sizeFactor,
-    );
+    return SmartIndicatorStyle(backgroundColor: c.backgroundColor?.toColor(), icon: null, sizeFactor: c.sizeFactor);
   }
 
   RegisteredBadgeStyle? _mapRegistered(RegisteredBadgeStyleConfig? c) {
@@ -67,18 +67,18 @@ class LeadingAvatarStyleFactory implements ThemeStyleFactory<LeadingAvatarStyles
     );
   }
 
-  /// Name-derived colors are on by default: a theme without a `nameColors` block still gets them,
-  /// only an explicit `"enabled": false` turns them off.
-  NameColorsStyle _mapNameColors(NameColorsStyleConfig? c) {
-    if (c == null) return const NameColorsStyle();
+  NameColorsStyle? _mapNameColors(NameColorsStyleConfig? c) {
+    if (c == null) return null;
     return NameColorsStyle(enabled: c.enabled, palette: c.palette?.map((hex) => hex.toColor()).toList());
   }
 
   PresenceBadgeStyle? _mapPresence(PresenceBadgeStyleConfig? c) {
     if (c == null) return null;
     return PresenceBadgeStyle(
-      availableColor: c.availableColor?.toColor() ?? colors.tertiary,
-      unavailableColor: c.unavailableColor?.toColor() ?? colors.onSurfaceVariant,
+      availableColor: c.availableColor?.toColor(),
+      unavailableColor: c.unavailableColor?.toColor(),
+      busyColor: c.busyColor?.toColor(),
+      iconColor: c.iconColor?.toColor(),
       sizeFactor: c.sizeFactor,
     );
   }

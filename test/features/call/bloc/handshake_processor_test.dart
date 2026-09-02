@@ -212,9 +212,8 @@ void main() {
     test(
       'returns RestoreCallAction when Callkeep connection survived (stateActive) but call not in BLoC state',
       () async {
-        when(
-          () => mockConnections.getConnection(_kCallId),
-        ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateActive));
+        when(() => mockConnections.getConnection(_kCallId))
+            .thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateActive));
 
         final line = makeRestorationLine();
         final actions = await processor.process(lines: [line], guestLine: null, activeCallIds: {});
@@ -227,9 +226,8 @@ void main() {
     test(
       'skips restoration when Callkeep connection is stateDisconnected (handled by HangupSignalingAction above)',
       () async {
-        when(
-          () => mockConnections.getConnection(_kCallId),
-        ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
+        when(() => mockConnections.getConnection(_kCallId))
+            .thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
 
         // stateDisconnected with AcceptedEvent -> early exit with HangupSignalingAction, not RestoreCallAction
         final line = makeRestorationLine();
@@ -335,9 +333,8 @@ void main() {
 
   group('stateDisconnected with AcceptedEvent', () {
     test('returns only HangupSignalingAction (early exit)', () async {
-      when(
-        () => mockConnections.getConnection(_kCallId),
-      ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
+      when(() => mockConnections.getConnection(_kCallId))
+          .thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
 
       final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeAcceptedEvent())]);
 
@@ -351,9 +348,8 @@ void main() {
     });
 
     test('returns only HangupSignalingAction for ProceedingEvent', () async {
-      when(
-        () => mockConnections.getConnection(_kCallId),
-      ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
+      when(() => mockConnections.getConnection(_kCallId))
+          .thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
 
       final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeProceedingEvent())]);
 
@@ -364,9 +360,8 @@ void main() {
     });
 
     test('early exit: EndLocalCallAction is NOT generated even if orphaned connections exist', () async {
-      when(
-        () => mockConnections.getConnection(_kCallId),
-      ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
+      when(() => mockConnections.getConnection(_kCallId))
+          .thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
       when(() => mockConnections.getConnections()).thenAnswer((_) async => [_makeConnection(callId: 'orphan-id')]);
 
       final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeAcceptedEvent())]);
@@ -384,9 +379,8 @@ void main() {
 
   group('stateDisconnected with IncomingCallEvent', () {
     test('returns only DeclineSignalingAction (early exit)', () async {
-      when(
-        () => mockConnections.getConnection(_kCallId),
-      ).thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
+      when(() => mockConnections.getConnection(_kCallId))
+          .thenAnswer((_) async => _makeConnection(state: CallkeepConnectionState.stateDisconnected));
 
       final line = _makeLine(callLogs: [CallEventLog(timestamp: 1000, callEvent: _makeIncomingEvent())]);
 
@@ -405,9 +399,8 @@ void main() {
 
   group('local connection not in handshake', () {
     test('returns EndLocalCallAction for each orphaned local connection', () async {
-      when(
-        () => mockConnections.getConnections(),
-      ).thenAnswer((_) async => [_makeConnection(callId: 'orphan-1'), _makeConnection(callId: 'orphan-2')]);
+      when(() => mockConnections.getConnections())
+          .thenAnswer((_) async => [_makeConnection(callId: 'orphan-1'), _makeConnection(callId: 'orphan-2')]);
 
       final actions = await processor.process(lines: [], guestLine: null, activeCallIds: {});
 

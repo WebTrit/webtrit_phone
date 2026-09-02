@@ -1,0 +1,15 @@
+builders:
+  schema_tables:
+    import: "package:webtrit_appearance_theme/builder.dart"
+    builder_factories: ["schemaTablesBuilder"]
+    build_extensions:
+      {"$lib$": ["schema/enum_properties.g.dart", "schema/union_variants.g.dart"]}
+    auto_apply: none
+    build_to: source
+    runs_before: ["json_serializable:json_serializable"]
+
+targets:
+  $default:
+    builders:
+      webtrit_appearance_theme:schema_tables:
+        enabled: true

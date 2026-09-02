@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/features.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/ice_checker.dart';
 
 import '../models/models.dart';
@@ -37,7 +38,10 @@ class DiagnosticScreenPage extends StatelessWidget {
               DiagnosticCubit(pushTokensBloc: pushTokensBloc, appPermissions: appPermissions, deviceInfo: deviceInfo),
         ),
         BlocProvider<NetworkTesterCubit>(
-          create: (context) => NetworkTesterCubit(iceChecker: IceCheckerFlutterWebrtcImpl()),
+          create: (context) => NetworkTesterCubit(
+            iceChecker: IceCheckerFlutterWebrtcImpl(),
+            iceServersResolver: context.read<IceServersRepository>().resolveIceServers,
+          ),
         ),
       ],
       child: Provider<DiagnosticScreenContext>(create: (context) => screenContext, child: const DiagnosticScreen()),

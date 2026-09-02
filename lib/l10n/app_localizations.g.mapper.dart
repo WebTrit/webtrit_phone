@@ -68,6 +68,11 @@ extension AppLocalizationsExtension on AppLocalizations {
         callThumbnail_SemanticsAction_moveBottomRight,
       'callThumbnail_SemanticsLabel_returnToCall' =>
         callThumbnail_SemanticsLabel_returnToCall,
+      'callerId_SemanticsLabel_addMatch' => callerId_SemanticsLabel_addMatch,
+      'callerId_SemanticsLabel_matchNumber' =>
+        callerId_SemanticsLabel_matchNumber,
+      'callerId_SemanticsLabel_defaultNumber' =>
+        callerId_SemanticsLabel_defaultNumber,
       'call_CallActionsTooltip_accept' => call_CallActionsTooltip_accept,
       'call_CallActionsTooltip_accept_inviteToAttendedTransfer' =>
         call_CallActionsTooltip_accept_inviteToAttendedTransfer,
@@ -180,6 +185,12 @@ extension AppLocalizationsExtension on AppLocalizations {
         common_noInternetConnection_retryButton,
       'common_noInternetConnection_title' => common_noInternetConnection_title,
       'common_problemWithLoadingPage' => common_problemWithLoadingPage,
+      'contacts_ContactsScreen_emptyFavorites' =>
+        contacts_ContactsScreen_emptyFavorites,
+      'contacts_ContactsScreen_searchSemanticsLabel' =>
+        contacts_ContactsScreen_searchSemanticsLabel,
+      'contacts_ContactsScreen_sourceSemanticsLabel' =>
+        contacts_ContactsScreen_sourceSemanticsLabel,
       'contacts_agreement_button_text' => contacts_agreement_button_text,
       'contacts_agreement_checkbox_text' => contacts_agreement_checkbox_text,
       'contacts_agreement_description' => contacts_agreement_description,
@@ -203,10 +214,9 @@ extension AppLocalizationsExtension on AppLocalizations {
       'contacts_LocalTabText_failure' => contacts_LocalTabText_failure,
       'contacts_LocalTabText_permissionFailure' =>
         contacts_LocalTabText_permissionFailure,
+      'contactsSourceFavorites' => contactsSourceFavorites,
       'contactsSourceExternal' => contactsSourceExternal,
       'contactsSourceLocal' => contactsSourceLocal,
-      'contacts_Text_blingTransferInitiated' =>
-        contacts_Text_blingTransferInitiated,
       'contacts_DialogsInfoView_title' => contacts_DialogsInfoView_title,
       'contacts_ContactScreen_options' => contacts_ContactScreen_options,
       'contacts_ContactScreen_presenceViaSip' =>
@@ -441,8 +451,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'favorites_SemanticsLabel_reorderDone' =>
         favorites_SemanticsLabel_reorderDone,
       'favorites_SemanticsLabel_reorder' => favorites_SemanticsLabel_reorder,
-      'favorites_Text_blingTransferInitiated' =>
-        favorites_Text_blingTransferInitiated,
       'locale_default' => locale_default,
       'locale_en' => locale_en,
       'locale_it' => locale_it,
@@ -573,6 +581,7 @@ extension AppLocalizationsExtension on AppLocalizations {
         logRecordsConsole_PopupMenuItem_clear,
       'main_BottomNavigationBarItemLabel_chats' =>
         main_BottomNavigationBarItemLabel_chats,
+      'main_Text_blindTransferInitiated' => main_Text_blindTransferInitiated,
       'main_BottomNavigationBarItemLabel_contacts' =>
         main_BottomNavigationBarItemLabel_contacts,
       'main_BottomNavigationBarItemLabel_favorites' =>
@@ -581,6 +590,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         main_BottomNavigationBarItemLabel_keypad,
       'main_BottomNavigationBarItemLabel_recents' =>
         main_BottomNavigationBarItemLabel_recents,
+      'main_BottomNavigationBarItemLabel_voicemail' =>
+        main_BottomNavigationBarItemLabel_voicemail,
       'main_CompatibilityIssueDialogActions_logout' =>
         main_CompatibilityIssueDialogActions_logout,
       'main_CompatibilityIssueDialogActions_update' =>
@@ -601,9 +612,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'messaging_ChooseContact_cancel' => messaging_ChooseContact_cancel,
       'messaging_ChooseContact_empty' => messaging_ChooseContact_empty,
       'messaging_ChooseContact_title' => messaging_ChooseContact_title,
-      'messaging_ConfirmDialog_ask' => messaging_ConfirmDialog_ask,
-      'messaging_ConfirmDialog_cancel' => messaging_ConfirmDialog_cancel,
-      'messaging_ConfirmDialog_confirm' => messaging_ConfirmDialog_confirm,
       'messaging_ConversationBuilders_back' =>
         messaging_ConversationBuilders_back,
       'messaging_ConversationBuilders_cancel' =>
@@ -678,6 +686,10 @@ extension AppLocalizationsExtension on AppLocalizations {
       'messaging_Conversations_tile_empty' =>
         messaging_Conversations_tile_empty,
       'messaging_Conversations_tile_you' => messaging_Conversations_tile_you,
+      'messaging_DeleteConversationDialog_content' =>
+        messaging_DeleteConversationDialog_content,
+      'messaging_DeleteConversationDialog_title' =>
+        messaging_DeleteConversationDialog_title,
       'messaging_DialogInfo_deleteAsk' => messaging_DialogInfo_deleteAsk,
       'messaging_DialogInfo_deleteBtn' => messaging_DialogInfo_deleteBtn,
       'messaging_DialogInfo_title' => messaging_DialogInfo_title,
@@ -692,6 +704,9 @@ extension AppLocalizationsExtension on AppLocalizations {
         messaging_GroupInfo_deleteLeaveBtnText,
       'messaging_GroupInfo_groupMembersHeadline' =>
         messaging_GroupInfo_groupMembersHeadline,
+      'messaging_LeaveGroupDialog_content' =>
+        messaging_LeaveGroupDialog_content,
+      'messaging_LeaveGroupDialog_title' => messaging_LeaveGroupDialog_title,
       'messaging_GroupInfo_leaveAndDeleteAsk' =>
         messaging_GroupInfo_leaveAndDeleteAsk,
       'messaging_GroupInfo_leaveAsk' => messaging_GroupInfo_leaveAsk,
@@ -859,6 +874,11 @@ extension AppLocalizationsExtension on AppLocalizations {
       'presence_activity_sleeping_name' => presence_activity_sleeping_name,
       'presence_activity_travel_name' => presence_activity_travel_name,
       'presence_activity_vacation_name' => presence_activity_vacation_name,
+      'presence_badge_state_available' => presence_badge_state_available,
+      'presence_badge_state_onCall' => presence_badge_state_onCall,
+      'presence_badge_state_registered' => presence_badge_state_registered,
+      'presence_badge_state_unavailable' => presence_badge_state_unavailable,
+      'presence_badge_state_unregistered' => presence_badge_state_unregistered,
       'presence_infoView_activity' => presence_infoView_activity,
       'presence_infoView_available' => presence_infoView_available,
       'presence_infoView_available_false' => presence_infoView_available_false,
@@ -921,8 +941,6 @@ extension AppLocalizationsExtension on AppLocalizations {
       'recents_DeleteConfirmDialog_title' => recents_DeleteConfirmDialog_title,
       'recents_HistoryTile_missedCallText' =>
         recents_HistoryTile_missedCallText,
-      'recents_Text_blingTransferInitiated' =>
-        recents_Text_blingTransferInitiated,
       'recentsVisibilityFilter_all' => recentsVisibilityFilter_all,
       'recentsVisibilityFilter_all_preposit' =>
         recentsVisibilityFilter_all_preposit,
@@ -1005,6 +1023,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'settings_AccountDeleteNotSupported_message' =>
         settings_AccountDeleteNotSupported_message,
       'settings_AppBarTitle_myAccount' => settings_AppBarTitle_myAccount,
+      'settings_SemanticsLabel_editAccount' =>
+        settings_SemanticsLabel_editAccount,
       'settings_audioProcessing_Section_AGC_title' =>
         settings_audioProcessing_Section_AGC_title,
       'settings_audioProcessing_Section_AM_title' =>
@@ -1669,6 +1689,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'common_SemanticsLabel_scrollToTop' => common_SemanticsLabel_scrollToTop,
       'contacts_SemanticsLabel_clearSearch' =>
         contacts_SemanticsLabel_clearSearch,
+      'contacts_SemanticsLabel_closeSearch' =>
+        contacts_SemanticsLabel_closeSearch,
       'messaging_SemanticsLabel_newChat' => messaging_SemanticsLabel_newChat,
       'messaging_SemanticsLabel_newSms' => messaging_SemanticsLabel_newSms,
       'messaging_SemanticsLabel_call' => messaging_SemanticsLabel_call,
@@ -1694,6 +1716,36 @@ extension AppLocalizationsExtension on AppLocalizations {
         messaging_SemanticsLabel_sendForward,
       'diagnosticNetworkTest_SemanticsLabel_refresh' =>
         diagnosticNetworkTest_SemanticsLabel_refresh,
+      'presence_settings_statusIcon_searchHint' =>
+        presence_settings_statusIcon_searchHint,
+      'presenceSettings_SemanticsLabel_preset' =>
+        presenceSettings_SemanticsLabel_preset,
+      'presenceSettings_SemanticsLabel_pickStatusIcon' =>
+        presenceSettings_SemanticsLabel_pickStatusIcon,
+      'presenceSettings_SemanticsLabel_clearStatusIcon' =>
+        presenceSettings_SemanticsLabel_clearStatusIcon,
+      'presenceSettings_SemanticsLabel_searchIcons' =>
+        presenceSettings_SemanticsLabel_searchIcons,
+      'presenceSettings_SemanticsLabel_stopSearchingIcons' =>
+        presenceSettings_SemanticsLabel_stopSearchingIcons,
+      'presenceSettings_SemanticsLabel_iconCategoryRecent' =>
+        presenceSettings_SemanticsLabel_iconCategoryRecent,
+      'presenceSettings_SemanticsLabel_iconCategorySmileys' =>
+        presenceSettings_SemanticsLabel_iconCategorySmileys,
+      'presenceSettings_SemanticsLabel_iconCategoryAnimals' =>
+        presenceSettings_SemanticsLabel_iconCategoryAnimals,
+      'presenceSettings_SemanticsLabel_iconCategoryFoods' =>
+        presenceSettings_SemanticsLabel_iconCategoryFoods,
+      'presenceSettings_SemanticsLabel_iconCategoryActivities' =>
+        presenceSettings_SemanticsLabel_iconCategoryActivities,
+      'presenceSettings_SemanticsLabel_iconCategoryTravel' =>
+        presenceSettings_SemanticsLabel_iconCategoryTravel,
+      'presenceSettings_SemanticsLabel_iconCategoryObjects' =>
+        presenceSettings_SemanticsLabel_iconCategoryObjects,
+      'presenceSettings_SemanticsLabel_iconCategorySymbols' =>
+        presenceSettings_SemanticsLabel_iconCategorySymbols,
+      'presenceSettings_SemanticsLabel_iconCategoryFlags' =>
+        presenceSettings_SemanticsLabel_iconCategoryFlags,
       'agoTicker_daysAgo' => switch (args) {
         [final int days] => agoTicker_daysAgo(days),
         _ => throw ArgumentError('agoTicker_daysAgo requires 1 arguments'),
@@ -1726,6 +1778,27 @@ extension AppLocalizationsExtension on AppLocalizations {
         [final String name] => callTile_SemanticsLabel_videoCall(name),
         _ => throw ArgumentError(
           'callTile_SemanticsLabel_videoCall requires 1 arguments',
+        ),
+      },
+      'callerId_SemanticsLabel_matchPrefix' => switch (args) {
+        [final String country] => callerId_SemanticsLabel_matchPrefix(country),
+        _ => throw ArgumentError(
+          'callerId_SemanticsLabel_matchPrefix requires 1 arguments',
+        ),
+      },
+      'callerId_SemanticsLabel_removeMatch' => switch (args) {
+        [final String dialCode] => callerId_SemanticsLabel_removeMatch(
+          dialCode,
+        ),
+        _ => throw ArgumentError(
+          'callerId_SemanticsLabel_removeMatch requires 1 arguments',
+        ),
+      },
+      'callerId_SemanticsLabel_matchRule' => switch (args) {
+        [final String dialCode, final String number] =>
+          callerId_SemanticsLabel_matchRule(dialCode, number),
+        _ => throw ArgumentError(
+          'callerId_SemanticsLabel_matchRule requires 2 arguments',
         ),
       },
       'call_CallList_header' => switch (args) {
@@ -2015,6 +2088,50 @@ extension AppLocalizationsExtension on AppLocalizations {
           webview_defaultError_details(description, code),
         _ => throw ArgumentError(
           'webview_defaultError_details requires 2 arguments',
+        ),
+      },
+      'common_SemanticsValue_unreadCount' => switch (args) {
+        [final int count] => common_SemanticsValue_unreadCount(count),
+        _ => throw ArgumentError(
+          'common_SemanticsValue_unreadCount requires 1 arguments',
+        ),
+      },
+      'common_SemanticsValue_totalCount' => switch (args) {
+        [final int count] => common_SemanticsValue_totalCount(count),
+        _ => throw ArgumentError(
+          'common_SemanticsValue_totalCount requires 1 arguments',
+        ),
+      },
+      'common_SemanticsValue_selectedCount' => switch (args) {
+        [final int count] => common_SemanticsValue_selectedCount(count),
+        _ => throw ArgumentError(
+          'common_SemanticsValue_selectedCount requires 1 arguments',
+        ),
+      },
+      'callPull_SemanticsLabel_badge' => switch (args) {
+        [final String name] => callPull_SemanticsLabel_badge(name),
+        _ => throw ArgumentError(
+          'callPull_SemanticsLabel_badge requires 1 arguments',
+        ),
+      },
+      'callPull_SemanticsLabel_badgeSeveral' => switch (args) {
+        [final int count] => callPull_SemanticsLabel_badgeSeveral(count),
+        _ => throw ArgumentError(
+          'callPull_SemanticsLabel_badgeSeveral requires 1 arguments',
+        ),
+      },
+      'callPull_SemanticsLabel_pickup' => switch (args) {
+        [final String name] => callPull_SemanticsLabel_pickup(name),
+        _ => throw ArgumentError(
+          'callPull_SemanticsLabel_pickup requires 1 arguments',
+        ),
+      },
+      'presenceSettings_SemanticsLabel_optionInfo' => switch (args) {
+        [final String option] => presenceSettings_SemanticsLabel_optionInfo(
+          option,
+        ),
+        _ => throw ArgumentError(
+          'presenceSettings_SemanticsLabel_optionInfo requires 1 arguments',
         ),
       },
       _ => null,

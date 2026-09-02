@@ -4,23 +4,26 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:webtrit_phone/features/call/utils/peer_connection_factory.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 part 'network_tester_state.dart';
 
 class NetworkTesterCubit extends Cubit<NetworkTesterState> {
-  NetworkTesterCubit({this.iceServers = _defaultIceServers, required this.iceChecker, Connectivity? connectivity})
-    : _connectivity = connectivity ?? Connectivity(),
+  NetworkTesterCubit({required this.iceChecker, IceServersResolver? iceServersResolver, Connectivity? connectivity})
+    : _iceServersResolver = iceServersResolver,
+      _connectivity = connectivity ?? Connectivity(),
       super(const NetworkTesterState()) {
     _connectivity.checkConnectivity().then(_onConnectivityChanged);
     _connectivitySub = _connectivity.onConnectivityChanged.listen(_onConnectivityChanged);
   }
 
-  static const _defaultIceServers = [
-    {'url': 'stun:stun.l.google.com:19302'},
-  ];
+  /// Resolves the deployment's own ICE servers, so the gathered candidates
+  /// reflect the servers a real call would use. `null` falls back to the public
+  /// STUN server.
+  final IceServersResolver? _iceServersResolver;
 
-  final List<Map<String, dynamic>> iceServers;
   final IceChecker iceChecker;
   final Connectivity _connectivity;
   late final StreamSubscription<List<ConnectivityResult>> _connectivitySub;
@@ -44,6 +47,9 @@ class NetworkTesterCubit extends Cubit<NetworkTesterState> {
       return;
     }
 
+    final iceServers = await _resolveIceServers();
+    if (isClosed) return;
+
     _gatherSub = iceChecker
         .gatherCandidates(iceServers: iceServers)
         .listen(
@@ -51,6 +57,14 @@ class NetworkTesterCubit extends Cubit<NetworkTesterState> {
           onDone: () => emit(state.copyWith(gatheringStatus: IceGatheringStatus.complete)),
           onError: (Object e) => emit(state.copyWith(gatheringStatus: IceGatheringStatus.complete)),
         );
+  }
+
+  Future<List<Map<String, dynamic>>> _resolveIceServers() async {
+    final resolver = _iceServersResolver;
+    if (resolver == null) return kFallbackRtcIceServers;
+
+    final iceServers = await resolver();
+    return iceServers.isEmpty ? kFallbackRtcIceServers : iceServers;
   }
 
   @override

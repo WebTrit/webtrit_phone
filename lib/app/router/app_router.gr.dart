@@ -401,6 +401,55 @@ class ContactsAgreementScreenPageRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ContactsFilterScreenPage]
+class ContactsFilterScreenPageRoute
+    extends PageRouteInfo<ContactsFilterScreenPageRouteArgs> {
+  ContactsFilterScreenPageRoute({
+    required List<ContactsListSelection> selections,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ContactsFilterScreenPageRoute.name,
+         args: ContactsFilterScreenPageRouteArgs(selections: selections),
+         initialChildren: children,
+       );
+
+  static const String name = 'ContactsFilterScreenPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ContactsFilterScreenPageRouteArgs>();
+      return ContactsFilterScreenPage(selections: args.selections);
+    },
+  );
+}
+
+class ContactsFilterScreenPageRouteArgs {
+  const ContactsFilterScreenPageRouteArgs({required this.selections});
+
+  final List<ContactsListSelection> selections;
+
+  @override
+  String toString() {
+    return 'ContactsFilterScreenPageRouteArgs{selections: $selections}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ContactsFilterScreenPageRouteArgs) return false;
+    return const ListEquality<ContactsListSelection>().equals(
+      selections,
+      other.selections,
+    );
+  }
+
+  @override
+  int get hashCode =>
+      const ListEquality<ContactsListSelection>().hash(selections);
+}
+
+/// generated route for
 /// [ContactsRouterPage]
 class ContactsRouterPageRoute extends PageRouteInfo<void> {
   const ContactsRouterPageRoute({List<PageRouteInfo>? children})
@@ -1735,6 +1784,22 @@ class VoicemailScreenPageRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return VoicemailScreenPage();
+    },
+  );
+}
+
+/// generated route for
+/// [VoicemailTabPage]
+class VoicemailTabPageRoute extends PageRouteInfo<void> {
+  const VoicemailTabPageRoute({List<PageRouteInfo>? children})
+    : super(VoicemailTabPageRoute.name, initialChildren: children);
+
+  static const String name = 'VoicemailTabPageRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return VoicemailTabPage();
     },
   );
 }

@@ -36,12 +36,22 @@ abstract class CoreSupport {
 
   /// Check if the external (server/PBX) contacts directory is supported by the remote system.
   bool get supportsExtensions;
+
+  /// Check if the remote system bundles its own STUN/TURN servers, which the app
+  /// then loads instead of falling back to a public STUN server.
+  bool get supportsBundledIceServers;
 }
 
 class CoreSupportImpl extends Equatable implements CoreSupport {
-  CoreSupportImpl(List<String>? supported) : _flags = {...?supported};
+  CoreSupportImpl(List<String>? supported, {bool iceServersConfigured = false})
+    : _flags = {...?supported},
+      _iceServersConfigured = iceServersConfigured;
 
   final Set<String> _flags;
+
+  /// Not an adapter flag: the core advertises bundled ICE servers under `core`
+  /// in `system-info`, not in `adapter.supported`.
+  final bool _iceServersConfigured;
 
   bool _has(String flag) => _flags.contains(flag);
 
@@ -70,14 +80,20 @@ class CoreSupportImpl extends Equatable implements CoreSupport {
   bool get supportsExtensions => _has(kExtensionsFeatureFlag);
 
   @override
+  bool get supportsBundledIceServers => _iceServersConfigured;
+
+  @override
   List<Object?> get props {
     final sortedFlags = _flags.toList()..sort();
-    return [List.unmodifiable(sortedFlags)];
+    return [List.unmodifiable(sortedFlags), _iceServersConfigured];
   }
 }
 
 class CoreSupportFactory {
   static CoreSupport create(WebtritSystemInfo? systemInfo) {
-    return CoreSupportImpl(systemInfo?.adapter?.supported);
+    return CoreSupportImpl(
+      systemInfo?.adapter?.supported,
+      iceServersConfigured: systemInfo?.core.iceServersConfigured ?? false,
+    );
   }
 }

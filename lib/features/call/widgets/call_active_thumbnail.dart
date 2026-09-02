@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -148,7 +149,11 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
           if (displayStream)
             StreamThumbnail(stream: widget.activeCall.remoteStream)
           else
-            _AvatarOverlay(activeCall: widget.activeCall, contactResolver: widget.contactResolver),
+            _AvatarOverlay(
+              activeCall: widget.activeCall,
+              contactResolver: widget.contactResolver,
+              smallerSide: widget.smallerSide,
+            ),
         ],
       ),
     );
@@ -156,30 +161,40 @@ class _CallActiveThumbnailState extends State<CallActiveThumbnail> {
 }
 
 class _AvatarOverlay extends StatelessWidget {
-  const _AvatarOverlay({required this.activeCall, this.contactResolver});
+  const _AvatarOverlay({required this.activeCall, required this.smallerSide, this.contactResolver});
+
+  static const double _padding = 8;
 
   final ActiveCall activeCall;
   final ContactResolver? contactResolver;
 
+  /// Smaller side of the window the avatar sits in; it is what the avatar is sized
+  /// from, so a window configured larger or smaller carries it along.
+  final double smallerSide;
+
+  /// Half of what the window leaves after its padding, and never less than nothing:
+  /// a window narrower than the padding it carries would otherwise ask for a negative
+  /// radius, which is not a size any box can take.
+  double get _radius => math.max(0.0, smallerSide - _padding * 2) / 2;
+
   @override
   Widget build(BuildContext context) {
-    final number = activeCall.handle.value;
-
+    // The window stretches whatever fills it to its own 9:16 shape. The avatar is a
+    // circle of a fixed size, so it has to be let out of those constraints: taken
+    // tight, it is drawn as an ellipse the shape of the window and the photo inside
+    // it is cropped to match.
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: FutureBuilder<Contact?>(
-        future: contactResolver?.resolve(number),
-        builder: (context, snapshot) {
-          final displayName = activeCall.displayName ?? '';
-          final resolvedName = snapshot.data?.maybeName ?? displayName;
-
-          return LeadingAvatar(
-            radius: 24,
-            username: resolvedName,
+      padding: const EdgeInsets.all(_padding),
+      child: Center(
+        child: FutureBuilder<Contact?>(
+          future: contactResolver?.resolve(activeCall.handle.value),
+          builder: (context, snapshot) => LeadingAvatar(
+            radius: _radius,
+            username: snapshot.data?.maybeName ?? activeCall.displayName ?? '',
             thumbnailUrl: snapshot.data?.thumbnailUrl,
             placeholderIcon: Icons.phone_in_talk_outlined,
-          );
-        },
+          ),
+        ),
       ),
     );
   }

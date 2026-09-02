@@ -39,11 +39,14 @@ mixin SystemInfoJsonMapper {
   }
 
   CoreInfo coreInfoFromMap(Map<String, dynamic> map) {
-    return CoreInfo(version: Version.parse(map['version']));
+    return CoreInfo(
+      version: Version.parse(map['version']),
+      iceServersConfigured: map['ice_servers_configured'] == true,
+    );
   }
 
   Map<String, dynamic> coreInfoToMap(CoreInfo coreInfo) {
-    return {'version': coreInfo.version.toString()};
+    return {'version': coreInfo.version.toString(), 'ice_servers_configured': coreInfo.iceServersConfigured};
   }
 
   PostgresInfo postgresInfoFromMap(Map<String, dynamic> map) {

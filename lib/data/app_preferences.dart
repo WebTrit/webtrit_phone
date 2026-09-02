@@ -1,6 +1,16 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AppPreferences {
+  String? getSystemInfo();
+
+  Future<void> setSystemInfo(String value);
+
+  Future<void> removeSystemInfo();
+
+  String? getFcmPushToken();
+
+  Future<void> setFcmPushToken(String value);
+
   String? getString(String key);
 
   Future<void> setString(String key, String value);
@@ -25,6 +35,24 @@ class AppPreferencesImpl implements AppPreferences {
     final sharedPreferences = await SharedPreferences.getInstance();
     return AppPreferencesImpl._(sharedPreferences);
   }
+
+  static const _systemInfoKey = 'system-info';
+  static const _fcmPushTokenKey = 'fcm-push-token';
+
+  @override
+  String? getSystemInfo() => getString(_systemInfoKey);
+
+  @override
+  Future<void> setSystemInfo(String value) => setString(_systemInfoKey, value);
+
+  @override
+  Future<void> removeSystemInfo() => remove(_systemInfoKey);
+
+  @override
+  String? getFcmPushToken() => getString(_fcmPushTokenKey);
+
+  @override
+  Future<void> setFcmPushToken(String value) => setString(_fcmPushTokenKey, value);
 
   @override
   String? getString(String key) => _sharedPreferences.getString(key);

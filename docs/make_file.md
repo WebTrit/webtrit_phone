@@ -90,21 +90,18 @@ FLUTTER_FLAGS="--build-name=1.2.3 --build-number=42" melos run build:apk
 
 ## CI Pipeline
 
-| Command                | Description                                                |
-|------------------------|------------------------------------------------------------|
-| `melos run ci`         | Full pipeline: get → generate → fmt:check → analyze → test |
-| `melos run smoke:test` | Smoke test all fast, non-destructive scripts               |
+| Command        | Description                                                             |
+|----------------|--------------------------------------------------------------------------|
+| `melos run ci` | Full pipeline: get → generate → fmt:check → analyze → l10n:check → test |
 
 ---
 
 ## Localization
 
-| Command                   | Description                                                     |
-|---------------------------|-----------------------------------------------------------------|
-| `melos run l10n:generate` | Generate Flutter localization files from ARB                    |
-| `melos run l10n:push`     | Push keys to Localizely (requires `LOCALIZELY_TOKEN` in `.env`) |
-| `melos run l10n:pull`     | Pull translations from Localizely                               |
-| `melos run l10n:fetch`    | `l10n:pull` + `l10n:generate`                                   |
+| Command                   | Description                                                              |
+|---------------------------|---------------------------------------------------------------------------|
+| `melos run l10n:generate` | Generate Flutter localization files from ARB                             |
+| `melos run l10n:check`    | Validate ARB files against `app_en.arb` (keys, placeholders, empty values) |
 
 ---
 

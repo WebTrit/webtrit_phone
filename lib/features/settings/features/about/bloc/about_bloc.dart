@@ -24,15 +24,15 @@ class AboutBloc extends Bloc<AboutEvent, AboutState> {
     required AppInfo appInfo,
     required PackageInfo packageInfo,
     required AppMetadataProvider appMetadataProvider,
-    required SecureStorage secureStorage,
+    required AppPreferences appPreferences,
     required EmbeddedConfig embeddedConfig,
     required this.infoRepository,
   }) : super(
          AboutState(
            packageName: packageInfo.packageName,
            appIdentifier: appInfo.identifier,
-           fcmPushToken: secureStorage.readFCMPushToken(),
-           embeddedLinks: embeddedConfig.embeddedResources.map((e) => e.uri.toString()).toList(),
+           fcmPushToken: appPreferences.getFcmPushToken(),
+           embeddedResources: embeddedConfig.embeddedResources,
            coreUrl: infoRepository.getCoreUrl(),
            userAgent: appMetadataProvider.userAgent,
            appInfo: appMetadataProvider.appInfo,

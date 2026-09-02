@@ -3,9 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/styles/styles.dart';
-import 'package:webtrit_phone/widgets/sip_presence_indicator.dart';
 
 import '../utils/utils.dart';
 import 'safe_network_image.dart';
@@ -17,28 +15,27 @@ class LeadingAvatar extends StatefulWidget {
     this.thumbnail,
     this.thumbnailUrl,
     this.placeholderIcon = Icons.person_outline,
-    this.registered,
     this.smart = false,
     this.radius, // value of private _defaultRadius variable in CircleAvatar class
     this.showLoading = false,
     this.loadingPadding,
     this.style,
-    this.presenceInfo,
-    this.dialogInfo,
+    this.badge,
   });
 
   final String? username;
   final Uint8List? thumbnail;
   final Uri? thumbnailUrl;
   final IconData placeholderIcon;
-  final bool? registered;
   final bool smart;
   final double? radius;
   final bool showLoading;
   final EdgeInsets? loadingPadding;
   final LeadingAvatarStyle? style;
-  final List<PresenceInfo>? presenceInfo;
-  final List<DialogInfo>? dialogInfo;
+
+  /// Status badge overlay (e.g. `AvatarStatusBadge`); it receives the whole
+  /// avatar square and positions itself within it.
+  final Widget? badge;
 
   @override
   State<LeadingAvatar> createState() => _LeadingAvatarState();
@@ -48,18 +45,6 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   late LeadingAvatarStyle _style;
   late double _radius;
   late double _diameter;
-  late Rect _registeredRect;
-  late Rect _presenceRect;
-  late Rect _smartRect;
-
-  @override
-  void initState() {
-    super.initState();
-    _style = const LeadingAvatarStyle();
-    _radius = widget.radius ?? _style.radius ?? 20;
-    _diameter = _radius * 2;
-    _updateBadgeRects();
-  }
 
   @override
   void didChangeDependencies() {
@@ -70,52 +55,23 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   @override
   void didUpdateWidget(covariant LeadingAvatar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.style != widget.style ||
-        oldWidget.radius != widget.radius ||
-        oldWidget.smart != widget.smart ||
-        oldWidget.registered != widget.registered ||
-        oldWidget.thumbnailUrl != widget.thumbnailUrl ||
-        oldWidget.thumbnail != widget.thumbnail ||
-        oldWidget.presenceInfo != widget.presenceInfo ||
-        oldWidget.dialogInfo != widget.dialogInfo ||
-        oldWidget.username != widget.username) {
+    if (oldWidget.style != widget.style || oldWidget.radius != widget.radius) {
       _recompute();
     }
   }
 
+  // The resolved style always carries the app's own values underneath, so the
+  // fields it fills are read without a fallback of their own here.
   void _recompute() {
-    final theme = Theme.of(context);
-    final themeStyle = theme.extension<LeadingAvatarStyles>()?.primary;
+    _style = LeadingAvatarStyle.merge(LeadingAvatarStyles.of(context), widget.style);
 
-    _style = LeadingAvatarStyle.merge(themeStyle, widget.style);
-
-    _radius = widget.radius ?? _style.radius ?? 20;
+    _radius = widget.radius ?? _style.radius!;
     _diameter = _radius * 2;
-
-    _updateBadgeRects();
-  }
-
-  void _updateBadgeRects() {
-    final registeredSizeFactor = _style.registeredBadge?.sizeFactor ?? 0.2;
-    final smartSizeFactor = _style.smartIndicator?.sizeFactor ?? 0.4;
-    final presenceSizeFactor = _style.presenceBadge?.sizeFactor ?? 0.325;
-
-    _registeredRect = BadgeLayout.bottomRightSquare(size: _diameter, sizeFactor: registeredSizeFactor);
-
-    _presenceRect = BadgeLayout.bottomRightSquare(size: _diameter, sizeFactor: presenceSizeFactor);
-
-    _smartRect = BadgeLayout.topLeftSquare(
-      size: _diameter,
-      sizeFactor: smartSizeFactor,
-      dxFactor: -0.1,
-      dyFactor: -0.1,
-    );
   }
 
   /// Name-derived background, or null when disabled / not applicable (photo shown, no name).
   Color? _nameBackgroundColor(BuildContext context) {
-    // Absent config means on: only an explicit `enabled: false` opts out.
-    final nameColors = _style.nameColors ?? const NameColorsStyle();
+    final nameColors = _style.nameColors!;
     if (!nameColors.enabled) return null;
     if (widget.thumbnail != null || widget.thumbnailUrl != null) return null;
 
@@ -124,18 +80,12 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    final presenceParams = PresenceViewParams.of(context);
     final nameBackgroundColor = _nameBackgroundColor(context);
 
     return Container(
       width: _diameter,
       height: _diameter,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: nameBackgroundColor ?? _style.backgroundColor ?? scheme.secondaryContainer,
-      ),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: nameBackgroundColor ?? _style.backgroundColor),
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.loose,
@@ -158,31 +108,35 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
               child: _buildAvatarContent(_diameter, _style),
             ),
           ),
-          if (!presenceParams.hybridPresenceSupport && widget.registered != null)
-            Positioned.fromRect(rect: _registeredRect, child: _registeredIndicator(_style)),
-          if (presenceParams.hybridPresenceSupport && widget.presenceInfo != null)
+          if (widget.badge != null) Positioned.fill(child: widget.badge!),
+          if (widget.smart)
             Positioned.fromRect(
-              rect: _presenceRect,
-              child: _buildPresenceIndicator(_style, widget.presenceInfo!, widget.dialogInfo ?? []),
+              rect: BadgeLayout.topLeftSquare(
+                size: _diameter,
+                sizeFactor: _style.smartIndicator!.sizeFactor!,
+                dxFactor: -0.1,
+                dyFactor: -0.1,
+              ),
+              child: _smartIndicator(_diameter, _style),
             ),
-          if (widget.smart) Positioned.fromRect(rect: _smartRect, child: _smartIndicator(_diameter, _style, scheme)),
           if (widget.showLoading) _buildLoadingOverlay(_style),
         ],
       ),
     );
   }
 
-  Widget _buildPresenceIndicator(
-    LeadingAvatarStyle style,
-    List<PresenceInfo> presenceInfo,
-    List<DialogInfo> dialogInfo,
-  ) {
-    return SipPresenceIndicator(presenceInfo: presenceInfo, presenceRect: _presenceRect, dialogInfo: dialogInfo);
-  }
-
   Widget _buildAvatarContent(double diameter, LeadingAvatarStyle style) {
     if (widget.thumbnailUrl != null) {
-      return ClipOval(key: ValueKey('remote:${widget.thumbnailUrl?.hashCode}'), child: _remoteImage(diameter, style));
+      // Gravatar serves 80x80 unless asked otherwise, which is soft on a list row and
+      // visibly pixelated on a large avatar, so ask for the resolution actually painted -
+      // rounded up to a shared size, so the same face is not downloaded once per screen.
+      final devicePixels = diameter * MediaQuery.devicePixelRatioOf(context);
+      final url =
+          GravatarUrl.withSize(widget.thumbnailUrl, GravatarUrl.requestSize(devicePixels)) ?? widget.thumbnailUrl!;
+
+      // Keyed by the contact's url rather than the sized one: a size change is a reload
+      // inside the image, not a new child, and remounting it would flash the placeholder.
+      return ClipOval(key: ValueKey('remote:${widget.thumbnailUrl}'), child: _remoteImage(url, diameter, style));
     } else if (widget.thumbnail != null) {
       return const ClipOval(key: ValueKey('local'), child: _LocalImage());
     } else {
@@ -193,8 +147,8 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
   Widget _buildLoadingOverlay(LeadingAvatarStyle style) {
     final hasAvatarData = widget.username != null || (widget.thumbnail != null || widget.thumbnailUrl != null);
 
-    final padding = widget.loadingPadding ?? style.loadingOverlay?.padding ?? EdgeInsets.zero;
-    final strokeWidth = style.loadingOverlay?.strokeWidth ?? 1.0;
+    final padding = widget.loadingPadding ?? style.loadingOverlay!.padding!;
+    final strokeWidth = style.loadingOverlay!.strokeWidth!;
     final color = style.initialsTextStyle?.color;
 
     return AnimatedSwitcher(
@@ -216,9 +170,9 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     );
   }
 
-  Widget _remoteImage(double diameter, LeadingAvatarStyle style) {
+  Widget _remoteImage(Uri url, double diameter, LeadingAvatarStyle style) {
     return SafeNetworkImage(
-      widget.thumbnailUrl.toString(),
+      url.toString(),
       fit: BoxFit.cover,
       placeholderBuilder: () => _placeholder(diameter, style),
       errorBuilder: () {
@@ -254,23 +208,11 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     return Icon(icon, size: diameter * 0.5, color: color);
   }
 
-  Widget _registeredIndicator(LeadingAvatarStyle style) {
-    final registered = widget.registered!;
-    final rs = Theme.of(context).extension<RegisteredStatusStyles>()?.primary;
-
-    final color = registered
-        ? (style.registeredBadge?.registeredColor ?? rs?.registered)
-        : (style.registeredBadge?.unregisteredColor ?? rs?.unregistered);
-
-    return Container(
-      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-    );
-  }
-
-  Widget _smartIndicator(double diameter, LeadingAvatarStyle style, ColorScheme scheme) {
-    final bg = style.smartIndicator?.backgroundColor ?? scheme.surfaceContainerLowest;
-    final icon = style.smartIndicator?.icon ?? Icons.person;
-    final sizeFactor = style.smartIndicator?.sizeFactor ?? 0.4;
+  Widget _smartIndicator(double diameter, LeadingAvatarStyle style) {
+    final smart = style.smartIndicator!;
+    final bg = smart.backgroundColor;
+    final icon = smart.icon;
+    final sizeFactor = smart.sizeFactor!;
     final color = style.initialsTextStyle?.color;
 
     return CircleAvatar(

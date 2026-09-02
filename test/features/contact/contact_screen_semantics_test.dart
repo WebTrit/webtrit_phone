@@ -239,14 +239,12 @@ void main() {
       );
 
       await tapViaSemantics(tester, find.bySemanticsIdentifier(contactDialogsSubscriptionId));
-      verify(
-        () => harness.contactBloc.add(const ContactSipSubscriptionToggled(true, SipSubscriptionType.blf)),
-      ).called(1);
+      verify(() => harness.contactBloc.add(const ContactSipSubscriptionToggled(true, SipSubscriptionType.blf)))
+          .called(1);
 
       await tapViaSemantics(tester, find.bySemanticsIdentifier(contactPresenceSubscriptionId));
-      verify(
-        () => harness.contactBloc.add(const ContactSipSubscriptionToggled(true, SipSubscriptionType.presence)),
-      ).called(1);
+      verify(() => harness.contactBloc.add(const ContactSipSubscriptionToggled(true, SipSubscriptionType.presence)))
+          .called(1);
 
       handle.dispose();
     });

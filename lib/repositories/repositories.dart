@@ -1,5 +1,5 @@
 export 'active_contact_source_type/active_contact_source_type_repository.dart';
-export 'active_main_flavor/active_main_flavor_repository.dart';
+export 'active_main_tab/active_main_tab_repository.dart';
 export 'active_recents_visibility_filter/active_recents_visibility_filter_repository.dart';
 export 'app/app_repository.dart';
 export 'app_analytics/app_analytics_repository.dart';
@@ -17,6 +17,7 @@ export 'dialog_info/dialog_info_repository.dart';
 export 'encoding_preset/encoding_preset_repository.dart';
 export 'encoding_settings/encoding_settings_repository.dart';
 export 'favorites/favorites.dart';
+export 'ice_servers/ice_servers.dart';
 export 'ice_settings/ice_settings_repository.dart';
 export 'incoming_call_type/incoming_call_type_repository.dart';
 export 'lines_state/lines_state_repository.dart';

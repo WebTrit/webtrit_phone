@@ -182,7 +182,7 @@ The configuration is parsed into `BottomMenuTabScheme` union variants depending 
 |-------------|----------|---------|--------------------------------------------------------------------------------------------------------------|
 | `enabled`   | `bool`   | `true`  | Whether the tab is visible and active in the UI.                                                             |
 | `initial`   | `bool`   | `false` | Whether the tab should be selected by default at startup.                                                    |
-| `type`      | `string` | —       | Defines which tab variant to render (`favorites`, `recents`, `contacts`, `keypad`, `messaging`, `embedded`). |
+| `type`      | `string` | —       | Defines which tab variant to render (`favorites`, `recents`, `contacts`, `keypad`, `messaging`, `voicemail`, `embedded`). |
 | `titleL10n` | `string` | —       | Localization key for the tab title.                                                                          |
 | `icon`      | `string` | —       | Material icon codepoint (hex string).                                                                        |
 
@@ -245,11 +245,39 @@ Contact list screen.
   "contactSourceTypes": [
     "local",
     "external"
-  ]
+  ],
+  "layout": "unified",
+  "favorites": true
 }
 ```
 
-- `contactSourceTypes`: which contact sources to display (`local`, `external`, etc.).
+| Field                | Type       | Default    | Description                                                             |
+|----------------------|------------|------------|-------------------------------------------------------------------------|
+| `contactSourceTypes` | `string[]` | `[]`       | Which address books to offer (`local`, `external`).                     |
+| `layout`             | `string`   | `"tabbed"` | How the section is arranged: `tabbed` or `unified`.                     |
+| `favorites`          | `bool`     | `true`     | Whether favorites are one of the lists offered. Read for `unified` only. |
+
+`layout` picks between two screens, not two styles of one:
+
+- `tabbed` - a tab per address book, and favorites live in a `favorites` tab of the bottom bar.
+  This is the arrangement the app had before `layout` existed, and the one a config that says
+  nothing keeps.
+- `unified` - one list at a time, named by a chooser on the line under the title: each address
+  book, plus - when `favorites` is on - the favorites, as one more entry of that same control.
+  Rows of an address book carry a star here, so a favorite is recognisable from the whole list.
+
+An unknown `layout` value falls back to `tabbed`, so a configurator may offer an arrangement
+before an installed app knows how to draw it.
+
+`favorites` is read only for `unified`. With `tabbed`, the favorites tab of the bottom bar
+decides instead, and stating it here would be a value nothing reads. The list behind the entry
+is the favorites section's own - the same rows, in the order a person arranged them - not the
+contacts list narrowed down, so the two never disagree. It is not searchable, and the search
+control steps aside while it is shown. Turning `favorites` off drops the entry; if the section
+also has a single address book, the chooser goes with it and the search box takes the line.
+
+Both surfaces may be enabled at once - a `favorites` tab in the bottom bar and `favorites: true`
+here. Nothing forbids it and the two show the same list, but a person then reaches it two ways.
 
 ### **KeypadTabScheme**
 
@@ -277,6 +305,26 @@ Messaging or chat tab.
   "icon": "0xe155"
 }
 ```
+
+### **VoicemailTabScheme**
+
+Voicemail list as a section of its own.
+
+```json
+{
+  "type": "voicemail",
+  "enabled": true,
+  "titleL10n": "main_BottomNavigationBarItemLabel_voicemail",
+  "icon": "0xe6c1"
+}
+```
+
+Shown only when the server advertises the `voicemail` capability in system-info; a configured tab
+is dropped from the menu on a core without it, the way a contacts tab with no usable source is.
+
+This tab and the `voicemail` item of the settings list are configured independently: a deployment
+may offer voicemail from either, from both, or from neither. Both lead to the same screen and share
+one local store, so what is read in one place is read in the other.
 
 ### **EmbeddedTabScheme**
 

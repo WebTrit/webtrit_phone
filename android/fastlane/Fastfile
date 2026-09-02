@@ -10,7 +10,6 @@ platform :android do
       "--no-tree-shake-icons",
     ]
 
-    args.push("--flavor", ENV['ANDROID_FLAVOR'].to_s.empty? ? "deeplinkssmsReceiver" : ENV['ANDROID_FLAVOR'])
     args.push("--build-name=#{ENV['ANDROID_BUILD_NAME']}")
     args.push("--build-number=#{ENV['ANDROID_BUILD_NUMBER']}")
 

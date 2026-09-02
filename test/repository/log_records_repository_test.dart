@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/common/disposable.dart';
 import 'package:webtrit_phone/repositories/log_records/log_records_repository.dart';
 import 'package:webtrit_phone/repositories/log_records/native_log_forwarder.dart';
 
@@ -98,6 +99,23 @@ void main() {
   // ---------------------------------------------------------------------------
   // ReadableRotatingFileAppender
   // ---------------------------------------------------------------------------
+
+  group('LogRecordsRepository teardown', () {
+    test('in-memory storage (the web branch) can be torn down by disposeIfDisposable', () async {
+      final LogRecordsRepository repository = LogRecordsRepository.create(
+        useFileStorage: false,
+        logFilePath: 'unused-on-web.log',
+      );
+      final logger = Logger('log-records-teardown');
+      await repository.attachToLogger(logger);
+
+      await expectLater(disposeIfDisposable(repository), completes);
+
+      logger.info('after teardown');
+      await Future<void>.delayed(Duration.zero);
+      expect(await repository.getLogRecords(), isEmpty);
+    });
+  });
 
   group('ReadableRotatingFileAppender', () {
     late Directory tempDir;

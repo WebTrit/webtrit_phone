@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:webtrit_appearance_theme/converters/converters.dart';
-
 part 'icon_data_config.freezed.dart';
 
 part 'icon_data_config.g.dart';
@@ -11,7 +9,8 @@ part 'icon_data_config.g.dart';
 class IconDataConfig with _$IconDataConfig {
   /// Exact IconData representation.
   const IconDataConfig({
-    /// e.g. 0xe491 (58513)
+    /// The code point in hex, as the JSON carries it - e.g. `e491`, with or
+    /// without an `0x` in front.
     required this.codePoint,
 
     /// e.g. "MaterialIcons"
@@ -21,9 +20,27 @@ class IconDataConfig with _$IconDataConfig {
     this.matchTextDirection = false,
   });
 
+  // Held as it arrives rather than parsed on the way in.
+  //
+  // It used to be an `int` behind a `JsonConverter<int, String>`, and the
+  // generated schema described the field rather than the JSON: it said
+  // `integer` where the document carries a string, so every real icon failed
+  // validation against the contract this package publishes. A field whose type
+  // is the type on the wire needs no converter and cannot say the wrong thing.
+  //
+  // Not a doc comment: the generator copies those into the schema, and the
+  // reasoning for a shape belongs beside the code and not in what is published.
+  /// The code point in hex, e.g. `e491`.
   @override
-  @HexCodePointConverter()
-  final int codePoint;
+  final String codePoint;
+
+  /// The code point as `IconData` wants it.
+  ///
+  /// The parse moved here from the converter, so it happens where the number
+  /// is used instead of on the way in. `0x` is tolerated because a stored
+  /// theme may carry it: the converter accepted both spellings and the ones
+  /// written before this cannot be asked to choose.
+  int get codePointValue => int.parse(codePoint.replaceFirst(RegExp('^0[xX]'), ''), radix: 16);
 
   @override
   final String fontFamily;

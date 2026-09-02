@@ -32,11 +32,11 @@ version: 0.0.0+0
 # Where:
 #   - <Major>, <Minor>, <Patch>: non-negative integers, decided by the developer
 # app_version represents tasks and fixed bugs, which is different from the build version that is specific to each client
-app_version: 1.16.4+0
+app_version: 1.16.5+0
 
 environment:
-  sdk: ^3.12.0
-  flutter: ^3.44.0
+  sdk: ^3.13.0
+  flutter: ^3.47.0
 
 dependencies:
   flutter:
@@ -81,7 +81,6 @@ dependencies:
   html: ^0.15.6
   http: ^1.6.0
   image: ^4.0.0
-  icon_decoration: ^2.1.0
   in_app_update: ^4.2.5
   intl: any
   json_annotation: ^4.12.0
@@ -102,15 +101,12 @@ dependencies:
   pub_semver: ^2.2.0
   quiver: ^3.2.2
   rxdart: ^0.28.0
-  # Temporary git pin: forked sdp_transform that restores the lossless guard in
-  # toIntIfInt (the published parser coerces numeric/hex ICE ufrags to int and
-  # corrupts them, e.g. 0X48 -> 72, breaking the local answer).
-  # TODO: move this fork off a personal account onto a corporate/org account, and
-  # re-pin to a stable commit or tag once the upstream parser fix is merged.
+  # The lossless numeric-coercion guard for ICE ufrags is merged upstream but is
+  # not in the latest pub.dev release (0.3.2) yet.
   sdp_transform:
     git:
-      url: https://github.com/SERDUN/dart-sdp-transform.git
-      ref: fix/ufrag-numeric-coercion
+      url: https://github.com/flutter-webrtc/dart-sdp-transform.git
+      ref: master
   share_plus: ^13.1.0
   shared_preferences: ^2.5.5
   stream_transform: ^2.1.1
@@ -140,7 +136,7 @@ dependencies:
     # Release branches pin callkeep to a published tag (see docs/release_versioning.md).
     git:
       url: https://github.com/WebTrit/webtrit_callkeep.git
-      ref: 1.3.3
+      ref: 1.3.4
       path: webtrit_callkeep
   webtrit_phone_number:
     path: ./packages/webtrit_phone_number
@@ -178,17 +174,19 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_native_splash: ^2.4.7
   freezed: ^3.2.5
-  json_serializable: ^6.14.0
+  json_serializable: ^6.14.1
   # TODO: temporary fork pin. Switch back to a pub.dev version constraint once
-  # analyzer ^13.0.0 support lands upstream
-  # (SERDUN/l10n_mapper -> kwado-tech/l10n_mapper).
+  # analyzer 8.3-14 compatibility is published upstream
+  # (SERDUN/l10n_mapper#1 -> kwado-tech/l10n_mapper).
   l10n_mapper_generator:
     git:
       url: https://github.com/SERDUN/l10n_mapper.git
-      ref: 8a90364
+      ref: dd2095bfc9a49ac9190dd4821d5bbc6b0f48f055
       path: l10n_mapper_generator
   melos: ^7.8.0
   mocktail: ^1.0.5
+  package_rename: ^1.8.0
+  json_schema: ^5.2.2
   # patrol is provisioned only for integration-test builds (see tool/scripts/*),
   # NOT committed here: patrol.podspec weak-links XCTest and Flutter does not strip
   # dev dependencies from iOS release builds (flutter/flutter#163874), so shipping it
@@ -206,6 +204,7 @@ flutter:
     - assets/login/
     - assets/ringtones/
     - assets/themes/
+    - assets/fonts/
     - assets/certificates/
 
 flutter_gen:
@@ -351,18 +350,20 @@ melos:
     # ===========================
 
     check:
-      description: Run formatting check and analysis.
+      description: Run formatting check, analysis, and l10n validation.
       steps:
         - fmt:check
         - analyze
+        - l10n:check
 
     ci:
-      description: Full CI pipeline - get, generate, check format, analyze, test.
+      description: Full CI pipeline - get, generate, check format, analyze, l10n check, test.
       steps:
         - get
         - generate
         - fmt:check
         - analyze
+        - l10n:check
         - test
 
     # ===========================
@@ -382,20 +383,29 @@ melos:
     # ===========================
 
     build:apk:
-      description: Build Android APK. Set FLUTTER_FLAGS for extra flags (e.g. --release).
+      description: Build Android APK. Optional features are resolved from dart_define.json. Set FLUTTER_FLAGS for extra flags (e.g. --release).
       run: flutter build apk --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:appbundle:
-      description: Build Android App Bundle. Set FLUTTER_FLAGS for extra flags.
+      description: Build Android App Bundle. Optional features are resolved from dart_define.json. Set FLUTTER_FLAGS for extra flags.
       run: flutter build appbundle --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:ios:
-      description: Build iOS app. Set FLUTTER_FLAGS for extra flags (e.g. --release --no-codesign).
-      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+      description: >-
+        Build iOS app. Optional features are resolved from dart_define.json, as on Android.
+        Set FLUTTER_FLAGS for extra flags (e.g. --release --no-codesign).
+      run: >-
+        sh tool/scripts/ios_optional_features.sh &&
+        flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:ios:config:
-      description: Configure Xcode project without building.
-      run: flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only
+      description: >-
+        Configure the Xcode project without building it. Optional features are resolved from
+        dart_define.json, as on Android. Set FLUTTER_FLAGS for extra flags
+        (e.g. --build-name, --build-number, --no-codesign).
+      run: >-
+        sh tool/scripts/ios_optional_features.sh &&
+        flutter build ios --dart-define-from-file=dart_define.json --no-tree-shake-icons --config-only ${FLUTTER_FLAGS:-}
 
     browserstack:upload:
       description: >-
@@ -441,7 +451,7 @@ melos:
     fastlane:android:build:
       description: >
         Build the Android app bundle via android/fastlane. Reads ANDROID_BUILD_TARGET,
-        ANDROID_FLAVOR, ANDROID_BUILD_NAME, ANDROID_BUILD_NUMBER from the environment.
+        ANDROID_BUILD_NAME, ANDROID_BUILD_NUMBER from the environment.
       steps:
         - fastlane:install
         - cd android && fastlane android build
@@ -487,14 +497,21 @@ melos:
         - icons:generate
         - splash:generate
 
+    package:rename:
+      description: >
+        Apply the package name and app name from tool/configs/package_rename_config.yaml,
+        which webtrit_phone_tools writes during configurator:generate.
+      run: dart run package_rename --path=tool/configs/package_rename_config.yaml
+
     # ===========================
     # Configurator - melos run configurator:generate
     # ===========================
 
     configurator:generate:
       description: >
-        Fetch resources from configurator backend, generate app assets, and run
-        flutterfire configure for all platforms. Reads APP_ID and CONFIGURATOR_TOKEN from .env file.
+        Fetch this brand from the configurator backend, generate the app's icons, splash and
+        identifiers from it, and run flutterfire configure for all platforms.
+        Reads APP_ID and CONFIGURATOR_TOKEN from .env file.
       run: |
         set -eo pipefail
         [ -f .env ] || { echo "ERROR: .env not found. Copy .env.example to .env and fill in your credentials." >&2; exit 1; }
@@ -516,6 +533,12 @@ melos:
           --token="${CONFIGURATOR_TOKEN:?CONFIGURATOR_TOKEN not found in .env}"
         phone_tools \
           configurator-generate
+        # This project's own generators, the same three the build workflow asks
+        # for. The rename goes last: the icons and the splash are written into
+        # the platform folders it then rewrites.
+        dart run melos run icons:generate
+        dart run melos run splash:generate
+        dart run melos run package:rename
         phone_tools \
           configurator-setup \
           --platform ios \
@@ -523,27 +546,47 @@ melos:
           --keystore-path="$KEYSTORE_APP_PATH"
 
     # ===========================
-    # Localization - melos run l10n:push | l10n:pull | l10n:generate | l10n:fetch
+    # Localization - melos run l10n:generate | l10n:check | l10n:pull | l10n:fetch
     # ===========================
 
-    l10n:push:
-      description: Push localization keys to Localizely (reads LOCALIZELY_TOKEN from .env).
+    l10n:generate:
+      description: Generate Flutter localization files from ARB files and format them at the project width.
+      # NOTE: `flutter gen-l10n` formats its output at the Dart default of 80 columns
+      # and does not read `formatter.page_width` from analysis_options.yaml. The fmt
+      # scripts above skip generated files, so without this reformat every regeneration
+      # carries thousands of lines of rewrapping noise. `l10n:check` guards the result.
       run: |
-        token=$(grep -E '^(export[[:space:]]+)?LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
-        localizely-cli --api-token="$token" push
+        flutter gen-l10n
+        dart format --line-length 120 lib/l10n
+
+    l10n:check:
+      description: Validate ARB files against app_en.arb (key parity, ICU placeholders, empty values, mapper coverage).
+      run: dart tool/check_l10n.dart
 
     l10n:pull:
-      description: Pull localization keys from Localizely (reads LOCALIZELY_TOKEN from .env).
+      description: Pull the configurator's translation catalog into the ARB files. Reads CONFIGURATOR_TOKEN from .env.
+      # The catalog owns the values, so this is how a correction made there comes
+      # back here. The fetch overwrites rather than merges; it refuses an export
+      # that would delete keys this checkout has, so there is nothing to vet on
+      # this side.
       run: |
-        token=$(grep -E '^(export[[:space:]]+)?LOCALIZELY_TOKEN=' .env | cut -d '=' -f2)
-        localizely-cli --api-token="$token" pull
-
-    l10n:generate:
-      description: Generate Flutter localization files from ARB files.
-      run: flutter gen-l10n
+        set -eo pipefail
+        [ -f .env ] || { echo "ERROR: .env not found. Copy .env.example to .env and fill in your credentials." >&2; exit 1; }
+        CONFIGURATOR_TOKEN=$(grep -E '^(export[[:space:]]+)?CONFIGURATOR_TOKEN=' .env | cut -d '=' -f2-)
+        # `dart run` streams a "Running build hooks..." progress fragment on stderr, and melos
+        # labels everything a script writes to stderr as ERROR - which reads as a failed run even
+        # though the command succeeded. Strip just that fragment; any other stderr text, the exit
+        # code and stdout pass through untouched.
+        phone_tools() {
+          { dart run ../webtrit_phone_tools/bin/webtrit_phone_tools.dart "$@" 2>&1 1>&3 \
+            | sed -e 's/Running build hooks\.\.\.//g' -e '/^[[:space:]]*$/d' >&2; } 3>&1
+        }
+        phone_tools \
+          configurator-translations-fetch \
+          --token="${CONFIGURATOR_TOKEN:?CONFIGURATOR_TOKEN not found in .env}"
 
     l10n:fetch:
-      description: Pull l10n from Localizely and regenerate Flutter localization files.
+      description: Pull the translation catalog and regenerate the localization classes.
       steps:
         - l10n:pull
         - l10n:generate
@@ -556,6 +599,7 @@ melos:
       description: Sync IDE run configurations from tool/run/ to .idea/runConfigurations/.
       run: |
         mkdir -p .idea/runConfigurations
+        rm -f .idea/runConfigurations/run-android-deeplinks*.xml
         cp tool/run/*.xml .idea/runConfigurations/
 
     # ===========================

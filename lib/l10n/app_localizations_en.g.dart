@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.g.dart';
 
 // ignore_for_file: type=lint
@@ -169,6 +170,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String callTile_SemanticsLabel_videoCall(String name) {
     return 'Video call $name';
+  }
+
+  @override
+  String get callerId_SemanticsLabel_addMatch => 'Add a dial code match';
+
+  @override
+  String get callerId_SemanticsLabel_matchNumber => 'Number to show for this dial code';
+
+  @override
+  String get callerId_SemanticsLabel_defaultNumber => 'Number to call from by default';
+
+  @override
+  String callerId_SemanticsLabel_matchPrefix(String country) {
+    return 'Dial code to match, currently $country';
+  }
+
+  @override
+  String callerId_SemanticsLabel_removeMatch(String dialCode) {
+    return 'Remove the match for $dialCode';
+  }
+
+  @override
+  String callerId_SemanticsLabel_matchRule(String dialCode, String number) {
+    return 'Calls to $dialCode show $number';
   }
 
   @override
@@ -460,6 +485,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get contacts_ContactsScreen_emptyFavorites =>
+      'No favorites among your contacts yet.\nAdd one from a contact card using the star icon';
+
+  @override
+  String get contacts_ContactsScreen_searchSemanticsLabel => 'Search contacts';
+
+  @override
+  String get contacts_ContactsScreen_sourceSemanticsLabel => 'Contact source';
+
+  @override
   String get contacts_agreement_button_text => 'Continue';
 
   @override
@@ -511,13 +546,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contacts_LocalTabText_permissionFailure => 'There are no permissions to get your phone contacts';
 
   @override
+  String get contactsSourceFavorites => 'Favorites';
+
+  @override
   String get contactsSourceExternal => 'Cloud PBX';
 
   @override
   String get contactsSourceLocal => 'Your phone';
-
-  @override
-  String get contacts_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
   String get contacts_DialogsInfoView_title => 'Calls information (BLF):';
@@ -958,9 +993,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get favorites_Text_blingTransferInitiated => 'Performing blind transfer';
-
-  @override
   String formatPhone(String style, String main, String ext) {
     String _temp0 = intl.Intl.selectLogic(style, {
       'full': '$main (ext: $ext)',
@@ -1267,6 +1299,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get main_BottomNavigationBarItemLabel_chats => 'Chats';
 
   @override
+  String get main_Text_blindTransferInitiated => 'Performing blind transfer';
+
+  @override
   String get main_BottomNavigationBarItemLabel_contacts => 'Contacts';
 
   @override
@@ -1277,6 +1312,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get main_BottomNavigationBarItemLabel_recents => 'Recents';
+
+  @override
+  String get main_BottomNavigationBarItemLabel_voicemail => 'Voicemail';
 
   @override
   String get main_CompatibilityIssueDialogActions_logout => 'Logout';
@@ -1327,15 +1365,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_ChooseContact_title => 'Choose contact:';
-
-  @override
-  String get messaging_ConfirmDialog_ask => 'Are you sure?';
-
-  @override
-  String get messaging_ConfirmDialog_cancel => 'No';
-
-  @override
-  String get messaging_ConfirmDialog_confirm => 'Yes';
 
   @override
   String get messaging_ConversationBuilders_back => 'Back';
@@ -1462,6 +1491,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_Conversations_tile_you => 'You';
 
   @override
+  String get messaging_DeleteConversationDialog_content => 'It will be removed from this device and from the account.';
+
+  @override
+  String get messaging_DeleteConversationDialog_title => 'Delete this conversation?';
+
+  @override
   String get messaging_DialogInfo_deleteAsk => 'Are you sure you want to delete this dialog?';
 
   @override
@@ -1487,6 +1522,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messaging_GroupInfo_groupMembersHeadline => 'Group members';
+
+  @override
+  String get messaging_LeaveGroupDialog_content =>
+      'You will stop receiving its messages. The conversation stays for everyone else.';
+
+  @override
+  String get messaging_LeaveGroupDialog_title => 'Leave this group?';
 
   @override
   String get messaging_GroupInfo_leaveAndDeleteAsk => 'Are you sure you want leave and delete this group?';
@@ -1860,6 +1902,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presence_activity_vacation_name => 'On vacation';
 
   @override
+  String get presence_badge_state_available => 'Available';
+
+  @override
+  String get presence_badge_state_onCall => 'On a call';
+
+  @override
+  String get presence_badge_state_registered => 'Registered';
+
+  @override
+  String get presence_badge_state_unavailable => 'Unavailable';
+
+  @override
+  String get presence_badge_state_unregistered => 'Not registered';
+
+  @override
   String get presence_infoView_activity => 'Activity:';
 
   @override
@@ -2039,9 +2096,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String recents_snackBar_deleted(String name) {
     return '$name deleted';
   }
-
-  @override
-  String get recents_Text_blingTransferInitiated => 'Performing blind transfer';
 
   @override
   String get recentsVisibilityFilter_all => 'All';
@@ -2244,6 +2298,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_AppBarTitle_myAccount => 'My account';
+
+  @override
+  String get settings_SemanticsLabel_editAccount => 'Edit account details';
 
   @override
   String get settings_audioProcessing_Section_AGC_title => 'Auto gain control';
@@ -3448,7 +3505,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get common_SemanticsLabel_scrollToTop => 'Scroll to top';
 
   @override
+  String common_SemanticsValue_unreadCount(int count) {
+    return '$count unread';
+  }
+
+  @override
+  String common_SemanticsValue_totalCount(int count) {
+    return '$count total';
+  }
+
+  @override
+  String common_SemanticsValue_selectedCount(int count) {
+    return '$count selected';
+  }
+
+  @override
   String get contacts_SemanticsLabel_clearSearch => 'Clear search';
+
+  @override
+  String get contacts_SemanticsLabel_closeSearch => 'Close search';
 
   @override
   String get messaging_SemanticsLabel_newChat => 'Start a new chat';
@@ -3496,5 +3571,70 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messaging_SemanticsLabel_sendForward => 'Forward the message';
 
   @override
+  String callPull_SemanticsLabel_badge(String name) {
+    return 'Take over the call with $name';
+  }
+
+  @override
+  String callPull_SemanticsLabel_badgeSeveral(int count) {
+    return 'Take over one of $count calls';
+  }
+
+  @override
+  String callPull_SemanticsLabel_pickup(String name) {
+    return 'Pick up the call with $name';
+  }
+
+  @override
   String get diagnosticNetworkTest_SemanticsLabel_refresh => 'Run the network test again';
+
+  @override
+  String get presence_settings_statusIcon_searchHint => 'Search icons';
+
+  @override
+  String presenceSettings_SemanticsLabel_optionInfo(String option) {
+    return 'What $option means';
+  }
+
+  @override
+  String get presenceSettings_SemanticsLabel_preset => 'Status preset';
+
+  @override
+  String get presenceSettings_SemanticsLabel_pickStatusIcon => 'Choose a status icon';
+
+  @override
+  String get presenceSettings_SemanticsLabel_clearStatusIcon => 'Remove the status icon';
+
+  @override
+  String get presenceSettings_SemanticsLabel_searchIcons => 'Search icons';
+
+  @override
+  String get presenceSettings_SemanticsLabel_stopSearchingIcons => 'Stop searching icons';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryRecent => 'Recently used';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategorySmileys => 'Smileys and people';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryAnimals => 'Animals and nature';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryFoods => 'Food and drink';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryActivities => 'Activities';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryTravel => 'Travel and places';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryObjects => 'Objects';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategorySymbols => 'Symbols';
+
+  @override
+  String get presenceSettings_SemanticsLabel_iconCategoryFlags => 'Flags';
 }

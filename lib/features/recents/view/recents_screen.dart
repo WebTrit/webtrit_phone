@@ -52,16 +52,22 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
     setState(() => _expandedRecentId = _expandedRecentId == callLogEntryId ? null : callLogEntryId);
   }
 
+  /// Filters this screen shows, one tab each. Deduplicated: a tab is keyed by
+  /// the filter behind it, and two tabs of one filter would collide on that
+  /// key and bring the screen down - a configuration that repeats a filter
+  /// gets one tab for it, the way the bottom menu treats a repeated section.
+  late final List<RecentsVisibilityFilter> _filters = widget.recentsFilters.toSet().toList(growable: false);
+
   @override
   void initState() {
     super.initState();
 
     final activeFilter = context.read<RecentsBloc>().state.filter;
-    final initialRecentsFiltersIndex = widget.recentsFilters.indexOf(activeFilter);
+    final initialRecentsFiltersIndex = _filters.indexOf(activeFilter);
 
     _tabController = TabController(
       initialIndex: initialRecentsFiltersIndex == -1 ? 0 : initialRecentsFiltersIndex,
-      length: widget.recentsFilters.length,
+      length: _filters.length,
       vsync: this,
     );
     _tabController.addListener(_tabControllerListener);
@@ -76,7 +82,7 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
 
   void _tabControllerListener() {
     if (!_tabController.indexIsChanging) {
-      final filter = widget.recentsFilters[_tabController.index];
+      final filter = _filters[_tabController.index];
       context.read<RecentsBloc>().add(RecentsFiltered(filter));
     }
   }
@@ -124,7 +130,30 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
     final effectiveStyle = widget.style ?? themeData.extension<RecentsScreenStyles>()?.primary;
 
     final mediaQueryData = MediaQuery.of(context);
-    final topPadding = kToolbarHeight + mediaQueryData.padding.top + kMainAppBarBottomTabHeight;
+
+    // The bar states its own height; deriving the inset from anything else is
+    // how the body ends up sitting eight points below where the bar ends.
+    final appBar = MainAppBar(
+      title: widget.title,
+      context: context,
+      flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
+          child: ExtTabBar(
+            width: mediaQueryData.size.width * 0.75,
+            height: kMainAppBarBottomControlHeight,
+            tabs: [
+              for (final recentsFilter in _filters)
+                ExtTab(key: recentsFilter.tabKey, identifier: recentsFilter.tabId, text: recentsFilter.l10n(context)),
+            ],
+            controller: _tabController,
+          ),
+        ),
+      ),
+    );
+    final topPadding = mediaQueryData.padding.top + appBar.preferredSize.height;
 
     return ThemedScaffold(
       background: effectiveStyle?.background,
@@ -132,28 +161,18 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
       applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
       appBarTheme: effectiveStyle?.appBarTheme,
       extendBodyBehindAppBar: true,
-      appBar: MainAppBar(
-        title: widget.title,
-        context: context,
-        flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
-            child: ExtTabBar(
-              width: mediaQueryData.size.width * 0.75,
-              height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: [for (final recentsFilter in widget.recentsFilters) Tab(text: recentsFilter.l10n(context))],
-              controller: _tabController,
-            ),
-          ),
-        ),
-      ),
+      appBar: appBar,
       body: BlocBuilder<RecentsBloc, RecentsState>(
         builder: (context, state) {
           final recents = state.recents;
+          // The body runs behind the bar, so everything it shows - not just
+          // the list - starts below it, or it centres under the bar instead
+          // of under the screen.
           if (recents == null) {
-            return const Center(child: CircularProgressIndicator());
+            return Padding(
+              padding: EdgeInsets.only(top: topPadding),
+              child: const Center(child: CircularProgressIndicator()),
+            );
           } else {
             final recentsFiltered = state.recentsFiltered!; // can not be null if state.recents is not null
             if (recentsFiltered.isEmpty) {
@@ -163,7 +182,10 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
               } else {
                 filterL10n = '${state.filter.l10nPreposit(context)} ';
               }
-              return NoDataPlaceholder(content: Text(context.l10n.recents_BodyCenter_empty(filterL10n)));
+              return Padding(
+                padding: EdgeInsets.only(top: topPadding),
+                child: NoDataPlaceholder(content: Text(context.l10n.recents_BodyCenter_empty(filterL10n))),
+              );
             } else {
               return BlocBuilder<UserInfoCubit, UserInfoState>(
                 builder: (context, userInfoState) {
@@ -267,16 +289,6 @@ class _RecentsScreenState extends State<RecentsScreen> with SingleTickerProvider
                 },
               );
             }
-          }
-        },
-      ),
-      bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
-        buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-        builder: (context, callState) {
-          if (callState.isBlingTransferInitiated) {
-            return TransferBottomNavigationBar(context.l10n.recents_Text_blingTransferInitiated);
-          } else {
-            return const SizedBox.shrink();
           }
         },
       ),

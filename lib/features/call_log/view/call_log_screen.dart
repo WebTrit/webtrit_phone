@@ -40,8 +40,8 @@ class CallLogScreen extends StatelessWidget {
                 child: LeadingAvatar(
                   username: title,
                   thumbnail: contact?.thumbnail,
-                  thumbnailUrl: gravatarThumbnailUrl(email),
-                  registered: contact?.registered,
+                  thumbnailUrl: GravatarUrl.forEmail(email),
+                  badge: AvatarStatusBadge.maybe(registered: contact?.registered),
                   radius: 50,
                 ),
               ),

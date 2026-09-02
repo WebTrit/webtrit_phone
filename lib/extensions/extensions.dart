@@ -1,6 +1,7 @@
 export 'agreement.dart';
 export 'app_database.dart';
 export 'audio_player_extension.dart';
+export 'bottom_menu_tab.dart';
 export 'build_context.dart';
 export 'call_line_logs_extension.dart';
 export 'call_status.dart';
@@ -20,6 +21,7 @@ export 'messaging_socket_exception.dart';
 export 'platform_deep_link.dart';
 export 'presence_activity.dart';
 export 'push_environment.dart';
+export 'recents_visibility_filter.dart';
 export 'registration_status.dart';
 export 'request_failure.dart';
 export 'route_match.dart';

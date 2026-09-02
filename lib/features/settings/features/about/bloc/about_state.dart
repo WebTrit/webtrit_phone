@@ -4,7 +4,7 @@ part of 'about_bloc.dart';
 class AboutState with _$AboutState {
   const AboutState({
     this.progress = false,
-    this.embeddedLinks = const [],
+    this.embeddedResources = const [],
     required this.packageName,
     required this.appIdentifier,
     required this.coreUrl,
@@ -20,8 +20,11 @@ class AboutState with _$AboutState {
   @override
   final bool progress;
 
+  /// Every embedded resource this build is configured with, in configuration
+  /// order. Carried as the resources themselves rather than their addresses:
+  /// the About screen opens one, and that needs the whole resource.
   @override
-  final List<String> embeddedLinks;
+  final List<EmbeddedData> embeddedResources;
 
   @override
   final String packageName;

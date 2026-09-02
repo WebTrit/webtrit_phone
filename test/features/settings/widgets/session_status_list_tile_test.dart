@@ -31,9 +31,8 @@ void main() {
   });
 
   Future<void> pump(WidgetTester tester, {bool microphoneGranted = true}) async {
-    when(
-      () => microphoneStatusBloc.state,
-    ).thenReturn(MicrophoneStatusState(microphonePermissionGranted: microphoneGranted));
+    when(() => microphoneStatusBloc.state)
+        .thenReturn(MicrophoneStatusState(microphonePermissionGranted: microphoneGranted));
 
     await tester.pumpWidget(
       MaterialApp(

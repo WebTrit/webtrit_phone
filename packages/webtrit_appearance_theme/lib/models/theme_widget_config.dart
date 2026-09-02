@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'common/common.dart';
-import 'features_config/metadata.dart';
 import 'resources/image_source.dart';
 
 part 'theme_widget_config.freezed.dart';
@@ -84,19 +83,10 @@ class ButtonWidgetConfig with _$ButtonWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class GroupWidgetConfig with _$GroupWidgetConfig {
-  const GroupWidgetConfig({
-    this.groupTitleListTile = const GroupTitleListTileWidgetConfig(),
-    // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
-    // ignore: deprecated_member_use_from_same_package
-    this.callActions = const CallActionsWidgetConfig(),
-  });
+  const GroupWidgetConfig({this.groupTitleListTile = const GroupTitleListTileWidgetConfig()});
 
   @override
   final GroupTitleListTileWidgetConfig groupTitleListTile;
-
-  @override
-  @Deprecated('Use CallPageActionsConfig instead')
-  final CallActionsWidgetConfig callActions;
 
   factory GroupWidgetConfig.fromJson(Map<String, Object?> json) => _$GroupWidgetConfigFromJson(json);
 
@@ -148,33 +138,6 @@ class BottomNavigationBarWidgetConfig with _$BottomNavigationBarWidgetConfig {
 
 @freezed
 @JsonSerializable(explicitToJson: true)
-class ExtTabBarWidgetConfig with _$ExtTabBarWidgetConfig {
-  const ExtTabBarWidgetConfig({
-    this.foregroundColor,
-    this.backgroundColor,
-    this.selectedItemColor,
-    this.unSelectedItemColor,
-  });
-
-  @override
-  final String? foregroundColor;
-
-  @override
-  final String? backgroundColor;
-
-  @override
-  final String? selectedItemColor;
-
-  @override
-  final String? unSelectedItemColor;
-
-  factory ExtTabBarWidgetConfig.fromJson(Map<String, Object?> json) => _$ExtTabBarWidgetConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$ExtTabBarWidgetConfigToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
 class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
   const GroupTitleListTileWidgetConfig({
     /// Background color in hex format.
@@ -194,78 +157,6 @@ class GroupTitleListTileWidgetConfig with _$GroupTitleListTileWidgetConfig {
       _$GroupTitleListTileWidgetConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$GroupTitleListTileWidgetConfigToJson(this);
-}
-
-@Deprecated('Use CallPageActionsConfig instead')
-@freezed
-@JsonSerializable(explicitToJson: true)
-class CallActionsWidgetConfig with _$CallActionsWidgetConfig {
-  const CallActionsWidgetConfig({
-    this.callStartBackgroundColor,
-    this.hangupBackgroundColor,
-    this.transferBackgroundColor,
-    this.cameraBackgroundColor,
-    this.cameraActiveBackgroundColor,
-    this.mutedBackgroundColor,
-    this.mutedActiveBackgroundColor,
-    this.speakerBackgroundColor,
-    this.speakerActiveBackgroundColor,
-    this.heldBackgroundColor,
-    this.heldActiveBackgroundColor,
-    this.swapBackgroundColor,
-    this.keyBackgroundColor,
-    this.keypadBackgroundColor,
-    this.keypadActiveBackgroundColor,
-  });
-
-  @override
-  final String? callStartBackgroundColor;
-
-  @override
-  final String? hangupBackgroundColor;
-
-  @override
-  final String? transferBackgroundColor;
-
-  @override
-  final String? cameraBackgroundColor;
-
-  @override
-  final String? cameraActiveBackgroundColor;
-
-  @override
-  final String? mutedBackgroundColor;
-
-  @override
-  final String? mutedActiveBackgroundColor;
-
-  @override
-  final String? speakerBackgroundColor;
-
-  @override
-  final String? speakerActiveBackgroundColor;
-
-  @override
-  final String? heldBackgroundColor;
-
-  @override
-  final String? heldActiveBackgroundColor;
-
-  @override
-  final String? swapBackgroundColor;
-
-  @override
-  final String? keyBackgroundColor;
-
-  @override
-  final String? keypadBackgroundColor;
-
-  @override
-  final String? keypadActiveBackgroundColor;
-
-  factory CallActionsWidgetConfig.fromJson(Map<String, Object?> json) => _$CallActionsWidgetConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$CallActionsWidgetConfigToJson(this);
 }
 
 @freezed
@@ -293,38 +184,6 @@ class ImageAssetsConfig with _$ImageAssetsConfig {
   factory ImageAssetsConfig.fromJson(Map<String, Object?> json) => _$ImageAssetsConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ImageAssetsConfigToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
-class ImageAssetConfig with _$ImageAssetConfig {
-  const ImageAssetConfig({
-    this.imageSource,
-    this.widthFactor = 1.0,
-    this.labelColor = '#FFFFFF',
-    this.metadata = const Metadata(),
-    @Deprecated('Use source.uri instead') this.uri,
-  });
-
-  @override
-  final ImageSource? imageSource;
-
-  @override
-  final double widthFactor;
-
-  @override
-  final String labelColor;
-
-  @override
-  final Metadata metadata;
-
-  @override
-  @Deprecated('Use source.uri instead')
-  final String? uri;
-
-  factory ImageAssetConfig.fromJson(Map<String, Object?> json) => _$ImageAssetConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$ImageAssetConfigToJson(this);
 }
 
 @freezed
@@ -766,26 +625,64 @@ class TabBarConfig with _$TabBarConfig {
 /// describe the overall [ThemeData.appBarTheme]. Properties are null by default,
 /// allowing the [AppBar] constructor to provide its own defaults.
 @freezed
-abstract class AppBarConfig with _$AppBarConfig {
-  const factory AppBarConfig({
-    @Default(true) bool primary,
-    @Default(true) bool showBackButton,
-    String? backgroundColor,
-    String? foregroundColor,
-    String? shadowColor,
-    String? surfaceTintColor,
-    double? elevation,
-    double? scrolledUnderElevation,
-    double? titleSpacing,
-    double? leadingWidth,
-    double? toolbarHeight,
-    bool? centerTitle,
-    IconThemeDataConfig? iconTheme,
-    IconThemeDataConfig? actionsIconTheme,
-    TextStyleConfig? titleTextStyle,
-    TextStyleConfig? toolbarTextStyle,
-    OverlayStyleModel? systemOverlayStyle,
-  }) = _AppBarConfig;
+@JsonSerializable(explicitToJson: true)
+class AppBarConfig with _$AppBarConfig {
+  const AppBarConfig({
+    this.primary = true,
+    this.showBackButton = true,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.shadowColor,
+    this.surfaceTintColor,
+    this.elevation,
+    this.scrolledUnderElevation,
+    this.titleSpacing,
+    this.leadingWidth,
+    this.toolbarHeight,
+    this.centerTitle,
+    this.iconTheme,
+    this.actionsIconTheme,
+    this.titleTextStyle,
+    this.toolbarTextStyle,
+    this.systemOverlayStyle,
+  });
+
+  @override
+  final bool primary;
+  @override
+  final bool showBackButton;
+  @override
+  final String? backgroundColor;
+  @override
+  final String? foregroundColor;
+  @override
+  final String? shadowColor;
+  @override
+  final String? surfaceTintColor;
+  @override
+  final double? elevation;
+  @override
+  final double? scrolledUnderElevation;
+  @override
+  final double? titleSpacing;
+  @override
+  final double? leadingWidth;
+  @override
+  final double? toolbarHeight;
+  @override
+  final bool? centerTitle;
+  @override
+  final IconThemeDataConfig? iconTheme;
+  @override
+  final IconThemeDataConfig? actionsIconTheme;
+  @override
+  final TextStyleConfig? titleTextStyle;
+  @override
+  final TextStyleConfig? toolbarTextStyle;
+  @override
+  final OverlayStyleModel? systemOverlayStyle;
 
   factory AppBarConfig.fromJson(Map<String, Object?> json) => _$AppBarConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$AppBarConfigToJson(this);
 }

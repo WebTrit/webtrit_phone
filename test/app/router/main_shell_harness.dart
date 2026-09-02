@@ -159,20 +159,6 @@ WebtritSystemInfo systemInfoWithSupported(List<String> supported) {
   return systemInfo;
 }
 
-/// Builds a real [FeatureAccess] from the shared mock app config and the
-/// given system info, the same way the production stream factory does.
-FeatureAccess featureAccessFor(WebtritSystemInfo systemInfo) {
-  final snapshot = MockRemoteConfigSnapshot();
-  when(() => snapshot.getBool(any())).thenReturn(null);
-  return FeatureAccess.create(
-    createMockAppConfig(),
-    [createMockTermsResource()],
-    CoreSupportFactory.create(systemInfo),
-    systemInfo,
-    FeatureOverridesFactory.create(snapshot),
-  );
-}
-
 /// Registers the mocktail fallback values the harness stubs rely on.
 /// Call once from the test file's `setUpAll`.
 void registerHarnessFallbacks() {
@@ -187,9 +173,8 @@ class MainShellHarness {
     initialFeatureAccess = featureAccessFor(initialSystemInfo);
 
     when(() => notificationsBloc.state).thenReturn(const NotificationsState());
-    when(
-      () => sessionRepository.getCurrent(),
-    ).thenReturn(const Session(coreUrl: 'http://127.0.0.1:1', token: 'test-token', userId: 'test-user'));
+    when(() => sessionRepository.getCurrent())
+        .thenReturn(const Session(coreUrl: 'http://127.0.0.1:1', token: 'test-token', userId: 'test-user'));
     when(() => appBloc.state).thenReturn(
       AppState(
         status: AppLifecycleStatus.authenticated,
@@ -202,9 +187,8 @@ class MainShellHarness {
     );
 
     when(() => systemInfoRepository.getLocalSystemInfo()).thenReturn(initialSystemInfo);
-    when(
-      () => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')),
-    ).thenAnswer((_) async => initialSystemInfo);
+    when(() => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')))
+        .thenAnswer((_) async => initialSystemInfo);
     when(() => systemInfoRepository.infoStream).thenAnswer((_) => systemInfoController.stream);
 
     when(() => appPermissions.isDenied).thenAnswer((_) async => false);
@@ -251,7 +235,7 @@ class MainShellHarness {
   late final registerStatusRepository = RegisterStatusRepositoryPrefsImpl(appPreferences);
   late final presenceSettingsRepository = PresenceSettingsRepositoryPrefsImpl(appPreferences, 'webtrit-test');
   late final queuedTerminationRequestsRepository = QueuedTerminationRequestsRepositoryPrefsImpl(appPreferences);
-  late final activeMainFlavorRepository = ActiveMainFlavorRepositoryPrefsImpl(appPreferences);
+  late final activeMainTabRepository = ActiveMainTabRepositoryPrefsImpl(appPreferences);
   late final activeRecentsVisibilityFilterRepository = ActiveRecentsVisibilityFilterRepositoryPrefsImpl(appPreferences);
   late final activeContactSourceTypeRepository = ActiveContactSourceTypeRepositoryPrefsImpl(appPreferences);
   late final audioProcessingSettingsRepository = AudioProcessingSettingsRepositoryPrefsImpl(appPreferences);
@@ -270,7 +254,7 @@ class MainShellHarness {
     systemInfoRepository,
     null,
     initialFeatureAccess.bottomMenuConfig,
-    BottomMenuInitialTabResolver(config: initialFeatureAccess.bottomMenuConfig, repository: activeMainFlavorRepository),
+    BottomMenuInitialTabResolver(config: initialFeatureAccess.bottomMenuConfig, repository: activeMainTabRepository),
     initialFeatureAccess.checker,
   );
 
@@ -312,7 +296,7 @@ class MainShellHarness {
         RepositoryProvider<RegisterStatusRepository>.value(value: registerStatusRepository),
         RepositoryProvider<PresenceSettingsRepository>.value(value: presenceSettingsRepository),
         RepositoryProvider<QueuedTerminationRequestsRepository>.value(value: queuedTerminationRequestsRepository),
-        RepositoryProvider<ActiveMainFlavorRepository>.value(value: activeMainFlavorRepository),
+        RepositoryProvider<ActiveMainTabRepository>.value(value: activeMainTabRepository),
         RepositoryProvider<ActiveRecentsVisibilityFilterRepository>.value(
           value: activeRecentsVisibilityFilterRepository,
         ),

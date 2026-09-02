@@ -9,7 +9,12 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../contacts.dart';
 
 class ContactsExternalTab extends StatefulWidget {
-  const ContactsExternalTab({super.key});
+  const ContactsExternalTab({super.key, this.markFavorites = false});
+
+  /// Whether a star marks the people with a favourite among their numbers.
+  /// Only where favourites are reachable from this screen: a star that leads
+  /// nowhere is worse than no star at all.
+  final bool markFavorites;
 
   @override
   State<ContactsExternalTab> createState() => _ContactsExternalTabState();
@@ -32,16 +37,23 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
 
     return BlocBuilder<ContactsExternalTabBloc, ContactsExternalTabState>(
       builder: (context, state) {
-        if (state.contacts.isNotEmpty) {
+        final contacts = state.contacts;
+
+        if (contacts.isNotEmpty) {
           return RefreshIndicator(
+            // See the local tab: the body runs behind the app bar, so the
+            // spinner needs the same inset the list content is given, or it
+            // is drawn underneath the bar.
+            edgeOffset: MediaQuery.of(context).padding.top,
             onRefresh: refreshContacts,
             child: ListView.builder(
-              itemCount: state.contacts.length,
+              itemCount: contacts.length,
               itemBuilder: (context, index) {
-                final contact = state.contacts[index];
+                final contact = contacts[index];
 
                 return ContactTileAdapter(
                   tileKey: contactsExtContactTileKey,
+                  markFavorite: widget.markFavorites,
                   contact: contact,
                   expanded: _expandedContactId == contact.id,
                   onToggleExpanded: () => _toggleExpanded(contact.id),

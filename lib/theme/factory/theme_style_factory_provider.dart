@@ -60,30 +60,15 @@ class ThemeStyleFactoryProvider {
     final callStatuses = widgetConfig.statuses.callStatuses;
     final registrationStatuses = widgetConfig.statuses.registrationStatuses;
     final elevatedButton = widgetConfig.button.primaryElevatedButton;
-    // TODO: Remove in future major release after migrating to CallPageActionsConfig
-    // ignore: deprecated_member_use
-    final callActions = widgetConfig.group?.callActions;
     final groupTitleListTile = widgetConfig.group?.groupTitleListTile;
     final linkify = widgetConfig.text.linkify;
 
-    // Common widget styles
-    final textButtonStyle = TextButtonStyleFactory(colorScheme).create();
-
     // Specific widget styles
     final appIconStylesProvider = AppIconStyleFactory(colorScheme, appIconConfig);
-    final confirmDialogStylesProvider = ConfirmDialogStyleFactory(
-      colorScheme,
-      textButtonStyle,
-      confirmDialog,
-      defaultFontFamily,
-    );
+    final confirmDialogStylesProvider = ConfirmDialogStyleFactory(colorScheme, confirmDialog, defaultFontFamily);
     final inputDecorationStyleFactory = InputDecorationStyleFactory(colorScheme);
     final callStatusStyleFactory = CallStatusStyleFactory(colorScheme, callStatuses);
     final elevatedButtonStyleFactory = ElevatedButtonStyleFactory(colorScheme, elevatedButton, defaultFontFamily);
-    final textButtonStyleFactory = TextButtonStyleFactory(colorScheme);
-    // TODO(Serdun): Remove in future major release after migrating to CallPageActionsConfig
-    // ignore: deprecated_member_use_from_same_package
-    final callActionsStyleFactory = CallActionsStyleFactory(colorScheme, callActions);
     final linkifyStyleFactory = LinkifyStyleFactory(colorScheme, linkify);
     final outlinedButtonStyleFactory = OutlinedButtonStyleFactory(colorScheme);
     final registrationStatusStyleFactory = RegisteredStatusStyleFactory(colorScheme, registrationStatuses);
@@ -116,7 +101,7 @@ class ThemeStyleFactoryProvider {
       pageConfig.about,
       appBarTheme: _pageAppBarTheme(pageConfig.about.appBarStyle),
     );
-    final callScreenStyleFactory = CallScreenStyleFactory(colorScheme, callPageScheme, callActions, defaultFontFamily);
+    final callScreenStyleFactory = CallScreenStyleFactory(colorScheme, callPageScheme, defaultFontFamily);
     final keypadScreenStyleFactory = KeypadScreenStyleFactory(
       colorScheme,
       defaultFontFamily,
@@ -204,14 +189,11 @@ class ThemeStyleFactoryProvider {
     );
 
     return <ThemeExtension?>[
-      textButtonStyle,
       appIconStylesProvider.create(),
       confirmDialogStylesProvider.create(),
       inputDecorationStyleFactory.create(),
       callStatusStyleFactory.create(),
       elevatedButtonStyleFactory.create(),
-      textButtonStyleFactory.create(),
-      callActionsStyleFactory.create(),
       linkifyStyleFactory.create(),
       outlinedButtonStyleFactory.create(),
       registrationStatusStyleFactory.create(),

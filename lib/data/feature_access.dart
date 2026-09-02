@@ -8,7 +8,6 @@ import 'package:logging/logging.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -61,7 +60,6 @@ class FeatureAccess extends Equatable {
     this.systemNotificationsConfig,
     this.sipPresenceConfig,
     this.supportedConfig,
-    this.localizationConfig,
     this.coreSupport,
     this.overrides,
     this.loggingConfig,
@@ -79,10 +77,6 @@ class FeatureAccess extends Equatable {
   final SipPresenceConfig sipPresenceConfig;
   final LoggingConfig loggingConfig;
 
-  /// Locales the app exposes for selection and auto-resolution, resolved from
-  /// the app config's language allowlist intersected with the bundled locales.
-  final LocalizationConfig localizationConfig;
-
   /// Represents the set of features explicitly supported and configured within the application's static [AppConfig].
   /// This includes features like theme mode and video call capabilities as defined in the application's build-time configuration.
   final SupportedConfig supportedConfig;
@@ -97,6 +91,23 @@ class FeatureAccess extends Equatable {
   /// features at runtime, potentially modifying or extending the behavior defined
   /// by [supportedConfig] and [coreSupport].
   final FeatureOverrides overrides;
+
+  /// Whether voicemail runs for this session: the core advertises it, and the
+  /// configuration offers it somewhere.
+  ///
+  /// Voicemail is placed by configuration, and a deployment may offer it from
+  /// the settings list, from the bottom menu, or from both. Behind every
+  /// placement is one data layer - one repository, one poll, one media cache -
+  /// so what to run is asked here rather than of any single placement: a
+  /// deployment that drops the settings row must not take the data layer, and
+  /// with it every other placement, down with it.
+  ///
+  /// The core capability is restated here rather than left to the placements:
+  /// gating once, at the top, is what keeps the answer right however a
+  /// placement is configured.
+  bool get voicemailAvailable =>
+      coreSupport.supportsVoicemail &&
+      (settingsConfig.voicemailsEnabled || bottomMenuConfig.getTabEnabled<VoicemailBottomMenuTab>() != null);
 
   static FeatureAccess create(
     AppConfig appConfig,
@@ -124,7 +135,6 @@ class FeatureAccess extends Equatable {
       final loggingConfig = LoggingMapper.map(appConfig, featureOverrides);
 
       final supportedConfig = SupportedMapper.map(appConfig.supported);
-      final localizationConfig = LocalizationMapper.map(appConfig);
 
       return FeatureAccess._(
         embeddedConfig,
@@ -138,7 +148,6 @@ class FeatureAccess extends Equatable {
         systemNotificationsConfig,
         sipPresenceConfig,
         supportedConfig,
-        localizationConfig,
         coreSupport,
         featureOverrides,
         loggingConfig,
@@ -163,7 +172,6 @@ class FeatureAccess extends Equatable {
     sipPresenceConfig,
     loggingConfig,
     supportedConfig,
-    localizationConfig,
     coreSupport,
     overrides,
   ];
@@ -176,7 +184,7 @@ abstract final class LoginMapper {
   // Currently, modeSelectActions control both the launch screen and the buttons on the login_mode_select_screen,
   // which leads to unclear and tightly coupled logic.
   static LoginConfig map(AppConfig appConfig, List<EmbeddedData> embeddedData) {
-    final rawButtons = appConfig.loginConfig.modeSelect.actions.where((button) => button.enabled);
+    final rawButtons = appConfig.loginConfig.modeSelect.modeSelectActions.where((button) => button.enabled);
     final buttons = <LoginModeAction>[];
 
     for (final action in rawButtons) {
@@ -201,10 +209,10 @@ abstract final class LoginMapper {
     return LoginConfig(
       titleL10n: appConfig.loginConfig.modeSelect.greetingL10n,
       actions: List.unmodifiable(buttons),
-      signinOrder: appConfig.loginConfig.signinOrder,
+      signinOrder: appConfig.loginConfig.signinOrderOrDefault,
       qrSignin: QrSigninConfig(
         enabled: qr.enabled,
-        formats: [for (final format in qr.formats) QrSigninFormatConfig(type: format.type, schemes: format.schemes)],
+        formats: [for (final format in qr.qrFormats) QrSigninFormatConfig(type: format.type, schemes: format.schemes)],
         expectedHost: qr.expectedHost,
       ),
       launchLoginPage: embeddedData.firstWhereOrNull(
@@ -236,17 +244,37 @@ abstract final class BottomMenuMapper {
       throw Exception('Bottom menu configuration is missing or empty');
     }
 
+    final seenIdentities = <String>{};
     final bottomMenuTabs = bottomMenu.tabs
         .where((tab) => tab.enabled)
         .map((tab) => _createBottomMenuTab(tab, embeddedConfig, coreSupport, overrides))
         .where((tab) => !(tab is ContactsBottomMenuTab && tab.contactSourceTypes.isEmpty))
+        // A section the server cannot fill would draw an entry that leads to a
+        // screen saying the feature is unavailable - worse than no entry.
+        .where((tab) => !(tab is VoicemailBottomMenuTab && !coreSupport.supportsVoicemail))
+        // Two entries of one identity would render with one widget key and
+        // bring the bar down with a duplicate-key crash. A config that
+        // repeats a section keeps only its first entry, every property of
+        // the dropped one included - a duplicate carrying the initial flag
+        // does not hand it to the survivor. This filter has to stay AFTER
+        // the two above: an entry they drop must not claim an identity.
+        .where((tab) {
+          // The identity is the very one the bar keys its entries by, so two
+          // entries pass this filter only if their widget keys really differ.
+          final identity = tab.navBarId;
+          final first = seenIdentities.add(identity);
+          if (!first) {
+            _logger.warning('Bottom menu repeats section "$identity"; keeping only its first entry');
+          }
+          return first;
+        })
         .toList();
 
     if (bottomMenuTabs.isEmpty) {
       throw Exception('No enabled tabs found in bottom menu configuration');
     }
 
-    return BottomMenuConfig(tabs: List.unmodifiable(bottomMenuTabs));
+    return BottomMenuConfig(tabs: List.unmodifiable(bottomMenuTabs), remembersSelectedTab: bottomMenu.cacheSelectedTab);
   }
 
   static BottomMenuTab _createBottomMenuTab(
@@ -255,8 +283,8 @@ abstract final class BottomMenuMapper {
     CoreSupport coreSupport,
     FeatureOverrides overrides,
   ) {
-    return tab.when(
-      favorites: (enabled, initial, titleL10n, icon) => FavoritesBottomMenuTab(
+    return switch (tab) {
+      FavoritesTabScheme() => FavoritesBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
@@ -265,49 +293,55 @@ abstract final class BottomMenuMapper {
       // Local flag (config) can be overridden by Firebase Remote Config, then gated by the core
       // capability: call history is shown only when the resolved local flag AND the server
       // callHistory capability are both true.
-      recents: (enabled, initial, titleL10n, icon, supportsCallHistory) => RecentsBottomMenuTab(
-        supportsCallHistory: (overrides.isCallHistoryEnabled ?? supportsCallHistory) && coreSupport.supportsCallHistory,
+      RecentsTabScheme() => RecentsBottomMenuTab(
+        supportsCallHistory:
+            (overrides.isCallHistoryEnabled ?? tab.supportsCallHistory) && coreSupport.supportsCallHistory,
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      contacts: (enabled, initial, titleL10n, icon, contactSourceTypes) => ContactsBottomMenuTab(
+      ContactsTabScheme() => ContactsBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
-        contactSourceTypes: contactSourceTypes
+        layout: switch (tab.layout) {
+          ContactsLayoutScheme.tabbed => const ContactsTabbedLayout(),
+          ContactsLayoutScheme.unified => ContactsUnifiedLayout(favorites: tab.favorites),
+        },
+        contactSourceTypes: tab.contactSourceTypes
             .map((type) => ContactSourceType.values.byName(type))
             .where((type) => type != ContactSourceType.external || coreSupport.supportsExtensions)
             .toList(),
       ),
-      keypad: (enabled, initial, titleL10n, icon) => KeypadBottomMenuTab(
+      KeypadTabScheme() => KeypadBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      messaging: (enabled, initial, titleL10n, icon) => MessagingBottomMenuTab(
+      MessagingTabScheme() => MessagingBottomMenuTab(
         enabled: tab.enabled,
         initial: tab.initial,
         titleL10n: tab.titleL10n,
         icon: tab.icon.toIconData(),
       ),
-      embedded: (enabled, initial, titleL10n, icon, embeddedId) {
-        final embeddedResource = embeddedConfig.embeddedResources.firstWhereOrNull(
-          (resource) => resource.id == embeddedId,
-        );
-        return EmbeddedBottomMenuTab(
-          id: embeddedId,
-          enabled: tab.enabled,
-          initial: tab.initial,
-          titleL10n: tab.titleL10n,
-          icon: tab.icon.toIconData(),
-          data: embeddedResource,
-        );
-      },
-    );
+      VoicemailTabScheme() => VoicemailBottomMenuTab(
+        enabled: tab.enabled,
+        initial: tab.initial,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+      ),
+      EmbeddedTabScheme() => EmbeddedBottomMenuTab(
+        id: tab.embeddedResourceId,
+        enabled: tab.enabled,
+        initial: tab.initial,
+        titleL10n: tab.titleL10n,
+        icon: tab.icon.toIconData(),
+        data: embeddedConfig.embeddedResources.firstWhereOrNull((resource) => resource.id == tab.embeddedResourceId),
+      ),
+    };
   }
 }
 
@@ -325,7 +359,7 @@ abstract final class SettingsMapper {
     final settingSections = <SettingsSection>[];
     bool hasVoicemail = false;
 
-    for (final section in appConfig.settingsConfig.sections.where((s) => s.enabled)) {
+    for (final section in appConfig.settingsConfig.settingsSections.where((s) => s.enabled)) {
       final items = <SettingItem>[];
 
       for (final item in section.items.where((i) => i.enabled)) {
@@ -413,7 +447,7 @@ abstract final class CallMapper {
     final defaultPresetOverride = encodingConfig.defaultPresetOverride;
 
     // Determine if the media settings UI should be accessible
-    final encodingViewEnabled = appConfig.settingsConfig.sections.any(
+    final encodingViewEnabled = appConfig.settingsConfig.settingsSections.any(
       (section) => section.items.any((item) => item.type == SettingsFlavor.mediaSettings.name && item.enabled),
     );
 
@@ -482,9 +516,7 @@ abstract final class CallMapper {
 abstract final class MessagingMapper {
   /// Maps configuration and core support to [MessagingConfig].
   static MessagingConfig map(AppConfig appConfig, CoreSupport coreSupport) {
-    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any(
-      (tab) => tab.maybeWhen(messaging: (enabled, _, _, _) => enabled, orElse: () => false),
-    );
+    final tabEnabled = appConfig.mainConfig.bottomMenu.tabs.any((tab) => tab is MessagingTabScheme && tab.enabled);
 
     return MessagingConfig(
       coreSmsSupport: coreSupport.supportsSms,
@@ -558,9 +590,9 @@ abstract final class SystemNotificationsMapper {
   ) {
     final supportedFeature = appConfig.supported.whereType<SupportedSystemNotifications>().firstOrNull;
 
-    // TODO: Migrate client configurations first before fully removing this property.
-    // ignore: deprecated_member_use_from_same_package, deprecated_member_use
-    final baseAppSupport = supportedFeature?.enabled ?? appConfig.mainConfig.systemNotificationsEnabled;
+    // One place says it. A configuration with no entry allows notifications,
+    // which is what the boolean this replaced carried as its default.
+    final baseAppSupport = supportedFeature?.enabled ?? true;
     // Apply remote config overrides
     final appSupport = featureOverrides.isSystemNotificationsEnabled ?? baseAppSupport;
     // Check if the backend supports system notifications
@@ -644,16 +676,15 @@ abstract final class ContactsMapper {
 abstract final class SupportedMapper {
   /// Maps a list of [SupportedFeature]s to a [SupportedConfig].
   static SupportedConfig map(List<SupportedFeature> supportedFeatures) {
-    final themeFeature =
-        supportedFeatures.firstWhere((e) => e is SupportedThemeMode, orElse: () => const SupportedFeature.themeMode())
-            as SupportedThemeMode;
+    final themeFeature = supportedFeatures.firstWhere(
+      (e) => e is SupportedThemeMode,
+      orElse: () => const SupportedFeature.themeMode(),
+    ) as SupportedThemeMode;
 
-    final videoCallFeature =
-        supportedFeatures.firstWhere(
-              (e) => e is SupportedVideoCall,
-              orElse: () => const SupportedFeature.videoCall(enabled: false),
-            )
-            as SupportedVideoCall;
+    final videoCallFeature = supportedFeatures.firstWhere(
+      (e) => e is SupportedVideoCall,
+      orElse: () => const SupportedFeature.videoCall(enabled: false),
+    ) as SupportedVideoCall;
 
     final configThemeMode = switch (themeFeature.mode) {
       ThemeModeConfig.system => ThemeMode.system,
@@ -665,48 +696,8 @@ abstract final class SupportedMapper {
   }
 }
 
-/// Mapper responsible for resolving the app's selectable locales from the
-/// language allowlist in [AppConfig], intersected with the locales the app
-/// actually bundles ([AppLocalizations.supportedLocales]).
-abstract final class LocalizationMapper {
-  static LocalizationConfig map(AppConfig appConfig) {
-    final enabledLanguages = appConfig.localization.enabledLanguages;
-    final bundled = AppLocalizations.supportedLocales;
-
-    // Diagnose misconfiguration without throwing: a bad code in a per-brand
-    // config must never brick the app (this feeds MaterialApp.supportedLocales),
-    // so unknown codes are logged and ignored, and resolve() keeps at least the
-    // full bundled set.
-    if (enabledLanguages.isNotEmpty) {
-      final bundledCodes = bundled.map((l) => l.languageCode.toLowerCase()).toSet();
-      final unknown = enabledLanguages
-          .map((code) => code.trim().toLowerCase())
-          .where((code) => code.isNotEmpty && !bundledCodes.contains(code))
-          .toList(growable: false);
-      if (unknown.isNotEmpty) {
-        _logger.warning(
-          'localization.enabledLanguages contains code(s) not bundled in the app '
-          '$unknown; ignoring them. Bundled: ${bundledCodes.toList()}',
-        );
-      }
-    }
-
-    final supportedLocales = LocalizationConfig.resolve(bundled, enabledLanguages);
-    if (enabledLanguages.isNotEmpty && supportedLocales.length == bundled.length) {
-      final requested = enabledLanguages.map((c) => c.trim().toLowerCase()).where((c) => c.isNotEmpty).toSet();
-      final anyValid = bundled.any((l) => requested.contains(l.languageCode.toLowerCase()));
-      if (!anyValid) {
-        _logger.warning(
-          'localization.enabledLanguages ($enabledLanguages) matched no bundled '
-          'language; falling back to all bundled languages.',
-        );
-      }
-    }
-
-    return LocalizationConfig(supportedLocales: supportedLocales);
-  }
-}
-
+/// The languages the app offers.
+///
 abstract final class LoggingMapper {
   static const _defaultInterval = Duration(seconds: 15);
   static const _defaultLogLevel = Level.INFO;
@@ -758,7 +749,7 @@ class FeatureChecker {
 
   bool _resolve(FeatureFlag feature) {
     return switch (feature) {
-      FeatureFlag.voicemail => _access.settingsConfig.voicemailsEnabled,
+      FeatureFlag.voicemail => _access.voicemailAvailable,
     };
   }
 }

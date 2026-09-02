@@ -46,7 +46,6 @@ app.*.map.json
 /android/app/release
 
 # Configuration files for project environment
-/tool/configs/localizely_token.txt
 makefile.shared
 .env
 
@@ -63,3 +62,10 @@ integration_test/patrol_test_bundle.dart
 
 # FVM SDK cache (managed by fvm; version pinned via .fvmrc)
 .fvm/
+
+# Kotlin build daemon session data (Kotlin 2.x)
+android/.kotlin/
+
+# Exported JSON Schemas of the theme contract. Generated on demand by
+# `dart run webtrit_appearance_theme:print_json_schema`; not a source artefact.
+*.schema.json

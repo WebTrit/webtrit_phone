@@ -27,40 +27,18 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required this.notificationsBloc,
     required this.appBloc,
     required this.userRepository,
-    required this.voicemailRepository,
     required this.sessionRepository,
     required this.appPermissions,
   }) : super(const SettingsState(progress: false)) {
     on<SettingsLogouted>(_onLogouted, transformer: droppable());
     on<SettingsAccountDeleted>(_onAccountDeleted, transformer: droppable());
-    on<SettingsUnreadVoicemailCountChanged>(_onVoicemailCountChanged);
-
-    _initializeVoicemailCountBadge();
   }
 
   final NotificationsBloc notificationsBloc;
   final AppBloc appBloc;
   final UserRepository userRepository;
-  final VoicemailRepository voicemailRepository;
   final SessionRepository sessionRepository;
   final AppPermissions appPermissions;
-
-  late final StreamSubscription<int> _unreadVoicemailsSub;
-
-  void _initializeVoicemailCountBadge() {
-    voicemailRepository.fetchVoicemails().catchError(
-      (Object e) {},
-      test: (e) => e is VoicemailNotConfiguredException || e is EndpointNotSupportedException,
-    );
-    _unreadVoicemailsSub = voicemailRepository.watchUnreadVoicemailsCount().listen((count) {
-      add(SettingsUnreadVoicemailCountChanged(count));
-    });
-  }
-
-  FutureOr<void> _onVoicemailCountChanged(SettingsUnreadVoicemailCountChanged event, Emitter<SettingsState> emit) {
-    _logger.fine('Voicemail count changed: ${event.count}');
-    if (state.unreadVoicemailCount != event.count) emit(state.copyWith(unreadVoicemailCount: event.count));
-  }
 
   FutureOr<void> _onLogouted(SettingsLogouted event, Emitter<SettingsState> emit) async {
     appBloc.add(const AppLogoutRequested());
@@ -91,11 +69,5 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (emit.isDone) return;
       emit(state.copyWith(progress: false));
     }
-  }
-
-  @override
-  Future<void> close() {
-    _unreadVoicemailsSub.cancel();
-    return super.close();
   }
 }

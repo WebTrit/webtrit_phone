@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 /// Where to anchor the badge inside a rectangular host.
@@ -196,6 +197,33 @@ class BadgeLayout {
     dxFactor: dxFactor,
     dyFactor: dyFactor,
   );
+
+  /// Places a square badge so that its CENTRE sits on the edge of the circle
+  /// inscribed in the host square, on the diagonal of [anchor].
+  ///
+  /// This is what makes a status mark read as sitting ON the avatar rather
+  /// than being cut out of it: half of the mark hangs outside the silhouette
+  /// instead of covering the face or the initials. Large marks therefore
+  /// overhang the host box; the host must not clip them.
+  static Rect onCircleEdgeSquare({
+    required double size,
+    required double sizeFactor,
+    BadgeAnchor anchor = BadgeAnchor.bottomRight,
+  }) {
+    final radius = size / 2;
+    final reach = radius / math.sqrt2;
+    final side = size * sizeFactor;
+
+    final center = switch (anchor) {
+      BadgeAnchor.topLeft => Offset(radius - reach, radius - reach),
+      BadgeAnchor.topRight => Offset(radius + reach, radius - reach),
+      BadgeAnchor.bottomLeft => Offset(radius - reach, radius + reach),
+      BadgeAnchor.bottomRight => Offset(radius + reach, radius + reach),
+      BadgeAnchor.center => Offset(radius, radius),
+    };
+
+    return Rect.fromCenter(center: center, width: side, height: side);
+  }
 
   static Rect centerSquare({
     required double size,
