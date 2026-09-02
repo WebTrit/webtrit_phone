@@ -69,6 +69,7 @@ AppConfig createMockAppConfig() {
 
   when(() => main.bottomMenu).thenReturn(bottomMenu);
   when(() => bottomMenu.tabs).thenReturn([BottomMenuTabScheme.keypad(titleL10n: 'Keypad', icon: '0xe1ce')]);
+  when(() => bottomMenu.cacheSelectedTab).thenReturn(true);
   when(() => settings.settingsSections).thenReturn([]);
 
   when(() => call.videoEnabled).thenReturn(true);
