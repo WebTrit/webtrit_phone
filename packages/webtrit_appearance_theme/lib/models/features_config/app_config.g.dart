@@ -27,11 +27,6 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
   messaging: json['messaging'] == null
       ? const AppConfigMessaging()
       : AppConfigMessaging.fromJson(json['messaging'] as Map<String, dynamic>),
-  localization: json['localization'] == null
-      ? const AppConfigLocalization()
-      : AppConfigLocalization.fromJson(
-          json['localization'] as Map<String, dynamic>,
-        ),
   supported:
       (json['supported'] as List<dynamic>?)
           ?.map((e) => SupportedFeature.fromJson(e as Map<String, dynamic>))
@@ -46,7 +41,6 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
   'callConfig': instance.callConfig.toJson(),
   'contacts': instance.contacts.toJson(),
   'messaging': instance.messaging.toJson(),
-  'localization': instance.localization.toJson(),
   'supported': instance.supported.map((e) => e.toJson()).toList(),
 };
 
@@ -60,7 +54,6 @@ const _$AppConfigJsonSchema = {
     'callConfig': {r'$ref': r'#/$defs/AppConfigCall'},
     'contacts': {r'$ref': r'#/$defs/AppConfigContacts'},
     'messaging': {r'$ref': r'#/$defs/AppConfigMessaging'},
-    'localization': {r'$ref': r'#/$defs/AppConfigLocalization'},
     'supported': {
       'type': 'array',
       'items': {r'$ref': r'#/$defs/SupportedFeature'},
@@ -310,18 +303,6 @@ const _$AppConfigJsonSchema = {
       'type': 'object',
       'properties': {
         'chats': {r'$ref': r'#/$defs/AppConfigChats'},
-      },
-    },
-    'AppConfigLocalization': {
-      'type': 'object',
-      'properties': {
-        'enabledLanguages': {
-          'type': 'array',
-          'items': {'type': 'string'},
-          'description':
-              'Allowlist of language codes (ISO 639-1, e.g. \'en\', \'it\') the app exposes.\nThe app intersects this with the locales it actually bundles, so only\nlanguages present in both are selectable and used for auto-resolution.\nAn empty list (the default) means "no restriction" - all bundled locales\nare available, preserving the previous behavior.',
-          'default': [],
-        },
       },
     },
     'SupportedFeature': {'type': 'object', 'properties': {}},
@@ -1074,17 +1055,3 @@ ChatContactInfo _$ChatContactInfoFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ChatContactInfoToJson(ChatContactInfo instance) =>
     <String, dynamic>{'showVideoButtonAction': instance.showVideoButtonAction};
-
-AppConfigLocalization _$AppConfigLocalizationFromJson(
-  Map<String, dynamic> json,
-) => AppConfigLocalization(
-  enabledLanguages:
-      (json['enabledLanguages'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList() ??
-      const [],
-);
-
-Map<String, dynamic> _$AppConfigLocalizationToJson(
-  AppConfigLocalization instance,
-) => <String, dynamic>{'enabledLanguages': instance.enabledLanguages};
