@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'common/common.dart';
-import 'features_config/metadata.dart';
 import 'resources/image_source.dart';
 
 part 'theme_widget_config.freezed.dart';
@@ -212,38 +211,6 @@ class ImageAssetsConfig with _$ImageAssetsConfig {
   factory ImageAssetsConfig.fromJson(Map<String, Object?> json) => _$ImageAssetsConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$ImageAssetsConfigToJson(this);
-}
-
-@freezed
-@JsonSerializable(explicitToJson: true)
-class ImageAssetConfig with _$ImageAssetConfig {
-  const ImageAssetConfig({
-    this.imageSource,
-    this.widthFactor = 1.0,
-    this.labelColor = '#FFFFFF',
-    this.metadata = const Metadata(),
-    @Deprecated('Use source.uri instead') this.uri,
-  });
-
-  @override
-  final ImageSource? imageSource;
-
-  @override
-  final double widthFactor;
-
-  @override
-  final String labelColor;
-
-  @override
-  final Metadata metadata;
-
-  @override
-  @Deprecated('Use source.uri instead')
-  final String? uri;
-
-  factory ImageAssetConfig.fromJson(Map<String, Object?> json) => _$ImageAssetConfigFromJson(json);
-
-  Map<String, Object?> toJson() => _$ImageAssetConfigToJson(this);
 }
 
 @freezed
