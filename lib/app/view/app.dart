@@ -103,7 +103,7 @@ class _AppState extends State<App> {
       systemInfoRepository: context.read<SystemInfoRepository>(),
       appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
       appInfo: context.read<AppInfo>(),
-      supportedLocales: featureAccess.localizationConfig.supportedLocales,
+      supportedLocales: AppLocalizations.supportedLocales,
       userSessionCleanupResolver: RepositoryUserSessionCleanupResolver(
         systemInfoRepository: context.read<SystemInfoRepository>(),
         registerStatusRepository: context.read<RegisterStatusRepository>(),
@@ -242,7 +242,7 @@ class _AppState extends State<App> {
             ),
             locale: state.effectiveLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: featureAccess.localizationConfig.supportedLocales,
+            supportedLocales: AppLocalizations.supportedLocales,
             // restorationScopeId: 'App', // TODO: temporary comment to prevent AppShell's AutoRouter placeholder blink - additional investigation necessary
             title: EnvironmentConfig.APP_NAME,
             themeMode: finalThemeMode,
