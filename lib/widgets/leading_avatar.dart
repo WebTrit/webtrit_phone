@@ -127,7 +127,16 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
 
   Widget _buildAvatarContent(double diameter, LeadingAvatarStyle style) {
     if (widget.thumbnailUrl != null) {
-      return ClipOval(key: ValueKey('remote:${widget.thumbnailUrl?.hashCode}'), child: _remoteImage(diameter, style));
+      // Gravatar serves 80x80 unless asked otherwise, which is soft on a list row and
+      // visibly pixelated on a large avatar, so ask for the resolution actually painted -
+      // rounded up to a shared size, so the same face is not downloaded once per screen.
+      final devicePixels = diameter * MediaQuery.devicePixelRatioOf(context);
+      final url =
+          GravatarUrl.withSize(widget.thumbnailUrl, GravatarUrl.requestSize(devicePixels)) ?? widget.thumbnailUrl!;
+
+      // Keyed by the contact's url rather than the sized one: a size change is a reload
+      // inside the image, not a new child, and remounting it would flash the placeholder.
+      return ClipOval(key: ValueKey('remote:${widget.thumbnailUrl}'), child: _remoteImage(url, diameter, style));
     } else if (widget.thumbnail != null) {
       return const ClipOval(key: ValueKey('local'), child: _LocalImage());
     } else {
@@ -161,9 +170,9 @@ class _LeadingAvatarState extends State<LeadingAvatar> {
     );
   }
 
-  Widget _remoteImage(double diameter, LeadingAvatarStyle style) {
+  Widget _remoteImage(Uri url, double diameter, LeadingAvatarStyle style) {
     return SafeNetworkImage(
-      widget.thumbnailUrl.toString(),
+      url.toString(),
       fit: BoxFit.cover,
       placeholderBuilder: () => _placeholder(diameter, style),
       errorBuilder: () {

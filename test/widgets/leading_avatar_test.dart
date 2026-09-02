@@ -6,6 +6,7 @@ import 'package:webtrit_phone/theme/styles/styles.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/avatar_status_badge.dart';
 import 'package:webtrit_phone/widgets/leading_avatar.dart';
+import 'package:webtrit_phone/widgets/safe_network_image.dart';
 
 void main() {
   Widget wrap(Widget child, {NameColorsStyle? nameColors}) {
@@ -85,6 +86,43 @@ void main() {
       await tester.pumpWidget(wrap(const LeadingAvatar(username: null), nameColors: const NameColorsStyle()));
 
       expect(backgroundOf(tester), const Color(0xFFEEF3F6));
+    });
+  });
+
+  group('LeadingAvatar photo resolution', () {
+    testWidgets('asks Gravatar for a shared size that covers what it paints', (tester) async {
+      // The test binding paints at 3.0, so a 74 px avatar is 222 real pixels, asked for
+      // as the 256 every other avatar of about that size asks for.
+      await tester.pumpWidget(
+        wrap(
+          LeadingAvatar(
+            username: 'John Doe',
+            thumbnailUrl: Uri.parse('https://www.gravatar.com/avatar/abc'),
+            radius: 37,
+          ),
+        ),
+      );
+
+      final image = tester.widget<SafeNetworkImage>(find.byType(SafeNetworkImage));
+      expect(Uri.parse(image.url).queryParameters['s'], '256');
+    });
+
+    testWidgets('keeps one url across nearby sizes, so the photo is downloaded once', (tester) async {
+      final photo = Uri.parse('https://www.gravatar.com/avatar/abc');
+
+      await tester.pumpWidget(wrap(LeadingAvatar(username: 'John Doe', thumbnailUrl: photo, radius: 37)));
+      final requested = tester.widget<SafeNetworkImage>(find.byType(SafeNetworkImage)).url;
+
+      await tester.pumpWidget(wrap(LeadingAvatar(username: 'John Doe', thumbnailUrl: photo, radius: 40)));
+
+      expect(tester.widget<SafeNetworkImage>(find.byType(SafeNetworkImage)).url, requested);
+    });
+
+    testWidgets('leaves a non-Gravatar url alone', (tester) async {
+      const url = 'https://example.com/photo.png';
+      await tester.pumpWidget(wrap(LeadingAvatar(username: 'John Doe', thumbnailUrl: Uri.parse(url), radius: 37)));
+
+      expect(tester.widget<SafeNetworkImage>(find.byType(SafeNetworkImage)).url, url);
     });
   });
 
