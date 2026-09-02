@@ -4,8 +4,8 @@ How to build, run, sign, and ship the WebTrit Phone project.
 
 Last reviewed: 2026-08-11
 
-It includes melos script usage, flavor configuration, signed release builds and store uploads via
-fastlane, Flutter SDK version management, and tips for local development.
+It includes melos script usage, optional feature selection, signed release builds and store uploads
+via fastlane, Flutter SDK version management, and tips for local development.
 
 For all available melos scripts, see [Melos Commands](make_file.md).
 For how a release pins its `webtrit_callkeep` version, see [Release Versioning](release_versioning.md).
@@ -14,42 +14,23 @@ see [Verifying a Change Compiles](build_verification.md).
 
 ---
 
-## Version-based Flavor Selection  [Flavors](flavors.md)
+## Optional Android Features  [Optional features](optional_features.md)
 
-The build logic dynamically adapts to the `VERSION` specified in the root-level `build.config` file:
+The project has no build flavors. Two Android features are still decided at build time, because a
+brand that does not use them must not ship their permission or their manifest components:
 
-```sh
-VERSION=0.0.2
-```
+* `WEBTRIT_APP_LINK_DOMAIN` - non-empty merges the deep-link intent filter into the manifest
+* `WEBTRIT_CALL_TRIGGER_MECHANISM_SMS` - `"true"` merges in `RECEIVE_SMS` and the SMS receiver
 
-This versioning ensures **backward compatibility** with older versions that do not use flavors.
-
-Depending on the version:
-
-* `legacy`: flavors are not used
-* `v0.0.1`: only deeplink flavor is applied
-* `v0.0.2+`: both deeplink and SMS flavors are combined
-
-Version logic is used to determine the correct flavor flags for build and run commands.
-
-> In the future, iOS flavor support may be added similarly
-
----
-
-## Dart Defines Based Flavor Computation
-
-Values are parsed from `dart_define.json`:
-
-* `WEBTRIT_APP_LINK_DOMAIN` → determines deeplink flavor
-* `WEBTRIT_CALL_TRIGGER_MECHANISM_SMS` → determines smsReceiver flavor
-
-### Example combined flavor:
+Both are read from `dart_define.json`, the same file the app itself reads, so no build command has
+to carry a feature name. Every build prints what it resolved:
 
 ```
---flavor deeplinkssmsReceiverDisabled
+Deep links: enabled, SMS call trigger: disabled
 ```
 
-This ensures only required Android permissions or receivers are included in the app build.
+> Only Android has manifest-level optional features; iOS declares its capabilities in the Xcode
+> project.
 
 ---
 
@@ -136,12 +117,11 @@ session - and skips waiting for build processing.
 
 `melos run fastlane:android:build` drives the flutter tool
 (`flutter build appbundle --dart-define-from-file=dart_define.json --no-tree-shake-icons`) so
-dart-defines, flavor selection, and version stamping behave exactly as in the `build:*` scripts.
+dart-defines, optional features, and version stamping behave exactly as in the `build:*` scripts.
 
 | Variable                              | Default                | Purpose                                |
 |---------------------------------------|------------------------|----------------------------------------|
 | `ANDROID_BUILD_TARGET`                | `appbundle`            | `appbundle` or `apk`                   |
-| `ANDROID_FLAVOR`                      | `deeplinkssmsReceiver` | Flavor combinator (see [Flavors](flavors.md)) |
 | `ANDROID_BUILD_NAME`                  | -                      | Marketing version                      |
 | `ANDROID_BUILD_NUMBER`                | -                      | Version code                           |
 | `ANDROID_AAB_PATH`                    | -                      | Bundle to upload                       |
@@ -206,9 +186,6 @@ melos run start:ios
 
 ## Development Workflow Notes
 
-During development you may need to adjust your environment manually to work efficiently with
-flavors.
-
 ### Options:
 
 * **Terminal (recommended)**:
@@ -225,15 +202,8 @@ flavors.
   In IntelliJ IDEA or Android Studio, sync run configurations via `melos run ide:sync`,
   then use the generated run configurations from `.idea/runConfigurations/`.
 
-* **Manual Flavor Selection**:
-
-  When running directly from the IDE without melos, manually pass the correct
-  `--flavor` (e.g., `--flavor deeplinkssmsReceiverDisabled`) in your launch configuration
-  to match the current `dart_define.json`.
-
 ### Tip:
 
-* Stick to a single flavor during development (e.g., the one most commonly enabled)
 * Run `melos run ide:sync` after updating run configurations in `tool/run/`
 
 > Melos scripts work best for **CI/CD and structured builds**. For day-to-day IDE development,

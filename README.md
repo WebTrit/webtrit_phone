@@ -34,7 +34,7 @@ The application offers extensive customization options:
 
 ## Development & Build
  - **Build and run**: See the [Build and Run](docs/build.md) documentation for details on how to build and run the application.
- - **Flavors**: See the [Build Flavors](docs/flavors.md) documentation for details on how to configure and use build flavors.
+ - **Optional features**: See [Optional Android Features](docs/optional_features.md) for the features whose permissions and manifest components are included only when the build enables them.
  - **Melos Commands**: See the [Melos Commands](docs/make_file.md) for all available build, run, and automation commands.
  - **Development Workflow and Git Hooks**: See the [Development Guide](docs/development.md) for details on commit conventions, hook setup, and workflow tools.
  - **Accessibility**: See the [Accessibility Guide](docs/accessibility.md) for what every interactive control must expose to screen readers and UI automation, and how to verify it.

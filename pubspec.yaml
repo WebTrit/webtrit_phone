@@ -382,12 +382,12 @@ melos:
     # ===========================
 
     build:apk:
-      description: Build Android APK. Flavor is resolved from dart_define.json. Set FLUTTER_FLAGS for extra flags (e.g. --release).
-      run: flutter build apk --flavor "$(tool/scripts/android_flavor.sh)" --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+      description: Build Android APK. Optional features are resolved from dart_define.json. Set FLUTTER_FLAGS for extra flags (e.g. --release).
+      run: flutter build apk --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:appbundle:
-      description: Build Android App Bundle. Flavor is resolved from dart_define.json. Set FLUTTER_FLAGS for extra flags.
-      run: flutter build appbundle --flavor "$(tool/scripts/android_flavor.sh)" --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
+      description: Build Android App Bundle. Optional features are resolved from dart_define.json. Set FLUTTER_FLAGS for extra flags.
+      run: flutter build appbundle --dart-define-from-file=dart_define.json --no-tree-shake-icons ${FLUTTER_FLAGS:-}
 
     build:ios:
       description: Build iOS app. Set FLUTTER_FLAGS for extra flags (e.g. --release --no-codesign).
@@ -443,7 +443,7 @@ melos:
     fastlane:android:build:
       description: >
         Build the Android app bundle via android/fastlane. Reads ANDROID_BUILD_TARGET,
-        ANDROID_FLAVOR, ANDROID_BUILD_NAME, ANDROID_BUILD_NUMBER from the environment.
+        ANDROID_BUILD_NAME, ANDROID_BUILD_NUMBER from the environment.
       steps:
         - fastlane:install
         - cd android && fastlane android build
@@ -591,6 +591,7 @@ melos:
       description: Sync IDE run configurations from tool/run/ to .idea/runConfigurations/.
       run: |
         mkdir -p .idea/runConfigurations
+        rm -f .idea/runConfigurations/run-android-deeplinks*.xml
         cp tool/run/*.xml .idea/runConfigurations/
 
     # ===========================

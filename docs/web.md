@@ -25,7 +25,7 @@ only after the full Dart compile (~4 min), so leaving it out costs a whole build
 [Verifying a Change Compiles](build_verification.md).
 
 A bare `flutter build web` leaves the `${WEBTRIT_APP_NAME}` placeholder
-unsubstituted and lacks the real web Firebase config; use the project's flavored
+unsubstituted and lacks the real web Firebase config; use the project's configurator-driven
 web pipeline (configurator -> dart-defines) for a real backend.
 
 ## Important dart-defines on web
