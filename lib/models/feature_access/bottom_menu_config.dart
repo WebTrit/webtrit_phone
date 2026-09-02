@@ -6,9 +6,13 @@ import 'bottom_menu_feature.dart';
 
 /// Static configuration for the bottom navigation menu.
 class BottomMenuConfig extends Equatable {
-  const BottomMenuConfig({required List<BottomMenuTab> tabs}) : _tabs = tabs;
+  const BottomMenuConfig({required List<BottomMenuTab> tabs, this.remembersSelectedTab = true}) : _tabs = tabs;
 
   final List<BottomMenuTab> _tabs;
+
+  /// Whether the app reopens the section a person left, or starts every time
+  /// on the one the configuration marks initial.
+  final bool remembersSelectedTab;
 
   /// Returns all configured tabs.
   List<BottomMenuTab> get tabs => _tabs;
@@ -55,5 +59,5 @@ class BottomMenuConfig extends Equatable {
   }
 
   @override
-  List<Object?> get props => [_tabs];
+  List<Object?> get props => [_tabs, remembersSelectedTab];
 }
