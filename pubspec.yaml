@@ -16,7 +16,6 @@ workspace:
   - packages/_web_socket_channel
   - packages/_tcp_proxy
   - packages/pjsua_companion
-  - screenshots
 
 # Version format: <Major>.<Minor>.<Patch>[-<Pre-release>]+<Build>
 # Where:
