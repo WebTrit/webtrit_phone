@@ -31,6 +31,13 @@ class CallRemoteAvatar extends StatefulWidget {
 
   @override
   State<CallRemoteAvatar> createState() => _CallRemoteAvatarState();
+
+  /// Preferred radius of the avatar shown in place of the remote video; the
+  /// avatar scales itself down when the space left over by the info block and
+  /// the action area is smaller than this.
+  static double preferredRadius(MediaQueryData mediaQueryData) {
+    return (mediaQueryData.size.shortestSide * 0.30).clamp(24.0, 150.0);
+  }
 }
 
 class _CallRemoteAvatarState extends State<CallRemoteAvatar> {
