@@ -227,7 +227,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   /// [CallControlEvent.answerFocused]).
   void _answerFocused() {
     final activeCalls = widget.activeCalls;
-    final incomingRinging = activeCalls.where((call) => call.isIncoming && call.wasAccepted == false).toList();
+    final incomingRinging = activeCalls.incomingRinging;
     final others = activeCalls.whereNot(incomingRinging.contains).toList();
     _callBloc.add(
       CallControlEvent.answerFocused(

@@ -465,6 +465,9 @@ extension ActiveCallIterableExtension<T extends ActiveCall> on Iterable<T> {
 
   T? get blindTransferInitiated => firstWhereOrNull((activeCall) => activeCall.transfer is BlindTransferInitiated);
 
+  /// The incoming calls that are still ringing - offered but not yet accepted.
+  List<T> get incomingRinging => where((activeCall) => activeCall.isIncoming && !activeCall.wasAccepted).toList();
+
   /// The most concerning media-degradation indicator across all calls, for the
   /// global toolbar status line: an active (non-recovered) warning beats a
   /// recovered confirmation, then the higher severity wins. `null` when every
