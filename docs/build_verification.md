@@ -131,6 +131,7 @@ not need it.
 ## Related repositories
 
 `webtrit_phone_configurator` compiles this repo as a path dependency (`webtrit_phone`,
-`screenshots`, `webtrit_appearance_theme`), so a break here breaks its web build too - with the
-error pointing into `lib/` of this repo. Its own run/build guide, including the same
+`webtrit_appearance_theme`), so a break here breaks its web build too - with the error pointing
+into `lib/` of this repo. Its `screenshots` package - the phone's screens, mocked, that its preview
+draws - used to live here and now lives there. Its own run/build guide, including the same
 `--no-tree-shake-icons` requirement, lives in that repo under `docs/run-and-build.md`.
