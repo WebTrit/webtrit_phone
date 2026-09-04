@@ -213,7 +213,7 @@ flutter_gen:
 patrol:
   app_name: Webtrit
   android:
-    package_name: com.webtrit.app
+    package_name: com.webtrit.phone
   ios:
     bundle_id: com.webtrit.app
 
