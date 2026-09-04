@@ -109,6 +109,12 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   bool _isConnected = false;
   bool _disposed = false;
 
+  // Set by the first connectivity event. The stream subscription is live
+  // before the boot probe resolves, so an early event carries fresher state
+  // than the probe: the boot path must then drop its own result instead of
+  // overwriting the state and running a second leading cycle.
+  bool _bootProbeSuperseded = false;
+
   final Map<Refreshable, _PollingConfig> _pollingConfigs = {};
 
   /// Register a [listener] with a polling [interval].
@@ -186,7 +192,9 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   Future<void> _initializePollingIfConnected() async {
     if (_disposed) return;
     _logger.info('PollingService: Initializing polling...');
-    _isConnected = await _connectivityService.checkConnection();
+    final connected = await _connectivityService.checkConnection();
+    if (_disposed || _bootProbeSuperseded) return;
+    _isConnected = connected;
     _reachability.clear(); // start with empty cache; we'll fill it in group-leading
 
     if (_shouldRunTimers) {
@@ -198,6 +206,7 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   void _handleConnectivityChange(bool connected) {
     if (_disposed) return;
 
+    _bootProbeSuperseded = true;
     _isConnected = connected;
     _reachability.clear();
 

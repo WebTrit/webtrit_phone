@@ -17,6 +17,11 @@ class FakeConnectivityService implements ConnectivityService {
 
   int checkCalls = 0;
 
+  /// When set, the first [checkConnection] call resolves only after this
+  /// delay, modelling a slow boot probe that a stream event can outrun.
+  Duration? firstCheckDelay;
+  bool _firstCheckDone = false;
+
   @override
   Stream<bool> get connectionStream => _controller.stream;
 
@@ -29,7 +34,15 @@ class FakeConnectivityService implements ConnectivityService {
   @override
   Future<bool> checkConnection() async {
     checkCalls++;
-    return _connected;
+    // Snapshot the state up front: a real probe reports the connectivity it
+    // observed when it ran, not the state at the moment its future resolves.
+    final result = _connected;
+    if (!_firstCheckDone) {
+      _firstCheckDone = true;
+      final delay = firstCheckDelay;
+      if (delay != null) await Future<void>.delayed(delay);
+    }
+    return result;
   }
 
   /// Set current connectivity and emit an event (alias: [push]).

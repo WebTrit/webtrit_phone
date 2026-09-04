@@ -104,6 +104,64 @@ void main() {
       });
     });
 
+    // Regression: a connectivity event that arrives while the boot probe is
+    // still in flight must supersede it - one leading cycle, not two.
+    test('connectivity event during the boot probe yields one leading cycle', () {
+      fakeAsync((async) {
+        connectivity = FakeConnectivityService(initialConnected: true)..firstCheckDelay = const Duration(seconds: 1);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 0, reason: 'boot probe is still in flight');
+
+        // The OS reports connectivity before the probe resolves.
+        connectivity.setConnected(true);
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'the connectivity event runs the leading cycle');
+
+        // The probe resolves late: it must not run a second leading cycle.
+        async.elapse(const Duration(seconds: 1));
+        expect(task.callCount, 1, reason: 'the superseded boot probe must stay silent');
+
+        async.elapse(const Duration(seconds: 10, milliseconds: 100));
+        expect(task.callCount, 2, reason: 'periodic polling continues normally');
+      });
+    });
+
+    // Regression: a probe that started while online but resolves after an
+    // offline event must not overwrite the fresher offline state.
+    test('stale boot probe does not overwrite an offline event', () {
+      fakeAsync((async) {
+        connectivity = FakeConnectivityService(initialConnected: true)..firstCheckDelay = const Duration(seconds: 1);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+
+        // The device goes offline while the probe is still in flight.
+        connectivity.setConnected(false);
+        async.flushMicrotasks();
+        expect(task.callCount, 0);
+
+        // The probe resolves with its stale online snapshot: it must not
+        // overwrite the fresher offline state and bring the timers up.
+        async.elapse(const Duration(minutes: 2));
+        expect(task.callCount, 0, reason: 'the stale probe must not start polling while offline');
+        expect(connectivity.checkCalls, 1, reason: 'a superseded probe must not trigger further reachability checks');
+      });
+    });
+
     // Regression: backgrounding while a refresh is still in flight must not
     // let the resume leading cycle start an overlapping refresh of the same
     // listener.
