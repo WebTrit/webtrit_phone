@@ -12,7 +12,11 @@ import 'call_active_scaffold_harness.dart';
 void main() {
   late MockCallBloc callBloc;
 
-  setUp(() => callBloc = newCallBloc());
+  setUp(() {
+    callBloc = newCallBloc();
+    // This suite pins the PORTRAIT arrangement.
+    pinPortraitSurface();
+  });
 
   group('CallActiveScaffold - what a screen reader is left with', () {
     // In a video call the controls hide themselves after a few idle seconds by

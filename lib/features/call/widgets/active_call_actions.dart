@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -16,13 +17,9 @@ class ActiveCallActions extends StatefulWidget {
   const ActiveCallActions({
     super.key,
     required this.enableInteractions,
-    required this.isIncoming,
-    required this.wasAccepted,
-    required this.wasHungUp,
     required this.cameraValue,
     this.cameraPermissionDenied = false,
     this.onCameraPermissionDeniedPressed,
-    required this.inviteToAttendedTransfer,
     this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
@@ -38,14 +35,13 @@ class ActiveCallActions extends StatefulWidget {
     this.onHangupPressed,
     this.onKeyPressed,
     this.keypadShown = false,
+    required this.dtmfInput,
     this.onKeypadToggle,
+    this.hangupRowShown = true,
     this.style,
   });
 
   final bool enableInteractions;
-  final bool isIncoming;
-  final bool wasAccepted;
-  final bool wasHungUp;
   final bool cameraValue;
 
   /// Whether camera permission was denied for this call (audio-only downgrade).
@@ -56,7 +52,6 @@ class ActiveCallActions extends StatefulWidget {
   /// The handler re-checks the live permission and either enables the camera
   /// (now granted) or opens app settings (still denied).
   final VoidCallback? onCameraPermissionDeniedPressed;
-  final bool inviteToAttendedTransfer;
   final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
@@ -77,8 +72,18 @@ class ActiveCallActions extends StatefulWidget {
   /// avatar hides), so a single owner keeps the two in sync.
   final bool keypadShown;
 
+  /// The digits typed on the open keypad, owned by the screen; the in-grid
+  /// display only listens to it, so a keypress never rebuilds the grid.
+  final ValueListenable<String> dtmfInput;
+
   /// Requests the in-call keypad to be shown or hidden.
   final ValueChanged<bool>? onKeypadToggle;
+
+  /// Whether the hangup (and hide-keypad) row renders inside this grid. The
+  /// portrait screen keeps it here; a layout that places the hangup in a zone
+  /// of its own turns this off, and the grid drops the row together with the
+  /// self-centering padding - the zone gives it exactly its own space.
+  final bool hangupRowShown;
 
   final CallScreenActionsStyle? style;
 
@@ -88,9 +93,7 @@ class ActiveCallActions extends StatefulWidget {
 
 class _ActiveCallActionsState extends State<ActiveCallActions> {
   final _keypadTextFieldKey = GlobalKey();
-
-  EditableTextState? get _keypadTextFieldEditableTextState =>
-      (_keypadTextFieldKey.currentState as TextSelectionGestureDetectorBuilderDelegate).editableTextKey.currentState;
+  final _keypadScrollController = ScrollController();
 
   late TextEditingController _keypadTextEditingController;
 
@@ -116,13 +119,52 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
   @override
   void initState() {
     super.initState();
-    _keypadTextEditingController = TextEditingController();
+    _keypadTextEditingController = TextEditingController(text: widget.dtmfInput.value);
+    widget.dtmfInput.addListener(_syncDtmfDisplay);
+  }
+
+  @override
+  void didUpdateWidget(covariant ActiveCallActions oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The screen owns the one digit buffer; the in-grid display only listens
+    // to it, so it survives a rebuild and empties exactly when the buffer does.
+    if (!identical(oldWidget.dtmfInput, widget.dtmfInput)) {
+      oldWidget.dtmfInput.removeListener(_syncDtmfDisplay);
+      widget.dtmfInput.addListener(_syncDtmfDisplay);
+      _syncDtmfDisplay();
+    }
+    // The dimensions depend on this flag, and didChangeDependencies does not
+    // run for an in-place widget update - without this a flipped flag keeps
+    // the padding of the other mode.
+    if (oldWidget.hangupRowShown != widget.hangupRowShown) computeDimensions();
   }
 
   @override
   void dispose() {
+    widget.dtmfInput.removeListener(_syncDtmfDisplay);
     _keypadTextEditingController.dispose();
+    _keypadScrollController.dispose();
     super.dispose();
+  }
+
+  /// Mirrors the screen-owned buffer into the display and keeps the newest
+  /// digits in view. A read-only field never scrolls to its caret on an
+  /// external controller write, so the display is scrolled to the end by
+  /// hand once the new text has been laid out.
+  void _syncDtmfDisplay() {
+    final digits = widget.dtmfInput.value;
+    _keypadTextEditingController.value = TextEditingValue(
+      text: digits,
+      selection: TextSelection.collapsed(offset: digits.length),
+    );
+    WidgetsBinding.instance.addPostFrameCallback(_scrollDtmfDisplayToEnd);
+  }
+
+  /// Runs after the frame that laid the new text out; anything earlier has no
+  /// scroll extent for it yet.
+  void _scrollDtmfDisplayToEnd(Duration _) {
+    if (!mounted || !_keypadScrollController.hasClients) return;
+    _keypadScrollController.jumpTo(_keypadScrollController.position.maxScrollExtent);
   }
 
   @override
@@ -150,7 +192,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     } else {
       _actionsDelimiterDimension = _dimension / 9;
       _hangupDelimiterDimension = _actionsDelimiterDimension;
-      _horizontalPadding = _dimension * 3;
+      _horizontalPadding = widget.hangupRowShown ? _dimension * 3 : 0;
     }
     if (mounted) setState(() {});
   }
@@ -170,18 +212,14 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     if (!widget.enableInteractions) return;
     final onKeyPressed = widget.onKeyPressed;
     if (onKeyPressed == null) return;
-
-    final newText = _keypadTextEditingController.text + key;
-    final newSelection = TextSelection.collapsed(offset: newText.length);
-    final value = _keypadTextEditingController.value.copyWith(text: newText, selection: newSelection);
-    _keypadTextFieldEditableTextState?.userUpdateTextEditingValue(value, SelectionChangedCause.keyboard);
-
+    // The screen appends the digit to the shared buffer and hands it back
+    // down as [ActiveCallActions.dtmfInput]; nothing is written locally, so
+    // the display can never drift from what was actually sent.
     onKeyPressed(key);
   }
 
-  /// Closes the in-call keypad, dropping the collected DTMF input.
+  /// Closes the in-call keypad; the screen drops the collected digits with it.
   void _hideKeypad() {
-    _keypadTextEditingController.clear();
     widget.onKeypadToggle?.call(false);
   }
 
@@ -369,9 +407,11 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
           child: Icon(Icons.dialpad, size: actionPadIconSize),
         ),
         // hangup delimiter
-        const SizedBox(),
-        SizedBox.square(dimension: _hangupDelimiterDimension),
-        const SizedBox(),
+        if (widget.hangupRowShown) ...[
+          const SizedBox(),
+          SizedBox.square(dimension: _hangupDelimiterDimension),
+          const SizedBox(),
+        ],
         //
       ];
     }
@@ -382,24 +422,13 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         // actions rows
         ...actions,
         // hangup row
-        const SizedBox(),
-        CallActionButton(
-          key: callActionsHangupKey,
-          identifier: callActionsHangupId,
-          label: context.l10n.call_CallActionsTooltip_hangup,
-          onPressed: onHangupPressed,
-          style: widget.style?.hangup,
-          child: Icon(Icons.call_end, size: actionPadIconSize),
-        ),
-        widget.keypadShown
-            ? CallActionButton(
-                identifier: callActionsHideKeypadId,
-                label: context.l10n.call_CallActionsTooltip_hideKeypad,
-                onPressed: _hideKeypad,
-                style: widget.style?.key,
-                child: Icon(Icons.dialpad, size: actionPadIconSize),
-              )
-            : const SizedBox(),
+        if (widget.hangupRowShown) ...[
+          const SizedBox(),
+          CallHangupButton(onPressed: onHangupPressed, style: widget.style?.hangup),
+          widget.keypadShown
+              ? CallHideKeypadButton(onPressed: _hideKeypad, style: widget.style?.key)
+              : const SizedBox(),
+        ],
       ],
     );
 
@@ -409,10 +438,13 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         data: IconThemeData(size: _iconSize),
         child: Column(
           children: [
-            if (widget.keypadShown) ...[
+            // Only where the grid keeps its hangup row - a layout without it
+            // shows the typed digits itself.
+            if (widget.keypadShown && widget.hangupRowShown) ...[
               TextField(
                 key: _keypadTextFieldKey,
                 controller: _keypadTextEditingController,
+                scrollController: _keypadScrollController,
                 decoration: _inputDecorations?.keypad,
                 style: _textStyle,
                 textAlign: TextAlign.center,

@@ -10,10 +10,15 @@ import 'call_list.dart';
 /// call a row, the focused one highlighted), with a single call - its central
 /// info block.
 ///
-/// The block is shared by the orientation layouts: each of them decides where
-/// it stands, none of them what is inside.
+/// The layout above decides where the block stands, never what is inside.
 class CallInfoBlock extends StatelessWidget {
-  const CallInfoBlock({super.key, required this.activeCalls, required this.focusedCall, required this.onCallSelected});
+  const CallInfoBlock({
+    super.key,
+    required this.activeCalls,
+    required this.focusedCall,
+    required this.onCallSelected,
+    this.textAlign = TextAlign.center,
+  });
 
   final List<ActiveCall> activeCalls;
 
@@ -21,6 +26,9 @@ class CallInfoBlock extends StatelessWidget {
   final ActiveCall focusedCall;
 
   final ValueChanged<String> onCallSelected;
+
+  /// How the single-call info lines align; the roster rows range themselves.
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +60,7 @@ class CallInfoBlock extends StatelessWidget {
       acceptedTime: focusedCall.acceptedTime,
       style: style?.callInfo,
       processingStatus: focusedCall.processingStatus,
+      textAlign: textAlign,
     );
   }
 }

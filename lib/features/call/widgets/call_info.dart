@@ -28,6 +28,7 @@ class CallInfo extends StatefulWidget {
     this.acceptedTime,
     this.processingStatus,
     required this.style,
+    this.textAlign = TextAlign.center,
   });
 
   final bool transfering;
@@ -40,6 +41,10 @@ class CallInfo extends StatefulWidget {
   final DateTime? acceptedTime;
   final CallProcessingStatus? processingStatus;
   final CallInfoStyle? style;
+
+  /// How the lines align. The portrait screen centers the block; a layout
+  /// that ranges it against something on its left starts it instead.
+  final TextAlign textAlign;
 
   @override
   State<CallInfo> createState() => _CallInfoState();
@@ -112,8 +117,20 @@ class _CallInfoState extends State<CallInfo> {
     final statusMessage = _buildStatusMessage(context);
     final processingStatus = widget.processingStatus?.l10n(context).nullify;
 
+    // The centered path keeps what the block always rendered: the name,
+    // number and processing lines explicitly centered, the status line at
+    // its default. A start-ranged layout ranges every line to the start.
+    final centered = widget.textAlign == TextAlign.center;
+    final textAlign = widget.textAlign;
+    final statusTextAlign = centered ? null : widget.textAlign;
+
     return Column(
       spacing: 8,
+      // Its own height only: inside a bounded box a max-sized column would
+      // fill it and pin the lines to the top instead of letting the box
+      // center them.
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         if (widget.username != null &&
             widget.username != widget.number &&
@@ -121,14 +138,14 @@ class _CallInfoState extends State<CallInfo> {
           Text(
             widget.username!,
             style: userInfoTextStyle,
-            textAlign: TextAlign.center,
+            textAlign: textAlign,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
             widget.number,
             style: numberTextStyle,
-            textAlign: TextAlign.center,
+            textAlign: textAlign,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -136,13 +153,12 @@ class _CallInfoState extends State<CallInfo> {
           Text(
             widget.number,
             style: userInfoTextStyle,
-            textAlign: TextAlign.center,
+            textAlign: textAlign,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-        Text(statusMessage, style: statusTextStyle),
-        if (processingStatus != null)
-          Text(processingStatus, style: processingStatusTextStyle, textAlign: TextAlign.center),
+        Text(statusMessage, style: statusTextStyle, textAlign: statusTextAlign),
+        if (processingStatus != null) Text(processingStatus, style: processingStatusTextStyle, textAlign: textAlign),
       ],
     );
   }

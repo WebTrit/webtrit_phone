@@ -16,7 +16,11 @@ import 'call_active_scaffold_harness.dart';
 void main() {
   late MockCallBloc callBloc;
 
-  setUp(() => callBloc = newCallBloc());
+  setUp(() {
+    callBloc = newCallBloc();
+    // This suite pins the PORTRAIT arrangement.
+    pinPortraitSurface();
+  });
 
   final ringing = makeCall(
     callId: 'ringing',
@@ -244,6 +248,21 @@ void main() {
       await teardownCallScaffold(tester);
     });
 
+    testWidgets('with a held call focused, the avatar shows that call, not the live one', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+
+      final held = makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true, displayName: 'Clara Diaz');
+      await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [held, active], focusedCall: held));
+      await tester.pump();
+
+      // The roster highlights Clara and the actions act on her - the picture
+      // must not show Boris (the derived current call) at the same time.
+      expect(find.descendant(of: find.byType(CallRemoteAvatar), matching: find.text('CD')), findsOneWidget);
+      await teardownCallScaffold(tester);
+    });
+
     testWidgets('the open in-call keypad hides the avatar and keeps the keys full size', (tester) async {
       // The in-call keypad opens only in portrait orientation.
       tester.view.physicalSize = const Size(1080, 2400);
@@ -262,9 +281,51 @@ void main() {
       final keySize = tester.getSize(find.byType(KeypadKeyButton).first);
       expect(keySize.width, greaterThanOrEqualTo(360 / 5));
 
-      await tester.tap(find.byTooltip('Hide keypad'));
+      await tester.tap(find.byKey(callActionsHideKeypadKey));
       await tester.pumpAndSettle();
       expect(find.byType(KeypadKeyButton), findsNothing);
+      expect(find.byType(CallRemoteAvatar), findsOneWidget);
+
+      await teardownCallScaffold(tester);
+    });
+
+    testWidgets('typed digits are sent as DTMF, shown, and dropped when the keypad closes', (tester) async {
+      await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [active], focusedCall: active));
+      await tester.tap(find.byKey(callActionsKeypadKey));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('5'));
+      await tester.tap(find.text('2'));
+      await tester.pumpAndSettle();
+
+      // Every key goes out as DTMF for the focused call, and the display
+      // mirrors the screen-owned buffer.
+      verify(() => callBloc.add(const CallControlEvent.sentDTMF('active', '5'))).called(1);
+      verify(() => callBloc.add(const CallControlEvent.sentDTMF('active', '2'))).called(1);
+      expect(find.text('52'), findsOneWidget);
+
+      // Closing the keypad drops the collected digits: reopening starts clean.
+      await tester.tap(find.byKey(callActionsHideKeypadKey));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(callActionsKeypadKey));
+      await tester.pumpAndSettle();
+      expect(find.text('52'), findsNothing);
+
+      await teardownCallScaffold(tester);
+    });
+  });
+
+  group('CallActiveScaffold - legacy landscape fallback', () {
+    testWidgets('a turned screen still renders the whole arrangement', (tester) async {
+      tester.view.physicalSize = const Size(2622, 1206);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [active], focusedCall: active));
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(ActiveCallActions), findsOneWidget);
       expect(find.byType(CallRemoteAvatar), findsOneWidget);
 
       await teardownCallScaffold(tester);
