@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/features/call/call.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/keypad_key_button.dart';
 
 import 'call_active_scaffold_harness.dart';
@@ -345,6 +347,51 @@ void main() {
       await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [active], focusedCall: active));
       await tester.pump();
       expect(tester.takeException(), isNull);
+      await teardownCallScaffold(tester);
+    });
+  });
+
+  group('CallControlsLandscape - video call info zone', () {
+    testWidgets('with a live picture behind, the lines range left instead of floating centered', (tester) async {
+      setLandscapePhoneSurface(tester);
+      final params = CallControlsParams(
+        activeCalls: [active],
+        focusedCall: active,
+        availableAudioDevices: const [],
+        callConfig: const CallCapabilitiesConfig(),
+        interactionsEnabled: true,
+        // A live video call: the picture fills the screen behind the
+        // controls, so the avatar stands down.
+        hasRenderableRemoteFrame: true,
+        dtmfInput: ValueNotifier(''),
+        onCallSelected: (_) {},
+        onKeypadToggle: (_) {},
+        onCameraChanged: (_) {},
+        onCameraPermissionDeniedPressed: () {},
+        onMutedChanged: (_) {},
+        onAudioDeviceChanged: (_) {},
+        onBlindTransferInitiated: () {},
+        onAttendedTransferInitiated: () {},
+        onAttendedTransferSubmitted: (_) {},
+        onHeldChanged: (_) {},
+        onKeyPressed: (_) {},
+        onHangup: () {},
+        onAccept: () {},
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: CallControlsLandscape(params: params)),
+        ),
+      );
+
+      expect(find.byType(CallRemoteAvatar), findsNothing);
+      // Without the picture beside them the lines still stand where it
+      // would have stood - at the start of the zone (behind the 32dp
+      // arrangement padding), not floating in the middle of it.
+      expect(tester.getTopLeft(find.text('Boris Klein')).dx, moreOrLessEquals(32, epsilon: 1));
+
       await teardownCallScaffold(tester);
     });
   });
