@@ -87,7 +87,7 @@ Two consequences worth spelling out:
 | `AppCompatibilityResolver`, `SignalingServiceFactory` | `RootApp.build`, both const | nothing to release |
 | `FirebaseMessaging` | `RootApp.build`, plugin singleton | nothing to release |
 | `AppDatabaseLifecycleHolder` and `AppDatabase` | `RootApp.build` | itself - it owns the client connection and its lifecycle observer |
-| `PollingService`, `CdrsSyncWorker`, session services | `main_shell_services.dart` | the same provider |
+| `PollingService`, `CdrsSyncWorker`, `ExternalContactsSyncWorker`, session services | `main_shell_services.dart` | the same provider |
 | `PrivateGatewayRepository` | `main_shell_repositories.dart` | the same provider |
 | `SessionGuard` | `main_shell.dart` | the shell |
 
