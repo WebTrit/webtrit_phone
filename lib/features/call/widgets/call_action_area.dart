@@ -50,6 +50,7 @@ class CallActionArea extends StatelessWidget {
       return ActiveCallActions(
         style: style?.actions,
         hangupRowShown: hangupRowShown,
+        padded: padded,
         keypadShown: params.keypadShown,
         dtmfInput: params.dtmfInput,
         onKeypadToggle: (shown) => params.onKeypadToggle(shown),

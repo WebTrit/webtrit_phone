@@ -130,7 +130,7 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 | Row overlay polish   | Call rows use light overlay tints of the on-screen text color: focused = brighter + light border (design polarity), bigger radius and padding                                                                                                | Merged (PR #1388) |
 | Video line badge     | A camera glyph next to the trailing label marks video lines in the call list                                                                                                                                                                 | Merged (PR #1389) |
 | Themed color roles   | Call-list rows/dots and the acting-on hint take colors from the theme pipeline: CallPageListConfig/CallPageHintConfig in webtrit_appearance_theme -> assets/themes JSONs -> CallListStyle/FocusedActionHintStyle; no fixed colors in widgets | In review         |
-| Landscape            | Three-zone landscape arrangement (info / grid / isolated hangup), the shared info-block and action-area widgets both orientations place, keypad unlocked in landscape with the digits beside the caller, Answer greyed out instead of vanishing during the interaction debounce | In review (PR #1820) |
+| Landscape            | Three-zone landscape arrangement (info / grid / isolated hangup), the shared info-block and action-area widgets both orientations place, keypad unlocked in landscape with the digits beside the caller, Answer greyed out instead of vanishing during the interaction debounce | In review (PRs #1822, #1821) |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a
 PR into that branch, and once the whole flow is tested there a single PR merges

@@ -31,8 +31,8 @@ void main() {
     final handle = tester.ensureSemantics();
     await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [active], focusedCall: active));
 
-    final node = tester.getSemantics(find.bySemanticsIdentifier(callActionsHangupId));
-    expect(node.getSemanticsData().label, isNotEmpty);
+    expectTapTargetSemantics(tester, find.bySemanticsIdentifier(callActionsHangupId), identifier: callActionsHangupId);
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
     await tapViaSemantics(tester, find.bySemanticsIdentifier(callActionsHangupId));
     verify(() => callBloc.add(const CallControlEvent.ended('active'))).called(1);
@@ -51,8 +51,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(KeypadKeyButton), findsNWidgets(12));
 
-    final node = tester.getSemantics(find.bySemanticsIdentifier(callActionsHideKeypadId));
-    expect(node.getSemanticsData().label, isNotEmpty);
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(callActionsHideKeypadId),
+      identifier: callActionsHideKeypadId,
+    );
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
     await tapViaSemantics(tester, find.bySemanticsIdentifier(callActionsHideKeypadId));
     await tester.pumpAndSettle();

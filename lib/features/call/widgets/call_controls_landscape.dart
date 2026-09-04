@@ -44,20 +44,35 @@ class CallControlsLandscape extends StatelessWidget {
         // on a wide-but-low surface (a split-screen window, a resized web
         // viewport) the zones it produces can outgrow the width. The zone
         // widths below are therefore budgeted from what is actually left
-        // after the padding and the gaps, and each zone scales its content
-        // down instead of starving the info zone or overflowing.
+        // after the padding and the gaps, with a floor under every tap
+        // target: the zones shrink, the buttons do not.
         final dimension = mediaQueryData.size.shortestSide / 5;
         final naturalAreaWidth = dimension * 3.4;
-        final chrome = 64.0 + 24.0 + (focusedIsRinging ? 0.0 : 24.0 + 1.0 + 24.0);
+        // The zone width at which the scaled grid buttons reach the minimum
+        // tap size; the grid zone never shrinks past it while the width
+        // still holds it. A grid whose natural buttons are already at or
+        // under the minimum is not scaled down at all.
+        final minAreaWidth = dimension > kMinInteractiveDimension
+            ? naturalAreaWidth * (kMinInteractiveDimension / dimension)
+            : naturalAreaWidth;
+
+        // Whether the isolated hangup zone (with its rule and gaps) fits
+        // beside a grid at its minimum scale. Where it does not, the hangup
+        // moves back into the grid's own row - one scale then carries every
+        // control down together, so ending the call is never out of reach
+        // while the rest of the grid still renders.
+        final fullAvailable = constraints.maxWidth - (64.0 + 24.0 + 24.0 + 1.0 + 24.0);
+        final tight = !focusedIsRinging && fullAvailable < kMinInteractiveDimension + minAreaWidth;
+        final hangupZoneShown = !focusedIsRinging && !tight;
+
+        final chrome = 64.0 + 24.0 + (hangupZoneShown ? 24.0 + 1.0 + 24.0 : 0.0);
         final available = max(0.0, constraints.maxWidth - chrome);
-        // A ringing focus renders no separate hangup - its budget goes to the
-        // two decision buttons. Otherwise the zone never drops below the
-        // minimum tap target: the isolated hangup is the only way to end the
-        // call, so it is the last thing allowed to shrink.
-        final hangupZoneWidth = focusedIsRinging || available <= 0
-            ? 0.0
-            : min(dimension, max(kMinInteractiveDimension, available * 0.13)).clamp(0.0, available);
-        final areaZoneWidth = min(naturalAreaWidth, (available - hangupZoneWidth) * 0.58);
+        // The isolated hangup never drops below the minimum tap target: it
+        // is the only way to end the call, so it is the last thing allowed
+        // to shrink - and the zone stands only while that floor fits.
+        final hangupZoneWidth = hangupZoneShown ? min(dimension, max(kMinInteractiveDimension, available * 0.13)) : 0.0;
+        final gridBudget = available - hangupZoneWidth;
+        final areaZoneWidth = min(naturalAreaWidth, max(gridBudget * 0.58, min(gridBudget, minAreaWidth)));
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -67,25 +82,41 @@ class CallControlsLandscape extends StatelessWidget {
                 child: _InfoZone(params: params, style: style),
               ),
               const SizedBox(width: 24),
-              // The action grid (or the two ringing decisions with their
-              // hint) at its natural size, scaled down into the zone when the
-              // zone is capped; the table inside splits the width evenly.
-              SizedBox(
-                width: areaZoneWidth,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: SizedBox(
-                    width: naturalAreaWidth,
-                    // The hangup lives in a zone of its own here, and the
-                    // zones place the area themselves - no self-centering
-                    // padding.
-                    child: CallActionArea(params: params, hangupRowShown: false, padded: false),
+              if (focusedIsRinging)
+                // The two ringing decisions (and the "Acting on" hint) at
+                // their natural size: the hint wraps and tall content
+                // scrolls, so growing text - long names, a raised font
+                // scale - can never shrink Decline and Answer, the two most
+                // time-critical buttons on screen.
+                SizedBox(
+                  width: areaZoneWidth,
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: CallActionArea(params: params, hangupRowShown: false, padded: false),
+                    ),
+                  ),
+                )
+              else
+                // The action grid at its natural size, scaled down into the
+                // zone when the zone is capped; the table inside splits the
+                // width evenly. In the tight fallback the grid keeps its own
+                // hangup row instead of the isolated zone.
+                SizedBox(
+                  width: areaZoneWidth,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: SizedBox(
+                      width: naturalAreaWidth,
+                      // The hangup lives in a zone of its own here, and the
+                      // zones place the area themselves - no self-centering
+                      // padding.
+                      child: CallActionArea(params: params, hangupRowShown: !hangupZoneShown, padded: false),
+                    ),
                   ),
                 ),
-              ),
               // A ringing focus keeps Decline/Answer inside the area - there
               // is no separate hangup to set apart.
-              if (!focusedIsRinging) ...[
+              if (hangupZoneShown) ...[
                 const SizedBox(width: 24),
                 _FadingRule(height: min(dimension * 1.8, constraints.maxHeight * 0.6), style: style),
                 const SizedBox(width: 24),
@@ -136,8 +167,15 @@ class _InfoZone extends StatelessWidget {
           textAlign: TextAlign.start,
         ),
         // Only once there is something to show: an empty underlined strip
-        // reads as a stray line, not as a display waiting for input.
-        if (params.keypadShown && params.dtmfInput.isNotEmpty) _DtmfDisplay(digits: params.dtmfInput, style: style),
+        // reads as a stray line, not as a display waiting for input. The
+        // display listens to the buffer itself, so a keypress repaints it
+        // alone rather than the whole layout.
+        if (params.keypadShown)
+          ValueListenableBuilder<String>(
+            valueListenable: params.dtmfInput,
+            builder: (context, digits, _) =>
+                digits.isEmpty ? const SizedBox.shrink() : _DtmfDisplay(digits: digits, style: style),
+          ),
       ],
     );
 
@@ -150,29 +188,40 @@ class _InfoZone extends StatelessWidget {
     // design ranges a smaller one beside the info instead of above it.
     final avatarRadius = (mediaQueryData.size.shortestSide * 0.18).clamp(24.0, 84.0);
 
-    return Center(
-      child: SingleChildScrollView(
-        child: Row(
-          children: [
-            if (!params.focusedFrameRenderable) ...[
-              Flexible(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  // The focused call, not the derived current one: whatever
-                  // the info lines describe, the picture shows the same person.
-                  child: CallRemoteAvatar(
-                    activeCall: params.focusedCall,
-                    radius: avatarRadius,
-                    contactResolver: params.contactResolver,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // A zone squeezed by the tap-target floors of its neighbours can get
+        // too narrow for the picture and the gap beside it. The lines saying
+        // who the call is with matter more than the portrait, so the avatar
+        // gives way rather than overflow.
+        final avatarShown = !params.focusedFrameRenderable && constraints.maxWidth >= avatarRadius * 2 + 24 + 48;
+        if (!avatarShown) {
+          return Center(child: SingleChildScrollView(child: infoBlock));
+        }
+
+        return Center(
+          child: SingleChildScrollView(
+            child: Row(
+              children: [
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    // The focused call, not the derived current one: whatever
+                    // the info lines describe, the picture shows the same person.
+                    child: CallRemoteAvatar(
+                      activeCall: params.focusedCall,
+                      radius: avatarRadius,
+                      contactResolver: params.contactResolver,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 24),
-            ],
-            Expanded(child: infoBlock),
-          ],
-        ),
-      ),
+                const SizedBox(width: 24),
+                Expanded(child: infoBlock),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

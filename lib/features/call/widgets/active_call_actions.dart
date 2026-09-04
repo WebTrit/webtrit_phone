@@ -38,6 +38,7 @@ class ActiveCallActions extends StatefulWidget {
     required this.dtmfInput,
     this.onKeypadToggle,
     this.hangupRowShown = true,
+    this.padded = true,
     this.style,
   });
 
@@ -85,6 +86,11 @@ class ActiveCallActions extends StatefulWidget {
   /// into a zone of its own, and the grid drops the row together with the
   /// self-centering padding - the zone gives it exactly its own space.
   final bool hangupRowShown;
+
+  /// Whether the grid pads itself to sit centered on a full-width screen. A
+  /// layout that hands it exactly the space it needs turns this off and does
+  /// the placing itself.
+  final bool padded;
 
   final CallScreenActionsStyle? style;
 
@@ -138,7 +144,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     // The dimensions depend on this flag, and didChangeDependencies does not
     // run for an in-place widget update - without this a flipped flag keeps
     // the padding of the other mode.
-    if (oldWidget.hangupRowShown != widget.hangupRowShown) computeDimensions();
+    if (oldWidget.hangupRowShown != widget.hangupRowShown || oldWidget.padded != widget.padded) computeDimensions();
   }
 
   @override
@@ -190,11 +196,11 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     if (_isOrientationPortrait) {
       _actionsDelimiterDimension = _dimension / 5;
       _hangupDelimiterDimension = _actionsDelimiterDimension;
-      _horizontalPadding = _dimension / 2;
+      _horizontalPadding = widget.padded ? _dimension / 2 : 0;
     } else {
       _actionsDelimiterDimension = _dimension / 9;
       _hangupDelimiterDimension = _actionsDelimiterDimension;
-      _horizontalPadding = widget.hangupRowShown ? _dimension * 3 : 0;
+      _horizontalPadding = widget.padded ? _dimension * 3 : 0;
     }
     if (mounted) setState(() {});
   }
