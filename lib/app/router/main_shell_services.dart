@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:webtrit_phone/app/adapters/polling_on_demand_refresher.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
@@ -44,16 +43,6 @@ class MainShellServices extends StatelessWidget {
           dispose: (context, service) => service.dispose(),
           lazy: false,
         ),
-        if (featureAccess.coreSupport.supportsExtensions)
-          // The contacts pull-to-refresh port: the forced refresh goes through
-          // the polling service, so it cannot race a scheduled tick and pushes
-          // the next one a full interval away.
-          Provider<ContactsRefresher>(
-            create: (context) => PollingContactsRefresher(
-              pollingService: context.read<PollingService>(),
-              listener: context.read<ExternalContactsRepository>(),
-            ),
-          ),
         if (featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == true)
           Provider<CdrsSyncWorker>(
             create: (context) =>

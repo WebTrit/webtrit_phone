@@ -12,6 +12,7 @@ import 'package:webtrit_signaling_service/webtrit_signaling_service.dart' show S
 
 import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
+import 'package:webtrit_phone/app/router/main_shell_adapters.dart';
 import 'package:webtrit_phone/app/router/main_shell_blocs.dart';
 import 'package:webtrit_phone/app/router/main_shell_repositories.dart';
 import 'package:webtrit_phone/app/router/main_shell_services.dart';
@@ -169,38 +170,40 @@ class _MainShellState extends State<MainShell> {
       child: MainShellRepositories(
         sessionGuard: _sessionGuard,
         child: MainShellServices(
-          child: MainShellBlocs(
-            callkeep: _callkeep,
-            callkeepConnections: _callkeepConnections,
-            signalingModule: _signalingModule,
+          child: MainShellAdapters(
+            child: MainShellBlocs(
+              callkeep: _callkeep,
+              callkeepConnections: _callkeepConnections,
+              signalingModule: _signalingModule,
 
-            /// The shell chrome: call, messaging and notification overlays around
-            /// the nested [AutoRouter], with a [MainShellNavigatorObserver] attached.
-            child: Builder(
-              builder: (context) {
-                final sipPresenceFeature = _sessionFeatureAccess.sipPresenceConfig;
-                return CallControllerScope(
-                  controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
-                  child: PresenceViewParams(
-                    hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
-                    blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
-                    presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
-                    child: CallConfigSynchronizer(
-                      child: CallShell(
-                        child: MessagingShell(
-                          child: SystemNotificationsShell(
-                            child: AutoRouter(
-                              navigatorObservers: () => [
-                                MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
-                              ],
+              /// The shell chrome: call, messaging and notification overlays around
+              /// the nested [AutoRouter], with a [MainShellNavigatorObserver] attached.
+              child: Builder(
+                builder: (context) {
+                  final sipPresenceFeature = _sessionFeatureAccess.sipPresenceConfig;
+                  return CallControllerScope(
+                    controller: _callController ??= CallController(callBloc: context.read<CallBloc>()),
+                    child: PresenceViewParams(
+                      hybridPresenceSupport: sipPresenceFeature.hybridPresenceSupport,
+                      blfViaSipSupport: sipPresenceFeature.dialogsViaSipBlfSupport,
+                      presenceViaSipSupport: sipPresenceFeature.presenceViaSipSupport,
+                      child: CallConfigSynchronizer(
+                        child: CallShell(
+                          child: MessagingShell(
+                            child: SystemNotificationsShell(
+                              child: AutoRouter(
+                                navigatorObservers: () => [
+                                  MainShellNavigatorObserver(context.read<MainShellRouteStateRepository>()),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ),

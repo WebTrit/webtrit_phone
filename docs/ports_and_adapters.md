@@ -32,11 +32,14 @@ Three pieces, three homes:
   adapter that grows logic is a use case trying to be born, and when a use
   case layer appears it will stand between consumers and ports, leaving
   adapters exactly as they are.
-- **Wiring** - the composition root (the shell's provider layers, or
-  `bootstrap()` for process-long objects) is the only place allowed to know
-  every layer at once. It creates the adapter from the service and provides
-  it AS the port, gated by the same conditions as the underlying capability,
-  so a consumer can only obtain a port that actually works in this session.
+- **Wiring** - the composition root is the only place allowed to know every
+  layer at once. Session-scoped ports are provided by the shell's dedicated
+  adapter layer (`lib/app/router/main_shell_adapters.dart`, sitting between
+  the services and the blocs); process-long ones would be wired in
+  `bootstrap()`. The wiring creates the adapter from the service and
+  provides it AS the port, gated by the same conditions as the underlying
+  capability, so a consumer can only obtain a port that actually works in
+  this session.
 
 The consumer depends on the port alone and receives it through its
 constructor, exactly like it receives repositories today.
