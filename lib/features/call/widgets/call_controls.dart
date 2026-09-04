@@ -109,8 +109,9 @@ class CallControlsParams {
 /// It only presents - what each control does is decided by the screen above
 /// and arrives in [params] as callbacks, so this stays a plain description of
 /// the call and can be put on a test screen on its own. This widget owns the
-/// toolbar and picks the body arrangement by orientation:
-/// [CallControlsPortrait] or [CallControlsLandscape].
+/// toolbar and selects the body arrangement through
+/// [OrientationLayoutSelector]: [CallControlsPortrait] or
+/// [CallControlsLandscape].
 class CallControls extends StatelessWidget {
   const CallControls({super.key, required this.callStatus, required this.popupMenuItems, required this.params});
 
@@ -124,11 +125,9 @@ class CallControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryData = MediaQuery.of(context);
     final style = Theme.of(context).extension<CallScreenStyles>()?.primary;
 
     final activeCalls = params.activeCalls;
-    final isPortrait = mediaQueryData.orientation == Orientation.portrait;
 
     return Column(
       children: [
@@ -156,7 +155,10 @@ class CallControls extends StatelessWidget {
           ],
         ),
         Expanded(
-          child: isPortrait ? CallControlsPortrait(params: params) : CallControlsLandscape(params: params),
+          child: OrientationLayoutSelector(
+            portrait: CallControlsPortrait(params: params),
+            landscape: CallControlsLandscape(params: params),
+          ),
         ),
         const SizedBox(height: 20),
       ],
