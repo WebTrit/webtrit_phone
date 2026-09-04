@@ -41,4 +41,21 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('CallRow-held')));
     expect(selected, ['held']);
   });
+
+  testWidgets('the info lines keep their explicit center by default and range to the start on demand', (tester) async {
+    await tester.pumpWidget(wrap(CallInfoBlock(activeCalls: [active], focusedCall: active, onCallSelected: (_) {})));
+
+    // The name and number were always explicitly centered - wrapped lines
+    // included - and must stay that way on the default path.
+    expect(tester.widget<Text>(find.text('Boris Klein')).textAlign, TextAlign.center);
+    expect(tester.widget<Text>(find.text(kHandle.value)).textAlign, TextAlign.center);
+
+    await tester.pumpWidget(
+      wrap(
+        CallInfoBlock(activeCalls: [active], focusedCall: active, onCallSelected: (_) {}, textAlign: TextAlign.start),
+      ),
+    );
+
+    expect(tester.widget<Text>(find.text('Boris Klein')).textAlign, TextAlign.start);
+  });
 }

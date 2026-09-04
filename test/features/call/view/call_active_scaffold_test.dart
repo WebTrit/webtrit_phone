@@ -288,6 +288,48 @@ void main() {
 
       await teardownCallScaffold(tester);
     });
+
+    testWidgets('typed digits are sent as DTMF, shown, and dropped when the keypad closes', (tester) async {
+      await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [active], focusedCall: active));
+      await tester.tap(find.byKey(callActionsKeypadKey));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('5'));
+      await tester.tap(find.text('2'));
+      await tester.pumpAndSettle();
+
+      // Every key goes out as DTMF for the focused call, and the display
+      // mirrors the screen-owned buffer.
+      verify(() => callBloc.add(const CallControlEvent.sentDTMF('active', '5'))).called(1);
+      verify(() => callBloc.add(const CallControlEvent.sentDTMF('active', '2'))).called(1);
+      expect(find.text('52'), findsOneWidget);
+
+      // Closing the keypad drops the collected digits: reopening starts clean.
+      await tester.tap(find.byKey(callActionsHideKeypadKey));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(callActionsKeypadKey));
+      await tester.pumpAndSettle();
+      expect(find.text('52'), findsNothing);
+
+      await teardownCallScaffold(tester);
+    });
+  });
+
+  group('CallActiveScaffold - legacy landscape fallback', () {
+    testWidgets('a turned screen still renders the whole arrangement', (tester) async {
+      tester.view.physicalSize = const Size(2622, 1206);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [active], focusedCall: active));
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(ActiveCallActions), findsOneWidget);
+      expect(find.byType(CallRemoteAvatar), findsOneWidget);
+
+      await teardownCallScaffold(tester);
+    });
   });
 
   group('CallActiveScaffold - 3 calls (held + active + incoming)', () {

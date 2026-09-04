@@ -157,10 +157,14 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
       text: digits,
       selection: TextSelection.collapsed(offset: digits.length),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || !_keypadScrollController.hasClients) return;
-      _keypadScrollController.jumpTo(_keypadScrollController.position.maxScrollExtent);
-    });
+    WidgetsBinding.instance.addPostFrameCallback(_scrollDtmfDisplayToEnd);
+  }
+
+  /// Runs after the frame that laid the new text out; anything earlier has no
+  /// scroll extent for it yet.
+  void _scrollDtmfDisplayToEnd(Duration _) {
+    if (!mounted || !_keypadScrollController.hasClients) return;
+    _keypadScrollController.jumpTo(_keypadScrollController.position.maxScrollExtent);
   }
 
   @override
