@@ -124,7 +124,7 @@ class MainShellRepositories extends StatelessWidget {
           ),
         ),
         RepositoryProvider<ExternalContactsRepository>(
-          create: (context) => ExternalContactsRepository(
+          create: (context) => ExternalContactsRepositoryV1Impl(
             webtritApiClient: context.read<WebtritApiClient>(),
             token: context.read<AppBloc>().state.session.token!,
           ),

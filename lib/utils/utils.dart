@@ -1,5 +1,6 @@
 export 'avatar_colors.dart';
 export 'backoff_retries.dart';
+export 'single_flight.dart';
 export 'badge_layout.dart';
 export 'bloc_concurrency.dart';
 export 'buffer_transformer.dart';
