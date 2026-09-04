@@ -83,8 +83,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   bool _inCallKeypadShown = false;
 
   /// The digits typed on the open keypad. Owned with the keypad flag so both
-  /// empty out together; the grid's display only mirrors this buffer.
-  String _dtmfInput = '';
+  /// empty out together. A notifier rather than plain state: only the digit
+  /// displays listen, so a keypress repaints them alone instead of rebuilding
+  /// the whole call screen (and re-wiring the native video renderer with it).
+  final _dtmfInput = ValueNotifier<String>('');
 
   Timer? _remoteFrameWatcher;
 
@@ -133,7 +135,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     // no setState is needed.)
     if (oldWidget.focusedCall.callId != widget.focusedCall.callId) {
       _inCallKeypadShown = false;
-      _dtmfInput = '';
+      _dtmfInput.value = '';
     }
   }
 
@@ -145,7 +147,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     // is needed).
     if (MediaQuery.of(context).orientation != Orientation.portrait) {
       _inCallKeypadShown = false;
-      _dtmfInput = '';
+      _dtmfInput.value = '';
     }
   }
 
@@ -178,6 +180,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     _compactController.removeListener(_onCompactChanged);
     _compactController.dispose();
     _debounceByStateSubscription?.cancel();
+    _dtmfInput.dispose();
     super.dispose();
   }
 
@@ -234,16 +237,15 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
 
   /// Opens or closes the in-call keypad; closing drops the collected digits.
   void _toggleKeypad(bool shown) {
-    setState(() {
-      _inCallKeypadShown = shown;
-      if (!shown) _dtmfInput = '';
-    });
+    setState(() => _inCallKeypadShown = shown);
+    if (!shown) _dtmfInput.value = '';
   }
 
-  /// Sends the pressed key as DTMF and appends it to the shown digits.
+  /// Sends the pressed key as DTMF and appends it to the shown digits. No
+  /// setState: the buffer is a notifier and only its displays repaint.
   void _sendDtmfKey(String value) {
     _callBloc.add(CallControlEvent.sentDTMF(widget.focusedCall.callId, value));
-    setState(() => _dtmfInput += value);
+    _dtmfInput.value += value;
   }
 
   void _hangupFocused() {
@@ -306,7 +308,11 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                     hasRenderableRemoteFrame: _hasRenderableRemoteFrame,
                     // Its important to hide video if held to avoid showing frozen/last frames when held,
                     // and especially for case when both sides turn on hold and after one side unholds video started to show for another 'holded' side.
-                    hideVideo: activeCall.held,
+                    // Also hidden while another call is focused: the controls
+                    // and the avatar describe the focused call, and a live
+                    // picture of somebody else moving behind them would put
+                    // two different people on screen at once.
+                    hideVideo: activeCall.held || widget.focusedCall.callId != activeCall.callId,
                   ),
                 // The same gesture for anyone navigating by name rather than
                 // by sight, as a node with a name of its own. It is offered

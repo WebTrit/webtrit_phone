@@ -117,7 +117,11 @@ class _CallInfoState extends State<CallInfo> {
     final statusMessage = _buildStatusMessage(context);
     final processingStatus = widget.processingStatus?.l10n(context).nullify;
 
-    final textAlign = widget.textAlign;
+    // On the centered path the lines keep their default alignment (the
+    // column centers each as a whole, wrapped lines stay ragged-left, as
+    // they always have); an explicit alignment is forwarded only when the
+    // block is ranged to the start.
+    final textAlign = widget.textAlign == TextAlign.center ? null : widget.textAlign;
 
     return Column(
       spacing: 8,
@@ -125,7 +129,7 @@ class _CallInfoState extends State<CallInfo> {
       // fill it and pin the lines to the top instead of letting the box
       // center them.
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: textAlign == TextAlign.center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: textAlign == null ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         if (widget.username != null &&
             widget.username != widget.number &&

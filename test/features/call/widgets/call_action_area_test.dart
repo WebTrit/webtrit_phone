@@ -33,6 +33,7 @@ void main() {
         callConfig: callConfig,
         interactionsEnabled: interactionsEnabled,
         hasRenderableRemoteFrame: false,
+        dtmfInput: ValueNotifier(''),
         onCallSelected: (_) {},
         onKeypadToggle: (_) {},
         onCameraChanged: (_) {},
@@ -131,6 +132,7 @@ void main() {
         callConfig: const CallCapabilitiesConfig(),
         interactionsEnabled: true,
         hasRenderableRemoteFrame: true,
+        dtmfInput: ValueNotifier(''),
         onCallSelected: (_) {},
         onKeypadToggle: (_) {},
         onCameraChanged: (_) {},
@@ -153,6 +155,14 @@ void main() {
       // with the held call focused, its avatar must still be offered.
       expect(paramsFor(activeCalls: [held, active], focusedCall: held).focusedFrameRenderable, isFalse);
       expect(paramsFor(activeCalls: [held, active], focusedCall: active).focusedFrameRenderable, isTrue);
+    });
+
+    test('a held focus shows its avatar even when it is the current call', () {
+      final held = makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true, displayName: 'Clara Diaz');
+      // Every call held: the screen hides the video of a held call rather
+      // than freeze on its last frame, so a blank background must not be
+      // left standing in for the person.
+      expect(paramsFor(activeCalls: [held], focusedCall: held).focusedFrameRenderable, isFalse);
     });
   });
 

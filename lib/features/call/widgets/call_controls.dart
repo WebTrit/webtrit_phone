@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
@@ -40,10 +41,10 @@ class CallControlsParams {
     required this.onKeyPressed,
     required this.onHangup,
     required this.onAccept,
+    required this.dtmfInput,
     this.audioDevice,
     this.contactResolver,
     this.keypadShown = false,
-    this.dtmfInput = '',
   });
 
   final List<ActiveCall> activeCalls;
@@ -87,15 +88,18 @@ class CallControlsParams {
   final bool keypadShown;
 
   /// The digits typed on the open keypad. The screen owns the buffer and the
-  /// layout only renders it, so a rebuilt grid can neither lose nor duplicate
-  /// digits.
-  final String dtmfInput;
+  /// displays only listen to it, so a keypress repaints the digits alone
+  /// instead of rebuilding the whole call screen, and a rebuilt grid can
+  /// neither lose nor duplicate digits.
+  final ValueListenable<String> dtmfInput;
 
   /// Whether the picture behind the controls belongs to the focused call -
   /// only then may its avatar stand down. The screen probes frames on the
   /// derived current call, which says nothing about a held or audio-only
-  /// focused one.
-  bool get focusedFrameRenderable => hasRenderableRemoteFrame && focusedCall.callId == activeCalls.current.callId;
+  /// focused one; a held focus shows its avatar too, since the screen hides
+  /// the video of a held call rather than freeze on its last frame.
+  bool get focusedFrameRenderable =>
+      hasRenderableRemoteFrame && focusedCall.callId == activeCalls.current.callId && !focusedCall.held;
 }
 
 /// Everything the user can press during a call: the toolbar, the call

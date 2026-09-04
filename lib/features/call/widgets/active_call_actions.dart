@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -16,13 +17,9 @@ class ActiveCallActions extends StatefulWidget {
   const ActiveCallActions({
     super.key,
     required this.enableInteractions,
-    required this.isIncoming,
-    required this.wasAccepted,
-    required this.wasHungUp,
     required this.cameraValue,
     this.cameraPermissionDenied = false,
     this.onCameraPermissionDeniedPressed,
-    required this.inviteToAttendedTransfer,
     this.onCameraChanged,
     required this.mutedValue,
     this.onMutedChanged,
@@ -38,16 +35,13 @@ class ActiveCallActions extends StatefulWidget {
     this.onHangupPressed,
     this.onKeyPressed,
     this.keypadShown = false,
-    this.dtmfInput = '',
+    required this.dtmfInput,
     this.onKeypadToggle,
     this.hangupRowShown = true,
     this.style,
   });
 
   final bool enableInteractions;
-  final bool isIncoming;
-  final bool wasAccepted;
-  final bool wasHungUp;
   final bool cameraValue;
 
   /// Whether camera permission was denied for this call (audio-only downgrade).
@@ -58,7 +52,6 @@ class ActiveCallActions extends StatefulWidget {
   /// The handler re-checks the live permission and either enables the camera
   /// (now granted) or opens app settings (still denied).
   final VoidCallback? onCameraPermissionDeniedPressed;
-  final bool inviteToAttendedTransfer;
   final ValueChanged<bool>? onCameraChanged;
   final bool mutedValue;
   final ValueChanged<bool>? onMutedChanged;
@@ -80,8 +73,8 @@ class ActiveCallActions extends StatefulWidget {
   final bool keypadShown;
 
   /// The digits typed on the open keypad, owned by the screen; the in-grid
-  /// display only mirrors it.
-  final String dtmfInput;
+  /// display only listens to it, so a keypress never rebuilds the grid.
+  final ValueListenable<String> dtmfInput;
 
   /// Requests the in-call keypad to be shown or hidden.
   final ValueChanged<bool>? onKeypadToggle;
@@ -100,6 +93,7 @@ class ActiveCallActions extends StatefulWidget {
 
 class _ActiveCallActionsState extends State<ActiveCallActions> {
   final _keypadTextFieldKey = GlobalKey();
+  final _keypadScrollController = ScrollController();
 
   late TextEditingController _keypadTextEditingController;
 
@@ -125,19 +119,19 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
   @override
   void initState() {
     super.initState();
-    _keypadTextEditingController = TextEditingController(text: widget.dtmfInput);
+    _keypadTextEditingController = TextEditingController(text: widget.dtmfInput.value);
+    widget.dtmfInput.addListener(_syncDtmfDisplay);
   }
 
   @override
   void didUpdateWidget(covariant ActiveCallActions oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // The screen owns the one digit buffer; the in-grid display only mirrors
-    // it, so it survives a rebuild and empties exactly when the buffer does.
-    if (oldWidget.dtmfInput != widget.dtmfInput) {
-      _keypadTextEditingController.value = TextEditingValue(
-        text: widget.dtmfInput,
-        selection: TextSelection.collapsed(offset: widget.dtmfInput.length),
-      );
+    // The screen owns the one digit buffer; the in-grid display only listens
+    // to it, so it survives a rebuild and empties exactly when the buffer does.
+    if (!identical(oldWidget.dtmfInput, widget.dtmfInput)) {
+      oldWidget.dtmfInput.removeListener(_syncDtmfDisplay);
+      widget.dtmfInput.addListener(_syncDtmfDisplay);
+      _syncDtmfDisplay();
     }
     // The dimensions depend on this flag, and didChangeDependencies does not
     // run for an in-place widget update - without this a flipped flag keeps
@@ -147,8 +141,26 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
 
   @override
   void dispose() {
+    widget.dtmfInput.removeListener(_syncDtmfDisplay);
     _keypadTextEditingController.dispose();
+    _keypadScrollController.dispose();
     super.dispose();
+  }
+
+  /// Mirrors the screen-owned buffer into the display and keeps the newest
+  /// digits in view. A read-only field never scrolls to its caret on an
+  /// external controller write, so the display is scrolled to the end by
+  /// hand once the new text has been laid out.
+  void _syncDtmfDisplay() {
+    final digits = widget.dtmfInput.value;
+    _keypadTextEditingController.value = TextEditingValue(
+      text: digits,
+      selection: TextSelection.collapsed(offset: digits.length),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_keypadScrollController.hasClients) return;
+      _keypadScrollController.jumpTo(_keypadScrollController.position.maxScrollExtent);
+    });
   }
 
   @override
@@ -428,6 +440,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
               TextField(
                 key: _keypadTextFieldKey,
                 controller: _keypadTextEditingController,
+                scrollController: _keypadScrollController,
                 decoration: _inputDecorations?.keypad,
                 style: _textStyle,
                 textAlign: TextAlign.center,

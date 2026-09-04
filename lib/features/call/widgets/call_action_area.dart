@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../bloc/call_bloc.dart';
-import '../models/models.dart';
 import '../view/call_screen_styles.dart';
 import 'active_call_actions.dart';
 import 'call_controls.dart';
@@ -57,13 +56,9 @@ class CallActionArea extends StatelessWidget {
         // Blocks signaling-dependent actions (hold, transfer, camera).
         // False during: interaction debounce, signaling not ready, SDP renegotiation.
         enableInteractions: interactionsEnabled,
-        isIncoming: focusedCall.isIncoming,
-        wasAccepted: focusedCall.wasAccepted,
-        wasHungUp: focusedCall.wasHungUp,
         cameraValue: focusedCall.isCameraActive,
         cameraPermissionDenied: callConfig.isVideoCallEnabled && focusedCall.videoPermissionDenied,
         onCameraPermissionDeniedPressed: params.onCameraPermissionDeniedPressed,
-        inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
         onCameraChanged: callConfig.isVideoCallEnabled ? params.onCameraChanged : null,
         mutedValue: focusedCall.muted,
         onMutedChanged: params.onMutedChanged,
