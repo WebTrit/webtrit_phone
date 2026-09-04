@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -19,6 +20,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
     required this.userRepository,
     required this.externalContactsRepository,
     required this.contactsRepository,
+    required this.contactsRefresher,
   }) : super(const ExternalContactsSyncInitial()) {
     on<ExternalContactsSyncStarted>(_onStarted, transformer: restartable());
     on<ExternalContactsSyncRefreshed>(_onRefreshed, transformer: droppable());
@@ -29,18 +31,22 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
   final ExternalContactsRepository externalContactsRepository;
   final ContactsRepository contactsRepository;
 
+  /// Port for the user-driven refresh: the schedule owner performs it, so a
+  /// pull-to-refresh cannot race a periodic tick.
+  final OnDemandRefresher contactsRefresher;
+
   void _onStarted(ExternalContactsSyncStarted event, Emitter<ExternalContactsSyncState> emit) async {
     _logger.finer('_onStarted');
 
-    final externalContactsForEachFuture = emit.onEach<List<ExternalContact>>(
+    // The first fetch is NOT triggered here: the polling service already runs
+    // a leading refresh of the contacts repository on every connect event, and
+    // a second mount-time fetch would download the same list twice. The
+    // repository stream replays the last known list, so subscribing is enough.
+    await emit.onEach<List<ExternalContact>>(
       externalContactsRepository.contacts(),
       onData: (contacts) => add(_ExternalContactsSyncUpdated(contacts: contacts)),
       onError: (e, stackTrace) => _logger.warning('_onStarted', e, stackTrace),
     );
-
-    add(const ExternalContactsSyncRefreshed());
-
-    await externalContactsForEachFuture;
   }
 
   void _onRefreshed(ExternalContactsSyncRefreshed event, Emitter<ExternalContactsSyncState> emit) async {
@@ -48,7 +54,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
     emit(const ExternalContactsSyncRefreshInProgress());
     try {
-      await externalContactsRepository.load();
+      await contactsRefresher.refreshNow();
     } catch (error) {
       _logger.warning('_onRefreshed error: ', error);
       emit(const ExternalContactsSyncRefreshFailure());

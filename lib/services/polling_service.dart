@@ -162,6 +162,40 @@ class PollingService with WidgetsBindingObserver implements Disposable {
     config?.scheduler.cancel();
   }
 
+  /// Immediate, caller-driven refresh of a registered [listener].
+  ///
+  /// Runs outside the reachability gate - a user-driven refresh must attempt
+  /// the network and surface its failure rather than silently skip - and
+  /// reschedules the periodic loop from this refresh's completion, so the
+  /// next tick lands a full interval away. When a refresh of this listener
+  /// is already in flight the call returns without a second request: the
+  /// in-flight result arrives through the listener's own data stream.
+  Future<void> refreshListener(Refreshable listener) async {
+    final config = _pollingConfigs[listener];
+    if (config == null) {
+      throw ArgumentError.value(listener, 'listener', 'is not registered with this PollingService');
+    }
+    if (_disposed || config.isRefreshing) return;
+
+    config.isRefreshing = true;
+    config.scheduler.cancel();
+    try {
+      await listener.refresh();
+      config.consecutiveErrors = 0;
+      config.lastSuccessAt = clock.now();
+    } catch (e) {
+      config.consecutiveErrors++;
+      config.lastError = e;
+      config.lastErrorAt = clock.now();
+      rethrow;
+    } finally {
+      config.isRefreshing = false;
+      if (!_disposed && _shouldRunTimers && _pollingConfigs[listener] == config && !config.scheduler.isActive) {
+        _startPolling(listener);
+      }
+    }
+  }
+
   /// Handle app lifecycle transitions. By default:
   /// - background → stop all schedules,
   /// - foreground resume → run **group-leading** (a single fresh reachability check shared across listeners).

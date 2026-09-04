@@ -6,6 +6,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/blocs/external_contacts_sync/external_contacts_sync_bloc.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
@@ -14,6 +15,8 @@ class MockUserRepository extends Mock implements UserRepository {}
 class MockExternalContactsRepository extends Mock implements ExternalContactsRepository {}
 
 class MockContactsRepository extends Mock implements ContactsRepository {}
+
+class MockOnDemandRefresher extends Mock implements OnDemandRefresher {}
 
 final _testUser = UserInfo(
   numbers: Numbers(main: '1000', additional: []),
@@ -42,21 +45,24 @@ void main() {
   late MockUserRepository userRepository;
   late MockExternalContactsRepository externalContactsRepository;
   late MockContactsRepository contactsRepository;
+  late MockOnDemandRefresher contactsRefresher;
   late ExternalContactsSyncBloc bloc;
 
   setUp(() {
     userRepository = MockUserRepository();
     externalContactsRepository = MockExternalContactsRepository();
     contactsRepository = MockContactsRepository();
+    contactsRefresher = MockOnDemandRefresher();
 
     when(() => userRepository.getAndListen()).thenAnswer((_) => Stream.value(_testUser));
-    when(() => externalContactsRepository.load()).thenAnswer((_) async {});
+    when(() => contactsRefresher.refreshNow()).thenAnswer((_) async {});
     when(() => contactsRepository.syncExternalContacts(any())).thenAnswer((_) async {});
 
     bloc = ExternalContactsSyncBloc(
       userRepository: userRepository,
       externalContactsRepository: externalContactsRepository,
       contactsRepository: contactsRepository,
+      contactsRefresher: contactsRefresher,
     );
   });
 
@@ -70,23 +76,63 @@ void main() {
         userRepository: userRepository,
         externalContactsRepository: externalContactsRepository,
         contactsRepository: contactsRepository,
+        contactsRefresher: contactsRefresher,
       );
       expect(bloc.state, const ExternalContactsSyncInitial());
     });
 
     blocTest<ExternalContactsSyncBloc, ExternalContactsSyncState>(
-      'emits RefreshInProgress then triggers load() on ExternalContactsSyncRefreshed',
+      'emits RefreshInProgress and refreshes through the port on ExternalContactsSyncRefreshed',
       build: () {
         when(() => externalContactsRepository.contacts()).thenAnswer((_) => Stream.value([]));
         return ExternalContactsSyncBloc(
           userRepository: userRepository,
           externalContactsRepository: externalContactsRepository,
           contactsRepository: contactsRepository,
+          contactsRefresher: contactsRefresher,
         );
       },
       act: (bloc) => bloc.add(const ExternalContactsSyncRefreshed()),
       expect: () => [const ExternalContactsSyncRefreshInProgress()],
-      verify: (_) => verify(() => externalContactsRepository.load()).called(1),
+      verify: (_) {
+        verify(() => contactsRefresher.refreshNow()).called(1);
+        verifyNever(() => externalContactsRepository.load());
+      },
+    );
+
+    blocTest<ExternalContactsSyncBloc, ExternalContactsSyncState>(
+      'emits RefreshFailure when the port refresh fails',
+      build: () {
+        when(() => externalContactsRepository.contacts()).thenAnswer((_) => Stream.value([]));
+        when(() => contactsRefresher.refreshNow()).thenThrow(Exception('offline'));
+        return ExternalContactsSyncBloc(
+          userRepository: userRepository,
+          externalContactsRepository: externalContactsRepository,
+          contactsRepository: contactsRepository,
+          contactsRefresher: contactsRefresher,
+        );
+      },
+      act: (bloc) => bloc.add(const ExternalContactsSyncRefreshed()),
+      expect: () => [const ExternalContactsSyncRefreshInProgress(), const ExternalContactsSyncRefreshFailure()],
+    );
+
+    blocTest<ExternalContactsSyncBloc, ExternalContactsSyncState>(
+      'start subscribes to the repository without fetching on its own',
+      build: () {
+        when(() => externalContactsRepository.contacts()).thenAnswer((_) => Stream.value([]));
+        return ExternalContactsSyncBloc(
+          userRepository: userRepository,
+          externalContactsRepository: externalContactsRepository,
+          contactsRepository: contactsRepository,
+          contactsRefresher: contactsRefresher,
+        );
+      },
+      act: (bloc) => bloc.add(const ExternalContactsSyncStarted()),
+      wait: const Duration(milliseconds: 100),
+      verify: (_) {
+        verifyNever(() => externalContactsRepository.load());
+        verifyNever(() => contactsRefresher.refreshNow());
+      },
     );
 
     blocTest<ExternalContactsSyncBloc, ExternalContactsSyncState>(
@@ -99,11 +145,12 @@ void main() {
           userRepository: userRepository,
           externalContactsRepository: externalContactsRepository,
           contactsRepository: contactsRepository,
+          contactsRefresher: contactsRefresher,
         );
       },
       act: (bloc) => bloc.add(const ExternalContactsSyncStarted()),
       wait: const Duration(milliseconds: 100),
-      expect: () => [const ExternalContactsSyncRefreshInProgress(), const ExternalContactsSyncSuccess()],
+      expect: () => [const ExternalContactsSyncSuccess()],
       verify: (_) {
         verify(
           () => contactsRepository.syncExternalContacts(
@@ -127,10 +174,10 @@ void main() {
           userRepository: userRepository,
           externalContactsRepository: externalContactsRepository,
           contactsRepository: contactsRepository,
+          contactsRefresher: contactsRefresher,
         );
       },
       act: (bloc) => bloc.add(const ExternalContactsSyncStarted()),
-      skip: 1,
       wait: const Duration(seconds: 5),
       expect: () => [const ExternalContactsSyncUpdateFailure()],
     );

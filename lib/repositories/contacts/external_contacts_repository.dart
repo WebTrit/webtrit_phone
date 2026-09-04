@@ -32,8 +32,14 @@ class ExternalContactsRepository with ExternalContactApiMapper implements Refres
 
   List<ExternalContact>? _cacheContacts;
 
-  Stream<List<ExternalContact>> contacts() {
-    return _controller.stream;
+  /// Replays the last known list to a new listener before live updates: the
+  /// fetches are driven by the polling leading cycle, which may complete
+  /// before a consumer subscribes, and a broadcast stream alone would lose
+  /// that emission.
+  Stream<List<ExternalContact>> contacts() async* {
+    final cached = _cacheContacts;
+    if (cached != null) yield cached;
+    yield* _controller.stream;
   }
 
   Future<void> load() async {

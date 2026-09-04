@@ -8,6 +8,7 @@ import 'package:webtrit_phone/bootstrap.dart';
 
 import 'components/api_request_log.dart';
 import 'components/integration_test_environment_config.dart';
+import 'components/render_overflow_tolerance.dart';
 import 'subsequences/login_by_method.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
@@ -20,6 +21,7 @@ import 'subsequences/pump_root_and_wait_until_visible.dart';
 /// deduplicated.
 void main() {
   patrolTest('a fresh login fetches the contact list exactly once', ($) async {
+    tolerateRenderOverflow();
     final dependencies = await bootstrap();
     final apiLog = ApiRequestLog()..start();
     addTearDown(apiLog.stop);

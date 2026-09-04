@@ -10,6 +10,7 @@ import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/notifications/notifications.dart';
 import 'package:webtrit_phone/app/session/session.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
@@ -127,6 +128,7 @@ class MainShellBlocs extends StatelessWidget {
                 userRepository: context.read<UserRepository>(),
                 externalContactsRepository: context.read<ExternalContactsRepository>(),
                 contactsRepository: context.read<ContactsRepository>(),
+                contactsRefresher: context.read<OnDemandRefresher>(),
               )..add(const ExternalContactsSyncStarted());
             },
           ),

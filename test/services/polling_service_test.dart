@@ -443,5 +443,96 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 500));
       expect(task.callCount, prev, reason: 'No additional refreshes should occur after dispose');
     });
+
+    // Caller-driven refresh: runs immediately and pushes the next scheduled
+    // tick a full interval away from its completion.
+    test('refreshListener refreshes immediately and shifts the next tick', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'boot leading refresh');
+
+        // Mid-interval forced refresh at ~t5.
+        async.elapse(const Duration(seconds: 5));
+        service.refreshListener(task);
+        async.flushMicrotasks();
+        expect(task.callCount, 2, reason: 'forced refresh runs immediately');
+
+        // The tick that was due at t10 must NOT fire: the window shifted.
+        async.elapse(const Duration(seconds: 6));
+        expect(task.callCount, 2, reason: 'the original t10 tick was rescheduled');
+
+        // The shifted tick lands a full interval after the forced refresh.
+        async.elapse(const Duration(seconds: 5));
+        expect(task.callCount, 3, reason: 'next tick fires one interval after the forced refresh');
+      });
+    });
+
+    test('refreshListener rethrows the failure and keeps the loop alive', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        task.failTimes = 1;
+        Object? failure;
+        service.refreshListener(task).catchError((Object e) => failure = e);
+        async.flushMicrotasks();
+        expect(failure, isA<StateError>(), reason: 'the caller must see the failure');
+
+        // Backoff applies, but the loop survives and recovers on its own.
+        async.elapse(const Duration(seconds: 30));
+        expect(task.callCount, greaterThanOrEqualTo(3), reason: 'polling continues after a failed forced refresh');
+      });
+    });
+
+    test('refreshListener rides an in-flight refresh instead of doubling it', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository(workTime: const Duration(seconds: 5));
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'boot leading refresh is in flight');
+
+        async.elapse(const Duration(seconds: 1));
+        service.refreshListener(task);
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'no second request while one is in flight');
+      });
+    });
+
+    test('refreshListener throws for an unregistered listener', () async {
+      connectivity.setConnected(true);
+
+      final registered = MockRefreshableRepository();
+      service = PollingService(
+        connectivityService: connectivity,
+        registrations: [PollingRegistration(listener: registered, interval: const Duration(seconds: 10))],
+      );
+
+      await expectLater(service.refreshListener(MockRefreshableRepository()), throwsArgumentError);
+    });
   });
 }
