@@ -42,8 +42,8 @@ class CallInfo extends StatefulWidget {
   final CallProcessingStatus? processingStatus;
   final CallInfoStyle? style;
 
-  /// How the lines align. The portrait screen centers the block; a layout
-  /// that ranges it against something on its left starts it instead.
+  /// How the lines align. The portrait screen centers the block; the
+  /// landscape info zone ranges it against the avatar on its left.
   final TextAlign textAlign;
 
   @override
@@ -126,9 +126,9 @@ class _CallInfoState extends State<CallInfo> {
 
     return Column(
       spacing: 8,
-      // Its own height only: inside a bounded box a max-sized column would
-      // fill it and pin the lines to the top instead of letting the box
-      // center them.
+      // Its own height only: inside a bounded box (the landscape info zone)
+      // a max-sized column would fill it and pin the lines to the top instead
+      // of letting the zone center them beside the avatar.
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [

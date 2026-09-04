@@ -139,18 +139,6 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     }
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // The in-call keypad exists only in portrait; rotating away closes it
-    // and drops the digits (a rebuild follows this callback, so no setState
-    // is needed).
-    if (MediaQuery.of(context).orientation != Orientation.portrait) {
-      _inCallKeypadShown = false;
-      _dtmfInput.value = '';
-    }
-  }
-
   /// Whether the controls may hide themselves as things stand.
   bool get _autoHide => widget.activeCalls.shouldAutoHideControls(keepControlsVisible: widget.keepControlsVisible);
 

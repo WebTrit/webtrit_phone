@@ -10,7 +10,8 @@ import 'call_list.dart';
 /// call a row, the focused one highlighted), with a single call - its central
 /// info block.
 ///
-/// The layout above decides where the block stands, never what is inside.
+/// The block is shared by the orientation layouts: each of them decides where
+/// it stands, none of them what is inside.
 class CallInfoBlock extends StatelessWidget {
   const CallInfoBlock({
     super.key,

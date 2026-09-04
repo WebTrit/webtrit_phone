@@ -4,7 +4,7 @@ The product-level view of the calling experience: what the user can do, the
 screen states, the widgets that back them, and the in-progress redesign. The
 implementation deep-dive lives in [`call_arch.md`](call_arch.md).
 
-Last reviewed: 2026-06-10
+Last reviewed: 2026-09-03
 
 ## What the user can do
 
@@ -72,14 +72,33 @@ following the derived `current` call.
 
 ## Key widgets
 
-| Widget                 | File                                 | Role                                                  |
-|------------------------|--------------------------------------|-------------------------------------------------------|
-| `CallActiveScaffold`   | `view/call_active_scaffold.dart`     | Active call screen; list + focused info + actions     |
-| `CallList` / `CallRow` | `widgets/call_list.dart`             | Tappable per-call rows with status badge + duration   |
-| `FocusedActionHint`    | `widgets/focused_action_hint.dart`   | "Acting on" hint + answer side effect                 |
-| `CallInfo`             | `widgets/call_info.dart`             | Focused-call name / number / call description / timer |
-| `IncomingCallActions`  | `widgets/incoming_call_actions.dart` | Decline / Answer for the focused ringing call         |
-| `ActiveCallActions`    | `widgets/active_call_actions.dart`   | In-call control grid + hang up + keypad               |
+| Widget                   | File                                   | Role                                                                        |
+|--------------------------|----------------------------------------|-----------------------------------------------------------------------------|
+| `CallActiveScaffold`     | `view/call_active_scaffold.dart`       | Active call screen; owns keypad/DTMF state and the control intents          |
+| `CallControls`           | `widgets/call_controls.dart`           | Toolbar + orientation selector; also defines `CallControlsParams`, the one object all wiring travels in |
+| `CallControlsPortrait`   | `widgets/call_controls_portrait.dart`  | Portrait arrangement: info on top, avatar flexing, actions at the bottom    |
+| `CallControlsLandscape`  | `widgets/call_controls_landscape.dart` | Landscape arrangement: info zone, action grid, hangup apart behind a rule |
+| `CallInfoBlock`          | `widgets/call_info_block.dart`         | Who the screen is about: the roster with several calls, `CallInfo` with one |
+| `CallActionArea`         | `widgets/call_action_area.dart`        | What can be pressed: the control grid, or Decline/Answer with the hint      |
+| `CallList` / `CallRow`   | `widgets/call_list.dart`               | Tappable per-call rows with status badge + duration                         |
+| `FocusedActionHint`      | `widgets/focused_action_hint.dart`     | "Acting on" hint + answer side effect                                       |
+| `CallInfo`               | `widgets/call_info.dart`               | Focused-call name / number / call description / timer                       |
+| `IncomingCallActions`    | `widgets/incoming_call_actions.dart`   | Decline / Answer for the focused ringing call                               |
+| `ActiveCallActions`      | `widgets/active_call_actions.dart`     | In-call control grid + keypad (the hangup row rides along in portrait only) |
+
+### Landscape
+
+The screen turns only during a call (the app is portrait-locked elsewhere).
+Landscape is a real arrangement, not the shrunk portrait column it used to be:
+the caller info (avatar beside the left-ranged name/timer, or the roster with
+several calls) takes the left, the control grid stands beside it, and the
+hangup button stands apart behind a fading rule so the destructive control is
+the hardest one to hit by accident. A ringing focus swaps the grid and hangup
+zones for Decline / Answer with the "Acting on" hint. The keypad opens in
+landscape too: the keys take the grid zone at full size, the typed digits show
+in the info zone next to the caller, the closing button stands under the
+hangup, and turning the phone keeps an open keypad open - but focusing another
+call closes it, because a DTMF session belongs to the call it was opened for.
 
 ## Redesign / in progress - list-based call flow
 
@@ -111,6 +130,7 @@ Rollout is incremental (foundations first, then UI), each step behind tests:
 | Row overlay polish   | Call rows use light overlay tints of the on-screen text color: focused = brighter + light border (design polarity), bigger radius and padding                                                                                                | Merged (PR #1388) |
 | Video line badge     | A camera glyph next to the trailing label marks video lines in the call list                                                                                                                                                                 | Merged (PR #1389) |
 | Themed color roles   | Call-list rows/dots and the acting-on hint take colors from the theme pipeline: CallPageListConfig/CallPageHintConfig in webtrit_appearance_theme -> assets/themes JSONs -> CallListStyle/FocusedActionHintStyle; no fixed colors in widgets | In review         |
+| Landscape            | Three-zone landscape arrangement (info / grid / isolated hangup), the shared info-block and action-area widgets both orientations place, keypad unlocked in landscape with the digits beside the caller, Answer greyed out instead of vanishing during the interaction debounce | In review (PR #1820) |
 
 The redesign lands on the `refactor/call` integration branch - every stage is a
 PR into that branch, and once the whole flow is tested there a single PR merges

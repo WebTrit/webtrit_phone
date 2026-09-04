@@ -29,8 +29,8 @@ class IncomingCallActions extends StatefulWidget {
   final void Function()? onAcceptPressed;
 
   /// Whether the buttons pad themselves to sit centered on a full-width
-  /// screen. A layout that hands them exactly the space they need turns this
-  /// off and does the placing itself.
+  /// screen. A landscape zone hands them exactly the space they need, so it
+  /// turns this off and does the placing itself.
   final bool padded;
 
   final CallScreenActionsStyle? style;

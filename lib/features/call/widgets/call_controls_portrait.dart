@@ -10,8 +10,8 @@ import 'call_remote_avatar.dart';
 ///
 /// It only places the shared pieces ([CallInfoBlock], [CallActionArea]) - what
 /// each control does arrives in [params] as callbacks, and the toolbar belongs
-/// to [CallControls]. In landscape it keeps the legacy scale-to-fit of the
-/// whole block, until a landscape arrangement of its own takes that over.
+/// to [CallControls], which picks this layout or the landscape one by
+/// orientation.
 class CallControlsPortrait extends StatelessWidget {
   const CallControlsPortrait({super.key, required this.params});
 
@@ -24,24 +24,28 @@ class CallControlsPortrait extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, BoxConstraints constraints) {
     final mediaQueryData = MediaQuery.of(context);
-    final isPortrait = mediaQueryData.orientation == Orientation.portrait;
-    final content = Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        CallInfoBlock(
-          activeCalls: params.activeCalls,
-          focusedCall: params.focusedCall,
-          onCallSelected: params.onCallSelected,
-        ),
-        // Nothing to render in the video area (audio-only call,
-        // remote camera off, or a held call): the remote party's
-        // avatar takes its place, between the info block and the
-        // action area. The avatar takes only the height LEFT OVER
-        // by the info block and the action area and scales itself
-        // down into it - so growing content (e.g. the open in-call
-        // keypad) shrinks the avatar, never the controls.
-        if (!params.focusedFrameRenderable && !params.keypadShown)
-          if (isPortrait)
+
+    // Portrait has the room: controls render at natural size and the
+    // avatar flexes into what is left.
+    return SizedBox(
+      width: constraints.maxWidth,
+      height: constraints.maxHeight,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CallInfoBlock(
+            activeCalls: params.activeCalls,
+            focusedCall: params.focusedCall,
+            onCallSelected: params.onCallSelected,
+          ),
+          // Nothing to render in the video area (audio-only call,
+          // remote camera off, or a held call): the remote party's
+          // avatar takes its place, between the info block and the
+          // action area. The avatar takes only the height LEFT OVER
+          // by the info block and the action area and scales itself
+          // down into it - so growing content (e.g. the open in-call
+          // keypad) shrinks the avatar, never the controls.
+          if (!params.focusedFrameRenderable && !params.keypadShown)
             Flexible(
               child: Center(
                 child: FittedBox(
@@ -56,28 +60,9 @@ class CallControlsPortrait extends StatelessWidget {
                   ),
                 ),
               ),
-            )
-          else
-            CallRemoteAvatar(
-              activeCall: params.focusedCall,
-              radius: CallRemoteAvatar.preferredRadius(mediaQueryData),
-              contactResolver: params.contactResolver,
             ),
-        CallActionArea(params: params),
-      ],
-    );
-
-    // Portrait has the room: controls render at natural size and the
-    // avatar flexes into what is left. Landscape keeps the legacy
-    // scale-to-fit of the whole block - heights there are too small
-    // for the natural layout.
-    if (isPortrait) {
-      return SizedBox(width: constraints.maxWidth, height: constraints.maxHeight, child: content);
-    }
-    return FittedBox(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: constraints.maxWidth, minHeight: constraints.minHeight),
-        child: content,
+          CallActionArea(params: params),
+        ],
       ),
     );
   }
