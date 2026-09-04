@@ -11,17 +11,17 @@ import 'incoming_call_actions.dart';
 /// while the call is live, or Decline/Answer - with the "Acting on" hint when
 /// other calls are around - while it rings.
 ///
-/// The layout above decides where the area stands, never what is inside.
-/// What each control does keeps arriving from the screen above as the
-/// callbacks in [params].
+/// The area is shared by the orientation layouts: each of them decides where
+/// it stands, none of them what is inside. What each control does keeps
+/// arriving from the screen above as the callbacks in [params].
 class CallActionArea extends StatelessWidget {
   const CallActionArea({super.key, required this.params, this.hangupRowShown = true, this.padded = true});
 
   final CallControlsParams params;
 
   /// Whether the control grid keeps its own hangup row (see
-  /// [ActiveCallActions.hangupRowShown]); a layout that renders the hangup
-  /// in a zone of its own turns it off.
+  /// [ActiveCallActions.hangupRowShown]); the landscape layout renders the
+  /// hangup in a zone of its own instead.
   final bool hangupRowShown;
 
   /// Whether the ringing Decline/Answer pad themselves to sit centered on a
@@ -50,6 +50,7 @@ class CallActionArea extends StatelessWidget {
       return ActiveCallActions(
         style: style?.actions,
         hangupRowShown: hangupRowShown,
+        padded: padded,
         keypadShown: params.keypadShown,
         dtmfInput: params.dtmfInput,
         onKeypadToggle: (shown) => params.onKeypadToggle(shown),

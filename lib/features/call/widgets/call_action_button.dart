@@ -122,9 +122,9 @@ class _CallActionMenuButtonState<T> extends State<CallActionMenuButton<T>> {
   }
 }
 
-/// The hangup control, shared wherever the call screen renders a hangup, so
-/// its key, automation id, spoken name, glyph and themed style can never
-/// drift between the places it stands.
+/// The hangup control, shared by the portrait grid row and the landscape
+/// hangup zone so its key, automation id, spoken name, glyph and themed style
+/// can never drift between the orientations.
 class CallHangupButton extends StatelessWidget {
   const CallHangupButton({super.key = callActionsHangupKey, required this.onPressed, this.style});
 
@@ -144,7 +144,8 @@ class CallHangupButton extends StatelessWidget {
 }
 
 /// The control that closes the in-call keypad, shared the same way as
-/// [CallHangupButton]; the portrait grid renders it in the hangup row.
+/// [CallHangupButton]: the portrait grid renders it in the hangup row, the
+/// landscape hangup zone under the hangup.
 class CallHideKeypadButton extends StatelessWidget {
   const CallHideKeypadButton({super.key = callActionsHideKeypadKey, required this.onPressed, this.style});
 

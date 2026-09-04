@@ -14,7 +14,8 @@ void main() {
 
   setUp(() {
     callBloc = newCallBloc();
-    // This suite pins the PORTRAIT arrangement.
+    // This suite pins the PORTRAIT arrangement; landscape lives next door in
+    // call_active_scaffold_landscape_test.dart.
     pinPortraitSurface();
   });
 

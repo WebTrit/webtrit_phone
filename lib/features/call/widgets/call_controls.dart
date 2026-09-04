@@ -11,15 +11,16 @@ import '../extensions/extensions.dart';
 import '../models/models.dart';
 import '../utils/utils.dart';
 import '../view/call_screen_styles.dart';
+import 'call_controls_landscape.dart';
 import 'call_controls_portrait.dart';
 import 'call_toolbar_status.dart';
 import 'popup_menu.dart';
 
 /// Everything the call layouts present and dispatch, bundled once: the calls
 /// on screen, the display state around them, and the intent callbacks the
-/// controls fire. One object travels from the screen into the layout and the
-/// action area, so a new control means one new field instead of a change in
-/// every constructor on the way.
+/// controls fire. One object travels from the screen through the orientation
+/// selector into both layouts and the action area, so a new control means one
+/// new field instead of a change in every constructor on the way.
 class CallControlsParams {
   const CallControlsParams({
     required this.activeCalls,
@@ -87,10 +88,10 @@ class CallControlsParams {
 
   final bool keypadShown;
 
-  /// The digits typed on the open keypad. The screen owns the buffer and the
-  /// displays only listen to it, so a keypress repaints the digits alone
-  /// instead of rebuilding the whole call screen, and a rebuilt grid can
-  /// neither lose nor duplicate digits.
+  /// The digits typed on the open keypad. One buffer for both orientations:
+  /// the screen owns it and the displays only listen, so rotation can neither
+  /// lose nor duplicate digits, and a keypress repaints the digits alone
+  /// instead of rebuilding the whole call screen.
   final ValueListenable<String> dtmfInput;
 
   /// Whether the picture behind the controls belongs to the focused call -
@@ -103,12 +104,14 @@ class CallControlsParams {
 }
 
 /// Everything the user can press during a call: the toolbar, the call
-/// information and the action area.
+/// information and the action area, laid out for the current orientation.
 ///
 /// It only presents - what each control does is decided by the screen above
 /// and arrives in [params] as callbacks, so this stays a plain description of
 /// the call and can be put on a test screen on its own. This widget owns the
-/// toolbar and leaves the body arrangement to [CallControlsPortrait].
+/// toolbar and selects the body arrangement through
+/// [OrientationLayoutSelector]: [CallControlsPortrait] or
+/// [CallControlsLandscape].
 class CallControls extends StatelessWidget {
   const CallControls({super.key, required this.callStatus, required this.popupMenuItems, required this.params});
 
@@ -151,7 +154,12 @@ class CallControls extends StatelessWidget {
               ),
           ],
         ),
-        Expanded(child: CallControlsPortrait(params: params)),
+        Expanded(
+          child: OrientationLayoutSelector(
+            portrait: CallControlsPortrait(params: params),
+            landscape: CallControlsLandscape(params: params),
+          ),
+        ),
         const SizedBox(height: 20),
       ],
     );

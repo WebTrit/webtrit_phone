@@ -38,6 +38,7 @@ class ActiveCallActions extends StatefulWidget {
     required this.dtmfInput,
     this.onKeypadToggle,
     this.hangupRowShown = true,
+    this.padded = true,
     this.style,
   });
 
@@ -72,18 +73,24 @@ class ActiveCallActions extends StatefulWidget {
   /// avatar hides), so a single owner keeps the two in sync.
   final bool keypadShown;
 
-  /// The digits typed on the open keypad, owned by the screen; the in-grid
-  /// display only listens to it, so a keypress never rebuilds the grid.
+  /// The digits typed on the open keypad, owned by the screen (one buffer for
+  /// both orientations); the in-grid display only listens to it, so a
+  /// keypress never rebuilds the grid.
   final ValueListenable<String> dtmfInput;
 
   /// Requests the in-call keypad to be shown or hidden.
   final ValueChanged<bool>? onKeypadToggle;
 
   /// Whether the hangup (and hide-keypad) row renders inside this grid. The
-  /// portrait screen keeps it here; a layout that places the hangup in a zone
-  /// of its own turns this off, and the grid drops the row together with the
+  /// portrait screen keeps it here; the landscape layout pulls the hangup out
+  /// into a zone of its own, and the grid drops the row together with the
   /// self-centering padding - the zone gives it exactly its own space.
   final bool hangupRowShown;
+
+  /// Whether the grid pads itself to sit centered on a full-width screen. A
+  /// layout that hands it exactly the space it needs turns this off and does
+  /// the placing itself.
+  final bool padded;
 
   final CallScreenActionsStyle? style;
 
@@ -126,8 +133,9 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
   @override
   void didUpdateWidget(covariant ActiveCallActions oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // The screen owns the one digit buffer; the in-grid display only listens
-    // to it, so it survives a rebuild and empties exactly when the buffer does.
+    // The screen owns the one digit buffer for both orientations; the in-grid
+    // display only listens to it, so it survives rotation and empties exactly
+    // when the buffer does.
     if (!identical(oldWidget.dtmfInput, widget.dtmfInput)) {
       oldWidget.dtmfInput.removeListener(_syncDtmfDisplay);
       widget.dtmfInput.addListener(_syncDtmfDisplay);
@@ -136,7 +144,7 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     // The dimensions depend on this flag, and didChangeDependencies does not
     // run for an in-place widget update - without this a flipped flag keeps
     // the padding of the other mode.
-    if (oldWidget.hangupRowShown != widget.hangupRowShown) computeDimensions();
+    if (oldWidget.hangupRowShown != widget.hangupRowShown || oldWidget.padded != widget.padded) computeDimensions();
   }
 
   @override
@@ -188,11 +196,11 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
     if (_isOrientationPortrait) {
       _actionsDelimiterDimension = _dimension / 5;
       _hangupDelimiterDimension = _actionsDelimiterDimension;
-      _horizontalPadding = _dimension / 2;
+      _horizontalPadding = widget.padded ? _dimension / 2 : 0;
     } else {
       _actionsDelimiterDimension = _dimension / 9;
       _hangupDelimiterDimension = _actionsDelimiterDimension;
-      _horizontalPadding = widget.hangupRowShown ? _dimension * 3 : 0;
+      _horizontalPadding = widget.padded ? _dimension * 3 : 0;
     }
     if (mounted) setState(() {});
   }
@@ -272,8 +280,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         ? onCameraPermissionDeniedPressed
         : (onCameraChanged != null ? () => onCameraChanged(!widget.cameraValue) : null);
 
-    // The keypad opens only in portrait and only when DTMF input is wired.
-    final canShowKeypad = onKeyPressed != null && _isOrientationPortrait;
+    // The keypad opens when DTMF input is wired, in either orientation.
+    final canShowKeypad = onKeyPressed != null;
 
     // With no transfer intent wired the trigger renders disabled; each branch
     // of the menu has its own set of items, so each has its own condition.
@@ -438,8 +446,8 @@ class _ActiveCallActionsState extends State<ActiveCallActions> {
         data: IconThemeData(size: _iconSize),
         child: Column(
           children: [
-            // Only where the grid keeps its hangup row - a layout without it
-            // shows the typed digits itself.
+            // The landscape layout shows the typed digits in the info zone
+            // instead, next to the person they are being sent to.
             if (widget.keypadShown && widget.hangupRowShown) ...[
               TextField(
                 key: _keypadTextFieldKey,
