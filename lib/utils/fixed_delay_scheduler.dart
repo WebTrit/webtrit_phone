@@ -32,20 +32,23 @@ typedef NextDelay = FutureOr<Duration> Function();
 /// ```
 class FixedDelayScheduler {
   Timer? _timer;
-  bool _running = false;
 
-  // Identity of the chain started by the last [start] call. A tick may still
-  // be awaiting its [onTick] after [cancel] (no timer is pending, so
+  // Generation of the chain started by the last [start] call. A tick may
+  // still be awaiting its [onTick] after [cancel] (no timer is pending, so
   // [isScheduled] is already false), and a subsequent [start] must not let
   // that stale tick reschedule itself alongside the new chain - each tick
-  // only reschedules while its own chain is still the current one.
-  Object? _chain;
+  // only reschedules while its own generation is still the current one.
+  int _generation = 0;
+  bool _active = false;
 
   /// Whether a timer is currently scheduled.
   bool get isScheduled => _timer != null;
 
-  /// Whether the [onTick] callback is currently running.
-  bool get isRunning => _running;
+  /// Whether a chain is active: a timer is pending or a tick is in flight.
+  /// While this is `true`, [start] is a no-op; use this (not [isScheduled],
+  /// which is `false` for the whole duration of a running tick) to decide
+  /// whether the loop needs a restart.
+  bool get isActive => _active;
 
   /// Start scheduling ticks.
   ///
@@ -53,26 +56,30 @@ class FixedDelayScheduler {
   /// - [onTick] — callback executed on each tick. It should return
   ///   the [Duration] until the next tick.
   ///
-  /// If [start] is called while already scheduled or while a tick of a
-  /// non-cancelled chain is still running, it does nothing.
+  /// If [start] is called while a chain [isActive], it does nothing. A tick
+  /// that throws ends its chain and releases the scheduler, so a later
+  /// [start] can arm it again.
   void start(Duration initialDelay, NextDelay onTick) {
-    if (_chain != null) return; // already active
-    final chain = Object();
-    _chain = chain;
+    if (_active) return; // a chain is already scheduled or mid-tick
+    _active = true;
+    final generation = ++_generation;
 
     void schedule(Duration delay) {
       _timer = Timer(delay, () async {
         _timer = null; // this tick is firing now
-        _running = true;
+        var rescheduled = false;
         try {
           final next = await onTick();
-          if (_chain == chain) {
+          if (_generation == generation) {
             // Schedule next tick after onTick completes.
             schedule(next);
+            rescheduled = true;
           }
         } finally {
-          if (_chain == chain) {
-            _running = false;
+          if (_generation == generation && !rescheduled) {
+            // The chain ended without a next tick (onTick threw): release
+            // ownership so a future [start] can arm the scheduler again.
+            _active = false;
           }
         }
       });
@@ -83,9 +90,9 @@ class FixedDelayScheduler {
 
   /// Cancel any scheduled ticks and prevent further rescheduling.
   void cancel() {
-    _chain = null;
+    _generation++; // invalidate the continuation of any in-flight tick
+    _active = false;
     _timer?.cancel();
     _timer = null;
-    _running = false;
   }
 }

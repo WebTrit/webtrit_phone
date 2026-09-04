@@ -126,8 +126,8 @@ class PollingService with WidgetsBindingObserver implements Disposable {
     final intervalChanged = config.interval != newInterval;
     config.interval = newInterval;
 
-    if (intervalChanged && config.scheduler.isScheduled) {
-      // Cancel previous schedule; do not trigger immediate refresh here.
+    if (intervalChanged) {
+      // Cancel previous schedule (even mid-tick); do not trigger immediate refresh here.
       config.scheduler.cancel();
     }
 
@@ -212,7 +212,9 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   void _stopAllTimers() {
     for (final c in _pollingConfigs.values) {
       c.scheduler.cancel();
-      c.isRefreshing = false;
+      // Do not clear isRefreshing here: a refresh may still be in flight and
+      // its own finally clears the flag; forcing it false would let a resume
+      // leading cycle start an overlapping refresh of the same listener.
       // Do not reset backoff counters here; they reset on success.
     }
   }
@@ -236,7 +238,7 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   /// backoff (on errors) and jitter (to spread load).
   void _startPolling(Refreshable listener) {
     final config = _pollingConfigs[listener];
-    if (config == null || _disposed || config.scheduler.isScheduled) return;
+    if (config == null || _disposed || config.scheduler.isActive) return;
 
     FutureOr<Duration> onTick() async {
       if (_disposed || !_shouldRunTimers || _pollingConfigs[listener] != config) {
@@ -307,7 +309,7 @@ class PollingService with WidgetsBindingObserver implements Disposable {
 
         final shouldSchedule = !_disposed && _shouldRunTimers && _pollingConfigs[listener] == config;
 
-        if (shouldSchedule && !config.scheduler.isScheduled) {
+        if (shouldSchedule && !config.scheduler.isActive) {
           _startPolling(listener); // schedules next run via FixedDelayScheduler
         }
       }
