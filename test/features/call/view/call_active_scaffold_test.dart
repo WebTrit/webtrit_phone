@@ -16,7 +16,11 @@ import 'call_active_scaffold_harness.dart';
 void main() {
   late MockCallBloc callBloc;
 
-  setUp(() => callBloc = newCallBloc());
+  setUp(() {
+    callBloc = newCallBloc();
+    // This suite pins the PORTRAIT arrangement.
+    pinPortraitSurface();
+  });
 
   final ringing = makeCall(
     callId: 'ringing',
@@ -244,6 +248,21 @@ void main() {
       await teardownCallScaffold(tester);
     });
 
+    testWidgets('with a held call focused, the avatar shows that call, not the live one', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+
+      final held = makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true, displayName: 'Clara Diaz');
+      await tester.pumpWidget(buildCallScaffold(callBloc, activeCalls: [held, active], focusedCall: held));
+      await tester.pump();
+
+      // The roster highlights Clara and the actions act on her - the picture
+      // must not show Boris (the derived current call) at the same time.
+      expect(find.descendant(of: find.byType(CallRemoteAvatar), matching: find.text('CD')), findsOneWidget);
+      await teardownCallScaffold(tester);
+    });
+
     testWidgets('the open in-call keypad hides the avatar and keeps the keys full size', (tester) async {
       // The in-call keypad opens only in portrait orientation.
       tester.view.physicalSize = const Size(1080, 2400);
@@ -262,7 +281,7 @@ void main() {
       final keySize = tester.getSize(find.byType(KeypadKeyButton).first);
       expect(keySize.width, greaterThanOrEqualTo(360 / 5));
 
-      await tester.tap(find.byTooltip('Hide keypad'));
+      await tester.tap(find.byKey(callActionsHideKeypadKey));
       await tester.pumpAndSettle();
       expect(find.byType(KeypadKeyButton), findsNothing);
       expect(find.byType(CallRemoteAvatar), findsOneWidget);

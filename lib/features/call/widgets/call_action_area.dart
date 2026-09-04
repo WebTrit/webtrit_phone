@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:collection/collection.dart';
-
-import 'package:webtrit_phone/models/models.dart';
-
 import '../bloc/call_bloc.dart';
 import '../models/models.dart';
 import '../view/call_screen_styles.dart';
 import 'active_call_actions.dart';
+import 'call_controls.dart';
 import 'focused_action_hint.dart';
 import 'incoming_call_actions.dart';
 
@@ -15,81 +12,48 @@ import 'incoming_call_actions.dart';
 /// while the call is live, or Decline/Answer - with the "Acting on" hint when
 /// other calls are around - while it rings.
 ///
-/// The area is shared by the orientation layouts: each of them decides where
-/// it stands, none of them what is inside. What each control does keeps
-/// arriving from the screen above as callbacks.
+/// The layout above decides where the area stands, never what is inside.
+/// What each control does keeps arriving from the screen above as the
+/// callbacks in [params].
 class CallActionArea extends StatelessWidget {
-  const CallActionArea({
-    super.key,
-    required this.activeCalls,
-    required this.focusedCall,
-    required this.audioDevice,
-    required this.availableAudioDevices,
-    required this.callConfig,
-    required this.keypadShown,
-    required this.interactionsEnabled,
-    required this.onKeypadToggle,
-    required this.onCameraChanged,
-    required this.onCameraPermissionDeniedPressed,
-    required this.onMutedChanged,
-    required this.onAudioDeviceChanged,
-    required this.onBlindTransferInitiated,
-    required this.onAttendedTransferInitiated,
-    required this.onAttendedTransferSubmitted,
-    required this.onHeldChanged,
-    required this.onKeyPressed,
-    required this.onHangup,
-    required this.onAccept,
-  });
+  const CallActionArea({super.key, required this.params, this.hangupRowShown = true, this.padded = true});
 
-  final List<ActiveCall> activeCalls;
+  final CallControlsParams params;
 
-  /// The call the area acts on (see `CallState.focusedCall`).
-  final ActiveCall focusedCall;
+  /// Whether the control grid keeps its own hangup row (see
+  /// [ActiveCallActions.hangupRowShown]); a layout that renders the hangup
+  /// in a zone of its own turns it off.
+  final bool hangupRowShown;
 
-  final CallAudioDevice? audioDevice;
-  final List<CallAudioDevice> availableAudioDevices;
-  final CallCapabilitiesConfig callConfig;
-
-  final bool keypadShown;
-
-  /// Whether anything that talks to the server may be pressed at all. It goes
-  /// down while a previous action is still settling, while signaling is not
-  /// ready and while a call is being renegotiated.
-  final bool interactionsEnabled;
-
-  final ValueChanged<bool> onKeypadToggle;
-  final ValueChanged<bool> onCameraChanged;
-  final VoidCallback onCameraPermissionDeniedPressed;
-  final ValueChanged<bool> onMutedChanged;
-  final ValueChanged<CallAudioDevice> onAudioDeviceChanged;
-  final VoidCallback onBlindTransferInitiated;
-  final VoidCallback onAttendedTransferInitiated;
-  final ValueChanged<ActiveCall> onAttendedTransferSubmitted;
-  final ValueChanged<bool> onHeldChanged;
-  final ValueChanged<String> onKeyPressed;
-  final VoidCallback onHangup;
-  final VoidCallback onAccept;
+  /// Whether the ringing Decline/Answer pad themselves to sit centered on a
+  /// full-width screen (see [IncomingCallActions.padded]).
+  final bool padded;
 
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).extension<CallScreenStyles>()?.primary;
 
+    final activeCalls = params.activeCalls;
+    final focusedCall = params.focusedCall;
+    final callConfig = params.callConfig;
+    final interactionsEnabled = params.interactionsEnabled;
+
     final activeCall = activeCalls.current;
     final heldCalls = activeCalls.nonCurrent;
 
-    final incomingRingingCalls = activeCalls.incomingRinging;
-    final nonIncomingRingingCalls = activeCalls.whereNot((call) => incomingRingingCalls.contains(call)).toList();
+    final nonIncomingRingingCalls = activeCalls.nonIncomingRinging;
     final nonIncomingRingingCanBeHolded = nonIncomingRingingCalls.where((call) => call.wasAccepted == true).toList();
 
-    final focusedIsRinging = focusedCall.isIncoming && !focusedCall.wasAccepted;
+    final focusedIsRinging = focusedCall.isIncomingRinging;
     final focusedTransfer = focusedCall.transfer;
 
     if (!focusedIsRinging) {
       return ActiveCallActions(
         style: style?.actions,
-        keypadShown: keypadShown,
-        onKeypadToggle: (shown) => onKeypadToggle(shown),
+        hangupRowShown: hangupRowShown,
+        keypadShown: params.keypadShown,
+        dtmfInput: params.dtmfInput,
+        onKeypadToggle: (shown) => params.onKeypadToggle(shown),
         // Blocks signaling-dependent actions (hold, transfer, camera).
         // False during: interaction debounce, signaling not ready, SDP renegotiation.
         enableInteractions: interactionsEnabled,
@@ -98,21 +62,21 @@ class CallActionArea extends StatelessWidget {
         wasHungUp: focusedCall.wasHungUp,
         cameraValue: focusedCall.isCameraActive,
         cameraPermissionDenied: callConfig.isVideoCallEnabled && focusedCall.videoPermissionDenied,
-        onCameraPermissionDeniedPressed: onCameraPermissionDeniedPressed,
+        onCameraPermissionDeniedPressed: params.onCameraPermissionDeniedPressed,
         inviteToAttendedTransfer: focusedTransfer is InviteToAttendedTransfer,
-        onCameraChanged: callConfig.isVideoCallEnabled ? onCameraChanged : null,
+        onCameraChanged: callConfig.isVideoCallEnabled ? params.onCameraChanged : null,
         mutedValue: focusedCall.muted,
-        onMutedChanged: onMutedChanged,
-        audioDevice: audioDevice,
-        availableAudioDevices: availableAudioDevices,
-        onAudioDeviceChanged: onAudioDeviceChanged,
+        onMutedChanged: params.onMutedChanged,
+        audioDevice: params.audioDevice,
+        availableAudioDevices: params.availableAudioDevices,
+        onAudioDeviceChanged: params.onAudioDeviceChanged,
         transferableCalls: heldCalls,
         onBlindTransferInitiated: callConfig.isBlindTransferEnabled
-            ? (!focusedCall.wasAccepted || focusedTransfer != null ? null : onBlindTransferInitiated)
+            ? (!focusedCall.wasAccepted || focusedTransfer != null ? null : params.onBlindTransferInitiated)
             : null,
         // TODO (Serdun): Simplify complex condition in the widget tree.
         onAttendedTransferInitiated: callConfig.isAttendedTransferEnabled
-            ? (!focusedCall.wasAccepted || focusedTransfer != null ? null : onAttendedTransferInitiated)
+            ? (!focusedCall.wasAccepted || focusedTransfer != null ? null : params.onAttendedTransferInitiated)
             : null,
         // TODO (Serdun): Simplify complex condition in the widget tree.
         // The submit acts on the consultation call (the derived
@@ -132,17 +96,17 @@ class CallActionArea extends StatelessWidget {
         // referor<->consultation link, not a positional guess -
         // see git history for a prior (closed) attempt.
         onAttendedTransferSubmitted: callConfig.isAttendedTransferEnabled
-            ? (!activeCall.wasAccepted || focusedTransfer != null ? null : onAttendedTransferSubmitted)
+            ? (!activeCall.wasAccepted || focusedTransfer != null ? null : params.onAttendedTransferSubmitted)
             : null,
         heldValue: focusedCall.held,
         // Hold pauses just the focused call; Resume brings it
         // back as the only live one (the other live calls are
         // put on hold first). Switching lines = focus the other
         // row and press Resume - there is no separate swap.
-        onHeldChanged: onHeldChanged,
-        onHangupPressed: onHangup,
+        onHeldChanged: params.onHeldChanged,
+        onHangupPressed: params.onHangup,
 
-        onKeyPressed: onKeyPressed,
+        onKeyPressed: params.onKeyPressed,
       );
     }
 
@@ -176,13 +140,14 @@ class CallActionArea extends StatelessWidget {
           ),
         IncomingCallActions(
           style: style?.actions,
+          padded: padded,
           inviteToAttendedTransfer: false,
           remoteVideo: focusedCall.remoteVideo && focusedCall.held == false,
-          onHangupPressed: onHangup,
+          onHangupPressed: params.onHangup,
           // Answering with other calls present mutates them
           // (hold/end), so it is gated by the interactions
           // debounce like any signaling-dependent action.
-          onAcceptPressed: nonIncomingRingingCalls.isNotEmpty && !interactionsEnabled ? null : onAccept,
+          onAcceptPressed: nonIncomingRingingCalls.isNotEmpty && !interactionsEnabled ? null : params.onAccept,
         ),
       ],
     );

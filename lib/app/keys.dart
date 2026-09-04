@@ -91,6 +91,7 @@ const String callActionsKeypadId = 'callActionsKeypad';
 const callActionsKeypadKey = Key(callActionsKeypadId);
 const String callActionsHangupId = 'callActionsHangup';
 const callActionsHangupKey = Key(callActionsHangupId);
+const callActionsHideKeypadKey = Key(callActionsHideKeypadId);
 const String callActionsTransferMenuId = 'callActionsTransferMenu';
 const callActionsTransferMenuKey = Key(callActionsTransferMenuId);
 const String callActionsTransferMenuBlindInitId = 'callActionsTransferMenuBlindInit';

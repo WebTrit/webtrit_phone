@@ -19,6 +19,7 @@ class IncomingCallActions extends StatefulWidget {
     required this.inviteToAttendedTransfer,
     this.onHangupPressed,
     this.onAcceptPressed,
+    this.padded = true,
     this.style,
   });
 
@@ -26,6 +27,11 @@ class IncomingCallActions extends StatefulWidget {
   final bool inviteToAttendedTransfer;
   final void Function()? onHangupPressed;
   final void Function()? onAcceptPressed;
+
+  /// Whether the buttons pad themselves to sit centered on a full-width
+  /// screen. A layout that hands them exactly the space they need turns this
+  /// off and does the placing itself.
+  final bool padded;
 
   final CallScreenActionsStyle? style;
 
@@ -46,7 +52,9 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
   @override
   void didUpdateWidget(covariant IncomingCallActions oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.remoteVideo != widget.remoteVideo) computeDimensions();
+    // The dimensions depend on the padding flag, and didChangeDependencies
+    // does not run for an in-place widget update.
+    if (oldWidget.remoteVideo != widget.remoteVideo || oldWidget.padded != widget.padded) computeDimensions();
   }
 
   @override
@@ -62,7 +70,9 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
 
     _isOrientationPortrait = _mediaQueryData.orientation == Orientation.portrait;
     _dimension = min(_mediaQueryData.size.width, _mediaQueryData.size.height) / 5;
-    if (_isOrientationPortrait) {
+    if (!widget.padded) {
+      _horizontalPadding = 0;
+    } else if (_isOrientationPortrait) {
       _horizontalPadding = _dimension / 2;
     } else {
       _horizontalPadding = _dimension * 3;
@@ -93,16 +103,18 @@ class _IncomingCallActionsState extends State<IncomingCallActions> {
         style: widget.style?.hangup,
         child: Icon(Icons.call_end, size: actionPadIconSize),
       ),
-      if (widget.onAcceptPressed != null)
-        CallActionButton(
-          identifier: callActionsAcceptId,
-          label: widget.inviteToAttendedTransfer
-              ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
-              : context.l10n.call_CallActionsTooltip_accept,
-          onPressed: onAcceptPressed,
-          style: widget.style?.callStart,
-          child: Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
-        ),
+      // Always in place, merely disabled while it may not be pressed:
+      // removing it would collapse the table to one column and shift Decline
+      // into Answer's spot at the worst possible moment.
+      CallActionButton(
+        identifier: callActionsAcceptId,
+        label: widget.inviteToAttendedTransfer
+            ? context.l10n.call_CallActionsTooltip_accept_inviteToAttendedTransfer
+            : context.l10n.call_CallActionsTooltip_accept,
+        onPressed: onAcceptPressed,
+        style: widget.style?.callStart,
+        child: Icon(widget.remoteVideo ? Icons.videocam : Icons.call, size: actionPadIconSize),
+      ),
     ];
 
     buttonsTable = TextButtonsTable(

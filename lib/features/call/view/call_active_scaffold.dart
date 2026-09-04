@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logging/logging.dart';
@@ -83,6 +82,10 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   /// hides), so a single owner keeps both in sync.
   bool _inCallKeypadShown = false;
 
+  /// The digits typed on the open keypad. Owned with the keypad flag so both
+  /// empty out together; the grid's display only mirrors this buffer.
+  String _dtmfInput = '';
+
   Timer? _remoteFrameWatcher;
 
   /// Where frames cannot be analysed there is nothing to wait for, so the remote
@@ -122,15 +125,27 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     // Covers both a change of the call itself and a change of the demand to
     // keep the controls, which arrives as a new value from above.
     _syncAutoHide(reason: 'didUpdateWidget');
+    // A DTMF session belongs to the call it was opened for: when the focus
+    // moves - a tap on another row, a ringing call grabbing it, the focused
+    // call ending - the keypad closes and its digits go with it. Without this
+    // the open-keypad flag outlives its call and the keypad springs open on
+    // one the user never opened it for. (A rebuild follows this callback, so
+    // no setState is needed.)
+    if (oldWidget.focusedCall.callId != widget.focusedCall.callId) {
+      _inCallKeypadShown = false;
+      _dtmfInput = '';
+    }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // The in-call keypad exists only in portrait; rotating away closes it
-    // (a rebuild follows this callback, so no setState is needed).
+    // and drops the digits (a rebuild follows this callback, so no setState
+    // is needed).
     if (MediaQuery.of(context).orientation != Orientation.portrait) {
       _inCallKeypadShown = false;
+      _dtmfInput = '';
     }
   }
 
@@ -217,6 +232,20 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
     }
   }
 
+  /// Opens or closes the in-call keypad; closing drops the collected digits.
+  void _toggleKeypad(bool shown) {
+    setState(() {
+      _inCallKeypadShown = shown;
+      if (!shown) _dtmfInput = '';
+    });
+  }
+
+  /// Sends the pressed key as DTMF and appends it to the shown digits.
+  void _sendDtmfKey(String value) {
+    _callBloc.add(CallControlEvent.sentDTMF(widget.focusedCall.callId, value));
+    setState(() => _dtmfInput += value);
+  }
+
   void _hangupFocused() {
     _callBloc.add(CallControlEvent.ended(widget.focusedCall.callId));
     dispatchInteractionDebounce();
@@ -227,8 +256,7 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
   /// [CallControlEvent.answerFocused]).
   void _answerFocused() {
     final activeCalls = widget.activeCalls;
-    final incomingRinging = activeCalls.incomingRinging;
-    final others = activeCalls.whereNot(incomingRinging.contains).toList();
+    final others = activeCalls.nonIncomingRinging;
     _callBloc.add(
       CallControlEvent.answerFocused(
         widget.focusedCall.callId,
@@ -322,39 +350,42 @@ class CallActiveScaffoldState extends State<CallActiveScaffold> {
                       HideableLayer(hidden: _compactController.compact, padding: mediaQueryData.padding, child: child!),
                   child: CallControls(
                     callStatus: widget.callStatus,
-                    activeCalls: widget.activeCalls,
-                    focusedCall: widget.focusedCall,
-                    audioDevice: widget.audioDevice,
-                    availableAudioDevices: widget.availableAudioDevices,
-                    callConfig: widget.callConfig,
-                    contactResolver: widget.contactResolver,
                     popupMenuItems: _buildPopupMenuItems,
-                    keypadShown: _inCallKeypadShown,
-                    // Blocks everything that talks to the server: while a
-                    // previous action is still settling, while signaling is
-                    // not ready, and while a call is being renegotiated.
-                    interactionsEnabled:
-                        interactionsDebounceActive == false &&
-                        widget.callStatus == CallStatus.ready &&
-                        widget.activeCalls.any((call) => call.updating) == false,
-                    hasRenderableRemoteFrame: _hasRenderableRemoteFrame,
-                    onCallSelected: (callId) => _callBloc.add(CallControlEvent.callSelected(callId)),
-                    onKeypadToggle: (shown) => setState(() => _inCallKeypadShown = shown),
-                    onCameraChanged: _toggleFocusedCamera,
-                    onCameraPermissionDeniedPressed: _onCameraPermissionDeniedPressed,
-                    onMutedChanged: (value) =>
-                        _callBloc.add(CallControlEvent.setMuted(widget.focusedCall.callId, value)),
-                    onAudioDeviceChanged: (device) =>
-                        _callBloc.add(CallControlEvent.audioDeviceSet(widget.focusedCall.callId, device)),
-                    onBlindTransferInitiated: () =>
-                        _callBloc.add(CallControlEvent.blindTransferInitiated(widget.focusedCall.callId)),
-                    onAttendedTransferInitiated: () =>
-                        _callBloc.add(CallControlEvent.attendedTransferInitiated(widget.focusedCall.callId)),
-                    onAttendedTransferSubmitted: _submitAttendedTransfer,
-                    onHeldChanged: _toggleFocusedHeld,
-                    onKeyPressed: (value) => _callBloc.add(CallControlEvent.sentDTMF(widget.focusedCall.callId, value)),
-                    onHangup: _hangupFocused,
-                    onAccept: _answerFocused,
+                    params: CallControlsParams(
+                      activeCalls: widget.activeCalls,
+                      focusedCall: widget.focusedCall,
+                      audioDevice: widget.audioDevice,
+                      availableAudioDevices: widget.availableAudioDevices,
+                      callConfig: widget.callConfig,
+                      contactResolver: widget.contactResolver,
+                      keypadShown: _inCallKeypadShown,
+                      dtmfInput: _dtmfInput,
+                      // Blocks everything that talks to the server: while a
+                      // previous action is still settling, while signaling is
+                      // not ready, and while a call is being renegotiated.
+                      interactionsEnabled:
+                          interactionsDebounceActive == false &&
+                          widget.callStatus == CallStatus.ready &&
+                          widget.activeCalls.any((call) => call.updating) == false,
+                      hasRenderableRemoteFrame: _hasRenderableRemoteFrame,
+                      onCallSelected: (callId) => _callBloc.add(CallControlEvent.callSelected(callId)),
+                      onKeypadToggle: _toggleKeypad,
+                      onCameraChanged: _toggleFocusedCamera,
+                      onCameraPermissionDeniedPressed: _onCameraPermissionDeniedPressed,
+                      onMutedChanged: (value) =>
+                          _callBloc.add(CallControlEvent.setMuted(widget.focusedCall.callId, value)),
+                      onAudioDeviceChanged: (device) =>
+                          _callBloc.add(CallControlEvent.audioDeviceSet(widget.focusedCall.callId, device)),
+                      onBlindTransferInitiated: () =>
+                          _callBloc.add(CallControlEvent.blindTransferInitiated(widget.focusedCall.callId)),
+                      onAttendedTransferInitiated: () =>
+                          _callBloc.add(CallControlEvent.attendedTransferInitiated(widget.focusedCall.callId)),
+                      onAttendedTransferSubmitted: _submitAttendedTransfer,
+                      onHeldChanged: _toggleFocusedHeld,
+                      onKeyPressed: _sendDtmfKey,
+                      onHangup: _hangupFocused,
+                      onAccept: _answerFocused,
+                    ),
                   ),
                 ),
               ],

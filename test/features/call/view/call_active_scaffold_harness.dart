@@ -21,6 +21,19 @@ import 'package:webtrit_phone/theme/theme.dart';
 
 class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
 
+/// Pins the test surface to a phone held upright (360x800 logical).
+///
+/// The default 800x600 test surface is LANDSCAPE, and since the screen picks
+/// its arrangement by orientation, a suite written to pin the portrait
+/// behaviour must say so explicitly or it silently tests the other layout.
+/// Call from `setUp`; the surface resets itself after each test.
+void pinPortraitSurface() {
+  final view = TestWidgetsFlutterBinding.instance.platformDispatcher.views.single;
+  view.physicalSize = const Size(1080, 2400);
+  view.devicePixelRatio = 3;
+  addTearDown(view.reset);
+}
+
 class MockAppPermissions extends Mock implements AppPermissions {}
 
 /// A call bloc that answers with an empty state and records what it is sent.

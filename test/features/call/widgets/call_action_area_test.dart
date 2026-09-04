@@ -26,25 +26,27 @@ void main() {
     VoidCallback? onAccept,
   }) {
     return CallActionArea(
-      activeCalls: activeCalls,
-      focusedCall: focusedCall,
-      audioDevice: null,
-      availableAudioDevices: const [],
-      callConfig: callConfig,
-      keypadShown: false,
-      interactionsEnabled: interactionsEnabled,
-      onKeypadToggle: (_) {},
-      onCameraChanged: (_) {},
-      onCameraPermissionDeniedPressed: () {},
-      onMutedChanged: (_) {},
-      onAudioDeviceChanged: (_) {},
-      onBlindTransferInitiated: () {},
-      onAttendedTransferInitiated: () {},
-      onAttendedTransferSubmitted: (_) {},
-      onHeldChanged: (_) {},
-      onKeyPressed: (_) {},
-      onHangup: onHangup ?? () {},
-      onAccept: onAccept ?? () {},
+      params: CallControlsParams(
+        activeCalls: activeCalls,
+        focusedCall: focusedCall,
+        availableAudioDevices: const [],
+        callConfig: callConfig,
+        interactionsEnabled: interactionsEnabled,
+        hasRenderableRemoteFrame: false,
+        onCallSelected: (_) {},
+        onKeypadToggle: (_) {},
+        onCameraChanged: (_) {},
+        onCameraPermissionDeniedPressed: () {},
+        onMutedChanged: (_) {},
+        onAudioDeviceChanged: (_) {},
+        onBlindTransferInitiated: () {},
+        onAttendedTransferInitiated: () {},
+        onAttendedTransferSubmitted: (_) {},
+        onHeldChanged: (_) {},
+        onKeyPressed: (_) {},
+        onHangup: onHangup ?? () {},
+        onAccept: onAccept ?? () {},
+      ),
     );
   }
 
@@ -120,15 +122,49 @@ void main() {
     });
   });
 
+  group('CallControlsParams - whose picture is behind the controls', () {
+    CallControlsParams paramsFor({required List<ActiveCall> activeCalls, required ActiveCall focusedCall}) {
+      return CallControlsParams(
+        activeCalls: activeCalls,
+        focusedCall: focusedCall,
+        availableAudioDevices: const [],
+        callConfig: const CallCapabilitiesConfig(),
+        interactionsEnabled: true,
+        hasRenderableRemoteFrame: true,
+        onCallSelected: (_) {},
+        onKeypadToggle: (_) {},
+        onCameraChanged: (_) {},
+        onCameraPermissionDeniedPressed: () {},
+        onMutedChanged: (_) {},
+        onAudioDeviceChanged: (_) {},
+        onBlindTransferInitiated: () {},
+        onAttendedTransferInitiated: () {},
+        onAttendedTransferSubmitted: (_) {},
+        onHeldChanged: (_) {},
+        onKeyPressed: (_) {},
+        onHangup: () {},
+        onAccept: () {},
+      );
+    }
+
+    test('a frame rendered for the current call does not stand in for a held focused one', () {
+      final held = makeCall(callId: 'held', acceptedTime: DateTime(2024), held: true, displayName: 'Clara Diaz');
+      // The screen probes frames on the derived current call (the live one) -
+      // with the held call focused, its avatar must still be offered.
+      expect(paramsFor(activeCalls: [held, active], focusedCall: held).focusedFrameRenderable, isFalse);
+      expect(paramsFor(activeCalls: [held, active], focusedCall: active).focusedFrameRenderable, isTrue);
+    });
+  });
+
   group('CallActionArea - gating', () {
     testWidgets('answering that mutates other calls waits out the interaction debounce', (tester) async {
       await tester.pumpWidget(
         wrap(buildArea(activeCalls: [active, ringing], focusedCall: ringing, interactionsEnabled: false)),
       );
 
-      // With no accept callback the button is not rendered at all (see
-      // IncomingCallActions); declining stays available throughout.
-      expect(find.byIcon(Icons.call), findsNothing);
+      // The button waits in place, greyed out - disappearing would shift
+      // Decline into its spot at the worst possible moment.
+      expect(buttonWithIcon(tester, Icons.call).onPressed, isNull);
       expect(buttonWithIcon(tester, Icons.call_end).onPressed, isNotNull);
     });
 
