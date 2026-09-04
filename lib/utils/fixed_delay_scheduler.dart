@@ -33,7 +33,13 @@ typedef NextDelay = FutureOr<Duration> Function();
 class FixedDelayScheduler {
   Timer? _timer;
   bool _running = false;
-  bool _stopped = false;
+
+  // Identity of the chain started by the last [start] call. A tick may still
+  // be awaiting its [onTick] after [cancel] (no timer is pending, so
+  // [isScheduled] is already false), and a subsequent [start] must not let
+  // that stale tick reschedule itself alongside the new chain - each tick
+  // only reschedules while its own chain is still the current one.
+  Object? _chain;
 
   /// Whether a timer is currently scheduled.
   bool get isScheduled => _timer != null;
@@ -47,10 +53,12 @@ class FixedDelayScheduler {
   /// - [onTick] — callback executed on each tick. It should return
   ///   the [Duration] until the next tick.
   ///
-  /// If [start] is called while already scheduled, it does nothing.
+  /// If [start] is called while already scheduled or while a tick of a
+  /// non-cancelled chain is still running, it does nothing.
   void start(Duration initialDelay, NextDelay onTick) {
-    if (_timer != null) return; // already scheduled
-    _stopped = false;
+    if (_chain != null) return; // already active
+    final chain = Object();
+    _chain = chain;
 
     void schedule(Duration delay) {
       _timer = Timer(delay, () async {
@@ -58,12 +66,14 @@ class FixedDelayScheduler {
         _running = true;
         try {
           final next = await onTick();
-          if (!_stopped) {
+          if (_chain == chain) {
             // Schedule next tick after onTick completes.
             schedule(next);
           }
         } finally {
-          _running = false;
+          if (_chain == chain) {
+            _running = false;
+          }
         }
       });
     }
@@ -73,7 +83,7 @@ class FixedDelayScheduler {
 
   /// Cancel any scheduled ticks and prevent further rescheduling.
   void cancel() {
-    _stopped = true;
+    _chain = null;
     _timer?.cancel();
     _timer = null;
     _running = false;
