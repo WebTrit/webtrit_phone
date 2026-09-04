@@ -104,6 +104,160 @@ void main() {
       });
     });
 
+    // Regression: a connectivity event that arrives while the boot probe is
+    // still in flight must not lead to a doubled leading cycle.
+    test('connectivity event during the boot probe yields one leading cycle', () {
+      fakeAsync((async) {
+        connectivity = FakeConnectivityService(initialConnected: true)..nextCheckDelay = const Duration(seconds: 1);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 0, reason: 'boot probe is still in flight');
+
+        // The OS reports connectivity before the probe resolves.
+        connectivity.setConnected(true);
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'the connectivity event runs the leading cycle');
+
+        // The probe resolves late with the same state: no second cycle.
+        async.elapse(const Duration(seconds: 1));
+        expect(task.callCount, 1, reason: 'the late boot probe must not repeat the leading cycle');
+
+        async.elapse(const Duration(seconds: 10, milliseconds: 100));
+        expect(task.callCount, 2, reason: 'periodic polling continues normally');
+      });
+    });
+
+    // Regression: an offline event during the boot probe stops polling and a
+    // probe resolving with the same offline state must not bring it up.
+    test('offline event during the boot probe keeps polling off', () {
+      fakeAsync((async) {
+        connectivity = FakeConnectivityService(initialConnected: true)..nextCheckDelay = const Duration(seconds: 1);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+
+        // The device goes offline while the probe is still in flight.
+        connectivity.setConnected(false);
+        async.flushMicrotasks();
+        expect(task.callCount, 0);
+
+        async.elapse(const Duration(minutes: 2));
+        expect(task.callCount, 0, reason: 'polling must not start while offline');
+        expect(connectivity.checkCalls, 1, reason: 'no timers means no further reachability checks');
+      });
+    });
+
+    // Regression: a transiently wrong offline event during the boot probe
+    // must not permanently disable polling - the probe that completes later
+    // carries fresher evidence and must win.
+    test('boot probe completing after a false offline event restores polling', () {
+      fakeAsync((async) {
+        connectivity = FakeConnectivityService(initialConnected: true)..nextCheckDelay = const Duration(seconds: 1);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+
+        // A transport handoff pushes a wrong offline event while the network
+        // is actually fine and the boot probe is still in flight.
+        connectivity.emitConnectivityEvent(false);
+        async.flushMicrotasks();
+        expect(task.callCount, 0);
+
+        // The boot probe completes and reports the network is up.
+        async.elapse(const Duration(seconds: 1));
+        expect(task.callCount, 1, reason: 'the completed probe must restore polling');
+
+        async.elapse(const Duration(seconds: 10, milliseconds: 100));
+        expect(task.callCount, 2, reason: 'periodic polling runs after recovery');
+      });
+    });
+
+    // Regression: a repeated same-state connectivity event (typical duplicate
+    // OS callback) must not run another leading cycle.
+    test('duplicate online event after boot does not repeat the leading cycle', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        connectivity.emitConnectivityEvent(true);
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'a same-state event must not trigger another refresh');
+
+        async.elapse(const Duration(seconds: 10, milliseconds: 100));
+        expect(task.callCount, 2, reason: 'periodic cadence is unaffected');
+      });
+    });
+
+    // Regression: a reachability probe that resolves after the connectivity
+    // state changed must not overwrite the fresher cached value.
+    test('stale reachability probe does not poison the TTL cache', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0, reachabilityTtl: Duration(seconds: 15)),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        // The tick at ~20s finds the cache expired and has to probe; make
+        // that probe slow and stale: it will report offline from a dying link.
+        async.elapse(const Duration(seconds: 15));
+        connectivity.nextCheckDelay = const Duration(seconds: 2);
+        connectivity.nextCheckResult = false;
+        async.elapse(const Duration(seconds: 5, milliseconds: 100));
+        final callsBeforeFlap = task.callCount;
+
+        // While that probe is in flight the network flaps down and up.
+        connectivity.setConnected(false);
+        async.flushMicrotasks();
+        connectivity.setConnected(true);
+        async.flushMicrotasks();
+        expect(task.callCount, callsBeforeFlap + 1, reason: 'the reconnect leading cycle refreshes');
+
+        // The stale probe resolves with false: it must not overwrite the
+        // fresh online state, so the next tick still refreshes from cache.
+        async.elapse(const Duration(seconds: 12));
+        expect(
+          task.callCount,
+          callsBeforeFlap + 2,
+          reason: 'the tick after the flap must refresh from the fresh cache, not the stale probe result',
+        );
+      });
+    });
+
     // Regression: backgrounding while a refresh is still in flight must not
     // let the resume leading cycle start an overlapping refresh of the same
     // listener.

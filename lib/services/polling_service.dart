@@ -109,6 +109,18 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   bool _isConnected = false;
   bool _disposed = false;
 
+  // Connectivity state applied last, null until the first report. Every
+  // piece of connectivity evidence - stream events and the boot probe - is
+  // applied through [_handleConnectivityChange] in completion order, and only
+  // an actual state change starts a leading cycle, so a late or repeated
+  // report can neither double the cycle nor wedge the state.
+  bool? _lastAppliedConnected;
+
+  // Bumped on every applied connectivity change; a reachability probe that
+  // resolves under an older epoch is stale and must not write its result
+  // into [_reachability].
+  int _connectivityEpoch = 0;
+
   final Map<Refreshable, _PollingConfig> _pollingConfigs = {};
 
   /// Register a [listener] with a polling [interval].
@@ -186,24 +198,29 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   Future<void> _initializePollingIfConnected() async {
     if (_disposed) return;
     _logger.info('PollingService: Initializing polling...');
-    _isConnected = await _connectivityService.checkConnection();
-    _reachability.clear(); // start with empty cache; we'll fill it in group-leading
-
-    if (_shouldRunTimers) {
-      // On boot: group-leading (one reachability check, then trigger all).
-      await _runLeadingForAll(forceCheck: true);
-    }
+    final connected = await _connectivityService.checkConnection();
+    if (_disposed) return;
+    // The boot probe is just one more piece of connectivity evidence: route
+    // it through the same single-writer path as stream events.
+    _handleConnectivityChange(connected);
   }
 
   void _handleConnectivityChange(bool connected) {
     if (_disposed) return;
 
+    final changed = connected != _lastAppliedConnected;
+    _lastAppliedConnected = connected;
     _isConnected = connected;
-    _reachability.clear();
+    if (!changed) return;
+
+    _connectivityEpoch++;
+    // The report that carried this state was itself produced by a liveness
+    // probe, so seed the cache with it instead of probing again right away.
+    _reachability.set(connected);
 
     if (_shouldRunTimers) {
-      // On (re)connect: group-leading (one reachability check for all listeners).
-      unawaited(_runLeadingForAll(forceCheck: true));
+      // On boot/(re)connect: group-leading sharing that fresh reachability result.
+      unawaited(_runLeadingForAll(forceCheck: false));
     } else {
       _stopAllTimers();
     }
@@ -324,8 +341,11 @@ class PollingService with WidgetsBindingObserver implements Disposable {
     if (cached != null) return cached;
 
     _logger.fine('PollingService: Checking reachability...');
+    final epoch = _connectivityEpoch;
     final r = await _connectivityService.checkConnection();
-    _reachability.set(r);
+    if (_connectivityEpoch == epoch) {
+      _reachability.set(r);
+    }
     return r;
   }
 
