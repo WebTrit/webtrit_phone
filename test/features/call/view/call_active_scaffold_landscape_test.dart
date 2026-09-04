@@ -354,9 +354,23 @@ void main() {
   group('CallControlsLandscape - video call info zone', () {
     testWidgets('with a live picture behind, the lines range left instead of floating centered', (tester) async {
       setLandscapePhoneSurface(tester);
+      // A short number, the way a real dial like "112" renders: the lines
+      // must be narrower than the zone, or centering and start-ranging
+      // land in the same place and the assertion proves nothing.
+      final videoCall = ActiveCall(
+        callId: 'video',
+        direction: CallDirection.outgoing,
+        line: 0,
+        handle: const CallkeepHandle.number('112'),
+        createdTime: DateTime(2024),
+        video: true,
+        processingStatus: CallProcessingStatus.connected,
+        held: false,
+        acceptedTime: DateTime(2024),
+      );
       final params = CallControlsParams(
-        activeCalls: [active],
-        focusedCall: active,
+        activeCalls: [videoCall],
+        focusedCall: videoCall,
         availableAudioDevices: const [],
         callConfig: const CallCapabilitiesConfig(),
         interactionsEnabled: true,
@@ -390,7 +404,7 @@ void main() {
       // Without the picture beside them the lines still stand where it
       // would have stood - at the start of the zone (behind the 32dp
       // arrangement padding), not floating in the middle of it.
-      expect(tester.getTopLeft(find.text('Boris Klein')).dx, moreOrLessEquals(32, epsilon: 1));
+      expect(tester.getTopLeft(find.text('112')).dx, moreOrLessEquals(32, epsilon: 1));
 
       await teardownCallScaffold(tester);
     });

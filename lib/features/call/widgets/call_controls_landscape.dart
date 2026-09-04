@@ -202,7 +202,14 @@ class _InfoZone extends StatelessWidget {
     // gives way rather than overflow.
     final avatarShown = !params.focusedFrameRenderable && constraints.maxWidth >= avatarRadius * 2 + 24 + 48;
     if (!avatarShown) {
-      return Center(child: SingleChildScrollView(child: infoBlock));
+      // No picture beside the lines (a live video already fills the screen,
+      // or the zone is too narrow for the portrait) - the lines still stand
+      // at the start of the zone, where the avatar row would have put them;
+      // centered they float in the middle of the empty zone.
+      return Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: SingleChildScrollView(child: infoBlock),
+      );
     }
 
     return Center(
