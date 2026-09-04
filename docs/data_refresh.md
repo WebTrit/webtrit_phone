@@ -1,7 +1,10 @@
 # Refreshing data by hand
 
 How a user asks a list in the app to fetch again, screen by screen.
-Last reviewed: 2026-08-28.
+Last reviewed: 2026-09-04.
+
+Who performs these fetches and why a manual refresh cannot race the
+periodic schedule: [`docs/refresh_ownership.md`](refresh_ownership.md).
 
 The rule: refreshing is a pull on the list. A screen that can be refreshed
 carries no refresh control in its app bar.
