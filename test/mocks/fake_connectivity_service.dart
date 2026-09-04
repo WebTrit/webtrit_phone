@@ -17,10 +17,13 @@ class FakeConnectivityService implements ConnectivityService {
 
   int checkCalls = 0;
 
-  /// When set, the first [checkConnection] call resolves only after this
-  /// delay, modelling a slow boot probe that a stream event can outrun.
-  Duration? firstCheckDelay;
-  bool _firstCheckDone = false;
+  /// Delay applied to the next [checkConnection] call only (consumed once),
+  /// modelling a slow probe that a stream event can outrun.
+  Duration? nextCheckDelay;
+
+  /// Forced result for the next [checkConnection] call only (consumed once),
+  /// modelling a probe whose answer is wrong by the time it resolves.
+  bool? nextCheckResult;
 
   @override
   Stream<bool> get connectionStream => _controller.stream;
@@ -34,16 +37,20 @@ class FakeConnectivityService implements ConnectivityService {
   @override
   Future<bool> checkConnection() async {
     checkCalls++;
-    // Snapshot the state up front: a real probe reports the connectivity it
-    // observed when it ran, not the state at the moment its future resolves.
-    final result = _connected;
-    if (!_firstCheckDone) {
-      _firstCheckDone = true;
-      final delay = firstCheckDelay;
-      if (delay != null) await Future<void>.delayed(delay);
-    }
-    return result;
+    final delay = nextCheckDelay;
+    nextCheckDelay = null;
+    final forced = nextCheckResult;
+    nextCheckResult = null;
+    if (delay != null) await Future<void>.delayed(delay);
+    // Like the real probe, report the state as of completion - unless the
+    // test forced a (possibly stale) result via [nextCheckResult].
+    return forced ?? _connected;
   }
+
+  /// Emit a connectivity event without changing the underlying state,
+  /// modelling a transiently wrong producer probe (e.g. a transport handoff
+  /// whose liveness check failed while the network is actually fine).
+  void emitConnectivityEvent(bool connected) => _controller.add(connected);
 
   /// Set current connectivity and emit an event (alias: [push]).
   void setConnected(bool value) {
