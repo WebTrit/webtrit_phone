@@ -41,26 +41,15 @@ Its semantics, implemented by `PollingService.refreshListener()`:
   through the data source's own stream;
 - does not swallow errors: the caller decides how to show a failed refresh.
 
-A consumer depends on the port only. It never sees `PollingService`, which is
-infrastructure tied to the widgets binding, so the layering stays intact: the
-domain-facing side declares the contract, the infrastructure implements it,
-and only the composition root knows both.
-
-## The adapter and where things live
-
-- **Port** - `lib/common/`, next to `Refreshable`. Pure contract, no
-  dependencies.
-- **Adapter** - `lib/app/adapters/`. A few lines of glue implementing a port
-  on top of infrastructure (`PollingOnDemandRefresher` binds the service to
-  one registered listener). This folder is for cross-layer glue only: no
-  mappers (they have `lib/mappers/`), no repositories or services (they have
-  their own layers), and no business logic - an adapter that grows logic is a
-  use case trying to be born, and it does not belong here.
-- **Wiring** - the shell's service layer
-  (`lib/app/router/main_shell_services.dart`), the same place the polling
-  registrations are built. The adapter is provided under the same feature
-  gate as its listener's registration, so a consumer can only obtain a port
-  whose listener the owner actually polls.
+A consumer depends on the port only - it never sees `PollingService`. This is
+an instance of the repository-wide pattern described in
+[`docs/ports_and_adapters.md`](ports_and_adapters.md); the concrete pieces
+here are the port in `lib/common/on_demand_refresher.dart`, the adapter
+`PollingOnDemandRefresher` in `lib/app/adapters/` binding the service to one
+registered listener, and the wiring in
+`lib/app/router/main_shell_services.dart` next to the polling registrations,
+under the same feature gate - so a consumer can only obtain a port whose
+listener the owner actually polls.
 
 ## The subscriber contract
 
@@ -90,6 +79,8 @@ copied. The checklist:
 
 ## Related
 
+- [`docs/ports_and_adapters.md`](ports_and_adapters.md) - the general
+  pattern this page instantiates.
 - [`docs/data_refresh.md`](data_refresh.md) - the UX side: which screens can
   be pulled and how the gesture behaves.
 - [`docs/dependency_ownership.md`](dependency_ownership.md) - who creates and
