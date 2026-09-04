@@ -106,7 +106,9 @@ class ExponentialBackoff implements BackoffPolicy {
   Duration next(int consecutiveErrors, Duration base, {Duration? max}) {
     if (consecutiveErrors <= 0) return base;
     final cap = max ?? this.max;
-    final factor = 1 << consecutiveErrors; // 2^n
+    // Clamp the exponent: an unbounded shift overflows into a negative
+    // duration past 62 errors, which would fire the timer immediately.
+    final factor = 1 << consecutiveErrors.clamp(0, 30); // 2^n
     final ms = base.inMilliseconds * factor;
     final d = Duration(milliseconds: ms);
     return d <= cap ? d : cap;

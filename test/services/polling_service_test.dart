@@ -104,6 +104,34 @@ void main() {
       });
     });
 
+    // Regression: backgrounding while a refresh is still in flight must not
+    // let the resume leading cycle start an overlapping refresh of the same
+    // listener.
+    test('resume during an in-flight refresh does not overlap it', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository(workTime: const Duration(seconds: 5));
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'leading refresh starts and stays in flight');
+
+        async.elapse(const Duration(seconds: 1));
+        service.didChangeAppLifecycleState(AppLifecycleState.paused);
+        service.didChangeAppLifecycleState(AppLifecycleState.resumed);
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'the in-flight refresh must not be overlapped on resume');
+
+        async.elapse(const Duration(seconds: 30));
+        expect(task.callCount, greaterThanOrEqualTo(2), reason: 'polling continues after the refresh completes');
+      });
+    });
+
     // Ensures that checkConnection() calls are cached during the TTL period
     // and only re-executed after the TTL expires.
     test('reachability TTL caches checkConnection calls', () {
