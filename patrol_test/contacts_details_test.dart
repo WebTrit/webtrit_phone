@@ -11,6 +11,7 @@ import 'package:webtrit_phone/models/main_flavor.dart';
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/open_ext_contacts_tab.dart';
 import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
@@ -40,8 +41,8 @@ void main() {
       await pumpFor(const Duration(seconds: 5), $);
     }
 
-    await $(MainFlavor.contacts.toNavBarKey()).tap();
-    await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
+    await openExtContactsTab($);
+    await $.pumpAndTrySettle();
 
     await _verifyContactDetails(
       $,
@@ -78,6 +79,7 @@ Future<void> _verifyContactDetails(
 }) async {
   final searchWasUsed = !$(contactsExtContactTileKey).containing(RegExp(contactName)).visible;
   if (searchWasUsed) {
+    await openContactsSearch($);
     await $(contactsSearchInputKey).enterText(contactName);
     await pumpFor(const Duration(seconds: 1), $);
   }
