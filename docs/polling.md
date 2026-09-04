@@ -372,11 +372,11 @@ fvm flutter test --no-pub test/services/polling_service_test.dart
 The on-device invariants live in:
 
 - `patrol_test/polling_connect_invariant_test.dart`;
-- `patrol_test/polling_contacts_single_fetch_test.dart`.
+- `patrol_test/contacts_worker_sync_e2e_test.dart`.
 
 The first asserts one user-info request for login, resume, and network recovery.
-The second protects the one-fetch Contacts behavior for both login and manual
-pull-to-refresh.
+The second covers the worker-driven Contacts flow from login through UI data,
+self-filtering, manual refresh, resume, offline failure, and network recovery.
 See [`integration_test_commands.md`](integration_test_commands.md) for setup and
 commands, and [`integration_test_coverage.md`](integration_test_coverage.md) for
 the scenario index.

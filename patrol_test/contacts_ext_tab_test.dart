@@ -10,6 +10,7 @@ import 'package:webtrit_phone/models/main_flavor.dart';
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/open_ext_contacts_tab.dart';
 import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
@@ -36,6 +37,13 @@ void main() {
     // Go to the contacts tab.
     await $(MainFlavor.contacts.toNavBarKey()).tap();
 
+    // The local/external sub-tab isolation only exists on a config with
+    // several contact sources - skip cleanly on a single-source layout.
+    if (!$(contactsTabLocalKey).visible) {
+      markTestSkipped('needs a multi-source contacts configuration');
+      return;
+    }
+
     // Check inner tabs switching.
     await $(contactsTabLocalKey).tap().then((e) => $.pumpAndTrySettle());
     expect(
@@ -51,6 +59,7 @@ void main() {
     );
 
     // Check if search with a query matching multiple contacts returns more than one result.
+    await openContactsSearch($);
     await $(contactsSearchInputKey).enterText(multiSearchQuery);
     await pumpFor(const Duration(seconds: 1), $);
     expect(
