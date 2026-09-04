@@ -48,8 +48,8 @@ class MainShellServices extends StatelessWidget {
           // The contacts pull-to-refresh port: the forced refresh goes through
           // the polling service, so it cannot race a scheduled tick and pushes
           // the next one a full interval away.
-          Provider<OnDemandRefresher>(
-            create: (context) => PollingOnDemandRefresher(
+          Provider<ContactsRefresher>(
+            create: (context) => PollingContactsRefresher(
               pollingService: context.read<PollingService>(),
               listener: context.read<ExternalContactsRepository>(),
             ),

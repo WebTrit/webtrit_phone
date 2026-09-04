@@ -16,7 +16,7 @@ class MockExternalContactsRepository extends Mock implements ExternalContactsRep
 
 class MockContactsRepository extends Mock implements ContactsRepository {}
 
-class MockOnDemandRefresher extends Mock implements OnDemandRefresher {}
+class MockContactsRefresher extends Mock implements ContactsRefresher {}
 
 final _testUser = UserInfo(
   numbers: Numbers(main: '1000', additional: []),
@@ -45,14 +45,14 @@ void main() {
   late MockUserRepository userRepository;
   late MockExternalContactsRepository externalContactsRepository;
   late MockContactsRepository contactsRepository;
-  late MockOnDemandRefresher contactsRefresher;
+  late MockContactsRefresher contactsRefresher;
   late ExternalContactsSyncBloc bloc;
 
   setUp(() {
     userRepository = MockUserRepository();
     externalContactsRepository = MockExternalContactsRepository();
     contactsRepository = MockContactsRepository();
-    contactsRefresher = MockOnDemandRefresher();
+    contactsRefresher = MockContactsRefresher();
 
     when(() => userRepository.getAndListen()).thenAnswer((_) => Stream.value(_testUser));
     when(() => contactsRefresher.refreshNow()).thenAnswer((_) async {});

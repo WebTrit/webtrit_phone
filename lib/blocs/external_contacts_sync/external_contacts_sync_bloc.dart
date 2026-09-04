@@ -33,7 +33,7 @@ class ExternalContactsSyncBloc extends Bloc<ExternalContactsSyncEvent, ExternalC
 
   /// Port for the user-driven refresh: the schedule owner performs it, so a
   /// pull-to-refresh cannot race a periodic tick.
-  final OnDemandRefresher contactsRefresher;
+  final ContactsRefresher contactsRefresher;
 
   void _onStarted(ExternalContactsSyncStarted event, Emitter<ExternalContactsSyncState> emit) async {
     _logger.finer('_onStarted');

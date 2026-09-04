@@ -15,3 +15,9 @@ class PollingOnDemandRefresher implements OnDemandRefresher {
   @override
   Future<void> refreshNow() => _pollingService.refreshListener(_listener);
 }
+
+/// The contacts instance of the polling-backed refresher, typed with the
+/// narrow port so dependency lookup cannot hand it to another consumer.
+class PollingContactsRefresher extends PollingOnDemandRefresher implements ContactsRefresher {
+  const PollingContactsRefresher({required super.pollingService, required super.listener});
+}

@@ -128,7 +128,7 @@ class MainShellBlocs extends StatelessWidget {
                 userRepository: context.read<UserRepository>(),
                 externalContactsRepository: context.read<ExternalContactsRepository>(),
                 contactsRepository: context.read<ContactsRepository>(),
-                contactsRefresher: context.read<OnDemandRefresher>(),
+                contactsRefresher: context.read<ContactsRefresher>(),
               )..add(const ExternalContactsSyncStarted());
             },
           ),

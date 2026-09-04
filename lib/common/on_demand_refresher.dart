@@ -9,3 +9,11 @@ abstract class OnDemandRefresher {
   /// interval away from this one's completion. Throws when the refresh fails.
   Future<void> refreshNow();
 }
+
+/// The on-demand refresh of the external contact list.
+///
+/// A marker over [OnDemandRefresher]: dependency lookup resolves by type, so
+/// each refreshed data source gets its own narrow port and a consumer can
+/// never receive another source's refresher by accident. The semantics are
+/// entirely those of the base contract.
+abstract class ContactsRefresher implements OnDemandRefresher {}

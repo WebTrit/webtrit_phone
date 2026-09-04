@@ -44,8 +44,10 @@ Its semantics, implemented by `PollingService.refreshListener()`:
 A consumer depends on the port only - it never sees `PollingService`. This is
 an instance of the repository-wide pattern described in
 [`docs/ports_and_adapters.md`](ports_and_adapters.md); the concrete pieces
-here are the port in `lib/common/on_demand_refresher.dart`, the adapter
-`PollingOnDemandRefresher` in `lib/app/adapters/` binding the service to one
+here are the port in `lib/common/on_demand_refresher.dart` (consumers depend
+on a narrow per-source marker such as `ContactsRefresher`, because dependency
+lookup resolves by type and must never hand one source refresher to another
+consumer), the adapter in `lib/app/adapters/` binding the service to one
 registered listener, and the wiring in
 `lib/app/router/main_shell_services.dart` next to the polling registrations,
 under the same feature gate - so a consumer can only obtain a port whose
@@ -69,9 +71,9 @@ copied. The checklist:
 1. The source is registered as a polling listener (most already are).
 2. Its stream replays the last known value to a late subscriber.
 3. Its consumer stops fetching on mount - subscribing is enough.
-4. A user-driven refresh, if the screen has one, goes through an
-   `OnDemandRefresher` provided next to the polling registrations, under the
-   same gate.
+4. A user-driven refresh, if the screen has one, goes through its own
+   narrow marker port over `OnDemandRefresher` (as `ContactsRefresher`
+   does), provided next to the polling registrations, under the same gate.
 5. Unit tests pin all three sides: no fetch on start, replay to a late
    subscriber, and the manual refresh delegating to the port.
 6. The connect-invariant e2e (`patrol_test/`) gets the endpoint added to its
