@@ -39,6 +39,7 @@ The application offers extensive customization options:
  - **Development Workflow and Git Hooks**: See the [Development Guide](docs/development.md) for details on commit conventions, hook setup, and workflow tools.
  - **Accessibility**: See the [Accessibility Guide](docs/accessibility.md) for what every interactive control must expose to screen readers and UI automation, and how to verify it.
  - **Startup time**: See [Where cold start time goes](docs/startup.md) for the measured breakdown of a cold start and the candidates worth optimising next.
+ - **Background polling**: See [Background Polling](docs/polling.md) for scheduling, manual refresh handles, lifecycle, backoff, and migration rules.
 
 # Testing
 
