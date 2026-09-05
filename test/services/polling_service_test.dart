@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 // ignore: depend_on_referenced_packages
@@ -345,6 +346,296 @@ void main() {
       });
     });
 
+    test('register returns the same stable handle for the same listener', () {
+      fakeAsync((async) {
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity);
+
+        final first = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 8)));
+        final second = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 3)));
+
+        expect(identical(first, second), isTrue);
+        expect(first.isRegistered, isTrue);
+        expect(first.state.phase, PollingTaskPhase.idle);
+      });
+    });
+
+    test('registering while online runs a leading refresh for the new task', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        async.flushMicrotasks();
+
+        final task = MockRefreshableRepository();
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+        async.flushMicrotasks();
+
+        expect(task.callCount, 1);
+        expect(handle.state.phase, PollingTaskPhase.succeeded);
+      });
+    });
+
+    test('handle replays state and joins an in-flight manual refresh', () {
+      fakeAsync((async) {
+        final task = MockRefreshableRepository(workTime: const Duration(seconds: 5));
+        service = PollingService(connectivityService: connectivity);
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+
+        final initialStates = <PollingTaskState>[];
+        final initialSubscription = handle.states.listen(initialStates.add);
+        async.flushMicrotasks();
+        expect(initialStates.single.phase, PollingTaskPhase.idle);
+
+        var firstCompleted = false;
+        var secondCompleted = false;
+        unawaited(handle.runNow().then((_) => firstCompleted = true));
+        unawaited(handle.runNow().then((_) => secondCompleted = true));
+        async.flushMicrotasks();
+
+        expect(task.callCount, 1, reason: 'both callers must join the same refresh cycle');
+        expect(handle.state.phase, PollingTaskPhase.running);
+
+        final lateStates = <PollingTaskState>[];
+        final lateSubscription = handle.states.listen(lateStates.add);
+        async.flushMicrotasks();
+        expect(lateStates.single.phase, PollingTaskPhase.running, reason: 'the current state must be replayed');
+
+        async.elapse(const Duration(seconds: 5));
+        expect(firstCompleted, isTrue);
+        expect(secondCompleted, isTrue);
+        expect(handle.state.phase, PollingTaskPhase.succeeded);
+        expect(handle.state.lastSuccessAt, isNotNull);
+
+        unawaited(initialSubscription.cancel());
+        unawaited(lateSubscription.cancel());
+      });
+    });
+
+    test('manual refresh shifts the next periodic tick by a full interval', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'leading refresh');
+
+        async.elapse(const Duration(seconds: 4));
+        unawaited(handle.runNow());
+        async.flushMicrotasks();
+        expect(task.callCount, 2, reason: 'manual refresh');
+
+        async.elapse(const Duration(seconds: 9, milliseconds: 999));
+        expect(task.callCount, 2, reason: 'the old periodic deadline must be invalidated');
+
+        async.elapse(const Duration(milliseconds: 2));
+        expect(task.callCount, 3, reason: 'the new cadence starts after the manual cycle');
+      });
+    });
+
+    test('manual failure is surfaced without increasing scheduled backoff', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 1)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'leading refresh succeeds');
+
+        task.failTimes = 1;
+        Object? reportedError;
+        Object? joinedError;
+        unawaited(
+          handle.runNow().then<void>(
+            (_) {},
+            onError: (Object error, StackTrace _) {
+              reportedError = error;
+            },
+          ),
+        );
+        unawaited(
+          handle.runNow().then<void>(
+            (_) {},
+            onError: (Object error, StackTrace _) {
+              joinedError = error;
+            },
+          ),
+        );
+        async.flushMicrotasks();
+
+        expect(task.callCount, 2, reason: 'the second caller must join the failing cycle');
+        expect(reportedError, isA<StateError>());
+        expect(joinedError, same(reportedError));
+        expect(handle.state.phase, PollingTaskPhase.failed);
+        expect(handle.state.error, same(reportedError));
+
+        async.elapse(const Duration(seconds: 1, milliseconds: 1));
+        expect(task.callCount, 3, reason: 'manual failure must not double the scheduled delay');
+      });
+    });
+
+    test('manual caller joining a scheduled failure receives it and keeps scheduled backoff', () {
+      fakeAsync((async) {
+        final task = _ControlledRefreshableRepository();
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 1)));
+        async.flushMicrotasks();
+
+        connectivity.setConnected(true);
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'the leading scheduled cycle is in flight');
+
+        Object? reportedError;
+        unawaited(
+          handle.runNow().then<void>(
+            (_) {},
+            onError: (Object error, StackTrace _) {
+              reportedError = error;
+            },
+          ),
+        );
+
+        final scheduledError = StateError('scheduled failure');
+        task.fail(scheduledError);
+        async.flushMicrotasks();
+
+        expect(task.callCount, 1, reason: 'the manual caller must join instead of invoking refresh again');
+        expect(reportedError, same(scheduledError));
+        expect(handle.state.error, same(scheduledError));
+
+        task.prepareNextCycle();
+        async.elapse(const Duration(seconds: 1, milliseconds: 999));
+        expect(task.callCount, 1, reason: 'the scheduled failure must apply exponential backoff');
+
+        async.elapse(const Duration(milliseconds: 2));
+        expect(task.callCount, 2);
+      });
+    });
+
+    test('manual refresh invalidates a periodic tick waiting on reachability', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          options: const PollingOptions(jitterMaxMs: 0, reachabilityTtl: Duration(seconds: 1)),
+        );
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        connectivity.nextCheckDelay = const Duration(seconds: 5);
+        async.elapse(const Duration(seconds: 10));
+        async.elapse(const Duration(seconds: 1));
+
+        unawaited(handle.runNow());
+        async.flushMicrotasks();
+        expect(task.callCount, 2);
+
+        async.elapse(const Duration(seconds: 4));
+        expect(task.callCount, 2, reason: 'the stale reachability result must not run another refresh');
+
+        async.elapse(const Duration(seconds: 6, milliseconds: 1));
+        expect(task.callCount, 3, reason: 'polling resumes from the manual cycle cadence');
+      });
+    });
+
+    test('resume remains authoritative immediately after a manual refresh', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          options: const PollingOptions(pauseInBackground: true, jitterMaxMs: 0),
+        );
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(minutes: 1)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        unawaited(handle.runNow());
+        async.flushMicrotasks();
+        expect(task.callCount, 2);
+
+        service.didChangeAppLifecycleState(AppLifecycleState.paused);
+        service.didChangeAppLifecycleState(AppLifecycleState.resumed);
+        async.flushMicrotasks();
+        expect(task.callCount, 3, reason: 'resume must not be suppressed by a recent manual cycle');
+      });
+    });
+
+    test('unregister stops the handle and rejects further manual runs', () {
+      fakeAsync((async) {
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity);
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+
+        handle.unregister();
+
+        expect(handle.isRegistered, isFalse);
+        expect(handle.state.phase, PollingTaskPhase.stopped);
+        expect(handle.runNow(), throwsStateError);
+
+        final lateStates = <PollingTaskState>[];
+        final lateSubscription = handle.states.listen(lateStates.add);
+        async.flushMicrotasks();
+        expect(lateStates.single.phase, PollingTaskPhase.stopped);
+        expect(task.callCount, 0);
+        unawaited(lateSubscription.cancel());
+      });
+    });
+
+    test('unregister during a refresh keeps the handle stopped after completion', () {
+      fakeAsync((async) {
+        final task = MockRefreshableRepository(workTime: const Duration(seconds: 5));
+        service = PollingService(connectivityService: connectivity);
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+
+        unawaited(handle.runNow());
+        async.flushMicrotasks();
+        expect(handle.state.phase, PollingTaskPhase.running);
+
+        handle.unregister();
+        expect(handle.state.phase, PollingTaskPhase.stopped);
+
+        async.elapse(const Duration(seconds: 5));
+        expect(task.callCount, 1);
+        expect(handle.state.phase, PollingTaskPhase.stopped, reason: 'late completion must not revive the handle');
+        expect(handle.isRegistered, isFalse);
+      });
+    });
+
+    test('manual run unregisters an inactive task and reports the error', () {
+      fakeAsync((async) {
+        final task = MockRefreshableRepository()..active = false;
+        service = PollingService(connectivityService: connectivity);
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+
+        Object? reportedError;
+        unawaited(
+          handle.runNow().then<void>(
+            (_) {},
+            onError: (Object error, StackTrace _) {
+              reportedError = error;
+            },
+          ),
+        );
+        async.flushMicrotasks();
+
+        expect(reportedError, isA<StateError>());
+        expect(task.callCount, 0);
+        expect(handle.isRegistered, isFalse);
+        expect(handle.state.phase, PollingTaskPhase.stopped);
+      });
+    });
+
     // Ensures exponential backoff kicks in after consecutive refresh failures,
     // increasing delay before retries and resetting after success.
     test('exponential backoff on consecutive errors', () {
@@ -430,18 +721,39 @@ void main() {
       connectivity.setConnected(true);
 
       final task = MockRefreshableRepository();
-      service = PollingService(
-        connectivityService: connectivity,
-        registrations: [PollingRegistration(listener: task, interval: const Duration(milliseconds: 200))],
-      );
+      service = PollingService(connectivityService: connectivity);
+      final handle = service.register(PollingRegistration(listener: task, interval: const Duration(milliseconds: 200)));
 
       await Future<void>.delayed(const Duration(milliseconds: 50));
       await service.dispose();
 
       final prev = task.callCount;
+      expect(handle.isRegistered, isFalse);
+      expect(handle.state.phase, PollingTaskPhase.stopped);
+      expect(handle.runNow(), throwsStateError);
+      expect(
+        () => service.register(
+          PollingRegistration(listener: MockRefreshableRepository(), interval: const Duration(seconds: 1)),
+        ),
+        throwsStateError,
+      );
 
       await Future<void>.delayed(const Duration(milliseconds: 500));
       expect(task.callCount, prev, reason: 'No additional refreshes should occur after dispose');
     });
   });
+}
+
+class _ControlledRefreshableRepository extends MockRefreshableRepository {
+  Completer<void> _cycle = Completer<void>();
+
+  @override
+  Future<void> refresh() {
+    calls++;
+    return _cycle.future;
+  }
+
+  void fail(Object error) => _cycle.completeError(error);
+
+  void prepareNextCycle() => _cycle = Completer<void>();
 }

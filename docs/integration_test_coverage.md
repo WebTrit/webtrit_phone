@@ -2,6 +2,7 @@
 
 All tests live in the `patrol_test/` directory and are built on the [Patrol](https://patrol.dev/) framework.
 Each test bootstraps the full app, logs in (or reuses an existing session), performs its scenario, and tears down cleanly.
+Last reviewed: 2026-09-05.
 
 ---
 
@@ -224,6 +225,42 @@ Three independent tests — each skipped automatically if the required credentia
 7. Place an outgoing call to contact A by tapping their recents tile.
 8. Verify order: contact A first (outgoing, `Icons.call_made`), contact B second (incoming), contact A third (incoming).
 9. Verify contact names are displayed correctly throughout.
+
+---
+
+## Background Polling - Connect Invariant
+
+**File:** `patrol_test/polling_connect_invariant_test.dart`
+
+**Verifies:** Fresh login, foreground resume, and network recovery each produce
+exactly one user-info request, without a retry or a back-to-back duplicate.
+
+**Steps:**
+1. Bootstrap and log in, capture API client request logs, and assert one `/user` request.
+2. Background and reopen the app, then assert one `/user` request after resume.
+3. Disable Wi-Fi and cellular connectivity, restore them, and wait for polling recovery.
+4. Assert one `/user` request after recovery.
+
+The test deliberately does not apply the same invariant to Contacts while its
+screen-owned fetch still overlaps the leading polling cycle. See
+[`polling.md`](polling.md#migration-in-progress).
+
+---
+
+## Background Polling - Contacts Single Fetch
+
+**File:** `patrol_test/polling_contacts_single_fetch_test.dart`
+
+**Verifies:** The intended end state is one external-contacts request after a
+fresh login.
+
+**Steps:**
+1. Bootstrap the app and start capturing API client request logs.
+2. Log in and wait for the main shell to settle.
+3. Assert exactly one `/user/contacts` request and no transport retry.
+
+This is an in-progress migration guard. It remains red until the Contacts
+screen-owned and leading polling paths are deduplicated.
 
 ---
 
