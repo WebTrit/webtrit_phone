@@ -34,7 +34,7 @@ class MainShellServices extends StatelessWidget {
           dispose: (context, service) => service.dispose(),
           lazy: false,
         ),
-        if (featureAccess.coreSupport.supportsExtensions)
+        if (featureAccess.externalContactsAvailable)
           Provider<ExternalContactsSyncWorker>(
             create: (context) => ExternalContactsSyncWorker(
               userRepository: context.read<UserRepository>(),
@@ -83,7 +83,7 @@ class MainShellServices extends StatelessWidget {
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
     final isVoicemailsEnabled = featureAccess.voicemailAvailable;
-    final supportsExtensions = featureAccess.coreSupport.supportsExtensions;
+    final supportsExtensions = featureAccess.externalContactsAvailable;
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
     final favoritesRepository = context.read<FavoritesRepository>();
     final sipSubscriptionsRepository = context.read<SipSubscriptionsRepository>();

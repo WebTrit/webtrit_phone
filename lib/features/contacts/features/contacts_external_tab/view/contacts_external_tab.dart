@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
@@ -31,17 +32,22 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
   @override
   Widget build(BuildContext context) {
     Future refreshContacts() async {
-      // The indicator closes when the operation ends, so await the worker's
-      // own single-flight cycle: waiting for a bloc state change instead
-      // would spin forever when a finished sync leaves the status as it was.
+      // Looked up outside the try on purpose: a missing provider is a wiring
+      // bug that must surface, not vanish into the failure handling below.
+      final refresher = context.read<ContactsRefresher>();
+      // The indicator closes when the operation ends, so await the refresh
+      // itself: waiting for a bloc state change instead would spin forever
+      // when a finished sync leaves the status as it was. The port hands the
+      // run to the schedule owner, so a pull cannot race a periodic cycle
+      // and pushes the next tick a full interval away.
       try {
-        await context.read<ExternalContactsSyncWorker>().refresh();
+        await refresher.refreshNow();
       } on Exception {
         // With items on screen the status-driven failure placeholder is not
         // built, so the failed pull must be told here or it looks like a
-        // silent no-op (same wording the account screen uses).
+        // silent no-op.
         if (context.mounted) {
-          context.showErrorSnackBar(context.l10n.settings_registerStatusSnackBar_requestFailed);
+          context.showErrorSnackBar(context.l10n.contacts_externalRefreshSnackBar_requestFailed);
         }
       }
     }

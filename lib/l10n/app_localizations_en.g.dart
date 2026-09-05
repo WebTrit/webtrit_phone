@@ -2766,6 +2766,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_network_smsFallback_toggle => 'SMS as a backup channel';
 
   @override
+  String get contacts_externalRefreshSnackBar_requestFailed => 'Could not reach the server - please try again';
+
+  @override
   String get settings_registerStatusSnackBar_requestFailed => 'Could not reach the server - please try again';
 
   @override

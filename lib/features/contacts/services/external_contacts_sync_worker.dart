@@ -28,6 +28,18 @@ enum ExternalContactsSyncStatus {
   failed,
 }
 
+/// The read side of the sync for the screens that show its progress: the
+/// presenter depends on this narrow contract, not on the worker type, the
+/// same way its manual refresh goes through the on-demand port.
+abstract class ContactsSyncProgress {
+  /// The current status; [statusStream] carries the changes.
+  ExternalContactsSyncStatus get status;
+
+  /// Status changes; a new listener should read [status] first, the stream
+  /// only carries transitions.
+  Stream<ExternalContactsSyncStatus> get statusStream;
+}
+
 /// Synchronizes the external contact list into the local contacts store.
 ///
 /// An honest worker, not a bloc: the whole cycle - fetch, filter out the
@@ -37,7 +49,7 @@ enum ExternalContactsSyncStatus {
 /// local store and this worker's [status] for the progress indicator; a
 /// user-driven pull calls the same single-flight [refresh], so it can never
 /// overlap a scheduled cycle (see `docs/refresh_ownership.md`).
-class ExternalContactsSyncWorker implements Refreshable, Disposable {
+class ExternalContactsSyncWorker implements Refreshable, Disposable, ContactsSyncProgress {
   ExternalContactsSyncWorker({
     required UserRepository userRepository,
     required ExternalContactsRepository externalContactsRepository,
@@ -62,11 +74,10 @@ class ExternalContactsSyncWorker implements Refreshable, Disposable {
   /// every polling tick for nothing.
   List<ExternalContact>? _lastSynced;
 
-  /// The current status; [statusStream] carries the changes.
+  @override
   ExternalContactsSyncStatus get status => _status;
 
-  /// Status changes; a new listener should read [status] first, the stream
-  /// only carries transitions.
+  @override
   Stream<ExternalContactsSyncStatus> get statusStream => _statusController.stream;
 
   @override

@@ -1306,6 +1306,8 @@ extension AppLocalizationsExtension on AppLocalizations {
         settings_network_incomingCallType_title,
       'settings_network_smsFallback_toggle' =>
         settings_network_smsFallback_toggle,
+      'contacts_externalRefreshSnackBar_requestFailed' =>
+        contacts_externalRefreshSnackBar_requestFailed,
       'settings_registerStatusSnackBar_requestFailed' =>
         settings_registerStatusSnackBar_requestFailed,
       'settings_registerStatusSnackBar_unavailable' =>

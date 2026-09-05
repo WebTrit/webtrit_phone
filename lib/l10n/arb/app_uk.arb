@@ -2287,6 +2287,7 @@
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
   },
+  "contacts_externalRefreshSnackBar_requestFailed": "Не вдалося зв'язатися з сервером - спробуйте ще раз",
   "settings_registerStatusSnackBar_requestFailed": "Не вдалося зв'язатися з сервером - спробуйте ще раз",
   "@settings_registerStatusSnackBar_requestFailed": {},
   "settings_registerStatusSnackBar_unavailable": "Немає зв'язку з сервером - це налаштування зараз не змінити",

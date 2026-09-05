@@ -15,8 +15,11 @@ pull-to-refresh. All three triggers flow through the owner:
   for every registered listener.
 - **Periodic ticks** run on the listener's interval, scheduled from the
   completion of the previous run, with backoff on errors.
-- **Manual refreshes** (a user pulling a list) call the same single-flight
-  cycle on the worker, so they can never overlap a scheduled one.
+- **Manual refreshes** (a user pulling a list) go through the owner too, via
+  the on-demand port: the run joins a cycle already in flight or starts one,
+  pushes the next tick a full interval away, and its failure stays out of
+  the scheduled loop's backoff - a user's retries must not starve the
+  automatic cadence.
 
 The rule exists because two independent triggers for one endpoint is exactly
 how the app used to download the same data twice on every login: a screen
@@ -44,9 +47,12 @@ Everything around the worker stays passive:
   never learns which generation it talks to;
 - screens read the merged data reactively from the local store, exactly as
   before, and the worker's status for the spinner; nobody fetches on mount;
-- a screen's pull-to-refresh awaits the worker's own `refresh()`; the
-  single-flight guard inside it keeps a pull from overlapping a scheduled
-  cycle, and the thrown error lets the screen show the failure.
+- a screen's pull-to-refresh awaits its narrow port (`ContactsRefresher`
+  over `OnDemandRefresher`, see
+  [`docs/ports_and_adapters.md`](ports_and_adapters.md)): the schedule owner
+  runs the cycle, reschedules the next tick from its completion, and the
+  thrown error lets the screen show the failure; the worker's own
+  single-flight guard stays as the second line of defense.
 
 `CdrsSyncWorker` is the next candidate for this shape: today it runs its own
 loop with its own connectivity checks; its cycle maps onto `refresh()` the
@@ -63,8 +69,9 @@ copied. The checklist:
    download.
 3. Screens read results reactively from the store and the worker's status
    for progress - nothing fetches on mount.
-4. A user-driven refresh, if the screen has one, awaits the worker's
-   single-flight `refresh()`.
+4. A user-driven refresh, if the screen has one, awaits its own narrow
+   marker port over `OnDemandRefresher` (as `ContactsRefresher` does),
+   provided by the shell's adapter layer under the same feature gate.
 5. Unit tests pin the cycle (fetch + rules + merge + statuses + the
    single-flight guard), the consumer's mapping of the status, and the pull
    delegating to the worker.
@@ -73,6 +80,8 @@ copied. The checklist:
 
 ## Related
 
+- [`docs/ports_and_adapters.md`](ports_and_adapters.md) - the general
+  pattern the on-demand port instantiates.
 - [`docs/data_refresh.md`](data_refresh.md) - the UX side: which screens can
   be pulled and how the gesture behaves.
 - [`docs/dependency_ownership.md`](dependency_ownership.md) - who creates and

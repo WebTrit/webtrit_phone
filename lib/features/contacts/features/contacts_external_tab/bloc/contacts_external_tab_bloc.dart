@@ -18,20 +18,23 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
   ContactsExternalTabBloc({
     required this.contactsRepository,
     required this.contactsSearchBloc,
-    required this.syncWorker,
+    required this.syncProgress,
   }) : super(const ContactsExternalTabState()) {
     on<ContactsExternalTabStarted>(_onStarted, transformer: restartable());
   }
 
   final ContactsRepository contactsRepository;
   final ContactsBloc contactsSearchBloc;
-  final ExternalContactsSyncWorker syncWorker;
+
+  /// The read side of the sync: the presenter maps its progress and never
+  /// sees the worker itself.
+  final ContactsSyncProgress syncProgress;
 
   Future<void> _onStarted(ContactsExternalTabStarted event, Emitter<ContactsExternalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.external),
       onData: (List<Contact> contacts) => state.copyWith(
-        status: _mapSyncStatus(syncWorker.status),
+        status: _mapSyncStatus(syncProgress.status),
         contacts: contacts,
         searching: event.search.isNotEmpty,
       ),
@@ -45,7 +48,7 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
     );
 
     final syncStatusForEachFuture = emit.forEach(
-      syncWorker.statusStream,
+      syncProgress.statusStream,
       onData: (ExternalContactsSyncStatus syncStatus) => state.copyWith(status: _mapSyncStatus(syncStatus)),
     );
 

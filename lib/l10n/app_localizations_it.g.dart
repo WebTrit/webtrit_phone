@@ -2794,6 +2794,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_network_smsFallback_toggle => 'SMS come canale di riserva';
 
   @override
+  String get contacts_externalRefreshSnackBar_requestFailed => 'Impossibile raggiungere il server - riprova';
+
+  @override
   String get settings_registerStatusSnackBar_requestFailed => 'Impossibile raggiungere il server - riprova';
 
   @override

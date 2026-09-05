@@ -86,6 +86,11 @@ class FeatureAccess extends Equatable {
   /// and SIP presence, are fundamentally supported by the device's operating system or environment.
   final CoreSupport coreSupport;
 
+  /// One predicate for the whole external contacts vertical: the sync
+  /// worker, its polling registration and its refresh port all gate on this
+  /// same value, so the three can never drift apart.
+  bool get externalContactsAvailable => coreSupport.supportsExtensions;
+
   /// Contains feature flags and configurations retrieved from a remote source,
   /// such as Firebase Remote Config. These overrides can dynamically enable or disable
   /// features at runtime, potentially modifying or extending the behavior defined

@@ -2356,6 +2356,7 @@
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
   },
+  "contacts_externalRefreshSnackBar_requestFailed": "Could not reach the server - please try again",
   "settings_registerStatusSnackBar_requestFailed": "Could not reach the server - please try again",
   "@settings_registerStatusSnackBar_requestFailed": {
     "description": "Shown in an error snackbar when a register-status request fails: an explicit refresh of the account registration setting, or a change of it (in which case the switch also rolls back to its previous value)."

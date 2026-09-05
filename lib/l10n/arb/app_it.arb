@@ -2287,6 +2287,7 @@
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
   },
+  "contacts_externalRefreshSnackBar_requestFailed": "Impossibile raggiungere il server - riprova",
   "settings_registerStatusSnackBar_requestFailed": "Impossibile raggiungere il server - riprova",
   "@settings_registerStatusSnackBar_requestFailed": {},
   "settings_registerStatusSnackBar_unavailable": "Nessuna connessione al server - impossibile modificare ora",

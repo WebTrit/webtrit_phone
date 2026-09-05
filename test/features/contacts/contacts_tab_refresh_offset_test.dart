@@ -72,4 +72,20 @@ void main() {
     states.add(ContactsExternalTabState(status: ContactsExternalTabStatus.success, contacts: people));
     await tester.pumpAndSettle();
   });
+
+  testWidgets('a pull on the extensions list delegates to the refresh port', (tester) async {
+    final states = StreamController<ContactsExternalTabState>.broadcast();
+    addTearDown(states.close);
+
+    await harness.pumpExternal(tester, contacts: people, states: states.stream);
+
+    await tester.fling(find.byType(ListView), const Offset(0, 300), 1000);
+    await tester.pumpAndSettle();
+
+    expect(
+      harness.contactsRefresher.refreshCalls,
+      1,
+      reason: 'the pull gesture must reach the schedule owner through the port',
+    );
+  });
 }

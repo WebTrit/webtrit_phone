@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/features/call_routing/call_routing.dart';
@@ -25,6 +26,17 @@ class MockContactsLocalTabBloc extends MockBloc<ContactsLocalTabEvent, ContactsL
 class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
 
 class MockCallRoutingCubit extends MockCubit<CallRoutingState?> implements CallRoutingCubit {}
+
+/// Records the pull-to-refresh delegations so a test can assert the gesture
+/// actually reached the port.
+class RecordingContactsRefresher implements ContactsRefresher {
+  int refreshCalls = 0;
+
+  @override
+  Future<void> refreshNow() async {
+    refreshCalls++;
+  }
+}
 
 /// A person in the list, favourite or not.
 ///
@@ -53,6 +65,7 @@ class ContactsTabHarness {
   }
 
   final externalBloc = MockContactsExternalTabBloc();
+  final contactsRefresher = RecordingContactsRefresher();
   final localBloc = MockContactsLocalTabBloc();
   final callBloc = MockCallBloc();
   final callRoutingCubit = MockCallRoutingCubit();
@@ -102,6 +115,10 @@ class ContactsTabHarness {
           providers: [
             BlocProvider<CallBloc>.value(value: callBloc),
             BlocProvider<CallRoutingCubit>.value(value: callRoutingCubit),
+            // The pull-to-refresh path reads this port; a harness without it
+            // would let the tab swallow a ProviderNotFoundException and pass
+            // the fling tests without exercising the refresh at all.
+            Provider<ContactsRefresher>.value(value: contactsRefresher),
           ],
           child: CallControllerScope(
             controller: CallController(callBloc: callBloc),

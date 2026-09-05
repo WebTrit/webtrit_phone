@@ -5,6 +5,7 @@ import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
 
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/services/services.dart';
 
 import '../mocks/fake_connectivity_service.dart';
@@ -443,5 +444,216 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 500));
       expect(task.callCount, prev, reason: 'No additional refreshes should occur after dispose');
     });
+
+    // Caller-driven refresh: joins an in-flight run, shifts the window, and
+    // keeps its failures out of the scheduled loop's backoff.
+    test('refreshListener joins an in-flight run and completes with it', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository(workTime: const Duration(seconds: 5));
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'boot leading refresh is in flight');
+
+        async.elapse(const Duration(seconds: 1));
+        var joined = false;
+        service.refreshListener(task).then((_) => joined = true);
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'no second request while one is in flight');
+        expect(joined, isFalse, reason: 'the joined future must wait for the running cycle');
+
+        async.elapse(const Duration(seconds: 4, milliseconds: 100));
+        expect(joined, isTrue, reason: 'the joined future completes when the cycle does');
+      });
+    });
+
+    test('refreshListener propagates the joined run failure to the caller', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = _SlowFailingRefreshable(const Duration(seconds: 5));
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.calls, 1, reason: 'boot leading refresh is in flight');
+
+        async.elapse(const Duration(seconds: 1));
+        Object? failure;
+        service.refreshListener(task).catchError((Object e) => failure = e);
+        async.elapse(const Duration(seconds: 5));
+
+        expect(failure, isA<StateError>(), reason: 'the joined caller must see the in-flight failure');
+        expect(task.calls, 1);
+      });
+    });
+
+    test('refreshListener refreshes immediately and shifts the next tick', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'boot leading refresh');
+
+        // Mid-interval forced refresh at ~t5.
+        async.elapse(const Duration(seconds: 5));
+        var done = false;
+        service.refreshListener(task).then((_) => done = true);
+        async.flushMicrotasks();
+        expect(done, isTrue);
+        expect(task.callCount, 2, reason: 'forced refresh runs immediately');
+
+        // The tick that was due at t10 must NOT fire: the window shifted.
+        async.elapse(const Duration(seconds: 6));
+        expect(task.callCount, 2, reason: 'the original t10 tick was rescheduled');
+
+        // The shifted tick lands a full interval after the forced refresh.
+        async.elapse(const Duration(seconds: 5));
+        expect(task.callCount, 3, reason: 'next tick fires one interval after the forced refresh');
+      });
+    });
+
+    test('a failed manual refresh rethrows and does not feed the scheduled backoff', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        async.elapse(const Duration(seconds: 5));
+        task.failTimes = 1;
+        Object? failure;
+        service.refreshListener(task).catchError((Object e) => failure = e);
+        async.flushMicrotasks();
+        expect(failure, isA<StateError>(), reason: 'the caller must see the failure');
+
+        // With the failure kept out of the backoff, the rescheduled tick
+        // lands one plain interval away, not an exponentially delayed one.
+        async.elapse(const Duration(seconds: 10, milliseconds: 100));
+        expect(task.callCount, 3, reason: 'the next tick must not be backed off by a manual failure');
+      });
+    });
+
+    test('a scheduled run right after a manual refresh is suppressed as a duplicate', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        async.elapse(const Duration(seconds: 5));
+        service.refreshListener(task).catchError((_) {});
+        async.flushMicrotasks();
+        expect(task.callCount, 2);
+
+        // A leading cycle landing within the suppression window (e.g. the
+        // stale tick that was mid-probe when the manual run finished) must
+        // not download the same data again.
+        service.didChangeAppLifecycleState(AppLifecycleState.paused);
+        service.didChangeAppLifecycleState(AppLifecycleState.resumed);
+        async.flushMicrotasks();
+        expect(task.callCount, 2, reason: 'a run within the suppression window is a duplicate');
+      });
+    });
+
+    test('refreshListener unregisters an inactive listener instead of refreshing it', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        task.active = false;
+        var done = false;
+        service.refreshListener(task).then((_) => done = true);
+        async.flushMicrotasks();
+        expect(done, isTrue);
+        expect(task.callCount, 1, reason: 'an inactive listener must not be refreshed');
+
+        async.elapse(const Duration(minutes: 1));
+        expect(task.callCount, 1, reason: 'the listener was unregistered');
+      });
+    });
+
+    test('refreshListener after dispose returns silently', () async {
+      connectivity.setConnected(true);
+
+      final task = MockRefreshableRepository();
+      service = PollingService(
+        connectivityService: connectivity,
+        registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+      );
+      await service.dispose();
+
+      await service.refreshListener(task);
+    });
+
+    test('refreshListener throws for an unregistered listener', () async {
+      connectivity.setConnected(true);
+
+      final registered = MockRefreshableRepository();
+      service = PollingService(
+        connectivityService: connectivity,
+        registrations: [PollingRegistration(listener: registered, interval: const Duration(seconds: 10))],
+      );
+
+      await expectLater(service.refreshListener(MockRefreshableRepository()), throwsArgumentError);
+    });
   });
+}
+
+/// A refreshable whose run takes a while and then fails - the shape a joined
+/// caller must observe as its own error.
+class _SlowFailingRefreshable implements Refreshable {
+  _SlowFailingRefreshable(this.workTime);
+
+  final Duration workTime;
+  int calls = 0;
+
+  @override
+  bool get isActive => true;
+
+  @override
+  Future<void> refresh() async {
+    calls++;
+    await Future<void>.delayed(workTime);
+    throw StateError('slow failure');
+  }
 }
