@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
 
 class ContactsExternalTab extends StatefulWidget {
-  const ContactsExternalTab({super.key, this.markFavorites = false});
+  const ContactsExternalTab({required this.syncTask, this.markFavorites = false, super.key});
+
+  /// The polling registration shared by scheduled and user-driven refreshes.
+  final PollingTaskHandle syncTask;
 
   /// Whether a star marks the people with a favourite among their numbers.
   /// Only where favourites are reachable from this screen: a star that leads
@@ -27,14 +32,22 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
     setState(() => _expandedContactId = _expandedContactId == contactId ? null : contactId);
   }
 
+  Future<void> _refreshContacts() async {
+    // Await the registered task so a pull joins an active scheduled cycle and
+    // the indicator closes on that cycle's actual result.
+    try {
+      await widget.syncTask.runNow();
+    } catch (_) {
+      // With cached items the status-driven failure placeholder is not built,
+      // so a failed pull needs an explicit notification.
+      if (mounted) {
+        context.showErrorSnackBar(context.l10n.settings_registerStatusSnackBar_requestFailed);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future refreshContacts() async {
-      final tabBloc = context.read<ContactsExternalTabBloc>();
-      tabBloc.add(const ContactsExternalTabRefreshed());
-      await tabBloc.stream.firstWhere((state) => state.status != ContactsExternalTabStatus.inProgress);
-    }
-
     return BlocBuilder<ContactsExternalTabBloc, ContactsExternalTabState>(
       builder: (context, state) {
         final contacts = state.contacts;
@@ -45,7 +58,7 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
             // spinner needs the same inset the list content is given, or it
             // is drawn underneath the bar.
             edgeOffset: MediaQuery.of(context).padding.top,
-            onRefresh: refreshContacts,
+            onRefresh: _refreshContacts,
             child: ListView.builder(
               itemCount: contacts.length,
               itemBuilder: (context, index) {
@@ -79,7 +92,7 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
             return NoDataPlaceholder(
               content: Text(context.l10n.contacts_ExternalTabText_empty),
               actions: [
-                TextButton(onPressed: refreshContacts, child: Text(context.l10n.contacts_ExternalTabButton_refresh)),
+                TextButton(onPressed: _refreshContacts, child: Text(context.l10n.contacts_ExternalTabButton_refresh)),
               ],
             );
         }

@@ -42,6 +42,12 @@ class MainShellServices extends StatelessWidget {
           dispose: (context, service) => service.dispose(),
           lazy: false,
         ),
+        if (featureAccess.coreSupport.supportsExtensions)
+          Provider<ExternalContactsSync>(
+            create: _createExternalContactsSync,
+            dispose: (context, sync) => sync.dispose(),
+            lazy: false,
+          ),
         if (featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == true)
           Provider<CdrsSyncWorker>(
             create: (context) =>
@@ -63,6 +69,8 @@ class MainShellServices extends StatelessWidget {
   /// Current registrations:
   /// - [UserRepository]: polled every 10 seconds to keep user data up to date.
   /// - [SystemInfoRepository]: polled every 5 minutes to refresh system information.
+  /// - [ExternalContactsSyncWorker]: registered separately so its stable task
+  ///   handle can be retained for manual refresh.
   /// - [VoicemailRepository]: polled every 5 minutes, but only if voicemail runs for this session
   ///   ([FeatureAccess.voicemailAvailable]) - whichever placement offers it.
   /// - [IceServersRepository]: polled every 5 minutes when the core bundles STUN/TURN servers.
@@ -74,7 +82,6 @@ class MainShellServices extends StatelessWidget {
   List<PollingRegistration> _pollingRegistrations(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
     final isVoicemailsEnabled = featureAccess.voicemailAvailable;
-    final supportsExtensions = featureAccess.coreSupport.supportsExtensions;
     final cliSettingsRepository = context.read<CallerIdSettingsRepository>();
     final favoritesRepository = context.read<FavoritesRepository>();
     final sipSubscriptionsRepository = context.read<SipSubscriptionsRepository>();
@@ -89,11 +96,6 @@ class MainShellServices extends StatelessWidget {
         listener: context.read<SystemInfoRepository>(),
         interval: Duration(seconds: EnvironmentConfig.SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS),
       ),
-      if (supportsExtensions)
-        PollingRegistration(
-          listener: context.read<ExternalContactsRepository>(),
-          interval: Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
-        ),
       if (isVoicemailsEnabled)
         PollingRegistration(
           listener: context.read<VoicemailRepository>(),
@@ -120,6 +122,19 @@ class MainShellServices extends StatelessWidget {
           interval: Duration(seconds: EnvironmentConfig.ICE_SERVERS_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
     ];
+  }
+
+  ExternalContactsSync _createExternalContactsSync(BuildContext context) {
+    final worker = ExternalContactsSyncWorker(
+      userRepository: context.read<UserRepository>(),
+      externalContactsRepository: context.read<ExternalContactsRepository>(),
+      contactsRepository: context.read<ContactsRepository>(),
+    );
+    return ExternalContactsSync(
+      worker: worker,
+      pollingService: context.read<PollingService>(),
+      interval: Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+    );
   }
 
   /// Builds a list of listeners that should be registered in [ConnectivityLifecycleService].

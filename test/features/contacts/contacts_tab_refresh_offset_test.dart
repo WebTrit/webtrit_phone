@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/features/contacts/contacts.dart';
 
@@ -58,18 +59,16 @@ void main() {
   });
 
   testWidgets('the extensions list draws its spinner below the bar, not behind it', (tester) async {
-    final states = StreamController<ContactsExternalTabState>.broadcast();
-    addTearDown(states.close);
+    final refresh = Completer<void>();
+    when(() => harness.externalSyncTask.runNow()).thenAnswer((_) => refresh.future);
 
-    await harness.pumpExternal(tester, contacts: people, behindAppBarOfHeight: tallBar, states: states.stream);
+    await harness.pumpExternal(tester, contacts: people, behindAppBarOfHeight: tallBar);
 
     final (:spinner, :barBottom) = await pullDown(tester);
 
     expect(spinner, greaterThanOrEqualTo(barBottom));
 
-    // The tab holds the spinner until its bloc reports a state that is no
-    // longer in progress; without it the indicator spins past the test.
-    states.add(ContactsExternalTabState(status: ContactsExternalTabStatus.success, contacts: people));
+    refresh.complete();
     await tester.pumpAndSettle();
   });
 }

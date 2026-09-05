@@ -15,7 +15,3 @@ class ContactsExternalTabStarted extends ContactsExternalTabEvent {
   @override
   List<Object?> get props => [search];
 }
-
-class ContactsExternalTabRefreshed extends ContactsExternalTabEvent {
-  const ContactsExternalTabRefreshed();
-}
