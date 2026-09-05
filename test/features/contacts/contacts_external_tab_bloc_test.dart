@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/features/contacts/contacts.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -12,37 +13,38 @@ class MockContactsRepository extends Mock implements ContactsRepository {}
 
 class MockContactsBloc extends MockBloc<ContactsEvent, ContactsState> implements ContactsBloc {}
 
-class MockExternalContactsSyncBloc extends MockBloc<ExternalContactsSyncEvent, ExternalContactsSyncState>
-    implements ExternalContactsSyncBloc {}
+class MockExternalContactsSyncWorker extends Mock implements ExternalContactsSyncWorker {}
 
 void main() {
   late MockContactsRepository contactsRepository;
   late MockContactsBloc searchBloc;
-  late MockExternalContactsSyncBloc syncBloc;
+  late MockExternalContactsSyncWorker syncWorker;
 
   setUp(() {
     contactsRepository = MockContactsRepository();
     searchBloc = MockContactsBloc();
-    syncBloc = MockExternalContactsSyncBloc();
+    syncWorker = MockExternalContactsSyncWorker();
 
     when(() => contactsRepository.watchContacts('', ContactSourceType.external))
         .thenAnswer((_) => Stream.value(const <Contact>[]));
     when(() => searchBloc.state).thenReturn(const ContactsState(sourceType: ContactSourceType.external));
+    when(() => syncWorker.statusStream).thenAnswer((_) => const Stream.empty());
+    when(() => syncWorker.refresh()).thenAnswer((_) async {});
   });
 
   ContactsExternalTabBloc build() => ContactsExternalTabBloc(
     contactsRepository: contactsRepository,
     contactsSearchBloc: searchBloc,
-    externalContactsSyncBloc: syncBloc,
+    syncWorker: syncWorker,
   );
 
-  void withSyncState(ExternalContactsSyncState syncState) {
-    when(() => syncBloc.state).thenReturn(syncState);
+  void withSyncStatus(ExternalContactsSyncStatus syncStatus) {
+    when(() => syncWorker.status).thenReturn(syncStatus);
   }
 
   blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
-    'sync Initial with an empty cache maps to inProgress (loading), not failure',
-    setUp: () => withSyncState(const ExternalContactsSyncInitial()),
+    'syncing with an empty cache maps to inProgress (loading), not failure',
+    setUp: () => withSyncStatus(ExternalContactsSyncStatus.syncing),
     build: build,
     act: (bloc) => bloc.add(const ContactsExternalTabStarted(search: '')),
     expect: () => [
@@ -53,18 +55,8 @@ void main() {
   );
 
   blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
-    'sync RefreshInProgress with an empty cache maps to inProgress (loading)',
-    setUp: () => withSyncState(const ExternalContactsSyncRefreshInProgress()),
-    build: build,
-    act: (bloc) => bloc.add(const ContactsExternalTabStarted(search: '')),
-    expect: () => [
-      isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.inProgress),
-    ],
-  );
-
-  blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
-    'sync Success with an empty cache maps to success (empty state, not loading)',
-    setUp: () => withSyncState(const ExternalContactsSyncSuccess()),
+    'synced with an empty cache maps to success (empty state, not loading)',
+    setUp: () => withSyncStatus(ExternalContactsSyncStatus.synced),
     build: build,
     act: (bloc) => bloc.add(const ContactsExternalTabStarted(search: '')),
     expect: () => [
@@ -73,12 +65,27 @@ void main() {
   );
 
   blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
-    'sync Failure maps to failure',
-    setUp: () => withSyncState(const ExternalContactsSyncRefreshFailure()),
+    'failed maps to failure',
+    setUp: () => withSyncStatus(ExternalContactsSyncStatus.failed),
     build: build,
     act: (bloc) => bloc.add(const ContactsExternalTabStarted(search: '')),
     expect: () => [
       isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.failure),
+    ],
+  );
+
+  blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
+    'worker status transitions arrive through the stream',
+    setUp: () {
+      withSyncStatus(ExternalContactsSyncStatus.syncing);
+      when(() => syncWorker.statusStream)
+          .thenAnswer((_) => Stream.fromIterable(const [ExternalContactsSyncStatus.synced]));
+    },
+    build: build,
+    act: (bloc) => bloc.add(const ContactsExternalTabStarted(search: '')),
+    expect: () => [
+      isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.inProgress),
+      isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.success),
     ],
   );
 }

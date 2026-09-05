@@ -119,17 +119,6 @@ class MainShellBlocs extends StatelessWidget {
             return bloc;
           },
         ),
-        if (featureAccess.coreSupport.supportsExtensions)
-          BlocProvider<ExternalContactsSyncBloc>(
-            lazy: false,
-            create: (context) {
-              return ExternalContactsSyncBloc(
-                userRepository: context.read<UserRepository>(),
-                externalContactsRepository: context.read<ExternalContactsRepository>(),
-                contactsRepository: context.read<ContactsRepository>(),
-              )..add(const ExternalContactsSyncStarted());
-            },
-          ),
         BlocProvider<CallBloc>(
           create: (context) {
             final appBloc = context.read<AppBloc>();

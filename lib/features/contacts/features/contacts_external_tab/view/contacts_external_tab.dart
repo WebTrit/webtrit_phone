@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -30,9 +31,19 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
   @override
   Widget build(BuildContext context) {
     Future refreshContacts() async {
-      final tabBloc = context.read<ContactsExternalTabBloc>();
-      tabBloc.add(const ContactsExternalTabRefreshed());
-      await tabBloc.stream.firstWhere((state) => state.status != ContactsExternalTabStatus.inProgress);
+      // The indicator closes when the operation ends, so await the worker's
+      // own single-flight cycle: waiting for a bloc state change instead
+      // would spin forever when a finished sync leaves the status as it was.
+      try {
+        await context.read<ExternalContactsSyncWorker>().refresh();
+      } on Exception {
+        // With items on screen the status-driven failure placeholder is not
+        // built, so the failed pull must be told here or it looks like a
+        // silent no-op (same wording the account screen uses).
+        if (context.mounted) {
+          context.showErrorSnackBar(context.l10n.settings_registerStatusSnackBar_requestFailed);
+        }
+      }
     }
 
     return BlocBuilder<ContactsExternalTabBloc, ContactsExternalTabState>(

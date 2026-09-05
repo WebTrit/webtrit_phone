@@ -34,6 +34,15 @@ class MainShellServices extends StatelessWidget {
           dispose: (context, service) => service.dispose(),
           lazy: false,
         ),
+        if (featureAccess.coreSupport.supportsExtensions)
+          Provider<ExternalContactsSyncWorker>(
+            create: (context) => ExternalContactsSyncWorker(
+              userRepository: context.read<UserRepository>(),
+              externalContactsRepository: context.read<ExternalContactsRepository>(),
+              contactsRepository: context.read<ContactsRepository>(),
+            ),
+            dispose: (context, worker) => worker.dispose(),
+          ),
         Provider<PollingService>(
           create: (context) => PollingService(
             connectivityService: context.read<ConnectivityService>(),
@@ -91,7 +100,7 @@ class MainShellServices extends StatelessWidget {
       ),
       if (supportsExtensions)
         PollingRegistration(
-          listener: context.read<ExternalContactsRepository>(),
+          listener: context.read<ExternalContactsSyncWorker>(),
           interval: Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
         ),
       if (isVoicemailsEnabled)

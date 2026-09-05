@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
@@ -19,21 +18,20 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
   ContactsExternalTabBloc({
     required this.contactsRepository,
     required this.contactsSearchBloc,
-    required this.externalContactsSyncBloc,
+    required this.syncWorker,
   }) : super(const ContactsExternalTabState()) {
     on<ContactsExternalTabStarted>(_onStarted, transformer: restartable());
-    on<ContactsExternalTabRefreshed>(_onRefreshed, transformer: droppable());
   }
 
   final ContactsRepository contactsRepository;
   final ContactsBloc contactsSearchBloc;
-  final ExternalContactsSyncBloc externalContactsSyncBloc;
+  final ExternalContactsSyncWorker syncWorker;
 
   Future<void> _onStarted(ContactsExternalTabStarted event, Emitter<ContactsExternalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.external),
       onData: (List<Contact> contacts) => state.copyWith(
-        status: _mapExternalContactsSyncStateToStatus(externalContactsSyncBloc.state),
+        status: _mapSyncStatus(syncWorker.status),
         contacts: contacts,
         searching: event.search.isNotEmpty,
       ),
@@ -46,32 +44,20 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
       },
     );
 
-    final externalContactsSyncStateForEachFuture = emit.forEach(
-      externalContactsSyncBloc.stream,
-      onData: (ExternalContactsSyncState externalContactsSyncState) =>
-          state.copyWith(status: _mapExternalContactsSyncStateToStatus(externalContactsSyncState)),
+    final syncStatusForEachFuture = emit.forEach(
+      syncWorker.statusStream,
+      onData: (ExternalContactsSyncStatus syncStatus) => state.copyWith(status: _mapSyncStatus(syncStatus)),
     );
 
-    await Future.wait([
-      watchContactsForEachFuture,
-      contactsSearchSateOnEachFuture,
-      externalContactsSyncStateForEachFuture,
-    ]);
+    await Future.wait([watchContactsForEachFuture, contactsSearchSateOnEachFuture, syncStatusForEachFuture]);
   }
 
-  Future<void> _onRefreshed(ContactsExternalTabRefreshed event, Emitter<ContactsExternalTabState> emit) async {
-    externalContactsSyncBloc.add(const ExternalContactsSyncRefreshed());
-  }
-
-  ContactsExternalTabStatus _mapExternalContactsSyncStateToStatus(ExternalContactsSyncState externalContactsSyncState) {
-    if (externalContactsSyncState is ExternalContactsSyncSuccess) {
-      return ContactsExternalTabStatus.success;
-    } else if (externalContactsSyncState is ExternalContactsSyncFailure) {
-      return ContactsExternalTabStatus.failure;
-    } else {
-      // Initial (sync not finished yet) and RefreshInProgress both mean the first
-      // remote fetch is still running, so keep the loading state until it resolves.
-      return ContactsExternalTabStatus.inProgress;
-    }
+  ContactsExternalTabStatus _mapSyncStatus(ExternalContactsSyncStatus syncStatus) {
+    return switch (syncStatus) {
+      // The first sync cycle is still running, so keep the loading state.
+      ExternalContactsSyncStatus.syncing => ContactsExternalTabStatus.inProgress,
+      ExternalContactsSyncStatus.synced => ContactsExternalTabStatus.success,
+      ExternalContactsSyncStatus.failed => ContactsExternalTabStatus.failure,
+    };
   }
 }
