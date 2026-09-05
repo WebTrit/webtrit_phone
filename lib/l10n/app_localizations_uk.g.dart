@@ -2800,6 +2800,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings_network_smsFallback_toggle => 'SMS як резервний канал';
 
   @override
+  String get contacts_externalRefreshSnackBar_requestFailed => 'Не вдалося зв\'язатися з сервером - спробуйте ще раз';
+
+  @override
   String get settings_registerStatusSnackBar_requestFailed => 'Не вдалося зв\'язатися з сервером - спробуйте ще раз';
 
   @override

@@ -13,33 +13,32 @@ class MockContactsRepository extends Mock implements ContactsRepository {}
 
 class MockContactsBloc extends MockBloc<ContactsEvent, ContactsState> implements ContactsBloc {}
 
-class MockExternalContactsSyncWorker extends Mock implements ExternalContactsSyncWorker {}
+class MockContactsSyncProgress extends Mock implements ContactsSyncProgress {}
 
 void main() {
   late MockContactsRepository contactsRepository;
   late MockContactsBloc searchBloc;
-  late MockExternalContactsSyncWorker syncWorker;
+  late MockContactsSyncProgress syncProgress;
 
   setUp(() {
     contactsRepository = MockContactsRepository();
     searchBloc = MockContactsBloc();
-    syncWorker = MockExternalContactsSyncWorker();
+    syncProgress = MockContactsSyncProgress();
 
     when(() => contactsRepository.watchContacts('', ContactSourceType.external))
         .thenAnswer((_) => Stream.value(const <Contact>[]));
     when(() => searchBloc.state).thenReturn(const ContactsState(sourceType: ContactSourceType.external));
-    when(() => syncWorker.statusStream).thenAnswer((_) => const Stream.empty());
-    when(() => syncWorker.refresh()).thenAnswer((_) async {});
+    when(() => syncProgress.statusStream).thenAnswer((_) => const Stream.empty());
   });
 
   ContactsExternalTabBloc build() => ContactsExternalTabBloc(
     contactsRepository: contactsRepository,
     contactsSearchBloc: searchBloc,
-    syncWorker: syncWorker,
+    syncProgress: syncProgress,
   );
 
   void withSyncStatus(ExternalContactsSyncStatus syncStatus) {
-    when(() => syncWorker.status).thenReturn(syncStatus);
+    when(() => syncProgress.status).thenReturn(syncStatus);
   }
 
   blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
@@ -78,7 +77,7 @@ void main() {
     'worker status transitions arrive through the stream',
     setUp: () {
       withSyncStatus(ExternalContactsSyncStatus.syncing);
-      when(() => syncWorker.statusStream)
+      when(() => syncProgress.statusStream)
           .thenAnswer((_) => Stream.fromIterable(const [ExternalContactsSyncStatus.synced]));
     },
     build: build,

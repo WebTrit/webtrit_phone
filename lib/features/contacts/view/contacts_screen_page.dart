@@ -72,7 +72,7 @@ Widget contactSourceTypeWidgetBuilder(
           return ContactsExternalTabBloc(
             contactsRepository: context.read<ContactsRepository>(),
             contactsSearchBloc: contactsSearchBloc,
-            syncWorker: context.read<ExternalContactsSyncWorker>(),
+            syncProgress: context.read<ExternalContactsSyncWorker>(),
           )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state.search));
         },
         child: widget,

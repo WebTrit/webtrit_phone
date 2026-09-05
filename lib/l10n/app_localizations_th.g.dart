@@ -2759,6 +2759,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get settings_network_smsFallback_toggle => 'SMS เป็นช่องทางสำรอง';
 
   @override
+  String get contacts_externalRefreshSnackBar_requestFailed => 'ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ - โปรดลองอีกครั้ง';
+
+  @override
   String get settings_registerStatusSnackBar_requestFailed => 'ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ - โปรดลองอีกครั้ง';
 
   @override

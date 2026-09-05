@@ -5095,6 +5095,12 @@ abstract class AppLocalizations {
   /// **'SMS as a backup channel'**
   String get settings_network_smsFallback_toggle;
 
+  /// No description provided for @contacts_externalRefreshSnackBar_requestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server - please try again'**
+  String get contacts_externalRefreshSnackBar_requestFailed;
+
   /// Shown in an error snackbar when a register-status request fails: an explicit refresh of the account registration setting, or a change of it (in which case the switch also rolls back to its previous value).
   ///
   /// In en, this message translates to:

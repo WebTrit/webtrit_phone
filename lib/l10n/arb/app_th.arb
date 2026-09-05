@@ -2290,6 +2290,7 @@
   "@settings_network_smsFallback_toggle": {
     "description": "Toggle label for enabling SMS fallback"
   },
+  "contacts_externalRefreshSnackBar_requestFailed": "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ - โปรดลองอีกครั้ง",
   "settings_registerStatusSnackBar_requestFailed": "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ - โปรดลองอีกครั้ง",
   "@settings_registerStatusSnackBar_requestFailed": {},
   "settings_registerStatusSnackBar_unavailable": "ไม่มีการเชื่อมต่อกับเซิร์ฟเวอร์ - เปลี่ยนการตั้งค่านี้ไม่ได้",

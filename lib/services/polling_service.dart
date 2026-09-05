@@ -31,6 +31,7 @@ class PollingOptions {
     this.leadingRefreshRequiresVerify = true,
     this.jitterMaxMs = 400,
     this.maxBackoff = const Duration(minutes: 5),
+    this.duplicateSuppressionWindow = const Duration(seconds: 3),
   });
 
   /// Stop timers while app is backgrounded (via didChangeAppLifecycleState).
@@ -50,6 +51,11 @@ class PollingOptions {
 
   /// Maximum backoff duration when errors accumulate.
   final Duration maxBackoff;
+
+  /// A scheduled run landing within this window after a listener's last
+  /// success is skipped: it would re-download data another entry point (a
+  /// manual refresh, a racing leading cycle) fetched moments ago.
+  final Duration duplicateSuppressionWindow;
 }
 
 /// Periodic polling service that calls `refresh()` on registered [Refreshable] listeners,
@@ -270,21 +276,8 @@ class PollingService with WidgetsBindingObserver implements Disposable {
         return _nextDelay(config);
       }
 
-      if (reachable && !config.isRefreshing) {
-        config.isRefreshing = true;
-        try {
-          await listener.refresh();
-          _logger.finest('PollingService: refresh() succeeded for $listener');
-          config.consecutiveErrors = 0;
-          config.lastSuccessAt = clock.now();
-        } catch (e) {
-          config.consecutiveErrors++;
-          config.lastError = e;
-          config.lastErrorAt = clock.now();
-          _logger.warning('PollingService: refresh() failed for $listener', e);
-        } finally {
-          config.isRefreshing = false;
-        }
+      if (reachable && !config.isRefreshing && !_justRefreshed(config)) {
+        await _runListenerRefresh(listener, config, countFailureTowardsBackoff: true);
       }
 
       return _nextDelay(config); // backoff + jitter for the next tick
@@ -298,7 +291,6 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   /// It uses a known result [reachable] that was computed once for the entire leading cycle.
   void _triggerOnceWithKnownReachability(Refreshable listener, _PollingConfig config, bool reachable) {
     if (_disposed || config.isRefreshing) return;
-    config.isRefreshing = true;
 
     // Cancel any pending schedule to avoid firing with an outdated cadence.
     config.scheduler.cancel();
@@ -306,31 +298,97 @@ class PollingService with WidgetsBindingObserver implements Disposable {
     scheduleMicrotask(() async {
       if (_disposed) return;
       try {
-        if (_shouldRunTimers && reachable) {
+        if (_shouldRunTimers && reachable && !config.isRefreshing) {
           if (!listener.isActive) {
             unregister(listener);
             return;
           }
-          await listener.refresh();
-          _logger.finest('PollingService: leading refresh succeeded for $listener');
-          config.consecutiveErrors = 0;
-          config.lastSuccessAt = clock.now();
+          if (!_justRefreshed(config)) {
+            await _runListenerRefresh(listener, config, countFailureTowardsBackoff: true);
+          }
         }
-      } catch (e) {
-        config.consecutiveErrors++;
-        config.lastError = e;
-        config.lastErrorAt = clock.now();
-        _logger.warning('PollingService: leading refresh failed for $listener', e);
       } finally {
-        config.isRefreshing = false;
-
-        final shouldSchedule = !_disposed && _shouldRunTimers && _pollingConfigs[listener] == config;
-
-        if (shouldSchedule && !config.scheduler.isActive) {
+        // _startPolling itself refuses a dead service, a foreign config and
+        // an already-active chain, so only the timers gate is checked here.
+        if (_shouldRunTimers && _pollingConfigs[listener] == config) {
           _startPolling(listener); // schedules next run via FixedDelayScheduler
         }
       }
     });
+  }
+
+  /// Whether [config] finished a successful run so recently that another
+  /// one now would be a duplicate download rather than fresh data.
+  bool _justRefreshed(_PollingConfig config) {
+    final lastSuccessAt = config.lastSuccessAt;
+    return lastSuccessAt != null && clock.now().difference(lastSuccessAt) < _options.duplicateSuppressionWindow;
+  }
+
+  /// The one refresh-cycle body every entry point runs: latch, execute,
+  /// record the outcome. Scheduled runs feed their failures into the backoff
+  /// counter; a manual run does not ([countFailureTowardsBackoff]), so a
+  /// user's retries cannot starve the automatic schedule, while its success
+  /// still resets the counter - a completed fetch is proof of recovery.
+  Future<void> _runListenerRefresh(
+    Refreshable listener,
+    _PollingConfig config, {
+    required bool countFailureTowardsBackoff,
+    bool rethrowError = false,
+  }) async {
+    config.isRefreshing = true;
+    final run = listener.refresh();
+    config.inFlight = run;
+    try {
+      await run;
+      _logger.finest('PollingService: refresh() succeeded for $listener');
+      config.consecutiveErrors = 0;
+      config.lastSuccessAt = clock.now();
+    } catch (e) {
+      _logger.warning('PollingService: refresh() failed for $listener', e);
+      if (countFailureTowardsBackoff) config.consecutiveErrors++;
+      if (rethrowError) rethrow;
+    } finally {
+      config.isRefreshing = false;
+      config.inFlight = null;
+    }
+  }
+
+  /// Immediate, caller-driven refresh of a registered [listener].
+  ///
+  /// Runs outside the reachability gate - a user-driven refresh must attempt
+  /// the network and surface its failure rather than silently skip - and
+  /// reschedules the periodic loop from its completion, so the next tick
+  /// lands a full interval away. A run already in flight is joined: the
+  /// returned future completes when that cycle does and shares its error.
+  /// Manual failures do not feed the scheduled loop's backoff.
+  Future<void> refreshListener(Refreshable listener) async {
+    if (_disposed) return;
+    final config = _pollingConfigs[listener];
+    if (config == null) {
+      throw ArgumentError.value(listener, 'listener', 'is not registered with this PollingService');
+    }
+
+    final inFlight = config.inFlight;
+    if (inFlight != null) return inFlight;
+
+    if (!listener.isActive) {
+      unregister(listener);
+      return;
+    }
+
+    try {
+      await _runListenerRefresh(listener, config, countFailureTowardsBackoff: false, rethrowError: true);
+      // A completed fetch is the strongest liveness evidence there is; seed
+      // the cache so the rescheduled tick does not probe again immediately.
+      _reachability.set(true);
+    } finally {
+      // The schedule is touched only after the run: cancelling before it
+      // would leave the listener without a loop if the run never completed.
+      config.scheduler.cancel();
+      if (_shouldRunTimers && _pollingConfigs[listener] == config) {
+        _startPolling(listener);
+      }
+    }
   }
 
   /// Reachability check with TTL cache. When [force] is true, the cache is ignored.
@@ -369,11 +427,14 @@ class _PollingConfig {
   /// Whether a refresh is currently running.
   bool isRefreshing = false;
 
-  // Observability / backoff
+  /// The run currently in flight, so a concurrent caller can join it and
+  /// complete (or fail) together with it instead of returning early.
+  Future<void>? inFlight;
+
+  // Backoff input and the duplicate-suppression anchor; failures are logged
+  // rather than stored.
   int consecutiveErrors = 0;
   DateTime? lastSuccessAt;
-  DateTime? lastErrorAt;
-  Object? lastError;
 }
 
 /// A registration for a [Refreshable] listener with a specific polling [interval].
