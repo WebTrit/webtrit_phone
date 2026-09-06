@@ -119,16 +119,56 @@ class BarWidgetConfig with _$BarWidgetConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class BottomNavigationBarWidgetConfig with _$BottomNavigationBarWidgetConfig {
-  const BottomNavigationBarWidgetConfig({this.backgroundColor, this.selectedItemColor, this.unSelectedItemColor});
+  const BottomNavigationBarWidgetConfig({
+    this.backgroundColor,
+    this.elevation,
+    this.selectedItemColor,
+    this.unSelectedItemColor,
+    this.selectedLabelStyle,
+    this.unselectedLabelStyle,
+    this.selectedIconTheme,
+    this.unselectedIconTheme,
+    this.showSelectedLabels,
+    this.showUnselectedLabels,
+  });
 
+  /// Background color in hex format, drawn as given. A bar that should show
+  /// what is behind it says so in the colour's own alpha channel - the widget
+  /// used to apply an alpha of its own, which no brand asked for and none
+  /// could correct.
   @override
   final String? backgroundColor;
 
+  @override
+  final double? elevation;
+
+  /// Colours the selected item. A caption takes it only while
+  /// [selectedLabelStyle] names no colour of its own: Flutter uses a label
+  /// style's colour *instead of* this one, which is why a style is the way to
+  /// paint captions differently from icons.
   @override
   final String? selectedItemColor;
 
   @override
   final String? unSelectedItemColor;
+
+  @override
+  final TextStyleConfig? selectedLabelStyle;
+
+  @override
+  final TextStyleConfig? unselectedLabelStyle;
+
+  @override
+  final IconThemeDataConfig? selectedIconTheme;
+
+  @override
+  final IconThemeDataConfig? unselectedIconTheme;
+
+  @override
+  final bool? showSelectedLabels;
+
+  @override
+  final bool? showUnselectedLabels;
 
   factory BottomNavigationBarWidgetConfig.fromJson(Map<String, Object?> json) =>
       _$BottomNavigationBarWidgetConfigFromJson(json);

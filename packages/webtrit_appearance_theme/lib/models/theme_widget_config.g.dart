@@ -111,16 +111,46 @@ BottomNavigationBarWidgetConfig _$BottomNavigationBarWidgetConfigFromJson(
   Map<String, dynamic> json,
 ) => BottomNavigationBarWidgetConfig(
   backgroundColor: json['backgroundColor'] as String?,
+  elevation: (json['elevation'] as num?)?.toDouble(),
   selectedItemColor: json['selectedItemColor'] as String?,
   unSelectedItemColor: json['unSelectedItemColor'] as String?,
+  selectedLabelStyle: json['selectedLabelStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(
+          json['selectedLabelStyle'] as Map<String, dynamic>,
+        ),
+  unselectedLabelStyle: json['unselectedLabelStyle'] == null
+      ? null
+      : TextStyleConfig.fromJson(
+          json['unselectedLabelStyle'] as Map<String, dynamic>,
+        ),
+  selectedIconTheme: json['selectedIconTheme'] == null
+      ? null
+      : IconThemeDataConfig.fromJson(
+          json['selectedIconTheme'] as Map<String, dynamic>,
+        ),
+  unselectedIconTheme: json['unselectedIconTheme'] == null
+      ? null
+      : IconThemeDataConfig.fromJson(
+          json['unselectedIconTheme'] as Map<String, dynamic>,
+        ),
+  showSelectedLabels: json['showSelectedLabels'] as bool?,
+  showUnselectedLabels: json['showUnselectedLabels'] as bool?,
 );
 
 Map<String, dynamic> _$BottomNavigationBarWidgetConfigToJson(
   BottomNavigationBarWidgetConfig instance,
 ) => <String, dynamic>{
   'backgroundColor': instance.backgroundColor,
+  'elevation': instance.elevation,
   'selectedItemColor': instance.selectedItemColor,
   'unSelectedItemColor': instance.unSelectedItemColor,
+  'selectedLabelStyle': instance.selectedLabelStyle?.toJson(),
+  'unselectedLabelStyle': instance.unselectedLabelStyle?.toJson(),
+  'selectedIconTheme': instance.selectedIconTheme?.toJson(),
+  'unselectedIconTheme': instance.unselectedIconTheme?.toJson(),
+  'showSelectedLabels': instance.showSelectedLabels,
+  'showUnselectedLabels': instance.showUnselectedLabels,
 };
 
 GroupTitleListTileWidgetConfig _$GroupTitleListTileWidgetConfigFromJson(

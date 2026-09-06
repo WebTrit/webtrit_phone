@@ -268,7 +268,11 @@ class ThemeStyleFactoryProvider {
   }
 
   BottomNavigationBarThemeData createBottomNavigationBarThemeData() {
-    return BottomNavigationBarThemeDataFactory(colorScheme, widgetConfig.bar.bottomNavigationBar).create();
+    return BottomNavigationBarThemeDataFactory(
+      colorScheme,
+      widgetConfig.bar.bottomNavigationBar,
+      defaultTextTheme.bodyMedium?.fontFamily,
+    ).create();
   }
 
   TabBarThemeData createTabBarTheme() {
