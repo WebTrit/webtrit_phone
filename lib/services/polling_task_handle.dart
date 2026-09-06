@@ -49,7 +49,7 @@ class PollingTaskState {
   final StackTrace? stackTrace;
 }
 
-/// A stable capability for observing and manually running one polling task.
+/// A stable capability for observing and triggering one polling task.
 ///
 /// [runNow] joins an already-running refresh instead of starting an overlapping
 /// one. Its returned future completes with that refresh cycle's result.
@@ -69,6 +69,20 @@ abstract interface class PollingTaskHandle {
   /// scheduled retry backoff. A failure from a scheduled cycle still does,
   /// including when this call joined that scheduled cycle.
   Future<void> runNow();
+
+  /// Marks the task's data as stale and requests an automatic refresh no
+  /// earlier than [after].
+  ///
+  /// Repeated calls use trailing-edge debounce: the latest call replaces the
+  /// previous deadline. If a refresh that started before the deadline is still
+  /// running, one trailing refresh remains pending. Connectivity, application
+  /// lifecycle, and single-flight rules apply. A failure from the resulting
+  /// automatic refresh participates in scheduled backoff.
+  ///
+  /// This method returns immediately. Observe [states] for the eventual result.
+  /// Throws [ArgumentError] for a negative delay and [StateError] after the task
+  /// has been unregistered.
+  void invalidate({Duration after = Duration.zero});
 
   /// Removes this task from its owning [PollingService].
   void unregister();

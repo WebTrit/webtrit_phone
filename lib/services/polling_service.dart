@@ -144,6 +144,7 @@ class PollingService with WidgetsBindingObserver implements Disposable {
       final config = _PollingConfig(interval: newInterval);
       config.handle = _PollingTaskHandle(
         runNow: () => _runNow(listener, config),
+        invalidate: (after) => _invalidate(listener, config, after),
         unregister: () => unregister(listener),
       );
       return config;
@@ -180,6 +181,7 @@ class PollingService with WidgetsBindingObserver implements Disposable {
 
     config.scheduleEpoch++;
     config.scheduler.cancel();
+    _clearInvalidation(config);
     unawaited(config.handle.stop());
   }
 
@@ -213,6 +215,9 @@ class PollingService with WidgetsBindingObserver implements Disposable {
 
     final configs = _pollingConfigs.values.toList(growable: false);
     _pollingConfigs.clear();
+    for (final config in configs) {
+      _clearInvalidation(config);
+    }
     await Future.wait([_connectivitySub.cancel(), ...configs.map((config) => config.handle.stop())]);
   }
 
@@ -376,11 +381,90 @@ class PollingService with WidgetsBindingObserver implements Disposable {
     }
   }
 
+  /// Schedule an automatic refresh using trailing-edge debounce.
+  void _invalidate(Refreshable listener, _PollingConfig config, Duration after) {
+    if (after.isNegative) {
+      throw ArgumentError.value(after, 'after', 'must not be negative');
+    }
+    if (_disposed || _pollingConfigs[listener] != config || !config.handle.isRegistered) {
+      throw StateError('This polling task is no longer registered.');
+    }
+
+    config.invalidationEpoch++;
+    final invalidationEpoch = config.invalidationEpoch;
+    config.invalidationPending = true;
+    config.invalidationDue = false;
+    config.invalidationTimer?.cancel();
+    config.invalidationTimer = null;
+
+    void triggerWhenCurrent() {
+      if (!_isCurrentInvalidation(listener, config, invalidationEpoch)) return;
+      config.invalidationTimer = null;
+      config.invalidationDue = true;
+      unawaited(_runDueInvalidation(listener, config));
+    }
+
+    if (after == Duration.zero) {
+      scheduleMicrotask(triggerWhenCurrent);
+    } else {
+      config.invalidationTimer = Timer(after, triggerWhenCurrent);
+    }
+  }
+
+  /// Run the pending invalidation when the task becomes eligible. A cycle that
+  /// predates its deadline is awaited rather than joined, preserving a
+  /// post-invalidation refresh attempt.
+  Future<void> _runDueInvalidation(Refreshable listener, _PollingConfig config) async {
+    while (_isDueInvalidation(listener, config)) {
+      if (!_shouldRunTimers) return;
+
+      if (!listener.isActive) {
+        unregister(listener);
+        return;
+      }
+
+      final inFlight = config.inFlight;
+      if (inFlight != null) {
+        try {
+          await inFlight;
+        } catch (_) {
+          // The pending invalidation still needs its own automatic attempt.
+        }
+        continue;
+      }
+
+      final invalidationEpoch = config.invalidationEpoch;
+      final reachable = await _isReachable();
+      if (!_isDueInvalidation(listener, config) || config.invalidationEpoch != invalidationEpoch) continue;
+      if (!_shouldRunTimers || !reachable) return;
+      if (config.inFlight != null) continue;
+
+      config.scheduleEpoch++;
+      config.scheduler.cancel();
+
+      try {
+        await _runRefreshCycle(listener, config, trigger: _PollingTrigger.invalidated);
+      } catch (_) {
+        // The cycle already published and logged the automatic failure.
+      } finally {
+        final shouldSchedule = !_disposed && _shouldRunTimers && _pollingConfigs[listener] == config;
+        if (shouldSchedule && !config.scheduler.isActive) {
+          _startPolling(listener);
+        }
+      }
+      return;
+    }
+  }
+
   /// The only path that invokes [Refreshable.refresh]. It publishes state and
   /// gives all manual callers the same in-flight future.
   Future<void> _runRefreshCycle(Refreshable listener, _PollingConfig config, {required _PollingTrigger trigger}) {
     final inFlight = config.inFlight;
     if (inFlight != null) return inFlight;
+
+    if (trigger != _PollingTrigger.manual && _isDueInvalidation(listener, config)) {
+      _clearInvalidation(config);
+    }
 
     final completer = Completer<void>();
     config.inFlight = completer.future;
@@ -432,6 +516,9 @@ class PollingService with WidgetsBindingObserver implements Disposable {
       } finally {
         if (identical(config.inFlight, completer.future)) {
           config.inFlight = null;
+          if (_shouldRunTimers && _isDueInvalidation(listener, config)) {
+            scheduleMicrotask(() => unawaited(_runDueInvalidation(listener, config)));
+          }
         }
       }
     }());
@@ -444,6 +531,25 @@ class PollingService with WidgetsBindingObserver implements Disposable {
         _shouldRunTimers &&
         _pollingConfigs[listener] == config &&
         config.scheduleEpoch == scheduleEpoch;
+  }
+
+  bool _isCurrentInvalidation(Refreshable listener, _PollingConfig config, int invalidationEpoch) {
+    return !_disposed &&
+        _pollingConfigs[listener] == config &&
+        config.invalidationPending &&
+        config.invalidationEpoch == invalidationEpoch;
+  }
+
+  bool _isDueInvalidation(Refreshable listener, _PollingConfig config) {
+    return !_disposed && _pollingConfigs[listener] == config && config.invalidationPending && config.invalidationDue;
+  }
+
+  void _clearInvalidation(_PollingConfig config) {
+    config.invalidationEpoch++;
+    config.invalidationPending = false;
+    config.invalidationDue = false;
+    config.invalidationTimer?.cancel();
+    config.invalidationTimer = null;
   }
 
   /// Reachability check with TTL cache. When [force] is true, the cache is ignored.
@@ -469,7 +575,7 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   }
 }
 
-enum _PollingTrigger { leading, scheduled, manual }
+enum _PollingTrigger { leading, scheduled, invalidated, manual }
 
 /// Internal per-listener state.
 class _PollingConfig {
@@ -490,6 +596,13 @@ class _PollingConfig {
   /// Invalidates ticks that crossed an async boundary under an older schedule.
   int scheduleEpoch = 0;
 
+  /// Latest trailing-edge invalidation request. Its epoch invalidates delayed
+  /// callbacks and reachability continuations from replaced requests.
+  int invalidationEpoch = 0;
+  bool invalidationPending = false;
+  bool invalidationDue = false;
+  Timer? invalidationTimer;
+
   // Observability / backoff
   int consecutiveErrors = 0;
   DateTime? lastSuccessAt;
@@ -497,11 +610,16 @@ class _PollingConfig {
 }
 
 class _PollingTaskHandle implements PollingTaskHandle {
-  _PollingTaskHandle({required Future<void> Function() runNow, required void Function() unregister})
-    : _runNow = runNow,
-      _unregister = unregister;
+  _PollingTaskHandle({
+    required Future<void> Function() runNow,
+    required void Function(Duration after) invalidate,
+    required void Function() unregister,
+  }) : _runNow = runNow,
+       _invalidate = invalidate,
+       _unregister = unregister;
 
   final Future<void> Function() _runNow;
+  final void Function(Duration after) _invalidate;
   final void Function() _unregister;
   final BehaviorSubject<PollingTaskState> _states = BehaviorSubject.seeded(
     const PollingTaskState(phase: PollingTaskPhase.idle),
@@ -524,6 +642,14 @@ class _PollingTaskHandle implements PollingTaskHandle {
       return Future.error(StateError('This polling task is no longer registered.'));
     }
     return _runNow();
+  }
+
+  @override
+  void invalidate({Duration after = Duration.zero}) {
+    if (!_isRegistered) {
+      throw StateError('This polling task is no longer registered.');
+    }
+    _invalidate(after);
   }
 
   @override
