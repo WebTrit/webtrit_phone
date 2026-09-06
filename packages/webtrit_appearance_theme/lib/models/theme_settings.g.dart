@@ -462,14 +462,6 @@ const _$ThemeSettingsJsonSchema = {
         },
       },
     },
-    'BottomNavigationBarWidgetConfig': {
-      'type': 'object',
-      'properties': {
-        'backgroundColor': {'type': 'string'},
-        'selectedItemColor': {'type': 'string'},
-        'unSelectedItemColor': {'type': 'string'},
-      },
-    },
     'OffsetConfig': {
       'type': 'object',
       'properties': {
@@ -540,6 +532,29 @@ const _$ThemeSettingsJsonSchema = {
           'type': 'boolean',
           'description': 'Whether to apply text scaling to the icons.',
         },
+      },
+    },
+    'BottomNavigationBarWidgetConfig': {
+      'type': 'object',
+      'properties': {
+        'backgroundColor': {
+          'type': 'string',
+          'description':
+              "Background color in hex format, drawn as given. A bar that should show\nwhat is behind it says so in the colour's own alpha channel - the widget\nused to apply an alpha of its own, which no brand asked for and none\ncould correct.",
+        },
+        'elevation': {'type': 'number'},
+        'selectedItemColor': {
+          'type': 'string',
+          'description':
+              "Colours the selected item. A caption takes it only while\n[selectedLabelStyle] names no colour of its own: Flutter uses a label\nstyle's colour *instead of* this one, which is why a style is the way to\npaint captions differently from icons.",
+        },
+        'unSelectedItemColor': {'type': 'string'},
+        'selectedLabelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
+        'unselectedLabelStyle': {r'$ref': r'#/$defs/TextStyleConfig'},
+        'selectedIconTheme': {r'$ref': r'#/$defs/IconThemeDataConfig'},
+        'unselectedIconTheme': {r'$ref': r'#/$defs/IconThemeDataConfig'},
+        'showSelectedLabels': {'type': 'boolean'},
+        'showUnselectedLabels': {'type': 'boolean'},
       },
     },
     'OverlayStyleModel': {
