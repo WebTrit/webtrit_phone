@@ -484,6 +484,8 @@
   "@contacts_agreement_title": {},
   "contacts_ExternalTabButton_refresh": "Refresh",
   "@contacts_ExternalTabButton_refresh": {},
+  "contacts_ExternalTabSnackBar_requestFailed": "Could not reach the server - please try again",
+  "@contacts_ExternalTabSnackBar_requestFailed": {},
   "contacts_ExternalTabText_empty": "No contacts",
   "@contacts_ExternalTabText_empty": {},
   "contacts_ExternalTabText_emptyOnSearching": "No contacts found",

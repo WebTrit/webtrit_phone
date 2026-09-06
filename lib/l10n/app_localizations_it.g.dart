@@ -516,6 +516,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contacts_ExternalTabButton_refresh => 'Aggiorna';
 
   @override
+  String get contacts_ExternalTabSnackBar_requestFailed => 'Impossibile raggiungere il server - riprova';
+
+  @override
   String get contacts_ExternalTabText_empty => 'Nessun contatto';
 
   @override

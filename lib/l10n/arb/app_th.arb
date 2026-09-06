@@ -460,6 +460,8 @@
   "@contacts_agreement_title": {},
   "contacts_ExternalTabButton_refresh": "รีเฟรช",
   "@contacts_ExternalTabButton_refresh": {},
+  "contacts_ExternalTabSnackBar_requestFailed": "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ - โปรดลองอีกครั้ง",
+  "@contacts_ExternalTabSnackBar_requestFailed": {},
   "contacts_ExternalTabText_empty": "ไม่มีรายชื่อติดต่อ",
   "@contacts_ExternalTabText_empty": {},
   "contacts_ExternalTabText_emptyOnSearching": "ไม่พบรายชื่อติดต่อ",

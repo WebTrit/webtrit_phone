@@ -197,6 +197,8 @@ extension AppLocalizationsExtension on AppLocalizations {
       'contacts_agreement_title' => contacts_agreement_title,
       'contacts_ExternalTabButton_refresh' =>
         contacts_ExternalTabButton_refresh,
+      'contacts_ExternalTabSnackBar_requestFailed' =>
+        contacts_ExternalTabSnackBar_requestFailed,
       'contacts_ExternalTabText_empty' => contacts_ExternalTabText_empty,
       'contacts_ExternalTabText_emptyOnSearching' =>
         contacts_ExternalTabText_emptyOnSearching,

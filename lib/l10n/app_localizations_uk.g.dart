@@ -531,6 +531,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contacts_ExternalTabButton_refresh => 'Оновити';
 
   @override
+  String get contacts_ExternalTabSnackBar_requestFailed => 'Не вдалося зв\'язатися з сервером - спробуйте ще раз';
+
+  @override
   String get contacts_ExternalTabText_empty => 'Немає контактів';
 
   @override

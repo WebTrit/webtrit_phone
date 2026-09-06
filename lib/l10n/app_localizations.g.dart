@@ -928,6 +928,12 @@ abstract class AppLocalizations {
   /// **'Refresh'**
   String get contacts_ExternalTabButton_refresh;
 
+  /// No description provided for @contacts_ExternalTabSnackBar_requestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server - please try again'**
+  String get contacts_ExternalTabSnackBar_requestFailed;
+
   /// No description provided for @contacts_ExternalTabText_empty.
   ///
   /// In en, this message translates to:

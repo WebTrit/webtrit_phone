@@ -460,6 +460,8 @@
   "@contacts_agreement_title": {},
   "contacts_ExternalTabButton_refresh": "Aggiorna",
   "@contacts_ExternalTabButton_refresh": {},
+  "contacts_ExternalTabSnackBar_requestFailed": "Impossibile raggiungere il server - riprova",
+  "@contacts_ExternalTabSnackBar_requestFailed": {},
   "contacts_ExternalTabText_empty": "Nessun contatto",
   "@contacts_ExternalTabText_empty": {},
   "contacts_ExternalTabText_emptyOnSearching": "Nessun contatto trovato",

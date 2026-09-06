@@ -512,6 +512,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contacts_ExternalTabButton_refresh => 'Refresh';
 
   @override
+  String get contacts_ExternalTabSnackBar_requestFailed => 'Could not reach the server - please try again';
+
+  @override
   String get contacts_ExternalTabText_empty => 'No contacts';
 
   @override
