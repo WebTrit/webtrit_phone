@@ -1,7 +1,7 @@
 # Polling worker pattern
 
 The polling worker pattern separates one finite feature sync cycle from its scheduling and lifecycle ownership.
-Last reviewed: 2026-09-06.
+Last reviewed: 2026-09-07.
 
 ## Scope
 
@@ -33,31 +33,70 @@ Every feature polling worker has exactly two roles:
 | Cycle executor | `PollingWorker` | Performs one finite domain sync cycle |
 | Registration owner | `PollingWorkerOwner<W>` | Registers, exposes safe capabilities, invalidates, and tears down |
 
-The dependency direction is:
+### Ownership
 
 ```text
-widget -> feature action -> BLoC/Cubit -> PollingTaskStateSource -+
-                                  |                               |
-                                  +------> PollingTaskRunner -----+--> FeatureSync owner
-                                                                      |
-domain event ----------------> feature-specific method ---------------+
-                                                                      |
-                                                                      v
-                                                              private task handle
-                                                                      |
-                                                                      v
-                                                                PollingService
-                                                                      |
-                                                                      v
-                                                                FeatureSyncWorker
-                                                                      |
-                                                        remote gateway + local repository
+MainShellServices (composition root)
+|
++-- owns PollingService
+|
++-- owns FeatureSync (PollingWorkerOwner)
+    |
+    +-- owns FeatureSyncWorker
+    |
+    +-- retains private PollingTaskHandle
+        |
+        +-- represents the worker registration in PollingService
+```
+
+The provider disposes `FeatureSync`. The owner then unregisters its private
+handle before disposing the worker. Neither the composition root nor any
+consumer disposes those two objects separately.
+
+### Allowed dependency direction
+
+```text
+widget --> feature BLoC/Cubit
+                 |      |
+          observes      runs
+                 v      v
+       PollingTaskStateSource   PollingTaskRunner
+                 ^      ^
+                 +--+---+
+                    |
+           implemented by FeatureSync
+                    |
+                    +--> PollingService (register/invalidate/unregister)
+                    |
+                    +--> FeatureSyncWorker (own/dispose)
+                              |
+                              +--> remote gateways, local repositories, mappers
 ```
 
 Only the owner sees the full `PollingTaskHandle`. A worker does not know that
 polling exists. A BLoC or Cubit receives only the capabilities required to map
 the task into feature state and actions. A widget depends only on that feature
-API, not on polling services.
+API, not on polling services. The arrows above mean "may depend on"; ownership
+is shown separately to avoid confusing construction with runtime calls.
+
+### Runtime trigger convergence
+
+```text
+automatic: boot / reconnect / resume / timer --> PollingService --------+
+                                                                         |
+manual: widget --> BLoC/Cubit --> PollingTaskRunner.runNow() ------------+--> one task
+                                                                         |    single-flight
+domain: event --> FeatureSync.domainMethod() --> deferred invalidation --+        |
+                                                                                  v
+                                                                      worker.refresh()
+                                                                                  |
+                                                                                  v
+                                                                    gateway -> local store
+```
+
+All three paths reach the same registration. Only the manual path returns the
+cycle result directly to its caller. Domain invalidation is automatic work and
+therefore still follows connectivity, foreground, and backoff rules.
 
 ## `PollingWorker` contract
 
@@ -307,6 +346,14 @@ worker directly.
 
 ## Current adoption
 
+Both migrated features use the same structure. Their differences are domain
+capabilities, not different worker patterns:
+
+| Feature | Cycle executor | Registration owner | Presentation capabilities | Domain capability |
+|---|---|---|---|---|
+| External Contacts | `ExternalContactsSyncWorker` | `ExternalContactsSync` | State + manual run through `ContactsExternalTabBloc` | None |
+| CDR | `CdrsSyncWorker` | `CdrsSync` | State for every CDR list; manual run for Full and Missed lists | `requestPostCallRefresh()` |
+
 ### External Contacts
 
 `ExternalContactsSyncWorker` implements the finite cycle and
@@ -319,7 +366,9 @@ calls `ContactsExternalTabBloc.refresh()` and has no polling dependency.
 `CdrsSyncWorker` implements the finite paginated sync cycle and `CdrsSync`
 uses the standard owner. CDR-specific post-call invalidation belongs on
 `CdrsSync`; task state and manual refresh reach consumers only through the
-narrow capabilities above.
+narrow capabilities above. Full and Missed list cubits receive state and
+runner capabilities. The per-number cubit receives only task state because it
+has no pull-to-refresh action.
 
 ## Non-goals
 
