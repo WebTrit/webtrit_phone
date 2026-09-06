@@ -9,7 +9,7 @@ For how a release pins its `webtrit_callkeep` version, see
 
 ---
 
-## What a patch is here
+## The shape of a patch
 
 A patch keeps the release's name and raises its build number. `pubspec.yaml` carries two
 version fields and only one of them moves:
@@ -38,7 +38,7 @@ Step 4 is the one that is easy to skip and the one that everything downstream ne
 
 ---
 
-## Why the tag is made by hand
+## The tag nobody creates
 
 Nothing creates it. `auto-tag-version` runs on pushes to `main`, reads `app_version`, and drops
 the build number before looking:
@@ -52,7 +52,7 @@ Its own comment says what follows from that: pushes "where the tag already exist
 X.Y.Z+N reusing the same base" are no-ops. A patch therefore never produces a tag on its own, and
 a merge into a release branch does not run the workflow at all.
 
-## Why an untagged patch is invisible
+## The reach of an untagged patch
 
 The configurator offers a list of phone refs, and that list is tags and nothing else -
 `GithubProxyService` asks GitHub for `path: 'tags'`. Both things a release needs are pointed at a
