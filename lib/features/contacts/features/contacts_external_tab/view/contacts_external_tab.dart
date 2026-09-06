@@ -41,7 +41,7 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
       // With cached items the status-driven failure placeholder is not built,
       // so a failed pull needs an explicit notification.
       if (mounted) {
-        context.showErrorSnackBar(context.l10n.settings_registerStatusSnackBar_requestFailed);
+        context.showErrorSnackBar(context.l10n.contacts_ExternalTabSnackBar_requestFailed);
       }
     }
   }

@@ -511,6 +511,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get contacts_ExternalTabButton_refresh => 'รีเฟรช';
 
   @override
+  String get contacts_ExternalTabSnackBar_requestFailed => 'ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ - โปรดลองอีกครั้ง';
+
+  @override
   String get contacts_ExternalTabText_empty => 'ไม่มีรายชื่อติดต่อ';
 
   @override

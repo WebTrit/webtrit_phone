@@ -460,6 +460,8 @@
   "@contacts_agreement_title": {},
   "contacts_ExternalTabButton_refresh": "Оновити",
   "@contacts_ExternalTabButton_refresh": {},
+  "contacts_ExternalTabSnackBar_requestFailed": "Не вдалося зв'язатися з сервером - спробуйте ще раз",
+  "@contacts_ExternalTabSnackBar_requestFailed": {},
   "contacts_ExternalTabText_empty": "Немає контактів",
   "@contacts_ExternalTabText_empty": {},
   "contacts_ExternalTabText_emptyOnSearching": "Контакти не знайдено",
