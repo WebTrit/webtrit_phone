@@ -9,7 +9,7 @@ import 'package:patrol/patrol.dart';
 /// airplane-mode helper which drives the quick-settings UI and does not find
 /// its tile on every device.
 Future<T> withNetworkDisabled<T>(PatrolIntegrationTester $, Future<T> Function() body) async {
-  final network = _RestorableNetwork($);
+  final network = RestorableNetwork($);
   addTearDown(network.restore);
 
   await network.disable();
@@ -20,8 +20,10 @@ Future<T> withNetworkDisabled<T>(PatrolIntegrationTester $, Future<T> Function()
   }
 }
 
-class _RestorableNetwork {
-  _RestorableNetwork(this.$);
+/// Controls the device network while guaranteeing that both transports can be
+/// restored by the caller's teardown.
+class RestorableNetwork {
+  RestorableNetwork(this.$);
 
   final PatrolIntegrationTester $;
   var _restored = false;
@@ -30,6 +32,10 @@ class _RestorableNetwork {
     await $.platformAutomator.mobile.disableWifi();
     await $.platformAutomator.mobile.disableCellular();
   }
+
+  Future<void> disableWifi() => $.platformAutomator.mobile.disableWifi();
+
+  Future<void> enableWifi() => $.platformAutomator.mobile.enableWifi();
 
   Future<void> restore() async {
     if (_restored) return;

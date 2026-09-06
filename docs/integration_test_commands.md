@@ -39,22 +39,31 @@ patrol build -t patrol_test/call_and_recent_test.dart ...
 
 ## Run the polling guards
 
-From the repository root, run the connect lifecycle and Contacts request-path
-guards separately:
+From the repository root, run the connectivity ordering, connect lifecycle, and
+Contacts request-path guards separately:
 
 ```bash
+patrol test -t patrol_test/connectivity_probe_ordering_test.dart \
+  --no-tree-shake-icons \
+  --dart-define-from-file=dart_define.json \
+  --dart-define-from-file=dart_define.integration_test.json
+
 patrol test -t patrol_test/polling_connect_invariant_test.dart \
+  --no-tree-shake-icons \
   --dart-define-from-file=dart_define.json \
   --dart-define-from-file=dart_define.integration_test.json
 
 patrol test -t patrol_test/contacts_worker_sync_e2e_test.dart \
+  --no-tree-shake-icons \
   --dart-define-from-file=dart_define.json \
   --dart-define-from-file=dart_define.integration_test.json
 ```
 
-Both guards disable and restore Wi-Fi and cellular service. On Android, use a
-USB-connected device for these scenarios: disabling Wi-Fi also disconnects a
-wireless ADB session before Patrol can restore the network.
+All three guards disable and restore Wi-Fi and cellular service. On Android,
+use a USB-connected device for these scenarios: disabling Wi-Fi also
+disconnects a wireless ADB session before Patrol can restore the network. The
+connectivity-ordering guard needs no account credentials; it constructs the
+connectivity and polling services directly and uses the real platform stream.
 
 ## Deploy to Firebase Test Lab
 

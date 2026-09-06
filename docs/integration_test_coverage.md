@@ -1,8 +1,10 @@
 # Integration Test Coverage
 
 All tests live in the `patrol_test/` directory and are built on the [Patrol](https://patrol.dev/) framework.
-Each test bootstraps the full app, logs in (or reuses an existing session), performs its scenario, and tears down cleanly.
-Last reviewed: 2026-09-05.
+App-flow tests bootstrap the full app and log in or reuse an existing session.
+Focused native-integration guards may construct only the services under test.
+Every test tears down its device state.
+Last reviewed: 2026-09-06.
 
 ---
 
@@ -225,6 +227,29 @@ Three independent tests — each skipped automatically if the required credentia
 7. Place an outgoing call to contact A by tapping their recents tile.
 8. Verify order: contact A first (outgoing, `Icons.call_made`), contact B second (incoming), contact A third (incoming).
 9. Verify contact names are displayed correctly throughout.
+
+---
+
+## Background Polling - Connectivity Probe Ordering
+
+**File:** `patrol_test/connectivity_probe_ordering_test.dart`
+
+**Verifies:** An older HTTP liveness probe cannot overwrite the online state
+from a newer Android connectivity event or stop the recovered polling schedule.
+
+**Steps:**
+1. Disable Wi-Fi and cellular connectivity and create the connectivity and
+   polling services while offline.
+2. Enable Wi-Fi to start probe P1, disable it again, then enable it to start P2.
+3. Complete P2 as online and verify that polling runs its leading refresh.
+4. Complete P1 as offline after P2 and verify that the last connection state
+   remains online.
+5. Wait for a periodic tick and verify that polling is still scheduled.
+6. Restore both device transports during teardown.
+
+The network transitions and `connectivity_plus` event stream are real. Probe
+completion is controlled to make the otherwise timing-dependent race
+deterministic. No account credentials are required.
 
 ---
 
