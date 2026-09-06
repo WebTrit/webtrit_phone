@@ -1,7 +1,7 @@
 # Refreshing data by hand
 
 How a user asks a list in the app to fetch again, screen by screen.
-Last reviewed: 2026-09-05.
+Last reviewed: 2026-09-06.
 
 The rule: refreshing is a pull on the list. A screen that can be refreshed
 carries no refresh control in its app bar.
@@ -79,10 +79,24 @@ on a branded one.
 `callhistory` capability) and `lib/features/recents/view/recents_screen.dart`
 (it does not).
 
-Neither screen can be refreshed by hand. The list is served from the local
-database, which `CdrsSyncWorker` fills through its shared `PollingService`
-registration every ten seconds by default. Scrolling to the bottom pulls older
-pages through `CdrsListCubit.fetchHistory()`.
+The server-backed screen can be refreshed by pulling either the All or Missed
+list, including an empty list. Both tabs receive only the
+`PollingTaskRunner` capability exposed by `CdrsSync` and await `runNow()`. A
+pull therefore joins an active scheduled cycle instead of starting a second
+request path, and its spinner closes only when that cycle has persisted its
+result. A failure keeps cached records visible and reports the failed explicit
+action with a snack bar.
+
+The indicator uses the same top inset as the list because the body extends
+behind the app bar. Both populated and empty scrollables use always-scrollable
+physics so a short list can still recognize the gesture. A list's pagination
+listener ignores positions at or beyond its leading edge, including negative
+iOS bounce overscroll, so a pull cannot start `fetchHistory()` beside the
+polling cycle. Scrolling toward the bottom remains a separate action: it loads
+older pages through `CdrsListCubit.fetchHistory()`.
+
+The local-recents screen cannot be refreshed by hand and has nothing remote to
+refresh: its list is written by the app itself and watched live.
 
 Ending a call invalidates the same polling task with a one-second delay so the
 backend can publish the CDR. Repeated call-ended events use trailing-edge

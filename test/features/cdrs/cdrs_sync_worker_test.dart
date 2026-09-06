@@ -236,11 +236,19 @@ void main() {
       when(() => syncWorker.dispose()).thenAnswer((_) async {});
       when(() => pollingService.register(any())).thenReturn(task);
       when(() => task.isRegistered).thenReturn(true);
+      when(() => task.state).thenReturn(const PollingTaskState(phase: PollingTaskPhase.idle));
+      when(() => task.states).thenAnswer((_) => const Stream<PollingTaskState>.empty());
+      when(() => task.runNow()).thenAnswer((_) async {});
       final sync = CdrsSync(worker: syncWorker, pollingService: pollingService, interval: const Duration(seconds: 10));
 
       final registration = verify(() => pollingService.register(captureAny())).captured.single as PollingRegistration;
       expect(registration.listener, same(syncWorker));
       expect(registration.interval, const Duration(seconds: 10));
+      expect(sync.state.phase, PollingTaskPhase.idle);
+      expect(sync.states, same(task.states));
+
+      await sync.runNow();
+      verify(() => task.runNow()).called(1);
 
       sync.requestPostCallRefresh();
       verify(() => task.invalidate(after: const Duration(seconds: 1))).called(1);

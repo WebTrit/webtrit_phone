@@ -504,6 +504,19 @@ with a one-second publication delay. Repeated call-ended events therefore
 debounce, an active scheduled cycle cannot overlap them, and the normal
 periodic cadence is re-armed after the trailing refresh.
 
+The Full and Missed CDR cubits receive `PollingTaskStateSource` and
+`PollingTaskRunner` from `CdrsSync`. Pull-to-refresh invokes the current cubit's
+feature action, which awaits `runNow()`, so it joins an active scheduled or
+post-call cycle and presents that cycle's completion or failure to the user.
+Widgets have no polling dependency, and neither presentation consumer can
+invalidate or unregister the app-owned task.
+
+Every failed CDR cycle asks the local repository to report an initial-sync
+failure, but the repository emits `CdrsInitialSyncFailed` only while its durable
+sync cursor is absent. A manual pull that fails after the first successful sync
+therefore updates task state and the pull UI without producing an initial-sync
+event.
+
 When the app is already offline, `PollingService` correctly skips the worker,
 and publishes `waitingForConnectivity` for the CDR polling task. `CdrsSync`
 exposes that replaying state to every CDR list. An empty list releases its

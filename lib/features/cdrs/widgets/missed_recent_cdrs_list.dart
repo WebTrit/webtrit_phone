@@ -46,20 +46,30 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
   @override
   void initState() {
     super.initState();
-    scrollController.addListener(() {
-      final maxScroll = scrollController.position.maxScrollExtent;
-      final position = scrollController.position.pixels;
-      final scrollRemaining = maxScroll - position;
+    scrollController.addListener(_handleScroll);
+  }
 
-      const hystoryFetchScrollThreshold = 500.0;
-      final shouldFetch = scrollRemaining < hystoryFetchScrollThreshold;
-      final canFetch = !cubit.state.historyEndReached && !cubit.state.fetchingHistory;
-      if (shouldFetch && canFetch) cubit.fetchHistory();
+  void _handleScroll() {
+    final position = scrollController.position;
+    final pixels = position.pixels;
+    final scrollRemaining = position.maxScrollExtent - pixels;
 
-      const scrolledThreshold = 1000;
-      final scrolledAway = position > scrolledThreshold;
-      if (this.scrolledAway != scrolledAway) setState(() => this.scrolledAway = scrolledAway);
-    });
+    const historyFetchScrollThreshold = 500.0;
+    // A leading-edge bounce is the pull-to-refresh gesture, not pagination.
+    final isPastLeadingEdge = pixels > position.minScrollExtent;
+    final shouldFetch = isPastLeadingEdge && scrollRemaining < historyFetchScrollThreshold;
+    final canFetch = !cubit.state.historyEndReached && !cubit.state.fetchingHistory;
+    if (shouldFetch && canFetch) cubit.fetchHistory();
+
+    const scrolledThreshold = 1000;
+    final scrolledAway = pixels > scrolledThreshold;
+    if (this.scrolledAway != scrolledAway) setState(() => this.scrolledAway = scrolledAway);
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   void scrollToTop() {
@@ -106,7 +116,15 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state.records.isEmpty) {
-          return Center(child: Text(context.l10n.cdrs_noMissedCalls_message));
+          return CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(child: Text(context.l10n.cdrs_noMissedCalls_message)),
+              ),
+            ],
+          );
         }
 
         return BlocBuilder<UserInfoCubit, UserInfoState>(
@@ -132,6 +150,7 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                       onScrollToTop: scrollToTop,
                       child: ListView.builder(
                         controller: scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
                         // TODO: migrate to scrollCacheExtent (deprecated after Flutter 3.41.0-0.0.pre)
                         // ignore: deprecated_member_use
                         cacheExtent: 500,
@@ -139,7 +158,9 @@ class _MissedRecentCdrsListState extends State<MissedRecentCdrsList> {
                         itemCount: state.records.length + 1,
                         itemBuilder: (context, index) {
                           final historyIndicatorPosition = state.records.length;
-                          if (index == historyIndicatorPosition) return HistoryFetchIndicator(state.fetchingHistory);
+                          if (index == historyIndicatorPosition) {
+                            return HistoryFetchIndicator(state.fetchingHistory);
+                          }
                           final cdr = state.records[index];
                           final participant = cdr.participant;
                           final participantNumber = cdr.participantNumber;

@@ -1,10 +1,22 @@
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import 'cdrs_list_cubit.dart';
 
 class FullRecentCdrsCubit extends CdrsListCubit {
-  FullRecentCdrsCubit(super.localRepository, super.remoteRepository, super.syncStateSource, {super.pageSize});
+  FullRecentCdrsCubit(
+    super.localRepository,
+    super.remoteRepository,
+    super.syncStateSource,
+    this.syncRunner, {
+    super.pageSize,
+  });
+
+  final PollingTaskRunner syncRunner;
+
+  /// Runs the app-owned CDR sync now or joins its in-flight cycle.
+  Future<void> refresh() => syncRunner.runNow();
 
   @override
   Future<List<CdrRecord>> queryLocal({DateTime? from}) => localRepository.getHistory(from: from, limit: pageSize);

@@ -820,6 +820,12 @@ abstract class AppLocalizations {
   /// **'No recent calls'**
   String get cdrs_noRecentCalls_message;
 
+  /// No description provided for @cdrs_refreshFailed_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not refresh call history - please try again'**
+  String get cdrs_refreshFailed_message;
+
   /// Accessibility name announced while a screen waits for a request to finish.
   ///
   /// In en, this message translates to:

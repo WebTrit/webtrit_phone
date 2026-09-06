@@ -24,9 +24,9 @@ const _incrementalRecordCount = 120;
 const _pageSize = 50;
 const _historyPath = '/api/v1/user/history';
 
-/// Covers one finite incremental CDR sync against the local Core and SIP
-/// adapter. The adapter serves 120 controlled records, forcing the worker to
-/// drain three pages (50 + 50 + 20) before the cycle completes.
+/// Covers one pull-driven incremental CDR sync against the local Core and SIP
+/// adapter. The adapter serves 120 controlled records, forcing the app-owned
+/// polling task to drain three pages (50 + 50 + 20) before the pull completes.
 void main() {
   const userRef = IntegrationTestEnvironmentConfig.PASSWORD_USER_CREDENTIAL;
   const customCoreUrl = IntegrationTestEnvironmentConfig.CUSTOM_CORE_URL;
@@ -64,14 +64,35 @@ void main() {
     final shellContext = $.tester.element(find.byKey(recentsNavKey));
     final scheduledSync = shellContext.read<CdrsSync>();
     final localRepository = shellContext.read<CdrsLocalRepository>();
-    final remoteRepository = shellContext.read<CdrsRemoteRepository>();
 
     await _waitForStoredRecords($, localRepository, _initialRecordCount);
 
-    // Release the app-owned registration after its initial polling cycle. The
-    // test below owns exactly one refresh, so no scheduled tick can pollute the
-    // request-count oracle.
-    await scheduledSync.dispose();
+    await $(recentsNavKey).tap();
+    await $(RecentCdrsScreen).waitUntilVisible();
+
+    // Complete a known empty cycle before arranging the incremental data. Its
+    // completion re-arms the next periodic deadline, leaving the following UI
+    // pull as the only cycle inside the request-count window.
+    await _clearHistory(adapterHistoryUri);
+    await scheduledSync.runNow();
+    await $.pump();
+
+    // The Missed tab performs a one-shot scan when it mounts with a short
+    // cache. Let that feature-owned pagination finish against the empty stand
+    // before opening the pull-driven request window below.
+    final recentContext = $.tester.element(find.byType(RecentCdrsScreen));
+    final fullCubit = recentContext.read<FullRecentCdrsCubit>();
+    final missedCubit = recentContext.read<MissedRecentCdrsCubit>();
+    await waitUntil(
+      $,
+      () =>
+          !fullCubit.state.isLoading &&
+          !fullCubit.state.fetchingHistory &&
+          !missedCubit.state.isLoading &&
+          !missedCubit.state.fetchingHistory,
+      timeout: const Duration(seconds: 30),
+      description: 'the mounted CDR lists did not finish their initial work',
+    );
 
     // Give the incremental cycle an anchor older than every CDR seeded by the
     // stand. This keeps the scenario valid when the adapter starts applying
@@ -79,17 +100,26 @@ void main() {
     await localRepository.wipeData();
     await localRepository.upsertCdrs([_paginationAnchor]);
     await localRepository.markSyncCompleted(_paginationAnchor.connectTime);
+    await $(Key(_paginationAnchor.callId)).waitUntilVisible();
 
     await _seedHistory(adapterHistoryUri, _incrementalRecordCount);
     final refreshStartedAt = DateTime.now();
 
-    final worker = CdrsSyncWorker(localRepository, remoteRepository, pageSize: _pageSize);
-    addTearDown(worker.dispose);
-    await worker.refresh();
+    await $.tester.fling(find.byType(ListView), const Offset(0, 300), 1000);
+    await _waitForStoredRecords($, localRepository, _incrementalRecordCount + 1);
     await $.pumpAndSettle();
 
+    expect(find.byType(RefreshProgressIndicator), findsNothing);
+
     final pageRequests = apiLog.requestsFor(_historyPath, since: refreshStartedAt);
-    expect(pageRequests, hasLength(3), reason: '120 CDRs at page size 50 must require exactly three pages');
+    final requestSummary = pageRequests
+        .map((request) => '${request.time.toIso8601String()} ${request.uri.queryParameters}')
+        .join('\n');
+    expect(
+      pageRequests,
+      hasLength(3),
+      reason: '120 CDRs at page size 50 must require exactly three pages:\n$requestSummary',
+    );
     expect(pageRequests.map((request) => request.uri.queryParameters['page']).toList(), ['1', '2', '3']);
     expect(pageRequests.map((request) => request.uri.queryParameters['items_per_page']).toSet(), {'$_pageSize'});
 
@@ -116,8 +146,6 @@ void main() {
       reason: 'the incremental anchor must remain the oldest local record',
     );
 
-    await $(recentsNavKey).tap();
-    await $(RecentCdrsScreen).waitUntilVisible();
     await $(Key('seeded-$userRef-0')).waitUntilVisible();
 
     await logout($);

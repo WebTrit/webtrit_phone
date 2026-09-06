@@ -178,6 +178,7 @@ extension AppLocalizationsExtension on AppLocalizations {
       'call_videoView_actionLabel_fit' => call_videoView_actionLabel_fit,
       'cdrs_noMissedCalls_message' => cdrs_noMissedCalls_message,
       'cdrs_noRecentCalls_message' => cdrs_noRecentCalls_message,
+      'cdrs_refreshFailed_message' => cdrs_refreshFailed_message,
       'common_SemanticsLabel_loading' => common_SemanticsLabel_loading,
       'common_noInternetConnection_message' =>
         common_noInternetConnection_message,

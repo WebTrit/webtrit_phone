@@ -463,6 +463,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'Немає останніх дзвінків';
 
   @override
+  String get cdrs_refreshFailed_message => 'Не вдалося оновити історію дзвінків - спробуйте ще раз';
+
+  @override
   String get common_SemanticsLabel_loading => 'Завантаження';
 
   @override
