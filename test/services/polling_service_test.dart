@@ -375,6 +375,46 @@ void main() {
       });
     });
 
+    test('offline boot publishes a replaying waiting-for-connectivity state', () {
+      fakeAsync((async) {
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final task = MockRefreshableRepository();
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+
+        async.flushMicrotasks();
+
+        expect(task.callCount, 0);
+        expect(handle.state.phase, PollingTaskPhase.waitingForConnectivity);
+
+        final lateStates = <PollingTaskState>[];
+        final lateSubscription = handle.states.listen(lateStates.add);
+        async.flushMicrotasks();
+        expect(lateStates.single.phase, PollingTaskPhase.waitingForConnectivity);
+        unawaited(lateSubscription.cancel());
+      });
+    });
+
+    test('an offline transition publishes waiting for connectivity after success', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          registrations: [PollingRegistration(listener: task, interval: const Duration(seconds: 10))],
+          options: const PollingOptions(jitterMaxMs: 0),
+        );
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+        async.flushMicrotasks();
+        expect(handle.state.phase, PollingTaskPhase.succeeded);
+
+        connectivity.setConnected(false);
+        async.flushMicrotasks();
+
+        expect(handle.state.phase, PollingTaskPhase.waitingForConnectivity);
+        expect(handle.state.lastSuccessAt, isNotNull);
+      });
+    });
+
     test('handle replays state and joins an in-flight manual refresh', () {
       fakeAsync((async) {
         final task = MockRefreshableRepository(workTime: const Duration(seconds: 5));
@@ -384,7 +424,10 @@ void main() {
         final initialStates = <PollingTaskState>[];
         final initialSubscription = handle.states.listen(initialStates.add);
         async.flushMicrotasks();
-        expect(initialStates.single.phase, PollingTaskPhase.idle);
+        expect(initialStates.map((state) => state.phase), [
+          PollingTaskPhase.idle,
+          PollingTaskPhase.waitingForConnectivity,
+        ]);
 
         var firstCompleted = false;
         var secondCompleted = false;

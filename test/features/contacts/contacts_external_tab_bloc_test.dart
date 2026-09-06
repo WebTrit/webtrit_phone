@@ -75,6 +75,16 @@ void main() {
   );
 
   blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
+    'waiting for connectivity maps to failure',
+    setUp: () => withSyncPhase(PollingTaskPhase.waitingForConnectivity),
+    build: build,
+    act: (bloc) => bloc.add(const ContactsExternalTabStarted(search: '')),
+    expect: () => [
+      isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.failure),
+    ],
+  );
+
+  blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
     'failed polling maps to failure',
     setUp: () => withSyncPhase(PollingTaskPhase.failed),
     build: build,

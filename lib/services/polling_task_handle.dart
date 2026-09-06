@@ -3,6 +3,9 @@ enum PollingTaskPhase {
   /// The task is registered but has not run yet.
   idle,
 
+  /// Automatic work is waiting for network reachability.
+  waitingForConnectivity,
+
   /// A refresh cycle is in progress.
   running,
 
@@ -49,26 +52,33 @@ class PollingTaskState {
   final StackTrace? stackTrace;
 }
 
-/// A stable capability for observing and triggering one polling task.
-///
-/// [runNow] joins an already-running refresh instead of starting an overlapping
-/// one. Its returned future completes with that refresh cycle's result.
-abstract interface class PollingTaskHandle {
+/// Read-only state of one polling task.
+abstract interface class PollingTaskStateSource {
   /// The latest state. It is available synchronously from registration time.
   PollingTaskState get state;
 
   /// A replaying state stream. A new listener immediately receives [state].
   Stream<PollingTaskState> get states;
+}
 
-  /// Whether this handle still represents a registered task.
-  bool get isRegistered;
-
+/// Permission to trigger one polling task without controlling its lifecycle.
+abstract interface class PollingTaskRunner {
   /// Runs the task now, or joins its in-flight refresh cycle.
   ///
   /// A manual failure is reported to the caller but does not increase the
   /// scheduled retry backoff. A failure from a scheduled cycle still does,
   /// including when this call joined that scheduled cycle.
   Future<void> runNow();
+}
+
+/// Full ownership handle for one task registered with [PollingService].
+///
+/// Owners keep this handle for invalidation and teardown. Consumers should be
+/// given only [PollingTaskStateSource] or [PollingTaskRunner], according to the
+/// operation they need.
+abstract interface class PollingTaskHandle implements PollingTaskStateSource, PollingTaskRunner {
+  /// Whether this handle still represents a registered task.
+  bool get isRegistered;
 
   /// Marks the task's data as stale and requests an automatic refresh no
   /// earlier than [after].

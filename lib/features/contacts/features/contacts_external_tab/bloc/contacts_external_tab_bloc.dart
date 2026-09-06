@@ -53,7 +53,9 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
       // Idle still precedes the first leading cycle, so an empty cache remains loading.
       PollingTaskPhase.idle || PollingTaskPhase.running => ContactsExternalTabStatus.inProgress,
       PollingTaskPhase.succeeded => ContactsExternalTabStatus.success,
-      PollingTaskPhase.failed || PollingTaskPhase.stopped => ContactsExternalTabStatus.failure,
+      PollingTaskPhase.waitingForConnectivity ||
+      PollingTaskPhase.failed ||
+      PollingTaskPhase.stopped => ContactsExternalTabStatus.failure,
     };
   }
 }
