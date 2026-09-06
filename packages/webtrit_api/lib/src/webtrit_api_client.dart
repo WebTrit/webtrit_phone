@@ -865,6 +865,7 @@ class WebtritApiClient {
     String token, {
     DateTime? from,
     DateTime? to,
+    int? page,
     int? limit,
     String? locale,
     RequestOptions options = const RequestOptions(),
@@ -877,6 +878,7 @@ class WebtritApiClient {
       queryParameters: {
         if (from != null) 'time_from': from.toUtc().toIso8601String(),
         if (to != null) 'time_to': to.toUtc().toIso8601String(),
+        if (page != null) 'page': page.toString(),
         if (limit != null) 'items_per_page': limit.toString(),
       },
     );

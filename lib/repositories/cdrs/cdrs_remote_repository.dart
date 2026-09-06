@@ -9,8 +9,9 @@ abstract class CdrsRemoteRepository {
   ///
   /// [from] - Optional parameter to filter records `from` this date.
   /// [to] - Optional parameter to filter records `to` this date.
+  /// [page] - Optional one-based page number.
   /// [limit] - Optional parameter to limit the number of records returned.
-  Future<List<CdrRecord>> getHistory({DateTime? from, DateTime? to, int? limit});
+  Future<List<CdrRecord>> getHistory({DateTime? from, DateTime? to, int? page, int? limit});
 }
 
 class CdrsRemoteRepositoryApiImpl with CdrApiMapper implements CdrsRemoteRepository {
@@ -21,9 +22,9 @@ class CdrsRemoteRepositoryApiImpl with CdrApiMapper implements CdrsRemoteReposit
   final SessionGuard _sessionGuard;
 
   @override
-  Future<List<CdrRecord>> getHistory({DateTime? from, DateTime? to, int? limit}) async {
+  Future<List<CdrRecord>> getHistory({DateTime? from, DateTime? to, int? page, int? limit}) async {
     try {
-      final response = await _webtritApiClient.getCdrHistory(_token, from: from, to: to, limit: limit);
+      final response = await _webtritApiClient.getCdrHistory(_token, from: from, to: to, page: page, limit: limit);
       return response.items.map(cdrFromApi).toList();
     } on UnauthorizedException catch (e) {
       _sessionGuard.onUnauthorized(e);
