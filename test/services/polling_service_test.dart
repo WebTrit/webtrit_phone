@@ -571,6 +571,262 @@ void main() {
       });
     });
 
+    test('deferred invalidation runs at its deadline and resets periodic cadence', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 10)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'leading refresh');
+
+        handle.invalidate(after: const Duration(seconds: 3));
+        async.elapse(const Duration(seconds: 2, milliseconds: 999));
+        expect(task.callCount, 1, reason: 'invalidation must not run before its deadline');
+
+        async.elapse(const Duration(milliseconds: 1));
+        expect(task.callCount, 2, reason: 'invalidation runs at its deadline');
+
+        async.elapse(const Duration(seconds: 9, milliseconds: 999));
+        expect(task.callCount, 2, reason: 'the old periodic deadline must be invalidated');
+
+        async.elapse(const Duration(milliseconds: 1));
+        expect(task.callCount, 3, reason: 'periodic cadence restarts after the invalidated cycle');
+      });
+    });
+
+    test('repeated invalidations use the latest trailing-edge deadline', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(minutes: 1)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        handle.invalidate(after: const Duration(seconds: 2));
+        async.elapse(const Duration(seconds: 1));
+        handle.invalidate(after: const Duration(seconds: 2));
+
+        async.elapse(const Duration(seconds: 1, milliseconds: 999));
+        expect(task.callCount, 1, reason: 'the replaced deadline must not run');
+
+        async.elapse(const Duration(milliseconds: 1));
+        expect(task.callCount, 2, reason: 'only the latest deadline runs');
+      });
+    });
+
+    test('a replaced invalidation ignores its stale reachability continuation', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          options: const PollingOptions(jitterMaxMs: 0, reachabilityTtl: Duration(seconds: 1)),
+        );
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(minutes: 1)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+        async.elapse(const Duration(seconds: 2));
+
+        connectivity.nextCheckDelay = const Duration(seconds: 5);
+        handle.invalidate();
+        async.flushMicrotasks();
+
+        async.elapse(const Duration(seconds: 1));
+        handle.invalidate(after: const Duration(seconds: 10));
+
+        async.elapse(const Duration(seconds: 4));
+        expect(task.callCount, 1, reason: 'the stale reachability result must not run the replaced invalidation');
+
+        async.elapse(const Duration(seconds: 5, milliseconds: 999));
+        expect(task.callCount, 1, reason: 'the replacement must wait for its own deadline');
+
+        async.elapse(const Duration(milliseconds: 1));
+        expect(task.callCount, 2);
+      });
+    });
+
+    test('invalidation queues a trailing cycle behind work that started earlier', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository(workTime: const Duration(seconds: 5));
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(minutes: 1)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'leading cycle is in flight');
+
+        handle.invalidate(after: const Duration(seconds: 1));
+        async.elapse(const Duration(seconds: 4, milliseconds: 999));
+        expect(task.callCount, 1, reason: 'the invalidation must not join or overlap the earlier cycle');
+
+        async.elapse(const Duration(milliseconds: 1));
+        expect(task.callCount, 2, reason: 'one trailing cycle starts when the earlier cycle completes');
+
+        async.elapse(const Duration(seconds: 5));
+        expect(task.callCount, 2, reason: 'the invalidation must produce only one trailing cycle');
+      });
+    });
+
+    test('manual refresh before the deadline does not consume an invalidation', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(minutes: 1)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        handle.invalidate(after: const Duration(seconds: 5));
+        async.elapse(const Duration(seconds: 2));
+        unawaited(handle.runNow());
+        async.flushMicrotasks();
+        expect(task.callCount, 2, reason: 'manual refresh runs independently');
+
+        async.elapse(const Duration(seconds: 3));
+        expect(task.callCount, 3, reason: 'the later automatic invalidation must still run');
+      });
+    });
+
+    test('offline invalidation remains pending until reconnect', () {
+      fakeAsync((async) {
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(minutes: 1)));
+        async.flushMicrotasks();
+
+        handle.invalidate(after: const Duration(seconds: 1));
+        async.elapse(const Duration(seconds: 5));
+        expect(task.callCount, 0, reason: 'automatic work must not run while offline');
+
+        connectivity.setConnected(true);
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'the reconnect cycle satisfies the pending invalidation');
+
+        async.elapse(const Duration(seconds: 1));
+        expect(task.callCount, 1, reason: 'the pending invalidation must not run twice');
+      });
+    });
+
+    test('background invalidation remains pending until resume', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(
+          connectivityService: connectivity,
+          options: const PollingOptions(pauseInBackground: true, jitterMaxMs: 0),
+        );
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(minutes: 1)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+
+        service.didChangeAppLifecycleState(AppLifecycleState.paused);
+        handle.invalidate(after: const Duration(seconds: 1));
+        async.elapse(const Duration(seconds: 5));
+        expect(task.callCount, 1, reason: 'automatic work must not run in background');
+
+        service.didChangeAppLifecycleState(AppLifecycleState.resumed);
+        async.flushMicrotasks();
+        expect(task.callCount, 2, reason: 'the resume cycle satisfies the pending invalidation');
+
+        async.elapse(const Duration(seconds: 1));
+        expect(task.callCount, 2, reason: 'the pending invalidation must not run twice');
+      });
+    });
+
+    test('resume preserves a trailing invalidation behind an in-flight manual cycle', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository(workTime: const Duration(seconds: 2));
+        service = PollingService(
+          connectivityService: connectivity,
+          options: const PollingOptions(pauseInBackground: true, jitterMaxMs: 0),
+        );
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(minutes: 1)));
+
+        async.flushMicrotasks();
+        async.elapse(const Duration(seconds: 2));
+        expect(task.callCount, 1, reason: 'leading refresh completes');
+
+        service.didChangeAppLifecycleState(AppLifecycleState.paused);
+        handle.invalidate(after: const Duration(seconds: 1));
+        async.elapse(const Duration(seconds: 1));
+
+        unawaited(handle.runNow());
+        async.flushMicrotasks();
+        expect(task.callCount, 2, reason: 'manual cycle starts while the app is backgrounded');
+
+        service.didChangeAppLifecycleState(AppLifecycleState.resumed);
+        async.flushMicrotasks();
+        expect(task.callCount, 2, reason: 'resume must not overlap the manual cycle');
+
+        async.elapse(const Duration(seconds: 2));
+        expect(task.callCount, 3, reason: 'the pending invalidation runs after the older manual cycle');
+
+        async.elapse(const Duration(seconds: 2));
+        expect(task.callCount, 3, reason: 'only one trailing invalidation cycle is started');
+      });
+    });
+
+    test('invalidated failure participates in automatic backoff', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(seconds: 1)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1, reason: 'leading refresh succeeds');
+
+        task.failTimes = 1;
+        handle.invalidate();
+        async.flushMicrotasks();
+        expect(task.callCount, 2);
+        expect(handle.state.phase, PollingTaskPhase.failed);
+
+        async.elapse(const Duration(seconds: 1, milliseconds: 999));
+        expect(task.callCount, 2, reason: 'automatic failure must apply exponential backoff');
+
+        async.elapse(const Duration(milliseconds: 1));
+        expect(task.callCount, 3);
+      });
+    });
+
+    test('unregister cancels pending invalidation and rejects new ones', () {
+      fakeAsync((async) {
+        connectivity.setConnected(true);
+
+        final task = MockRefreshableRepository();
+        service = PollingService(connectivityService: connectivity, options: const PollingOptions(jitterMaxMs: 0));
+        final handle = service.register(PollingRegistration(listener: task, interval: const Duration(minutes: 1)));
+
+        async.flushMicrotasks();
+        expect(task.callCount, 1);
+        expect(() => handle.invalidate(after: const Duration(seconds: -1)), throwsArgumentError);
+
+        handle.invalidate(after: const Duration(seconds: 5));
+        handle.unregister();
+        async.elapse(const Duration(seconds: 10));
+
+        expect(task.callCount, 1);
+        expect(() => handle.invalidate(), throwsStateError);
+      });
+    });
+
     test('unregister stops the handle and rejects further manual runs', () {
       fakeAsync((async) {
         final task = MockRefreshableRepository();
