@@ -62,16 +62,16 @@ void main() {
     final recentsNavKey = MainFlavor.recents.toNavBarKey();
     await $(recentsNavKey).waitUntilVisible();
     final shellContext = $.tester.element(find.byKey(recentsNavKey));
-    final scheduledWorker = shellContext.read<CdrsSyncWorker>();
+    final scheduledSync = shellContext.read<CdrsSync>();
     final localRepository = shellContext.read<CdrsLocalRepository>();
     final remoteRepository = shellContext.read<CdrsRemoteRepository>();
 
     await _waitForStoredRecords($, localRepository, _initialRecordCount);
 
-    // Stop the transitional self-scheduler after its initial cycle. The test
-    // below owns exactly one refresh, so no 10-second tick can pollute the
+    // Release the app-owned registration after its initial polling cycle. The
+    // test below owns exactly one refresh, so no scheduled tick can pollute the
     // request-count oracle.
-    await scheduledWorker.dispose();
+    await scheduledSync.dispose();
 
     // Give the incremental cycle an anchor older than every CDR seeded by the
     // stand. This keeps the scenario valid when the adapter starts applying

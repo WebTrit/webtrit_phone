@@ -10,7 +10,7 @@ This page describes UI behavior. The shared scheduler, task handles, and the
 boundary between automatic and manual execution are documented in
 [`polling.md`](polling.md). A manual fetch for a data source that is also polled
 must use the same task capability to avoid a parallel refresh path. External
-Contacts follows this rule; the remaining migration status is recorded there.
+Contacts and CDR synchronization follow this rule.
 
 ## My account (settings)
 
@@ -80,8 +80,20 @@ on a branded one.
 (it does not).
 
 Neither screen can be refreshed by hand. The list is served from the local
-database, which `CdrsSyncWorker` fills on a ten-second poll; scrolling to the
-bottom pulls older pages through `CdrsListCubit.fetchHistory()`.
+database, which `CdrsSyncWorker` fills through its shared `PollingService`
+registration every ten seconds by default. Scrolling to the bottom pulls older
+pages through `CdrsListCubit.fetchHistory()`.
+
+Ending a call invalidates the same polling task with a one-second delay so the
+backend can publish the CDR. Repeated call-ended events use trailing-edge
+debounce, and the refresh cannot overlap the periodic cycle.
+
+An empty cache keeps its initial loader while the first remote cycle is
+pending. When automatic polling cannot run offline, the CDR task publishes a
+replaying `waitingForConnectivity` state and the screen immediately resolves to
+the empty state. A screen opened after the offline transition receives the same
+retained state. A slow online sync remains loading instead of being mistaken
+for offline, and a later successful sync still populates the list normally.
 
 ## Voicemail
 

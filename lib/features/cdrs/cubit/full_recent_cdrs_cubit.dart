@@ -4,7 +4,7 @@ import 'package:webtrit_phone/utils/utils.dart';
 import 'cdrs_list_cubit.dart';
 
 class FullRecentCdrsCubit extends CdrsListCubit {
-  FullRecentCdrsCubit(super.localRepository, super.remoteRepository, {super.pageSize});
+  FullRecentCdrsCubit(super.localRepository, super.remoteRepository, super.syncStateSource, {super.pageSize});
 
   @override
   Future<List<CdrRecord>> queryLocal({DateTime? from}) => localRepository.getHistory(from: from, limit: pageSize);

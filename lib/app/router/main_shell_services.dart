@@ -49,12 +49,7 @@ class MainShellServices extends StatelessWidget {
             lazy: false,
           ),
         if (featureAccess.bottomMenuConfig.getTabEnabled<RecentsBottomMenuTab>()?.supportsCallHistory == true)
-          Provider<CdrsSyncWorker>(
-            create: (context) =>
-                CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
-            dispose: (context, worker) => worker.dispose(),
-            lazy: false,
-          ),
+          Provider<CdrsSync>(create: _createCdrsSync, dispose: (context, sync) => sync.dispose(), lazy: false),
       ],
       child: child,
     );
@@ -134,6 +129,15 @@ class MainShellServices extends StatelessWidget {
       worker: worker,
       pollingService: context.read<PollingService>(),
       interval: Duration(seconds: EnvironmentConfig.EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS),
+    );
+  }
+
+  CdrsSync _createCdrsSync(BuildContext context) {
+    final worker = CdrsSyncWorker(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>());
+    return CdrsSync(
+      worker: worker,
+      pollingService: context.read<PollingService>(),
+      interval: Duration(seconds: EnvironmentConfig.CDRS_REPOSITORY_POLLING_INTERVAL_SECONDS),
     );
   }
 

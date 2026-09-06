@@ -6,10 +6,19 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_phone/features/cdrs/cdrs.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 class MockCdrsLocalRepository extends Mock implements CdrsLocalRepository {}
 
 class MockCdrsRemoteRepository extends Mock implements CdrsRemoteRepository {}
+
+class MockCdrsSyncWorker extends Mock implements CdrsSyncWorker {}
+
+class MockPollingTaskHandle extends Mock implements PollingTaskHandle {}
+
+class MockPollingService extends Mock implements PollingService {}
+
+class FakePollingRegistration extends Fake implements PollingRegistration {}
 
 CdrRecord _record(String id, int minute) => CdrRecord(
   callId: id,
@@ -26,6 +35,8 @@ CdrRecord _record(String id, int minute) => CdrRecord(
 );
 
 void main() {
+  setUpAll(() => registerFallbackValue(FakePollingRegistration()));
+
   late MockCdrsLocalRepository localRepository;
   late MockCdrsRemoteRepository remoteRepository;
   late CdrsSyncWorker worker;
@@ -214,6 +225,59 @@ void main() {
       await expectLater(worker.refresh(), throwsA(isA<StateError>()));
       expect(worker.isActive, isFalse);
       verifyNever(() => localRepository.getLastUpdate());
+    });
+  });
+
+  group('CdrsSync', () {
+    test('owns one registration and forwards call-ended refresh requests', () async {
+      final syncWorker = MockCdrsSyncWorker();
+      final pollingService = MockPollingService();
+      final task = MockPollingTaskHandle();
+      when(() => syncWorker.dispose()).thenAnswer((_) async {});
+      when(() => pollingService.register(any())).thenReturn(task);
+      when(() => task.isRegistered).thenReturn(true);
+      final sync = CdrsSync(worker: syncWorker, pollingService: pollingService, interval: const Duration(seconds: 10));
+
+      final registration = verify(() => pollingService.register(captureAny())).captured.single as PollingRegistration;
+      expect(registration.listener, same(syncWorker));
+      expect(registration.interval, const Duration(seconds: 10));
+
+      sync.requestPostCallRefresh();
+      verify(() => task.invalidate(after: const Duration(seconds: 1))).called(1);
+
+      await sync.dispose();
+      await sync.dispose();
+
+      verify(() => task.unregister()).called(1);
+      verify(() => syncWorker.dispose()).called(1);
+    });
+
+    test('ignores a late call-ended refresh after disposal', () async {
+      final syncWorker = MockCdrsSyncWorker();
+      final pollingService = MockPollingService();
+      final task = MockPollingTaskHandle();
+      when(() => syncWorker.dispose()).thenAnswer((_) async {});
+      when(() => pollingService.register(any())).thenReturn(task);
+      final sync = CdrsSync(worker: syncWorker, pollingService: pollingService, interval: const Duration(seconds: 10));
+
+      await sync.dispose();
+
+      expect(sync.requestPostCallRefresh, returnsNormally);
+      verifyNever(() => task.invalidate(after: const Duration(seconds: 1)));
+    });
+
+    test('ignores a refresh request after the polling service unregisters the task', () async {
+      final syncWorker = MockCdrsSyncWorker();
+      final pollingService = MockPollingService();
+      final task = MockPollingTaskHandle();
+      when(() => syncWorker.dispose()).thenAnswer((_) async {});
+      when(() => pollingService.register(any())).thenReturn(task);
+      when(() => task.isRegistered).thenReturn(false);
+      final sync = CdrsSync(worker: syncWorker, pollingService: pollingService, interval: const Duration(seconds: 10));
+
+      expect(sync.requestPostCallRefresh, returnsNormally);
+      verifyNever(() => task.invalidate(after: const Duration(seconds: 1)));
+      await sync.dispose();
     });
   });
 }

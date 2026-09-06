@@ -2,7 +2,13 @@ import 'package:webtrit_phone/features/cdrs/cubit/cdrs_list_cubit.dart';
 import 'package:webtrit_phone/models/models.dart';
 
 class NumberCdrsLogCubit extends CdrsListCubit {
-  NumberCdrsLogCubit(this.number, super.localRepository, super.remoteRepository, {super.pageSize});
+  NumberCdrsLogCubit(
+    this.number,
+    super.localRepository,
+    super.remoteRepository,
+    super.syncStateSource, {
+    super.pageSize,
+  });
 
   final String number;
 

@@ -24,11 +24,9 @@ capability it needs instead of the ownership handle, another timer, or a
 parallel call to the same work.
 
 Most app registrations are still supplied through the `PollingService`
-constructor because no consumer needs their handles. External Contacts uses
-the worker pattern: `ExternalContactsSync` owns its worker and private handle,
-then exposes state and manual execution through narrow interfaces. The CDR
-migration is called out under
-[Migration in progress](#migration-in-progress); it is not current behavior.
+constructor because no consumer needs their handles. External Contacts and CDR
+use the worker pattern: their `*Sync` owners retain private registrations and
+expose only narrow capabilities or domain methods.
 
 UI pull-to-refresh behavior is a separate concern. See
 [`data_refresh.md`](data_refresh.md) for the screens and gestures that expose it.
@@ -58,7 +56,7 @@ feature ownership boundary.
 
 ## Core invariants
 
-The contract has six invariants:
+The contract has seven invariants:
 
 1. One `Refreshable` object identity maps to one registration and one stable
    handle inside a service.
@@ -71,6 +69,8 @@ The contract has six invariants:
    probe started by an older event cannot overwrite newer evidence.
 6. Unregister and service disposal are terminal for a handle. Late completion
    of an already-running refresh cannot move it out of `stopped`.
+7. Deferred invalidation uses trailing-edge debounce and preserves one refresh
+   after work that started before the latest deadline.
 
 The single-flight guarantee only covers calls routed through the same
 `PollingService` registration. A direct call to `repository.refresh()`, a second
@@ -84,6 +84,7 @@ All supported triggers converge on one refresh-cycle runner:
 boot / reconnect / resume ----+
 periodic timer ---------------+--> one in-flight refresh --> state --> next schedule
 PollingTaskRunner.runNow() ----+
+owner invalidation ------------+
 ```
 
 Only the cycle runner invokes `Refreshable.refresh()`. It publishes state,
@@ -97,6 +98,7 @@ records the result, and completes the future shared by manual callers.
 | Foreground resume | Performs one fresh check shared by all registrations | Does not overlap it | Logged; increments automatic backoff | Arms the next periodic tick |
 | Periodic tick | Uses the TTL cache or performs a check | Skips the refresh | Logged; increments automatic backoff | Computes the next fixed delay |
 | `runNow()` | No service-level preflight | Joins the same future | Returned to the caller | Re-arms one full computed delay after completion |
+| `invalidate()` deadline | Uses the TTL cache or performs a check | Waits for an older cycle, then runs once | Logged; increments automatic backoff | Re-arms from the invalidated cycle |
 
 A group-leading cycle is used for boot, reconnect, resume, and adding a new
 registration while polling is active. It performs at most one reachability
@@ -207,6 +209,28 @@ Because manual execution skips the service reachability preflight, the
 repository remains the source of truth for request errors. This keeps explicit
 user actions observable instead of silently turning them into noops when the
 cached connectivity state is wrong.
+
+## Deferred invalidation
+
+Low-level task owners use `invalidate(after:)` when a domain event means that
+cached data is stale, but the backend may need a short publication delay.
+Feature owners expose that through a domain method:
+
+```dart
+cdrsSync.requestPostCallRefresh();
+```
+
+Invalidation is automatic work, not a manual request. It respects connectivity
+and foreground lifecycle checks, and its failure contributes to scheduled
+backoff. The call returns immediately; consumers that need the result observe
+the handle state.
+
+Repeated invalidations replace the deadline, giving trailing-edge debounce. A
+refresh that starts before the deadline does not consume the invalidation: the
+service waits for that cycle to finish and then performs one trailing refresh.
+If the deadline passes while offline or in the background, the request remains
+pending until reconnect or resume. A reconnect or resume leading cycle may
+satisfy it, but it cannot run twice.
 
 ## Observable state
 
@@ -366,6 +390,7 @@ overridden by the matching dart-define.
 | `UserRepository` | 10 s | Always |
 | `SystemInfoRepository` | 300 s | Always |
 | `ExternalContactsSyncWorker` | 60 s | Core supports extensions |
+| `CdrsSyncWorker` | 10 s | Call history is enabled for the session |
 | `VoicemailRepository` | 300 s | Voicemail is available for the session |
 | `CallerIdSettingsRepository` | 300 s | Remote implementation is active |
 | `FavoritesRepository` | 300 s | Syncable implementation is active |
@@ -415,6 +440,7 @@ covered by `test/services/polling_worker_test.dart`. Together they cover:
 - fixed delay, jitter, backoff, and stale timer invalidation;
 - stable handle identity, replaying state, and offline availability;
 - manual single-flight success and failure;
+- deferred invalidation debounce, trailing execution, and lifecycle recovery;
 - manual versus automatic backoff ownership;
 - interval changes, inactive listeners, unregister, and disposal;
 - late completion after a terminal stop;
@@ -442,7 +468,8 @@ probe to finish last, and verifies that the periodic schedule survives. The
 connect invariant asserts one user-info request for login, resume, and network
 recovery. The Contacts test covers the worker-driven flow from login through UI
 data, self-filtering, manual refresh, resume, offline failure, and network
-recovery.
+recovery. The CDR pagination test verifies the initial polling registration and
+a three-page finite sync cycle against the local Core and SIP adapter.
 See [`integration_test_commands.md`](integration_test_commands.md) for setup and
 commands, and [`integration_test_coverage.md`](integration_test_coverage.md) for
 the scenario index.
@@ -463,15 +490,27 @@ state, and invokes `runNow()`. The full handle remains private to the standard
 owner. A pull during an automatic cycle therefore joins it instead of starting
 a second download.
 
-## Migration in progress
-
 ### CDR
 
-Recent-call synchronization is currently owned by `CdrsSyncWorker`, which has
-its own ten-second loop and is not a `PollingService` registration. A later
-migration must align it with the worker and owner contract in
-[`polling_workers.md`](polling_workers.md), but this document does not describe
-that future design as current behavior.
+`CdrsSyncWorker.refresh()` owns one finite sync cycle: it fetches the initial
+page or drains all incremental pages, then atomically updates the local call
+history and its completed-sync marker. It owns no timer or connectivity
+subscription.
+
+`CdrsSync` extends `PollingWorkerOwner<CdrsSyncWorker>` and owns the worker and
+its private polling registration. `CallBloc` receives a callback backed by
+`requestPostCallRefresh()`: when a call ends, the owner invalidates the task
+with a one-second publication delay. Repeated call-ended events therefore
+debounce, an active scheduled cycle cannot overlap them, and the normal
+periodic cadence is re-armed after the trailing refresh.
+
+When the app is already offline, `PollingService` correctly skips the worker,
+and publishes `waitingForConnectivity` for the CDR polling task. `CdrsSync`
+exposes that replaying state to every CDR list. An empty list releases its
+initial loader immediately on that state, including when the screen subscribes
+after the offline transition. A slow online cycle remains `running`, so it does
+not incorrectly flash an empty state. The next successful repository cycle
+still resolves and renders the records.
 
 ## Non-goals
 

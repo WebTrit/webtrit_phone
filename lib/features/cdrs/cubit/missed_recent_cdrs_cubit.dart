@@ -3,7 +3,7 @@ import 'package:webtrit_phone/models/models.dart';
 import 'cdrs_list_cubit.dart';
 
 class MissedRecentCdrsCubit extends CdrsListCubit {
-  MissedRecentCdrsCubit(super.localRepository, super.remoteRepository, {super.pageSize});
+  MissedRecentCdrsCubit(super.localRepository, super.remoteRepository, super.syncStateSource, {super.pageSize});
 
   @override
   Future<List<CdrRecord>> queryLocal({DateTime? from}) => localRepository.getHistory(

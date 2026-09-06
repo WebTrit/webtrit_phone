@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/data/feature_access.dart';
 import 'package:webtrit_phone/environment_config.dart';
+import 'package:webtrit_phone/features/cdrs/services/cdrs_sync_worker.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 import '../number_cdrs_log.dart';
@@ -21,8 +22,12 @@ class NumberCdrsScreenPage extends StatelessWidget {
     final featureAccess = context.read<FeatureAccess>();
     final videoVisible = featureAccess.callConfig.capabilities.isVideoCallEnabled;
     return BlocProvider(
-      create: (context) =>
-          NumberCdrsLogCubit(number, context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
+      create: (context) => NumberCdrsLogCubit(
+        number,
+        context.read<CdrsLocalRepository>(),
+        context.read<CdrsRemoteRepository>(),
+        context.read<CdrsSync>(),
+      )..init(),
       child: NumberCdrsScreen(title: Text(EnvironmentConfig.APP_NAME), videoVisible: videoVisible),
     );
   }

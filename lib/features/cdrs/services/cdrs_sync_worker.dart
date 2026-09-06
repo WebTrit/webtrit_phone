@@ -1,60 +1,43 @@
-import 'dart:async';
-
 import 'package:clock/clock.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 final _logger = Logger('CdrsSyncWorker');
 
+const _postCallRefreshDelay = Duration(seconds: 1);
+
+/// Owns the CDR worker and its polling registration.
+///
+/// Scheduled refreshes and call-ended invalidations use the same polling task,
+/// so they share one lifecycle, single-flight boundary, and backoff policy.
+final class CdrsSync extends PollingWorkerOwner<CdrsSyncWorker> {
+  CdrsSync({required super.worker, required super.pollingService, required super.interval});
+
+  /// Requests one refresh after the backend has had time to publish the CDR.
+  ///
+  /// Repeated call-ended events use the task's trailing-edge debounce instead
+  /// of cancelling and recreating the polling schedule.
+  void requestPostCallRefresh() {
+    invalidatePollingTask(after: _postCallRefreshDelay);
+  }
+}
+
 /// Synchronizes remote call history with the local CDR store.
 ///
-/// One [refresh] is a finite domain sync cycle. The legacy timer and
-/// connectivity lifecycle remain temporarily in this worker until scheduling
-/// is migrated to the shared polling service.
-class CdrsSyncWorker implements Refreshable, Disposable {
-  CdrsSyncWorker(
-    this.localRepo,
-    this.remoteRepo, {
-    this.pollingInterval = const Duration(seconds: 10),
-    this.pageSize = 50,
-  }) : assert(pageSize > 0, 'pageSize must be greater than zero');
+/// One [refresh] is a finite domain sync cycle. [PollingService] owns
+/// scheduling, connectivity, lifecycle, single-flight, and backoff. Feature
+/// consumers request additional work through [CdrsSync].
+class CdrsSyncWorker implements PollingWorker {
+  CdrsSyncWorker(this.localRepo, this.remoteRepo, {this.pageSize = 50})
+    : assert(pageSize > 0, 'pageSize must be greater than zero');
 
   final CdrsLocalRepository localRepo;
   final CdrsRemoteRepository remoteRepo;
-  final connectivity = Connectivity();
 
-  final Duration pollingInterval;
   final int pageSize;
-  StreamSubscription? _syncSub;
-
-  /// Starts the transitional self-scheduled polling loop.
-  Future<void> init() async {
-    if (_disposed) {
-      throw StateError('Cannot initialize a disposed CDR sync worker.');
-    }
-
-    // Uncomment to wipe local CDRs data on each start (for testing purposes)
-    // await localRepo.wipeData();
-    _logger.info('Initializing CDRs sync worker');
-    _syncSub = _syncStream().listen(_handleSyncEvent);
-  }
-
-  /// Restarts the transitional polling loop after an optional [delay].
-  Future<void> forceSync(Duration? delay) async {
-    if (_disposed) {
-      throw StateError('Cannot force sync a disposed CDR sync worker.');
-    }
-
-    _logger.info('Forcing CDRs sync');
-    _syncSub?.cancel();
-    if (delay != null) await Future.delayed(delay);
-    if (_disposed) return;
-    _syncSub = _syncStream().listen(_handleSyncEvent);
-  }
 
   @override
   bool get isActive => !_disposed;
@@ -121,50 +104,13 @@ class CdrsSyncWorker implements Refreshable, Disposable {
     await localRepo.upsertCdrs(fetchedCdrs.reversed.toList());
   }
 
-  Stream<dynamic> _syncStream() async* {
-    while (!_disposed) {
-      try {
-        // Check connectivity before processing
-        late final List<ConnectivityResult> connectivityResult;
-        try {
-          connectivityResult = await connectivity.checkConnectivity();
-        } catch (_) {
-          await _notifyInitialSyncFailed();
-          rethrow;
-        }
-        if (connectivityResult.every((r) => r == ConnectivityResult.none)) {
-          // Cannot sync now: let consumers stop waiting on the initial sync
-          // (they would spin forever otherwise); the next poll self-heals.
-          await _notifyInitialSyncFailed();
-          continue;
-        }
-
-        await refresh();
-      } catch (e, s) {
-        yield (e, s);
-      } finally {
-        yield await Future.delayed(pollingInterval, () => _kRetryEventStub);
-      }
-    }
-  }
-
   Future<void> _notifyInitialSyncFailed() async {
     try {
       await localRepo.notifyInitialSyncFailed();
     } catch (e, s) {
-      // Never let the failure notification itself break the sync loop.
+      // Preserve the original cycle failure when notifying observers also
+      // fails, so PollingService applies backoff to the real sync error.
       _logger.warning('notifyInitialSyncFailed', e, s);
-    }
-  }
-
-  void _handleSyncEvent(dynamic event) {
-    if (event is (Object, StackTrace)) {
-      final (error, stackTrace) = event;
-      _logger.warning(error, stackTrace);
-    } else if (event == _kRetryEventStub) {
-      return;
-    } else {
-      _logger.fine(event);
     }
   }
 
@@ -176,8 +122,5 @@ class CdrsSyncWorker implements Refreshable, Disposable {
 
     _logger.info('Disposing');
     _disposed = true;
-    await _syncSub?.cancel();
   }
 }
-
-const _kRetryEventStub = 'retry';
