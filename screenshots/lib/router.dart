@@ -5,6 +5,7 @@ import 'package:webtrit_phone/blocs/app/app_bloc.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/models/models.dart';
 
+import 'package:screenshots/data/data.dart';
 import 'package:screenshots/screenshots/screenshots.dart';
 import 'package:screenshots/widgets/widgets.dart';
 
@@ -59,6 +60,14 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
         appBloc: appBloc,
         child: MainScreenScreenshot(MainFlavor.recents, Text(EnvironmentConfig.APP_NAME)),
       ),
+      ScreenshotApp(
+        appBloc: appBloc,
+        child: MainScreenScreenshot(
+          MainFlavor.recents,
+          Text(EnvironmentConfig.APP_NAME),
+          pullableCallDialogs: dPullableCallDialogs,
+        ),
+      ),
       ScreenshotApp(appBloc: appBloc, child: MainScreenScreenshot(MainFlavor.keypad, Text(EnvironmentConfig.APP_NAME))),
       ScreenshotApp(
         appBloc: appBloc,
@@ -70,6 +79,10 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
           builder: (context) => MainScreenScreenshot(MainFlavor.messaging, Text(EnvironmentConfig.APP_NAME)),
         ),
       ),
+      // Pointer events stay live: the page is a column of bars to be scrolled through
+      // and looked at, not a single frame to be captured.
+      ScreenshotApp(appBloc: appBloc, ignorePointer: false, child: const AppBarStatusesScreenshot()),
+      ScreenshotApp(appBloc: appBloc, ignorePointer: false, child: const GravatarUsageScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: const SettingScreenScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: const DialogsShowcaseScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: MediaSettingsScreenScreenshot(initialOpenSection: 1)),
@@ -90,6 +103,14 @@ class _IndexInputScreenState extends State<IndexInputScreen> {
       ScreenshotApp(appBloc: appBloc, child: const DiagnosticScreenScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: const CallerIdSettingsScreenScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: const PresenceSettingsScreenScreenshot()),
+      // Pointer events stay live so the presence controls can be exercised by
+      // hand in the local preview: the option explanations, the status fields
+      // and the icon picker with its search.
+      ScreenshotApp(
+        appBloc: appBloc,
+        ignorePointer: false,
+        child: const PresenceSettingsScreenScreenshot(interactive: true),
+      ),
       ScreenshotApp(appBloc: appBloc, child: const ThemeModeScreenScreenshot()),
       ScreenshotApp(appBloc: appBloc, child: const VoicemailScreenScreenshot()),
       // Login variant

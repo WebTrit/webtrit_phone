@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:webtrit_api/webtrit_api.dart';
 
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
@@ -32,7 +33,7 @@ abstract class SessionRepository {
   Future<void> patchSession({String? tenantId, String? token, String? coreUrl, String? userId});
 }
 
-class SessionRepositoryImpl implements SessionRepository {
+class SessionRepositoryImpl implements SessionRepository, Disposable {
   SessionRepositoryImpl({required this.secureStorage, this.sessionCleanupWorker, required this.apiClientFactory}) {
     // Initialize in-memory cache immediately on startup.
     _currentSession = _loadFromStorage();
@@ -171,5 +172,13 @@ class SessionRepositoryImpl implements SessionRepository {
       tenantId: secureStorage.readTenantId() ?? '',
       userId: secureStorage.readUserId() ?? '',
     );
+  }
+
+  /// Releases the cleanup worker this repository was built with: it is nobody
+  /// else's, and left alone it keeps retrying stored sessions on every network
+  /// change.
+  @override
+  Future<void> dispose() async {
+    await sessionCleanupWorker?.dispose();
   }
 }

@@ -2,28 +2,21 @@
 
 ## Table of Contents
 
-- [Using Make Commands](#using-make-commands)
+- [Using Make Commands](#commands)
 - [Renaming the Application](#renaming-the-application)
 - [Script Dependencies](#script-dependencies)
 - [Using `package_rename` Directly](#using-package_rename-directly)
 - [Variables](#variables)
 
-## Using Make Commands
+## Commands
 
-The following `make` commands are available to facilitate application configuration:
+`tool/configs/package_rename_config.yaml` is written by `webtrit_phone_tools` as part of
+`melos run configurator:generate`, from the brand the configurator holds. Applying it is a
+separate step:
 
-- **Renaming Application:**
-  ```sh
-  make rename-package PACKAGE_NAME=com.example.newapp BUNDLE_ID=com.example.newapp ANDROID_APP_NAME="New App" IOS_APP_NAME="New App"
-  ```
-- **Generating package rename configuration:**
-  ```sh
-  make generate-package-config
-  ```
-- **Adding and running package rename tool:**
-  ```sh
-  make rename-package
-  ```
+```sh
+melos run package:rename
+```
 
 ## Renaming the Application
 
@@ -31,8 +24,11 @@ To update the package name, bundle ID, and application name for Android and iOS,
 command:
 
 ```sh
-make rename-package PACKAGE_NAME=com.webtrit.newapp BUNDLE_ID=com.webtrit.newapp ANDROID_APP_NAME="WebTrit" IOS_APP_NAME="WebTrit"
+melos run package:rename
 ```
+
+The names come from the config file rather than from arguments: the same brand that a build is
+made for decides them, and typing them twice is how the two disagree.
 
 ## Script Dependencies
 

@@ -103,13 +103,13 @@ class _AppState extends State<App> {
       systemInfoRepository: context.read<SystemInfoRepository>(),
       appCompatibilityResolver: context.read<AppCompatibilityResolver>(),
       appInfo: context.read<AppInfo>(),
-      supportedLocales: featureAccess.localizationConfig.supportedLocales,
+      supportedLocales: AppLocalizations.supportedLocales,
       userSessionCleanupResolver: RepositoryUserSessionCleanupResolver(
         systemInfoRepository: context.read<SystemInfoRepository>(),
         registerStatusRepository: context.read<RegisterStatusRepository>(),
         presenceSettingsRepository: context.read<PresenceSettingsRepository>(),
         queuedTerminationRequestsRepository: context.read<QueuedTerminationRequestsRepository>(),
-        activeMainFlavorRepository: context.read<ActiveMainFlavorRepository>(),
+        activeMainTabRepository: context.read<ActiveMainTabRepository>(),
         activeRecentsVisibilityFilterRepository: context.read<ActiveRecentsVisibilityFilterRepository>(),
         activeContactSourceTypeRepository: context.read<ActiveContactSourceTypeRepository>(),
         audioProcessingSettingsRepository: context.read<AudioProcessingSettingsRepository>(),
@@ -128,7 +128,7 @@ class _AppState extends State<App> {
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,
-      repository: context.read<ActiveMainFlavorRepository>(),
+      repository: context.read<ActiveMainTabRepository>(),
     );
 
     appRouter = AppRouter(
@@ -182,7 +182,7 @@ class _AppState extends State<App> {
 
     final initialTabResolver = BottomMenuInitialTabResolver(
       config: featureAccess.bottomMenuConfig,
-      repository: context.read<ActiveMainFlavorRepository>(),
+      repository: context.read<ActiveMainTabRepository>(),
     );
 
     appRouter.updateConfiguration(
@@ -242,7 +242,7 @@ class _AppState extends State<App> {
             ),
             locale: state.effectiveLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: featureAccess.localizationConfig.supportedLocales,
+            supportedLocales: AppLocalizations.supportedLocales,
             // restorationScopeId: 'App', // TODO: temporary comment to prevent AppShell's AutoRouter placeholder blink - additional investigation necessary
             title: EnvironmentConfig.APP_NAME,
             themeMode: finalThemeMode,

@@ -30,9 +30,8 @@ void main() {
   /// Sets up a device where the full-screen intent permission is denied and
   /// everything else is out of the way.
   void givenFullScreenIntentDenied() {
-    when(
-      () => appPermissions.getSpecialPermissionStatuses(),
-    ).thenAnswer((_) async => {fullScreenIntent: CallkeepSpecialPermissionStatus.denied});
+    when(() => appPermissions.getSpecialPermissionStatuses())
+        .thenAnswer((_) async => {fullScreenIntent: CallkeepSpecialPermissionStatus.denied});
     // The app's own gate never counts a special permission, so it stays satisfied.
     when(() => appPermissions.isDenied).thenAnswer((_) async => false);
   }

@@ -105,9 +105,38 @@ const String callActiveThumbnailId = 'callActiveThumbnail';
 const String callControlsToggleId = 'callControlsToggle';
 const String callRowId = 'callRow';
 
+// Bottom navigation of the main screen: which tabs are there and what they are
+// called both come from the server-side menu configuration, so the entry is
+// addressed by the section it opens.
+const String favoritesNavBarId = 'favoritesNavBar';
+const favoritesNavBarKey = Key(favoritesNavBarId);
+const String recentsNavBarId = 'recentsNavBar';
+const recentsNavBarKey = Key(recentsNavBarId);
+const String contactsNavBarId = 'contactsNavBar';
+const contactsNavBarKey = Key(contactsNavBarId);
+const String keypadNavBarId = 'keypadNavBar';
+const keypadNavBarKey = Key(keypadNavBarId);
+const String messagingNavBarId = 'messagingNavBar';
+const messagingNavBarKey = Key(messagingNavBarId);
+const String voicemailNavBarId = 'voicemailNavBar';
+const voicemailNavBarKey = Key(voicemailNavBarId);
+const String embeddedNavBarIdPrefix = 'embeddedNavBar';
+
+/// Id of the bottom navigation entry that opens the embedded section [id].
+///
+/// There can be several embedded sections, all of them announced by whatever
+/// caption the install configures, so the id they are configured with is the
+/// only thing that tells one entry from another.
+String embeddedNavBarId(String id) => '$embeddedNavBarIdPrefix${_capitalize(id)}';
+
+/// Key of the same entry, built from [embeddedNavBarId] so the widget-test
+/// anchor and the accessibility anchor cannot drift apart.
+Key embeddedNavBarKey(String id) => Key(embeddedNavBarId(id));
+
 // Screen anchors: identify the screen itself, so a flow can tell where it is
 // before touching a control. Login needs them because the visible captions
 // repeat - "Proceed" names the button on four different screens.
+const String callerIdScreenId = 'callerIdScreen';
 const String chatConversationScreenId = 'chatConversationScreen';
 const String contactScreenId = 'contactScreen';
 const String loginCoreUrlScreenId = 'loginCoreUrlScreen';
@@ -144,6 +173,20 @@ const String callActionsAcceptId = 'callActionsAccept';
 const String callActionsAudioDeviceId = 'callActionsAudioDevice';
 const String callActionsHideKeypadId = 'callActionsHideKeypad';
 const String callActionsOptionsId = 'callActionsOptions';
+const String callPullBadgeId = 'callPullBadge';
+const String callPullDialogId = 'callPullDialog';
+const String callPullPickupId = 'callPullPickup';
+
+/// The number a call goes out with unless a dial code rule says otherwise.
+const String callerIdDefaultNumberId = 'callerIdDefaultNumber';
+
+/// The two halves of a new dial code rule: which code it matches, and the
+/// number to show for it.
+const String callerIdMatchPrefixId = 'callerIdMatchPrefix';
+const String callerIdMatchNumberId = 'callerIdMatchNumber';
+
+const String callerIdAddMatchId = 'callerIdAddMatch';
+const String callerIdRemoveMatchId = 'callerIdRemoveMatch';
 const String callTileDialId = 'callTileDial';
 const String callTileMenuId = 'callTileMenu';
 const String chatInfoCallId = 'chatInfoCall';
@@ -169,9 +212,27 @@ const String loginSignupEmbeddedRetryButtonId = 'loginSignupEmbeddedRetryButton'
 const String otpVerifyResendButtonId = 'otpVerifyResendButton';
 const String passwordObscureToggleId = 'passwordObscureToggle';
 const String permissionsSettingsButtonId = 'permissionsSettingsButton';
+const String presenceSettingsActivityId = 'presenceSettingsActivity';
+const String presenceSettingsActivityInfoId = 'presenceSettingsActivityInfo';
+const String presenceSettingsAvailabilityId = 'presenceSettingsAvailability';
+const String presenceSettingsAvailabilityInfoId = 'presenceSettingsAvailabilityInfo';
+const String presenceSettingsConfigSectionId = 'presenceSettingsConfigSection';
+const String presenceSettingsDndId = 'presenceSettingsDnd';
+const String presenceSettingsDndInfoId = 'presenceSettingsDndInfo';
+const String presenceSettingsNoteId = 'presenceSettingsNote';
+const String presenceSettingsNoteInfoId = 'presenceSettingsNoteInfo';
+const String presenceSettingsPresetId = 'presenceSettingsPreset';
+const String presenceSettingsScreenId = 'presenceSettingsScreen';
+const String presenceSettingsStatusIconClearId = 'presenceSettingsStatusIconClear';
+const String presenceSettingsStatusIconPickId = 'presenceSettingsStatusIconPick';
 const String registerStatusSwitchId = 'registerStatusSwitch';
 const String sessionStatusTileId = 'sessionStatusTile';
+const String settingsUserInfoEditId = 'settingsUserInfoEdit';
 const String signupVerifyResendButtonId = 'signupVerifyResendButton';
+const String statusIconPickerId = 'statusIconPicker';
+const String statusIconPickerSearchId = 'statusIconPickerSearch';
+const String statusIconPickerSearchCloseId = 'statusIconPickerSearchClose';
+const String statusIconPickerSearchInputId = 'statusIconPickerSearchInput';
 const String systemNotificationsBadgeId = 'systemNotificationsBadge';
 const String voicemailMenuId = 'voicemailMenu';
 const String voicemailPlaybackId = 'voicemailPlayback';
@@ -189,6 +250,10 @@ const String settingsLanguageOptionIdPrefix = 'settingsLanguageOption';
 const String settingsThemeModeOptionIdPrefix = 'settingsThemeModeOption';
 const String settingsIncomingCallTypeOptionIdPrefix = 'settingsIncomingCallTypeOption';
 const String mediaSettingsOptionIdPrefix = 'mediaSettingsOption';
+
+// Category tabs of the status icon picker: the tabs are bare icons, so the id
+// is built from the category each one stands for.
+const String statusIconPickerCategoryIdPrefix = 'statusIconPickerCategory';
 
 /// Stable automation id of an option row, built from what the option means
 /// rather than from its position or its translated title.
@@ -213,14 +278,51 @@ const String contactsExtContactTileId = 'contactsExtContactTile';
 const contactsExtContactTileKey = Key(contactsExtContactTileId);
 const String contactsLocalContactTileId = 'contactsLocalContactTile';
 const contactsLocalContactTileKey = Key(contactsLocalContactTileId);
+
 const String contactsTabExtId = 'contactsTabExt';
 const contactsTabExtKey = Key(contactsTabExtId);
 const String contactsTabLocalId = 'contactsTabLocal';
 const contactsTabLocalKey = Key(contactsTabLocalId);
+// The contacts screen of a deployment that offers favourites as a filter.
+// Its own ids: the two screens are addressed separately so a flow cannot pass
+// against whichever of them happens to be on screen.
+const String contactsFavoritesReorderId = 'contactsFavoritesReorder';
+const contactsFavoritesReorderKey = Key(contactsFavoritesReorderId);
+const String contactsSourceFavoritesId = 'contactsSourceFavorites';
+const contactsSourceFavoritesKey = Key(contactsSourceFavoritesId);
+const String contactsSourcePickerId = 'contactsSourcePicker';
+const contactsSourcePickerKey = Key(contactsSourcePickerId);
+const String contactsSearchOpenId = 'contactsSearchOpen';
+const contactsSearchOpenKey = Key(contactsSearchOpenId);
+
 const String contactsSearchInputId = 'contactsSearchInput';
 const contactsSearchInputKey = Key(contactsSearchInputId);
 const String contactsSearchInputClearId = 'contactsSearchInputClear';
 const contactsSearchInputClearKey = Key(contactsSearchInputClearId);
+
+/// Tabs of the recents section. The same ids serve the local-recents screen
+/// and the server-CDRs one: a configuration enables exactly one of them, they
+/// draw the same filters under the same captions, and a flow that opens "the
+/// missed calls tab" should not have to know which backend answered.
+///
+/// Both screens currently show `all` and `missed` only - nothing passes a
+/// wider filter list yet. The other two are declared so the mapping stays
+/// total, and a flow can rely on them the day a build offers them.
+const String recentsTabAllId = 'recentsTabAll';
+const recentsTabAllKey = Key(recentsTabAllId);
+const String recentsTabMissedId = 'recentsTabMissed';
+const recentsTabMissedKey = Key(recentsTabMissedId);
+const String recentsTabIncomingId = 'recentsTabIncoming';
+const recentsTabIncomingKey = Key(recentsTabIncomingId);
+const String recentsTabOutgoingId = 'recentsTabOutgoing';
+const recentsTabOutgoingKey = Key(recentsTabOutgoingId);
+
+/// Tabs of the conversations screen; which of them exist depends on what the
+/// backend supports, and both carry the same caption style.
+const String conversationsTabChatId = 'conversationsTabChat';
+const conversationsTabChatKey = Key(conversationsTabChatId);
+const String conversationsTabSmsId = 'conversationsTabSms';
+const conversationsTabSmsKey = Key(conversationsTabSmsId);
 
 const String conversationsSearchInputId = 'conversationsSearchInput';
 const conversationsSearchInputKey = Key(conversationsSearchInputId);

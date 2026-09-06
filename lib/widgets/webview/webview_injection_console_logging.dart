@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'web_view_container.dart';
 
 /// Injects a console wrapper that forwards console.* messages through a JS channel.

@@ -10,7 +10,7 @@ import 'package:webtrit_phone/features/messaging/messaging.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
-import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 class ChatConversationsTile extends StatefulWidget {
   const ChatConversationsTile({required this.conversation, required this.lastMessage, required this.userId, super.key});
@@ -35,20 +35,26 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
   }
 
   Future<bool> onDismiss(_) async {
-    final conformation = await showDialog(context: context, builder: (_) => const ConfirmDialog());
-    if (conformation != true) return false;
+    final conversation = widget.conversation;
+    // The same swipe means two different things: the owner of a group and
+    // anyone in a direct chat delete the conversation, everyone else only
+    // leaves. The question has to say which one is about to happen.
+    final leaving = conversation.type != ChatType.direct && !conversation.members.isGroupOwner(widget.userId);
+
+    final confirmed = await ConfirmDialog.showDangerous(
+      context,
+      title: leaving
+          ? context.l10n.messaging_LeaveGroupDialog_title
+          : context.l10n.messaging_DeleteConversationDialog_title,
+      content: leaving
+          ? context.l10n.messaging_LeaveGroupDialog_content
+          : context.l10n.messaging_DeleteConversationDialog_content,
+    );
+    if (confirmed != true) return false;
     if (!mounted) return false;
 
-    final conversation = widget.conversation;
-    if (conversation.type == ChatType.direct) {
-      return context.read<ChatConversationsCubit>().deleteConversation(conversation.id);
-    } else {
-      if (conversation.members.isGroupOwner(widget.userId)) {
-        return context.read<ChatConversationsCubit>().deleteConversation(conversation.id);
-      } else {
-        return context.read<ChatConversationsCubit>().leaveGroup(conversation.id);
-      }
-    }
+    final cubit = context.read<ChatConversationsCubit>();
+    return leaving ? cubit.leaveGroup(conversation.id) : cubit.deleteConversation(conversation.id);
   }
 
   @override
@@ -101,9 +107,11 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             thumbnail: contact?.thumbnail,
             thumbnailUrl: contact?.thumbnailUrl,
             radius: 20,
-            registered: contact?.registered,
-            presenceInfo: contact?.presenceInfo,
-            dialogInfo: contact?.dialogInfo,
+            badge: AvatarStatusBadge.maybe(
+              registered: contact?.registered,
+              presenceInfo: contact?.presenceInfo,
+              dialogInfo: contact?.dialogInfo,
+            ),
           ),
           title: Row(
             children: [
@@ -209,14 +217,15 @@ class _ChatConversationsTileState extends State<ChatConversationsTile> {
             final count = state.unreadCountForChatConversation(widget.conversation.id);
             if (count == 0) return const SizedBox();
 
-            return Container(
-              margin: const EdgeInsets.only(left: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(12),
+            // The badge is silent by itself; the count is said here, on the
+            // last thing the tile draws, so it lands after the name of the
+            // conversation rather than inside it.
+            return Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Semantics(
+                label: context.l10n.common_SemanticsValue_unreadCount(count),
+                child: CountBadge(count: count),
               ),
-              child: Text('$count', style: const TextStyle(color: Colors.white, fontSize: 12)),
             );
           },
         ),

@@ -113,10 +113,7 @@ void main() {
         return _jsonResponse({'code': 'session_missing', 'message': 'Session not found'}, 401);
       });
 
-      expect(
-        () => apiClient.getUserInfo(token),
-        throwsA(isNot(isA<UnauthorizedException>())),
-      );
+      expect(() => apiClient.getUserInfo(token), throwsA(isNot(isA<UnauthorizedException>())));
     });
   });
 }

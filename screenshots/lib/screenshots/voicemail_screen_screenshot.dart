@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'package:webtrit_phone/features/settings/features/voicemail/bloc/voicemail_cubit.dart';
-import 'package:webtrit_phone/features/settings/features/voicemail/bloc/voicemail_playback_controller.dart';
-import 'package:webtrit_phone/features/settings/features/voicemail/models/voicemail_screen_context.dart';
-import 'package:webtrit_phone/features/settings/features/voicemail/view/voicemail_screen.dart';
+import 'package:webtrit_phone/features/voicemail/bloc/voicemail_cubit.dart';
+import 'package:webtrit_phone/features/voicemail/bloc/voicemail_playback_controller.dart';
+import 'package:webtrit_phone/features/voicemail/models/voicemail_screen_context.dart';
+import 'package:webtrit_phone/features/voicemail/view/voicemail_screen.dart';
 
 import 'package:screenshots/mocks/mocks.dart';
 

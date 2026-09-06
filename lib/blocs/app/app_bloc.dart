@@ -196,6 +196,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   Future<void> _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) async {
+    // Only an authenticated session can be torn down.
+    //
+    // Requests issued before the logout keep completing after it, so a late
+    // unauthorized response can ask for a logout when the session is already
+    // gone. Entering teardown again would strand the app on the teardown
+    // screen: the cleanup that leaves that state is dispatched by
+    // [TeardownScreen] when it mounts, and the screen is already mounted at
+    // that point, so nothing would ever finish the sequence.
+    if (state.status != AppLifecycleStatus.authenticated) {
+      _logger.info('Logout requested with no active session (${state.status}). Reason: ${event.reason}. Ignoring.');
+      return;
+    }
+
     _logger.info('Logout requested. Reason: ${event.reason}. Initiating safe teardown sequence.');
     emit(state.copyWith(status: AppLifecycleStatus.teardown, logoutReason: event.reason));
   }

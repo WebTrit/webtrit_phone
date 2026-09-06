@@ -7,6 +7,13 @@ linter:
 analyzer:
   exclude:
     - "**/*.g.dart"
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 formatter:
   page_width: 120

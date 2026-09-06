@@ -224,10 +224,18 @@ class PresenceBadgeStyleConfig with _$PresenceBadgeStyleConfig {
     /// Color used when presence is "available" (e.g., online, idle).
     this.availableColor,
 
-    /// Color used when presence is "unavailable" (e.g., offline, busy).
+    /// Color used when presence is "unavailable" (e.g., offline).
     this.unavailableColor,
 
-    /// Size factor relative to avatar diameter (widget uses ~0.325 by default).
+    /// Color used when the contact should not be called right now: one
+    /// publishing "busy" or "do not disturb".
+    this.busyColor,
+
+    /// Color of the activity glyph drawn inside the badge; it has to read on
+    /// top of the badge fill.
+    this.iconColor,
+
+    /// Size factor relative to avatar diameter.
     this.sizeFactor,
   });
 
@@ -235,11 +243,21 @@ class PresenceBadgeStyleConfig with _$PresenceBadgeStyleConfig {
   @override
   final String? availableColor;
 
-  /// Color used when presence is "unavailable" (e.g., offline, busy).
+  /// Color used when presence is "unavailable" (e.g., offline).
   @override
   final String? unavailableColor;
 
-  /// Size factor relative to avatar diameter (widget uses ~0.325 by default).
+  /// Color used when the contact should not be called right now: one
+  /// publishing "busy" or "do not disturb".
+  @override
+  final String? busyColor;
+
+  /// Color of the activity glyph drawn inside the badge; it has to read on
+  /// top of the badge fill.
+  @override
+  final String? iconColor;
+
+  /// Size factor relative to avatar diameter.
   @override
   final double? sizeFactor;
 

@@ -9,7 +9,7 @@ part of 'image_source.dart';
 ImageSource _$ImageSourceFromJson(Map<String, dynamic> json) => ImageSource(
   id: json['id'] as String?,
   uri: json['uri'] as String?,
-  ref: json[r'$ref'] as String? ?? 'asset',
+  refType: json['refType'] as String? ?? 'asset',
   render: json['render'] == null
       ? null
       : ImageRenderSpec.fromJson(json['render'] as Map<String, dynamic>),
@@ -22,7 +22,7 @@ Map<String, dynamic> _$ImageSourceToJson(ImageSource instance) =>
     <String, dynamic>{
       'id': instance.id,
       'uri': instance.uri,
-      r'$ref': instance.ref,
+      'refType': instance.refType,
       'render': instance.render?.toJson(),
       'metadata': instance.metadata.toJson(),
     };

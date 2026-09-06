@@ -4,9 +4,9 @@ Which check to run for a given change, what each one costs, and the flags a buil
 Written to stop the common waste pattern: launching a multi-minute build, having it fail on a
 known-mandatory flag, and launching it again.
 
-Last reviewed: 2026-08-17
+Last reviewed: 2026-08-18
 
-For build/run commands, flavors, signing and SDK pinning see [Build & Development](build.md).
+For build/run commands, optional features, signing and SDK pinning see [Build & Development](build.md).
 For what works on web and the web-specific dart-defines see [Flutter web support](web.md).
 
 ---
@@ -61,6 +61,37 @@ What makes this expensive:
 The `melos run build:*` and `fastlane:*` scripts already pass both flags (`pubspec.yaml`,
 `tool/scripts/browserstack_upload.sh`). A hand-written `flutter build ...` command is the only
 place they go missing - prefer the melos script.
+
+## Optional Android features
+
+Android has no build flavors, so an APK/AAB build needs no `--flavor` and there is only one
+variant per build type. Two features are decided at build time because their permission and
+components must be absent when they are off - deep links and the SMS call trigger. Both follow
+`dart_define.json`:
+
+| Dart define (`dart_define.json`)     | Value           | Effect                                       |
+|--------------------------------------|-----------------|----------------------------------------------|
+| `WEBTRIT_APP_LINK_DOMAIN`            | non-empty       | deep-link intent filter is merged in         |
+|                                      | empty/missing   | no intent filter                             |
+| `WEBTRIT_CALL_TRIGGER_MECHANISM_SMS` | `"true"`        | `RECEIVE_SMS` and the receiver are merged in |
+|                                      | anything else   | neither is declared                          |
+
+Every build prints what it resolved (`Deep links: enabled, SMS call trigger: disabled`), so a
+build log is enough to tell which features the artifact carries.
+
+Checking the result does not need a full build - the merged manifest is one Gradle task. It wants
+the dart-defines the way Flutter passes them, a comma-separated list of base64-encoded `KEY=VALUE`
+pairs, and it does NOT fail when they are missing: it succeeds with both features off, which looks
+the same as a fragment that never merged.
+
+```bash
+cd android
+defines="$(printf '%s' 'WEBTRIT_APP_LINK_DOMAIN=app.webtrit.com' | base64 | tr -d '\n'),$(printf '%s' 'WEBTRIT_CALL_TRIGGER_MECHANISM_SMS=true' | base64 | tr -d '\n')"
+./gradlew :app:processReleaseManifest -Pdart-defines="$defines"
+cat ../build/app/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml
+```
+
+Background: [optional_features.md](optional_features.md).
 
 ## Web builds
 

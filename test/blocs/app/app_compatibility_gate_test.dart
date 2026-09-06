@@ -70,9 +70,8 @@ void main() {
     when(() => contactsAgreementStatusRepository.getContactsAgreementStatus()).thenReturn(AgreementStatus.accepted);
 
     when(() => systemInfoRepository.infoStream).thenAnswer((_) => infoStreamController.stream);
-    when(
-      () => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')),
-    ).thenAnswer((_) async => null);
+    when(() => systemInfoRepository.getSystemInfo(fetchPolicy: any(named: 'fetchPolicy')))
+        .thenAnswer((_) async => null);
   });
 
   tearDown(() async {

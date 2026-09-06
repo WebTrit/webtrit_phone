@@ -13,7 +13,12 @@ import 'package:webtrit_phone/widgets/widgets.dart';
 import '../../../contacts.dart';
 
 class ContactsLocalTab extends StatefulWidget {
-  const ContactsLocalTab({super.key});
+  const ContactsLocalTab({super.key, this.markFavorites = false});
+
+  /// Whether a star marks the people with a favourite among their numbers.
+  /// Only where favourites are reachable from this screen: a star that leads
+  /// nowhere is worse than no star at all.
+  final bool markFavorites;
 
   @override
   State<ContactsLocalTab> createState() => _ContactsLocalTabState();
@@ -55,6 +60,8 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
 
     return BlocBuilder<ContactsLocalTabBloc, ContactsLocalTabState>(
       builder: (context, state) {
+        final shown = state.contacts;
+
         if (state.status == ContactsLocalTabStatus.initial) {
           return const Center(child: CircularProgressIndicator());
         } else if (state.status == ContactsLocalTabStatus.permissionFailure) {
@@ -67,15 +74,22 @@ class _ContactsLocalTabState extends State<ContactsLocalTab> with WidgetsBinding
               ),
             ],
           );
-        } else if (state.contacts.isNotEmpty) {
+        } else if (shown.isNotEmpty) {
           return RefreshIndicator(
+            // The list runs behind the app bar, so without this the spinner
+            // settles forty points from the top of the SCREEN - a bar's height
+            // out of sight, and a pull looks like it did nothing. The inset the
+            // screen already applied to the body is the one figure both this
+            // and the first row are placed by, so they cannot drift apart.
+            edgeOffset: MediaQuery.of(context).padding.top,
             onRefresh: _refreshContacts,
             child: ListView.builder(
-              itemCount: state.contacts.length,
+              itemCount: shown.length,
               itemBuilder: (context, index) {
-                final contact = state.contacts[index];
+                final contact = shown[index];
                 return ContactTileAdapter(
                   tileKey: contactsLocalContactTileKey,
+                  markFavorite: widget.markFavorites,
                   contact: contact,
                   expanded: _expandedContactId == contact.id,
                   onToggleExpanded: () => _toggleExpanded(contact.id),

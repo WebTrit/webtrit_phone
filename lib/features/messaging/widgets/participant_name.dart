@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:webtrit_phone/features/messaging/extensions/extensions.dart';
-import 'package:webtrit_phone/widgets/widgets.dart' hide ConfirmDialog;
+import 'package:webtrit_phone/widgets/widgets.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 

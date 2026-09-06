@@ -20,6 +20,14 @@ class LineErrorEvent extends LineEvent implements ErrorEvent {
       return null;
     }
 
+    // The server marks a line-scoped error by carrying the line, even when it
+    // has no index to give (the guest line sends it as null). An error without
+    // the field at all is session-scoped, and decoding it here would shadow
+    // SessionErrorEvent, which is tried after this one.
+    if (!json.containsKey('line')) {
+      return null;
+    }
+
     try {
       return LineErrorEvent(
         transaction: json['transaction'],

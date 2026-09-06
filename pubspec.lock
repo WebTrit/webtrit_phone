@@ -961,14 +961,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
-  icon_decoration:
-    dependency: "direct main"
-    description:
-      name: icon_decoration
-      sha256: "3553d73cc1e7e9c0e54c1b21788de89961a92996693bdf0c942a1a4b7f5bb45d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   image:
     dependency: "direct main"
     description:
@@ -1002,10 +994,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
+      sha256: "1ca20c894b1717686a2319b8548763d812bc0aabdac580420a44c5178c57a867"
       url: "https://pub.dev"
     source: hosted
-    version: "0.20.2"
+    version: "0.20.3"
   io:
     dependency: transitive
     description:
@@ -1030,14 +1022,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.12.0"
+  json_schema:
+    dependency: "direct dev"
+    description:
+      name: json_schema
+      sha256: f37d9c3fdfe8c9aae55fdfd5af815d24ce63c3a0f6a2c1f0982c30f43643fa1a
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.2"
   json_serializable:
     dependency: "direct dev"
     description:
       name: json_serializable
-      sha256: ffcd10cde35a93b2abbbcc26bd9971f4ca93763e8abe78d855e3c4177797e501
+      sha256: e45aefa0324f08c683caafbb94b72837aa6193c61822799c916e45f4a263113d
       url: "https://pub.dev"
     source: hosted
-    version: "6.14.0"
+    version: "6.14.1"
   just_audio:
     dependency: "direct main"
     description:
@@ -1066,8 +1066,8 @@ packages:
     dependency: "direct dev"
     description:
       path: l10n_mapper_generator
-      ref: "8a90364"
-      resolved-ref: "8a90364fe8509688435d3a9f7ad35f7072679d50"
+      ref: dd2095bfc9a49ac9190dd4821d5bbc6b0f48f055
+      resolved-ref: dd2095bfc9a49ac9190dd4821d5bbc6b0f48f055
       url: "https://github.com/SERDUN/l10n_mapper.git"
     source: git
     version: "3.0.0"
@@ -1155,10 +1155,10 @@ packages:
     dependency: transitive
     description:
       name: matcher
-      sha256: dc0b7dc7651697ea4ff3e69ef44b0407ea32c487a39fff6a4004fa585e901861
+      sha256: "31bd099b47c10cd1aeb55146a2d46ce0277630ecef3f7dae54ad7873f36696cd"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.19"
+    version: "0.12.20"
   material_color_utilities:
     dependency: "direct main"
     description:
@@ -1179,10 +1179,10 @@ packages:
     dependency: "direct main"
     description:
       name: meta
-      sha256: "1741988757a65eb6b36abe716829688cf01910bbf91c34354ff7ec1c3de2b349"
+      sha256: "307249ce4ff29d58a18e97f6345f539382eb9c9c29ecda628900f31de0443dd9"
       url: "https://pub.dev"
     source: hosted
-    version: "1.18.0"
+    version: "1.19.0"
   mime:
     dependency: transitive
     description:
@@ -1279,6 +1279,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  package_rename:
+    dependency: "direct dev"
+    description:
+      name: package_rename
+      sha256: "8e957670ab3c8ab0aa9976d10dfe8575c279e81a48aeeca9e7de43dbdc2c2be0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.10.1"
   path:
     dependency: "direct main"
     description:
@@ -1519,6 +1527,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
+  rfc_6901:
+    dependency: transitive
+    description:
+      name: rfc_6901
+      sha256: "6a43b1858dca2febaf93e15639aa6b0c49ccdfd7647775f15a499f872b018154"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   rxdart:
     dependency: "direct main"
     description:
@@ -1531,9 +1547,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "fix/ufrag-numeric-coercion"
-      resolved-ref: "355ed593f336c937e2dfe18769444d0c490bd010"
-      url: "https://github.com/SERDUN/dart-sdp-transform.git"
+      ref: master
+      resolved-ref: ec68b14bc2386e4e90220699998486c8257150db
+      url: "https://github.com/flutter-webrtc/dart-sdp-transform.git"
     source: git
     version: "0.3.2"
   share_plus:
@@ -1769,26 +1785,26 @@ packages:
     dependency: transitive
     description:
       name: test
-      sha256: "8d9ceddbab833f180fbefed08afa76d7c03513dfdba87ffcec2718b02bbcbf20"
+      sha256: ca578dc12bb8b2f40b67b7d3bd2fac4f31c01a6ff7130a14e2597b919934507f
       url: "https://pub.dev"
     source: hosted
-    version: "1.31.0"
+    version: "1.31.1"
   test_api:
     dependency: transitive
     description:
       name: test_api
-      sha256: "949a932224383300f01be9221c39180316445ecb8e7547f70a41a35bf421fb9e"
+      sha256: "2a122cbe059f8b610d3a5415f42e255b6c17b1f21eee1d960f31080237fb4f11"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.11"
+    version: "0.7.12"
   test_core:
     dependency: transitive
     description:
       name: test_core
-      sha256: "1991d4cfe85d5043241acac92962c3977c8d2f2add1ee73130c7b286417d1d34"
+      sha256: d2e98ec12998368dc59ddd47ab709f2cd55acd6b66dc7db764455a44082f4bc5
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.17"
+    version: "0.6.18"
   time:
     dependency: transitive
     description:
@@ -1821,6 +1837,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  uri:
+    dependency: transitive
+    description:
+      name: uri
+      sha256: "889eea21e953187c6099802b7b4cf5219ba8f3518f604a1033064d45b1b8268a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   url_launcher:
     dependency: "direct main"
     description:
@@ -1929,10 +1953,10 @@ packages:
     dependency: transitive
     description:
       name: vector_math
-      sha256: d530bd74fea330e6e364cda7a85019c434070188383e1cd8d9777ee586914c5b
+      sha256: f36f9f3be64c6198714492bb455c11056e33e2f85d9a0b676a48301e44fdcf47
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.4.2"
   vm_service:
     dependency: transitive
     description:
@@ -2010,17 +2034,17 @@ packages:
     dependency: "direct main"
     description:
       path: webtrit_callkeep
-      ref: "1.3.3"
-      resolved-ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
+      ref: "1.3.4"
+      resolved-ref: "9f4f34515847b1380403d667bc444588142250f0"
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
-    version: "1.3.3+0"
+    version: "1.3.4+0"
   webtrit_callkeep_android:
     dependency: transitive
     description:
       path: webtrit_callkeep_android
-      ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
-      resolved-ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
+      ref: "9f4f34515847b1380403d667bc444588142250f0"
+      resolved-ref: "9f4f34515847b1380403d667bc444588142250f0"
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.0.0+0"
@@ -2028,8 +2052,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_ios
-      ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
-      resolved-ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
+      ref: "9f4f34515847b1380403d667bc444588142250f0"
+      resolved-ref: "9f4f34515847b1380403d667bc444588142250f0"
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.0.0+0"
@@ -2037,8 +2061,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_linux
-      ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
-      resolved-ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
+      ref: "9f4f34515847b1380403d667bc444588142250f0"
+      resolved-ref: "9f4f34515847b1380403d667bc444588142250f0"
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.1.0+1"
@@ -2046,8 +2070,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_macos
-      ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
-      resolved-ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
+      ref: "9f4f34515847b1380403d667bc444588142250f0"
+      resolved-ref: "9f4f34515847b1380403d667bc444588142250f0"
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.1.0+1"
@@ -2055,8 +2079,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_platform_interface
-      ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
-      resolved-ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
+      ref: "9f4f34515847b1380403d667bc444588142250f0"
+      resolved-ref: "9f4f34515847b1380403d667bc444588142250f0"
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.0.0+0"
@@ -2064,8 +2088,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_web
-      ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
-      resolved-ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
+      ref: "9f4f34515847b1380403d667bc444588142250f0"
+      resolved-ref: "9f4f34515847b1380403d667bc444588142250f0"
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.0.0+0"
@@ -2073,8 +2097,8 @@ packages:
     dependency: transitive
     description:
       path: webtrit_callkeep_windows
-      ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
-      resolved-ref: b7df349cc07996ad0cea0c63d758b9bff6dd0ae1
+      ref: "9f4f34515847b1380403d667bc444588142250f0"
+      resolved-ref: "9f4f34515847b1380403d667bc444588142250f0"
       url: "https://github.com/WebTrit/webtrit_callkeep.git"
     source: git
     version: "0.1.0+1"
@@ -2242,5 +2266,5 @@ packages:
     source: hosted
     version: "2.2.4"
 sdks:
-  dart: ">=3.12.0 <4.0.0"
-  flutter: ">=3.44.0 <4.0.0"
+  dart: ">=3.13.0 <4.0.0"
+  flutter: ">=3.47.0 <4.0.0"

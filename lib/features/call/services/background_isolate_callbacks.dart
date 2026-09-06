@@ -1,15 +1,10 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_appearance_theme/webtrit_appearance_theme.dart';
 import 'package:webtrit_callkeep/webtrit_callkeep.dart';
 import 'package:webtrit_signaling/webtrit_signaling.dart';
 import 'package:webtrit_signaling_service/webtrit_signaling_service.dart';
 
-import 'package:webtrit_phone/app/assets.gen.dart';
 import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
@@ -42,27 +37,17 @@ PushNotificationIsolateManager? _manager;
 // Resolves an arbitrary persisted locale to a locale that lookupAppLocalizations
 // can handle. Falls back to the first supported locale (EN) when the stored value
 // is the 'und' sentinel (no locale ever selected) or any other unsupported tag.
-// [supported] is the app's configured locale allowlist (see [_resolveSupportedLocales]).
+// [supported] is what the build carries: AppLocalizations.supportedLocales.
 Locale _effectiveLocale(Locale locale, List<Locale> supported) {
   if (supported.contains(locale)) return locale;
   final byLanguage = supported.where((s) => s.languageCode == locale.languageCode).firstOrNull;
   return byLanguage ?? supported.first;
 }
 
-// The push isolate is a separate Dart VM without a FeatureAccess instance, so it
-// reads the language allowlist straight from the bundled app config asset and
-// intersects it with the locales the app ships. Any failure falls back to the
-// full bundled set, matching the pre-config behavior.
-Future<List<Locale>> _resolveSupportedLocales() async {
-  try {
-    final raw = await rootBundle.loadString(Assets.themes.appConfig);
-    final appConfig = AppConfig.fromJson(jsonDecode(raw) as Map<String, Object?>);
-    return LocalizationConfig.resolve(AppLocalizations.supportedLocales, appConfig.localization.enabledLanguages);
-  } catch (e, st) {
-    _logger.warning('Failed to resolve supported locales from app config; using all bundled locales', e, st);
-    return AppLocalizations.supportedLocales;
-  }
-}
+// The languages this build carries, which is all there is to say: the build
+// wrote only the ones the brand enables. This used to read and parse the app
+// config asset to intersect the two, on a separate Dart VM woken by a push -
+// work that could only ever agree with what was already on disk.
 
 /// Returns the isolate-level manager, reusing an existing instance if already
 /// initialised. Accepts an already-constructed [PushIsolateContext] so the
@@ -81,8 +66,7 @@ Future<PushNotificationIsolateManager> _getOrInit(PushIsolateContext context) as
   WebtritSignalingService.setHandoffCallback(() => _manager?.notifyActivityTookOver());
   _logger.info('_getOrInit: module factory and handoff callback registered');
 
-  final supportedLocales = await _resolveSupportedLocales();
-  final l10n = lookupAppLocalizations(_effectiveLocale(context.locale, supportedLocales));
+  final l10n = lookupAppLocalizations(_effectiveLocale(context.locale, AppLocalizations.supportedLocales));
   final localPushRepository = context.localPushRepository;
   _manager = PushNotificationIsolateManager(
     callLogsRepository: context.callLogsRepository,

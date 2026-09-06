@@ -5,11 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/constants.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../../call/call.dart';
 import '../contacts.dart';
 
 export 'contacts_screen_styles.dart';
@@ -68,6 +66,16 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
     }
   }
 
+  /// Tab of one contact source, addressable by the id of that source.
+  ExtTab _tab(BuildContext context, ContactSourceType sourceType) {
+    final (key, identifier) = switch (sourceType) {
+      ContactSourceType.local => (contactsTabLocalKey, contactsTabLocalId),
+      ContactSourceType.external => (contactsTabExtKey, contactsTabExtId),
+    };
+
+    return ExtTab(key: key, identifier: identifier, text: sourceType.l10n(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
@@ -81,46 +89,27 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
             child: ExtTabBar(
               controller: _tabController,
               width: mediaQueryData.size.width * 0.75,
-              height: kMainAppBarBottomTabHeight - kMainAppBarBottomPaddingGap,
-              tabs: widget.sourceTypes.map((sourceType) {
-                return Tab(
-                  key: switch (sourceType) {
-                    ContactSourceType.local => contactsTabLocalKey,
-                    ContactSourceType.external => contactsTabExtKey,
-                  },
-                  text: sourceType.l10n(context),
-                );
-              }).toList(),
+              height: kMainAppBarBottomControlHeight,
+              tabs: [for (final sourceType in widget.sourceTypes) _tab(context, sourceType)],
             ),
           );
 
-    final search = Padding(
-      padding: const EdgeInsets.only(
-        left: kMainAppBarBottomPaddingGap,
-        right: kMainAppBarBottomPaddingGap,
-        bottom: kMainAppBarBottomPaddingGap,
-      ),
-      child: IgnoreUnfocuser(
-        child: BlocBuilder<ContactsBloc, ContactsState>(
-          builder: (context, state) {
-            final contactsSearchBloc = context.read<ContactsBloc>();
-            return ClearedTextField(
-              key: contactsSearchInputKey,
-              identifier: contactsSearchInputId,
-              clearButtonKey: contactsSearchInputClearKey,
-              clearButtonIdentifier: contactsSearchInputClearId,
-              initialValue: state.search,
-              onChanged: (value) => contactsSearchBloc.add(ContactsSearchChanged(value)),
-              onSubmitted: (value) => contactsSearchBloc.add(ContactsSearchSubmitted(value)),
-              iconConstraints: const BoxConstraints.expand(
-                width: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
-                height: kMainAppBarBottomSearchHeight - kMainAppBarBottomPaddingGap,
-              ),
-            );
-          },
-        ),
+    const search = ContactsSearchRow();
+
+    // What the bar below the title takes up. Stated once: the bar is built
+    // from it and the body is inset by it, and the two drifting apart is how
+    // a list ends up starting underneath the search field.
+    final appBarBottomHeight = (tabBar != null ? kMainAppBarBottomTabHeight : 0) + ContactsSearchRow.height;
+    final appBar = MainAppBar(
+      title: widget.title,
+      context: context,
+      flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(appBarBottomHeight),
+        child: Column(children: [?tabBar, search]),
       ),
     );
+
     return Unfocuser(
       child: ThemedScaffold(
         background: effectiveStyle?.background,
@@ -128,43 +117,16 @@ class _ContactsScreenState extends State<ContactsScreen> with SingleTickerProvid
         applyToAppBar: effectiveStyle?.applyToAppBar ?? true,
         appBarTheme: effectiveStyle?.appBarTheme,
         extendBodyBehindAppBar: true,
-        appBar: MainAppBar(
-          title: widget.title,
-          context: context,
-          flexibleSpace: BlurredSurface.fromStyle(effectiveStyle?.appBarBlurredSurface),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(
-              (tabBar != null ? kMainAppBarBottomTabHeight : 0) + kMainAppBarBottomSearchHeight,
-            ),
-            child: Column(children: [?tabBar, search]),
-          ),
-        ),
-        body: MediaQuery(
-          data: mediaQueryData.copyWith(
-            padding: mediaQueryData.padding.copyWith(
-              top:
-                  mediaQueryData.padding.top +
-                  kToolbarHeight +
-                  (tabBar != null ? kMainAppBarBottomTabHeight : 0) +
-                  kMainAppBarBottomSearchHeight,
-            ),
-          ),
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              for (final sourceType in widget.sourceTypes) widget.sourceTypeWidgetBuilder(context, sourceType),
-            ],
-          ),
-        ),
-        bottomNavigationBar: BlocBuilder<CallBloc, CallState>(
-          buildWhen: (previous, current) => previous.isBlingTransferInitiated != current.isBlingTransferInitiated,
-          builder: (context, callState) {
-            if (callState.isBlingTransferInitiated) {
-              return TransferBottomNavigationBar(context.l10n.contacts_Text_blingTransferInitiated);
-            } else {
-              return const SizedBox.shrink();
-            }
-          },
+        appBar: appBar,
+        // No inset of its own: the body runs behind the bar, and Scaffold
+        // already hands it a MediaQuery whose top padding is the bar plus the
+        // status bar. A list with no padding of its own takes that figure, and
+        // so does the refresh indicator. Computing it here a second time is
+        // what let the two disagree - it read kToolbarHeight where MainAppBar
+        // is built from kMinInteractiveDimension, eight points apart.
+        body: TabBarView(
+          controller: _tabController,
+          children: [for (final sourceType in widget.sourceTypes) widget.sourceTypeWidgetBuilder(context, sourceType)],
         ),
       ),
     );

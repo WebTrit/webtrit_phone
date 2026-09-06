@@ -36,7 +36,7 @@ class AboutScreenPage extends StatelessWidget {
             notificationsBloc: context.read<NotificationsBloc>(),
             appInfo: appInfo,
             packageInfo: context.read<PackageInfo>(),
-            secureStorage: context.read<SecureStorage>(),
+            appPreferences: context.read<AppPreferences>(),
             embeddedConfig: context.read<FeatureAccess>().embeddedConfig,
             infoRepository: context.read<SystemInfoRepository>(),
             appMetadataProvider: appMetadataProvider,

@@ -180,7 +180,7 @@ class MainShellRepositories extends StatelessWidget {
         ),
         RepositoryProvider<VoicemailRepository>(
           create: (context) {
-            final isVoicemailsEnabled = featureAccess.settingsConfig.voicemailsEnabled;
+            final isVoicemailsEnabled = featureAccess.voicemailAvailable;
 
             if (isVoicemailsEnabled) {
               return VoicemailRepositoryImpl(
@@ -192,6 +192,20 @@ class MainShellRepositories extends StatelessWidget {
               return const EmptyVoicemailRepository();
             }
           },
+        ),
+        RepositoryProvider<IceServersRepository>(
+          create: (context) {
+            // Only a core that bundles STUN/TURN servers has a configuration to
+            // serve; every other deployment keeps the public STUN fallback,
+            // which the empty implementation returns without a request.
+            if (!featureAccess.coreSupport.supportsBundledIceServers) return const EmptyIceServersRepository();
+
+            return IceServersRepositoryImpl(
+              webtritApiClient: context.read<WebtritApiClient>(),
+              token: context.read<AppBloc>().state.session.token!,
+            );
+          },
+          dispose: disposeIfDisposable,
         ),
         RepositoryProvider<AppRepository>(
           create: (context) => AppRepository(
@@ -259,7 +273,7 @@ class MainShellRepositories extends StatelessWidget {
 
             return AppCacheManager(
               sections: [
-                if (!kIsWeb && featureAccess.settingsConfig.voicemailsEnabled)
+                if (!kIsWeb && featureAccess.voicemailAvailable)
                   VoicemailCacheSection(
                     mediaCacheBasePath: appPath.mediaCacheBasePath,
                     temporaryPath: appPath.temporaryPath,

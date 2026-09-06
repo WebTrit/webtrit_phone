@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'push_notifications.dart';
 
 /// This class is used to handle remote push notifications from global context

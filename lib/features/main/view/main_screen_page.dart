@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -6,21 +7,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/data/data.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/features.dart';
-import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/features/voicemail/widgets/voicemail_flavor_overlay.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
+/// Every badge the bottom menu can carry, each drawn by the feature it belongs
+/// to and silent where its section is not configured or its state not provided.
+final _decorateTabIcon = composeTabIconDecorators([MessagingFlavorOverlay.forTab, VoicemailFlavorOverlay.forTab]);
+
 @RoutePage()
-class MainScreenPage extends StatelessWidget {
+class MainScreenPage extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
   const MainScreenPage();
 
   @override
+  State<MainScreenPage> createState() => _MainScreenPageState();
+}
+
+class _MainScreenPageState extends State<MainScreenPage> {
+  /// The tab set and the active tab's path as of the last frame - what a
+  /// configuration reload is detected against.
+  List<BottomMenuTab>? _lastTabs;
+  String? _lastActivePath;
+
+  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final mainScreenRouteStateRepository = context.read<MainScreenRouteStateRepository>();
 
     final featureAccess = context.read<FeatureAccess>();
@@ -41,9 +54,17 @@ class MainScreenPage extends StatelessWidget {
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
 
+        _restoreActiveTabAfterConfigChange(tabsRouter, tabs);
+
         if (callToActionsEnabled) {
           final isRouteActive = context.router.isRouteActive(MainScreenPageRoute.name);
-          final flavor = MainFlavor.values[tabsRouter.activeIndex];
+          // The flavor belongs to the active tab, not to the position: the tab
+          // set is configured per install, so an index into the enum points at
+          // the wrong flavor and walks off it once more tabs are configured
+          // than the enum has values. Looked up softly: a configuration
+          // reload can shrink the tab set while the router still reports the
+          // old index for a frame, and the cubit accepts a null flavor.
+          final flavor = tabs.elementAtOrNull(tabsRouter.activeIndex)?.flavor;
 
           context.read<CallToActionsCubit>()
             ..getActions(flavor)
@@ -51,29 +72,25 @@ class MainScreenPage extends StatelessWidget {
         }
 
         // Tabs are guaranteed to be non-empty due to validation during the bootstrap phase.
-        // Therefore, we only check if there's more than one tab to determine the layout.
-        return bottomMenuManager.tabs.length > 1
-            ? MainScreen(
-                body: child,
-                bottomNavigationBar: BottomNavigationBar(
-                  elevation: 0,
-                  backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor?.withAlpha(200),
-                  useLegacyColorScheme: false,
-                  enableFeedback: true,
-                  type: BottomNavigationBarType.fixed,
-                  selectedLabelStyle: theme.textTheme.bodySmall,
-                  unselectedLabelStyle: theme.textTheme.bodySmall,
-                  // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
-                  // to handle navigation changes correctly, especially when the user navigates by url.
-                  // e.g router.navigate(const MainScreenPageRoute(['favorites']));
-                  currentIndex: tabsRouter.activeIndex,
-                  items: _buildNavBarItems(context, tabs),
-                  onTap: (index) =>
-                      BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
-                  // items: navBarItems,
-                ),
-              )
-            : child;
+        // The screen itself decides whether a bar is drawn at all - the
+        // single-section rule lives there, shared with the previews.
+        return MainScreen(
+          body: child,
+          tabs: tabs,
+          // Read here rather than inside the screen: the screen is also built
+          // by the previews, which have no call to be transferring.
+          transferInProgress: context.select<CallBloc, bool>((bloc) => bloc.state.isBlingTransferInitiated),
+          // The shell above provides the unread state this reads.
+          decorateTabIcon: _decorateTabIcon,
+          // Be aware to use activeIndex from tabsRouter, not from bottomMenuManager
+          // to handle navigation changes correctly, especially when the user navigates by url.
+          // e.g router.navigate(const MainScreenPageRoute(['favorites']));
+          // Clamped for the same one-frame window as the flavor above:
+          // the bar asserts its index is within the entries it draws.
+          currentIndex: tabsRouter.activeIndex.clamp(0, tabs.length - 1),
+          onTabSelected: (index) =>
+              BottomMenuTabHandler.handleTap(context, index: index, tabs: tabs, tabsRouter: tabsRouter),
+        );
       },
       navigatorObservers: () => [MainScreenNavigatorObserver(mainScreenRouteStateRepository)],
     );
@@ -99,6 +116,29 @@ class MainScreenPage extends StatelessWidget {
     );
   }
 
+  /// When its routes are replaced on a configuration reload, the tabs router
+  /// re-matches the active tab by route name, and every embedded section
+  /// shares one - the user landed on the first of them whichever was open.
+  /// Reactivate the tab that was open, identified by its path, once the
+  /// frame settles.
+  void _restoreActiveTabAfterConfigChange(TabsRouter tabsRouter, List<BottomMenuTab> tabs) {
+    final index = BottomMenuTabHandler.reactivationIndex(
+      previousTabs: _lastTabs,
+      previousPath: _lastActivePath,
+      tabs: tabs,
+      activeIndex: tabsRouter.activeIndex,
+    );
+    _lastTabs = tabs;
+    if (index != null) {
+      _lastActivePath = tabs[index].routePath;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) tabsRouter.setActiveIndex(index);
+      });
+    } else if (tabsRouter.activeIndex < tabs.length) {
+      _lastActivePath = tabs[tabsRouter.activeIndex].routePath;
+    }
+  }
+
   List<PageRouteInfo> _buildRoutePages(List<BottomMenuTab> tabs) {
     return tabs.map<PageRouteInfo<dynamic>>((tab) {
       switch (tab) {
@@ -109,22 +149,14 @@ class MainScreenPage extends StatelessWidget {
         case MessagingBottomMenuTab():
           return const ConversationsScreenPageRoute();
         case RecentsBottomMenuTab():
-          return tab.supportsCallHistory ? const RecentCdrsRouterPageRoute() : const RecentsRouterPageRoute();
+          return recentsRouteOf(tab);
         case ContactsBottomMenuTab():
-          return ContactsRouterPageRoute(children: [ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes)]);
+          return contactsRouteOf(tab);
+        case VoicemailBottomMenuTab():
+          return const VoicemailTabPageRoute();
         case EmbeddedBottomMenuTab():
           return EmbeddedTabPageRoute(id: tab.id);
       }
-    }).toList();
-  }
-
-  List<BottomNavigationBarItem> _buildNavBarItems(BuildContext context, List<BottomMenuTab> tabs) {
-    return tabs.map((tab) {
-      final flavor = tab.flavor;
-      Widget icon = Icon(tab.icon);
-      String label = context.parseL10n(tab.titleL10n);
-      if (flavor == MainFlavor.messaging) icon = MessagingFlavorOverlay(child: icon);
-      return BottomNavigationBarItem(key: flavor.toNavBarKey(), icon: icon, label: label);
     }).toList();
   }
 }
@@ -140,10 +172,30 @@ abstract final class BottomMenuTabHandler {
   }) {
     final tappedTab = tabs[index];
 
-    // Persist the selection to the repository
-    context.read<ActiveMainFlavorRepository>().setActiveMainFlavor(tappedTab.flavor);
+    // Persist the selection by the tab's path: with several embedded sections
+    // in the menu the kind alone cannot say which of them to restore.
+    context.read<ActiveMainTabRepository>().setActiveTabPath(tappedTab.routePath);
 
     // Update the actual UI state via AutoRoute
     tabsRouter.setActiveIndex(index);
+  }
+
+  /// Index of the tab to reactivate after the configured tab set changed, or
+  /// null when the current activation needs no correction.
+  ///
+  /// The correction applies only when the tab set really changed, the tab
+  /// that was open (identified by [previousPath]) is still configured, and
+  /// the router did not land on it by itself.
+  static int? reactivationIndex({
+    required List<BottomMenuTab>? previousTabs,
+    required String? previousPath,
+    required List<BottomMenuTab> tabs,
+    required int activeIndex,
+  }) {
+    if (previousTabs == null || previousPath == null) return null;
+    if (listEquals(previousTabs, tabs)) return null;
+    final index = tabs.indexWhere((tab) => tab.routePath == previousPath);
+    if (index < 0 || index == activeIndex) return null;
+    return index;
   }
 }

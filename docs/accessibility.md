@@ -3,7 +3,7 @@
 How interactive controls are exposed to screen readers and to UI automation, and
 what every feature has to do about it before it ships.
 
-Last reviewed: 2026-08-14
+Last reviewed: 2026-08-17
 
 ## Why this exists
 
@@ -59,7 +59,7 @@ flow against the screen.
 
 ## Attaching it: pick the wrapper
 
-Both wrappers are exported from `lib/widgets/widgets.dart`; import the barrel.
+All three wrappers are exported from `lib/widgets/widgets.dart`; import the barrel.
 
 **`SemanticAction`** - a tap target. It merges the subtree into a single node, so
 name, identifier and action cannot drift apart. Use the default constructor for
@@ -109,6 +109,24 @@ cannot activate what it just found by id. The in-call buttons were announced as 
 bare "button" for exactly this reason before they were fixed - their name sat on a
 node split off from the one that could be activated.
 
+**`SemanticIdOfAncestor`** - an identifier for a control whose node is built by a
+widget we do not own and cannot wrap. The entries of a `BottomNavigationBar` are
+the case it was written for: the bar itself builds the node that carries the
+caption, the selected state and the press, and nothing we pass in can become
+that node. Wrapping the icon in `Semantics(identifier: ...)` does not help - an
+identifier implicitly introduces a node of its own (framework `basic.dart`), so
+the id lands on an empty node inside the entry, with no name to announce and no
+action to press. This widget contributes the id to the description the ancestor
+compiles instead of declaring a node, so it ends up on the entry itself.
+
+Reach for it only when the id cannot be declared on the control: it depends on
+who builds the node above, which is not visible from the call site. Where the
+subtree can be wrapped, `SemanticAction` is the answer.
+
+Note that a widget that merges its subtree needs none of this - `getSemanticsData`
+picks an identifier up from a merged child, which is why an id inside a `Tab` or a
+segment of a `SegmentedButton` lands on the merged node (see Traps).
+
 A raw `Semantics` is still the right tool in two situations. One is a node that
 declares the name, the identifier **and** the action itself, which is how the
 keypad keys are done (`lib/widgets/keypad_key_button.dart`): the key takes pointer
@@ -125,14 +143,25 @@ not a control at all: a status or progress message published with
 Reach for these before writing anything new; each one carries a rule that is easy
 to get wrong on your own.
 
-- **`SemanticAction`, `SemanticId`** (`lib/widgets/`) - the two wrappers above,
-  exported from the widgets barrel.
+- **`SemanticAction`, `SemanticId`, `SemanticIdOfAncestor`** (`lib/widgets/`) - the
+  three wrappers above, exported from the widgets barrel.
 - **`CallActionButton`, `CallActionMenuButton`**
   (`lib/features/call/widgets/call_action_button.dart`) - every in-call action
   button. They take the `label` and the `identifier`, and keep the visual
   long-press tooltip with `excludeFromSemantics: true` so it is not spoken on top
   of the name. In the menu flavor the styling button opens the menu itself,
   because after the merge its handler is what the node's tap action runs.
+- **`ExtTab`, `ExtTabBar`** (`lib/widgets/tab_bar.dart`) - the tabs of a screen's
+  tab bar. The bar merges a tab with the ink well that answers the press, so the
+  id is declared INSIDE the tab (a `Semantics` of its own around it would land
+  beside the press) - `ExtTab(identifier: ..., text: ...)`. A tab that draws more
+  than a caption takes `ExtTab.child`, and anything decorative in that child says
+  nothing: `UnreadBadge` already excludes itself, and what it counts goes in the
+  tab's `value`, which is announced after the tab's name. Never wrap the tab in a
+  plain `Semantics(identifier: ...)`.
+- **`CountBadge`** (`lib/widgets/count_badge.dart`) - every number drawn in a
+  filled shape. See "Counting things" for the three parts of the standard it is
+  one of.
 - **`context.showSnackBar`** (`lib/extensions/build_context.dart`) - already wraps
   the message in a `SemanticId`, so a flow can wait for the snackbar by id, and
   keeps a snackbar that carries an action on screen until it is dismissed:
@@ -152,10 +181,93 @@ of "Call button" is spoken as "Call button, button".
 
 Keep identity in the label when the control is one of many identical ones (the
 call button in a list row, an account badge), and exclude the decorative piece
-that would otherwise be read as a bare number or letter: an avatar initial or an
-unread count is announced as "1" and collides with everything else on screen.
-Merge the count into the label ("Notifications, 3") and keep the raw glyph out of
-the tree.
+that would otherwise be read as a bare number or letter: an avatar initial is
+announced as a stray letter and collides with everything else on screen. A count
+has a standard of its own - see below.
+
+## Counting things
+
+A count is drawn as a bare glyph almost everywhere in this app, and a bare glyph
+merged into a row is spoken as a number with nothing attached to it: "Voicemail,
+3", "Alice, 10:32, see you then, 2". The standard has three parts, and all three
+are needed - a count fixed in two of them still reads wrong.
+
+**Who stays silent.** The widget that draws the number owns its own silence: it
+wraps its glyph in `ExcludeSemantics` itself, so no host can forget. A host that
+has to remember is a host that will not.
+
+**Which node speaks, and where the phrase goes.** The count belongs to the NAME
+of the thing it decorates, placed after it, and the way to get it there is to say
+it from something drawn later than the name:
+
+- **The control names itself** (the notification bell, the delete button of the
+  voicemail screen): put the count in its own label, after the name -
+  `SemanticAction(label: '$title, $selectedCount')`.
+- **Someone else names the node** (a tab of a `TabBar`, the trailing slot of a
+  `ListTile`, a row wrapped in one `InkWell`): put a plain
+  `Semantics(label: ...)` on the badge itself. A merged name is assembled in the
+  order its parts are drawn, and the badge is drawn after the caption - which is
+  exactly what lands the count behind the name. Two ways to get this wrong: a
+  label given to the tile or row instead of to the badge is assembled before
+  everything inside it, and `container: true` stops the node merging at all and
+  leaves a nameless focus stop beside the control.
+
+**Not the node's value**, even though a count is state and `value` is what state
+is for. Android composes what it speaks as value, then label, then hint
+(`AccessibilityBridge.getValueLabelHint` in the engine), so a value is always
+read out AHEAD of the name it belongs to - "3 unread, Voicemail". iOS speaks the
+name first, so this is invisible in a simulator and on a Mac; it was found by
+dumping the tree on a device. A count in the name reads correctly on both.
+
+The price of putting it in the name is real: a screen reader announces a changed
+value on its own, and a changed name it does not. We take that trade because the
+complaint that started this was about position.
+
+**When the name is not ours.** An entry of a `BottomNavigationBar` takes its name
+from what it displays and draws it after the slot we decorate, so there is
+nothing of ours drawn later to hang the phrase on - and adding to the caption
+would change what is on screen. That one case keeps `Semantics(value: ...)`,
+which at least says what the number means; see `MessagingFlavorOverlay`.
+
+**What it says.** Three shared keys cover every count in the app, and each of
+them is a MEANING rather than a place, which is what keeps their number from
+growing with the screens:
+
+- `common_SemanticsValue_unreadCount` - "3 unread". How much of this is new:
+  unread messages in a chat tile, unread voicemail, an unread tab.
+- `common_SemanticsValue_totalCount` - "5 total". How many there are of it:
+  active sessions, members of a group.
+- `common_SemanticsValue_selectedCount` - "3 selected". How many a control would
+  act on: the delete button while voicemail is being picked out.
+
+Neither phrase names what is being counted, and that is the whole point of the
+standard. The noun is already spoken - it is the name of the node the value is
+attached to ("Voicemail, 3 unread"), so repeating it only makes the phrase longer
+and the key single-use. It also cannot be a placeholder: in the app's languages a
+noun does not survive being pasted next to a numeral - Ukrainian declines it
+after the number, and declines it differently after two than after five - which
+is exactly why a key that carries the noun has to be reinvented per screen. The
+translations are picked to have nothing to agree with either: Ukrainian takes the
+impersonal phrasing, which has neither gender nor case, and Thai has a single
+form regardless of the number.
+
+So a new count anywhere costs no localization work at all: decide which of the
+three meanings it is, and pass it. A count that fits none of them needs a new key
+that is a meaning too - generic and noun-free, usable by any screen. A key named
+after the screen that happened to need it first is how the app ended up with a
+count phrase per screen in the first place.
+
+**The badge itself.** `CountBadge` (`lib/widgets/`) draws every count in the app.
+It excludes itself from the tree, caps what it draws (`maxCount`, "99+") without
+touching what is spoken, and swaps its pair of colours for a badge drawn on the
+accent rather than on the surface (`onAccent`). It has no opinion about zero: a
+host decides whether there is anything to show, which it has to decide anyway to
+know whether to speak the count.
+
+**Not Flutter's `Badge`.** It performs no semantics of its own - not a merge, not
+an exclusion - so its label survives as a separate, nameless node reading a bare
+digit next to a control that says nothing about it. Draw the count with
+`CountBadge` instead.
 
 ## Verifying it
 
@@ -194,6 +306,55 @@ the tree.
   pointer tap on a device showed it. A screen reader activates through the
   semantics action and never notices.
 
+## Size of a tap target
+
+`kMinInteractiveDimension` is the floor, and Material only reaches it by
+padding a control: `Checkbox`, `Radio` and `Switch` draw a glyph far smaller
+than that. Two things take it away silently:
+
+- `materialTapTargetSize: MaterialTapTargetSize.shrinkWrap` - that is
+  literally `kMinInteractiveDimension - 8`, so a checkbox drops to 40;
+- the platform default off mobile. `ThemeData` picks `shrinkWrap` AND a
+  compact `visualDensity` for linux/macOS/windows, which a desktop browser
+  reports for the web build - the same checkbox lands at 32.
+
+A third way is not Material's at all: a parent that hands its child a fixed
+height. An `AppBar.bottom` reserves a row through `PreferredSize`, and whatever
+the row spends on padding comes out of the control inside it - so a strip
+declared 42 with a 6 gap leaves tabs of 36, and the button inside a search
+field declared the same way ends up 42. Pass the control its own height
+(`kMainAppBarBottomControlHeight`) and let the row be that plus the gap, rather
+than the other way round.
+
+Shrinking is fine when something larger around the control answers the same
+tap - a merged row, a `ListTile` - and only then. When the control is the only
+target the row offers, state `MaterialTapTargetSize.padded` rather than
+leaning on the default, and pin the size in the test
+(`greaterThanOrEqualTo(kMinInteractiveDimension)`), including one case with a
+desktop-class `ThemeData(platform: ...)`: widget tests run as Android and see
+the friendly branch.
+
+**A row that cannot be merged owes nothing extra to the finger.** Where a
+sentence hosts a link, the row stays unmerged (Trap 2) - and the sentence must
+NOT take a tap of its own either: a link's hit area follows its glyphs, not the
+line box, so a tap that misses it by a few pixels would land on the row's own
+handler. On a consent row that means agreeing, or silently taking an agreement
+back. Let the control carry the interaction and make the control big enough.
+
+## The push gate
+
+`tool/scripts/semantics-gate.sh` runs on every push, before the analyzer. It looks only at
+lines ADDED since the merge-base with `origin/develop`, in hand-written `lib/` sources, and
+fails the push when a diff introduces a raw `GestureDetector`, `InkWell`, `InkResponse` or
+`IconButton` in a file whose added lines wire no semantics at all (no `SemanticAction`,
+`SemanticId`, `Semantics(`, `CallActionButton`, `semanticLabel` or `tooltip:`). The scope is
+deliberately narrow so the gate stays quiet on refactors; it is a tripwire for the common
+miss, not a proof of correctness - the semantics tests remain the real check.
+
+A control that genuinely needs no name (rare - see the exceptions above) takes a trailing
+`// semantics-exempt: <reason>` on its line. The reason lands in the diff, so the reviewer
+sees the decision.
+
 ## Traps
 
 Learned the hard way; none of these is caught by the analyzer or by a pointer
@@ -208,9 +369,12 @@ test.
 2. **Do not merge a row that contains a link.** Merging kills the link's
    activation. Keep the name on the control and leave the text as its own node,
    even at the cost of the sentence being read twice.
-3. **A child's identifier survives a merge.** `getSemanticsData()` picks it up
-   when the parent has none, so an id on a segment's label lands on the same node
-   that carries selection and the tap. No extra per-segment id is needed.
+3. **A child's identifier survives a merge, and only a merge.** `getSemanticsData()`
+   picks it up when the parent has none, so an id on a segment's label lands on the
+   same node that carries selection and the tap; `TabBar` merges each tab the same
+   way, and `ExtTab` relies on it. A parent that only opens a container without
+   merging - `BottomNavigationBar` does that per entry - picks up nothing, and the
+   id sits on a node of its own instead: that is what `SemanticIdOfAncestor` is for.
 4. **`opacity: 0`, `Offstage` and friends remove the subtree from semantics
    entirely.** Controls that fade out or auto-hide stop existing for a screen
    reader, not just visually. Keep them reachable while a screen reader is on -
@@ -238,6 +402,16 @@ test.
 9. **A custom semantics action can cost more than it adds.** Adding one to a list
    row can break the row's node apart and take away the move actions the list
    itself provides. Prefer the action the framework already exposes.
+10. **A `DropdownMenu` goes silent about its value on the web.** The framework
+    wraps the field it is built from in `ExcludeSemantics(excluding: isButton &&
+    kIsWeb)` (`dropdown_menu.dart`), so on the web the chooser announces what it
+    is for and never what it holds. Say the chosen value from a node of our own
+    around it, as `NumberDropdown` and the presence chooser do. Two things this
+    trap teaches beyond itself: a widget test always runs off the web, so it
+    cannot see the branch at all - this one was confirmed by building for the
+    web and reading the DOM - and the same `isButton` decides whether the
+    chooser is a button or a text field a person can type into, which is why
+    both pass `selectOnly: true`.
 
 ## Third-party widgets
 
@@ -251,6 +425,11 @@ with no trace.
 - Identifiers are camelCase, mirroring the `keys.dart` constants. That is a
   deliberate deviation from the snake_case scheme QA proposed, and the convention
   is still to be confirmed with them.
+- Refreshing a list is a pull and nothing else, so it is out of reach of a
+  screen reader and of the UI test runner. On the account screen that is a
+  deliberate choice, taken when the refresh button was removed; the sessions
+  screen and the contacts tabs have been that way for longer. Which screen
+  refreshes how is in [`data_refresh.md`](data_refresh.md).
 - Everything above was verified on Android, with TalkBack and with Android UI
   automation. VoiceOver has not been run over these screens yet, so iOS-specific
   wording (a tooltip is appended to the label there) rests on the framework

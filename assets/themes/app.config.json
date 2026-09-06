@@ -12,6 +12,10 @@
       "type": "hybridPresence"
     },
     {
+      "type": "systemNotifications",
+      "enabled": true
+    },
+    {
       "type": "callPull",
       "__videoStrategy": "How Call Pull handles a video call. Must match a 'CallPullVideoStrategy' enum name: 'softMute' (no backend, default; recvonly video, camera off), 'hideVideo' (excludes video dialogs from the pull list, needs backend has_video), or 'mirror' (pulls a video dialog as a video call with the camera on, needs backend has_video). If omitted or invalid, defaults to 'softMute'.",
       "videoStrategy": "softMute"
@@ -51,7 +55,7 @@
       "cacheSelectedTab": true,
       "tabs": [
         {
-          "enabled": true,
+          "enabled": false,
           "initial": false,
           "type": "favorites",
           "titleL10n": "main_BottomNavigationBarItemLabel_favorites",
@@ -71,6 +75,8 @@
           "type": "contacts",
           "titleL10n": "main_BottomNavigationBarItemLabel_contacts",
           "icon": "0xee35",
+          "layout": "unified",
+          "favorites": true,
           "contactSourceTypes": [
             "local",
             "external"
@@ -107,8 +113,7 @@
           "embeddedResourceId": "example_embedded_spa"
         }
       ]
-    },
-    "systemNotificationsEnabled": true
+    }
   },
   "settingsConfig": {
     "sections": [
@@ -268,8 +273,6 @@
     }
   },
   "contacts": {
-    "_list": {},
-    "__list": "Not implemented yet. Configuration for the Contacts List screen.",
     "_details": {
       "__details": "Configuration for the Contact Details screen, determining layout and available interactions.",
       "actions": {
@@ -295,17 +298,12 @@
     }
   },
   "messaging": {
-    "sms": {},
     "chats": {
       "groupChatButtonEnabled": true,
       "contactInfo": {
         "showVideoButtonAction": true
       }
     }
-  },
-  "localization": {
-    "__enabledLanguages": "Allowlist of language codes (ISO 639-1) exposed by the app. Intersected with the languages the app bundles, so only ones present in both are selectable and used for auto-resolution. Defaults to every bundled language; remove entries to restrict a build (e.g. keep only [\"en\"] to ship English). An empty list also means no restriction (all bundled languages).",
-    "enabledLanguages": ["en", "it", "th", "uk"]
   }
 }
 

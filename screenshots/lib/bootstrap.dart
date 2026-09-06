@@ -26,7 +26,8 @@ Future<AppContext> bootstrap() async {
   final secureStorage = await SecureStorageImpl.init();
   final appInfo = await AppInfo.init(SharedPreferencesAppIdProvider());
 
-  final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(secureStorage);
+  final appPreferences = await AppPreferencesImpl.init();
+  final systemInfoLocalRepository = SystemInfoLocalRepositoryPrefsImpl(appPreferences);
 
   final mockSnapshot = RemoteConfigSnapshot(const {}, MockCacheConfigService());
   final systemInfo = systemInfoLocalRepository.getSystemInfo();

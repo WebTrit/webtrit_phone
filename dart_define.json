@@ -6,7 +6,7 @@
   "__WEBTRIT_APP_PREDEFINED_CORE_URLS_DESCRIPTION": "Semicolon-separated list of Core URLs to pre-populate the core URL autocomplete dropdown on the login screen. Example: 'https://core1.example.com;https://core2.example.com'. Suggestions are always shown; user-typed entries appear above presets and case-insensitive duplicates are merged.",
   "_WEBTRIT_APP_CORE_VERSION_CONSTRAINT": "",
   "WEBTRIT_APP_LINK_DOMAIN": "app.webtrit.phone",
-  "__WEBTRIT_APP_LINK_DOMAIN_DESCRIPTION": "If provided, enables Android App Links integration via intent-filter. Must match assetlinks.json configuration on the target domain. This functionality is configured via Android flavors — if the value is non-empty, the 'deeplinks' flavor is selected automatically.",
+  "__WEBTRIT_APP_LINK_DOMAIN_DESCRIPTION": "If provided, enables Android App Links integration via intent-filter. Must match assetlinks.json configuration on the target domain. A non-empty value merges the deep-link manifest fragment into the build; an empty value leaves the intent-filter out entirely.",
   "WEBTRIT_APP_NAME": "WebTrit",
   "_WEBTRIT_APP_WEB_BUNDLE_ID": "",
   "__WEBTRIT_APP_WEB_BUNDLE_ID_DESCRIPTION": "Web only. Overrides the bundle_id sent in the session (login) and autoprovision requests on web, where there is no platform bundle identifier (packageInfo.packageName resolves to the pubspec name and the backend rejects it with 'unconfigured_bundle_id'). Disabled by default (leading underscore). To enable for a web build, remove the leading underscore and set this to a bundle_id that is registered on the server for the 'web' app type. Ignored on Android/iOS. Left disabled, web falls back to packageInfo.packageName.",
@@ -35,6 +35,7 @@
   "WEBTRIT_APP_SYSTEM_INFO_REPOSITORY_POLLING_INTERVAL_SECONDS": 300,
   "WEBTRIT_APP_EXTERNAL_CONTACTS_REPOSITORY_POLLING_INTERVAL_SECONDS": 60,
   "WEBTRIT_APP_VOICEMAIL_REPOSITORY_POLLING_INTERVAL_SECONDS": 300,
+  "WEBTRIT_APP_ICE_SERVERS_REPOSITORY_POLLING_INTERVAL_SECONDS": 300,
   "WEBTRIT_APP_CALLER_ID_SETTINGS_REPOSITORY_POLLING_INTERVAL_SECONDS": 300,
   "WEBTRIT_APP_FAVORITES_REPOSITORY_POLLING_INTERVAL_SECONDS": 300,
   "WEBTRIT_APP_SIP_SUBSCRIPTIONS_REPOSITORY_POLLING_INTERVAL_SECONDS": 300

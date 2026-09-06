@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:webtrit_phone/app/router/app_router.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
@@ -139,7 +140,7 @@ class _AboutScreenState extends State<AboutScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: TextButton.icon(
-                  onPressed: () => _showEmbeddedLinksDialog(context, state.embeddedLinks),
+                  onPressed: () => _showEmbeddedLinksDialog(context, state.embeddedResources),
                   style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
                   icon: const Icon(Icons.link),
                   label: Text(
@@ -168,7 +169,12 @@ class _AboutScreenState extends State<AboutScreen> {
     );
   }
 
-  void _showEmbeddedLinksDialog(BuildContext context, List<String> links) {
+  void _showEmbeddedLinksDialog(BuildContext context, List<EmbeddedData> resources) {
+    // The dialog is mounted on the root navigator, so a router resolved from
+    // inside its builder is the root one rather than the router this screen
+    // lives in. Resolve it here, while still on the screen.
+    final router = context.router;
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -177,12 +183,10 @@ class _AboutScreenState extends State<AboutScreen> {
           width: double.maxFinite,
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: links.length,
-            itemBuilder: (context, index) => CopyToClipboard(
-              data: links[index],
-              child: ListTile(
-                title: Text(links[index], style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center),
-              ),
+            itemCount: resources.length,
+            itemBuilder: (context, index) => EmbeddedLinkTile(
+              resource: resources[index],
+              onOpen: (resource) => _onEmbeddedLinkOpen(ctx, router, resource),
             ),
           ),
         ),
@@ -194,6 +198,11 @@ class _AboutScreenState extends State<AboutScreen> {
         ],
       ),
     );
+  }
+
+  void _onEmbeddedLinkOpen(BuildContext dialogContext, StackRouter router, EmbeddedData resource) {
+    Navigator.of(dialogContext).pop();
+    router.navigate(EmbeddedScreenPageRoute(data: resource));
   }
 
   void _showLicenses(BuildContext context) {

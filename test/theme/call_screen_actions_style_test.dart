@@ -36,6 +36,13 @@ import 'package:webtrit_phone/theme/factory/styles/call_screen_style_factory.dar
 /// keeps fading instead of being snapped to a fixed alpha. `muted` is the
 /// toggle that colors its switched-on look, so its selected row shows the theme
 /// winning over the palette.
+///
+/// What the palette rows pin is the difference between off and on. Every
+/// button the theme leaves alone rests at `#66EEF3F6` - the surface at
+/// [kRestingOpacity] - and a toggle switches to `#FFEEF3F6`, the same surface
+/// opaque. A change that makes those two the same tone is a call screen where
+/// nobody can tell a muted microphone from a live one, which is what this
+/// snapshot is here to refuse.
 const _themeJson = '''
 {
   "dialing": {
@@ -115,7 +122,7 @@ void main() {
   String snapshot() {
     final colors = _scheme();
     final dialing = ThemePageConfig.fromJson(jsonDecode(_themeJson) as Map<String, dynamic>).dialing;
-    final actions = CallScreenStyleFactory(colors, dialing, null, null).create().primary!.actions!;
+    final actions = CallScreenStyleFactory(colors, dialing, null).create().primary!.actions!;
 
     final lines = <String>[];
     for (final name in buttons) {
@@ -134,7 +141,7 @@ void main() {
     return lines.join('\n');
   }
 
-  test('a theme resolves to the same call-action colors it always did', () {
+  test('an unset button rests translucent and switches to opaque', () {
     expect(snapshot(), '''
 callStart
   normal   bg=#FF75B943 fg=#FFFFFFFF icon=#FFEEEEEE
@@ -147,39 +154,58 @@ hangup
   disabled bg=#66E74C3C fg=#66FFFFFF icon=#66EEF3F6
   sel+dis  bg=#66E74C3C fg=#66FFFFFF icon=#66EEF3F6
 transfer
-  normal   bg=#FF123752 fg=#FFEAF1F6 icon=#FFEEF3F6
-  selected bg=#FF123752 fg=#FFEAF1F6 icon=#FFEEF3F6
-  disabled bg=#66123752 fg=#66EAF1F6 icon=#66EEF3F6
-  sel+dis  bg=#66123752 fg=#66EAF1F6 icon=#66EEF3F6
+  normal   bg=#66EEF3F6 fg=#FFEEF3F6 icon=#FFEEF3F6
+  selected bg=#66EEF3F6 fg=#FFEEF3F6 icon=#FFEEF3F6
+  disabled bg=#29EEF3F6 fg=#66EEF3F6 icon=#66EEF3F6
+  sel+dis  bg=#29EEF3F6 fg=#66EEF3F6 icon=#66EEF3F6
 swap
-  normal   bg=#FFDCE3E8 fg=#FF30302F icon=#FF30302F
-  selected bg=#FFDCE3E8 fg=#FF30302F icon=#FF30302F
-  disabled bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
-  sel+dis  bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
+  normal   bg=#66EEF3F6 fg=#FFEEF3F6 icon=#FFEEF3F6
+  selected bg=#66EEF3F6 fg=#FFEEF3F6 icon=#FFEEF3F6
+  disabled bg=#29EEF3F6 fg=#66EEF3F6 icon=#66EEF3F6
+  sel+dis  bg=#29EEF3F6 fg=#66EEF3F6 icon=#66EEF3F6
 key
-  normal   bg=#FFE3E9ED fg=#FF30302F icon=#FF30302F
-  selected bg=#FFE3E9ED fg=#FF30302F icon=#FF30302F
-  disabled bg=#66E3E9ED fg=#6630302F icon=#66EEF3F6
-  sel+dis  bg=#66E3E9ED fg=#6630302F icon=#66EEF3F6
+  normal   bg=#66EEF3F6 fg=#FFEEF3F6 icon=#FFEEF3F6
+  selected bg=#66EEF3F6 fg=#FFEEF3F6 icon=#FFEEF3F6
+  disabled bg=#29EEF3F6 fg=#66EEF3F6 icon=#66EEF3F6
+  sel+dis  bg=#29EEF3F6 fg=#66EEF3F6 icon=#66EEF3F6
 camera
-  normal   bg=#66FFFFFF fg=#FF30302F icon=#FF102030
+  normal   bg=#66FFFFFF fg=#FFEEF3F6 icon=#FF102030
   selected bg=#FFEEF3F6 fg=#FF30302F icon=#FF848581
-  disabled bg=#29FFFFFF fg=#6630302F icon=#66EEF3F6
+  disabled bg=#29FFFFFF fg=#66EEF3F6 icon=#66EEF3F6
   sel+dis  bg=#66EEF3F6 fg=#6630302F icon=#66EEF3F6
 muted
-  normal   bg=#FFDCE3E8 fg=#FF30302F icon=#FF30302F
+  normal   bg=#66EEF3F6 fg=#FFEEF3F6 icon=#FFEEF3F6
   selected bg=#FF0B6E4F fg=#FF30302F icon=#FFFFFFFF
-  disabled bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
+  disabled bg=#29EEF3F6 fg=#66EEF3F6 icon=#66EEF3F6
   sel+dis  bg=#660B6E4F fg=#6630302F icon=#66EEF3F6
 speaker
-  normal   bg=#FFDCE3E8 fg=#FF30302F icon=#FF30302F
+  normal   bg=#66EEF3F6 fg=#FFEEF3F6 icon=#FFEEF3F6
   selected bg=#FFEEF3F6 fg=#FF30302F icon=#FF848581
-  disabled bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
+  disabled bg=#29EEF3F6 fg=#66EEF3F6 icon=#66EEF3F6
   sel+dis  bg=#66EEF3F6 fg=#6630302F icon=#66EEF3F6
 held
-  normal   bg=#FFDCE3E8 fg=#FF30302F icon=#FF30302F
+  normal   bg=#66EEF3F6 fg=#FFEEF3F6 icon=#FFEEF3F6
   selected bg=#FFEEF3F6 fg=#FF30302F icon=#FF848581
-  disabled bg=#66DCE3E8 fg=#6630302F icon=#66EEF3F6
+  disabled bg=#29EEF3F6 fg=#66EEF3F6 icon=#66EEF3F6
   sel+dis  bg=#66EEF3F6 fg=#6630302F icon=#66EEF3F6''');
+  });
+  // A theme written before the page config had `actions` still has to draw
+  // nine buttons. It used to be caught by the retired widget-level styles,
+  // which were a defaulted field and therefore never absent; with those gone,
+  // an unmapped config would reach `TextButton` as no style at all and lose
+  // the circle a call button is.
+  test('a theme with no actions config still styles every button', () {
+    final colors = _scheme();
+    final actions = CallScreenStyleFactory(colors, const CallPageConfig(), null).create().primary!.actions!;
+
+    for (final name in ['callStart', 'hangup', 'transfer', 'swap', 'key', 'camera', 'muted', 'speaker', 'held']) {
+      final button = buttonOf(actions, name);
+      expect(button, isNotNull, reason: '$name has no style');
+      expect(
+        button!.backgroundColor?.resolve(const <WidgetState>{}),
+        isNotNull,
+        reason: '$name has no background, so it would not draw a circle',
+      );
+    }
   });
 }

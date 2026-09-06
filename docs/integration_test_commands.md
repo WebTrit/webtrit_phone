@@ -20,13 +20,13 @@ when done (`git checkout pubspec.yaml pubspec.lock`).
 ## Run integration tests in dev mode
 
 ```bash
-patrol develop --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json --flavor=deeplinkssmsReceiver
+patrol develop --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
 ```
 
 ## Build integration tests
 
 ```bash
-patrol build android/ios --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json --flavor=deeplinkssmsReceiver
+patrol build android/ios --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
 ```
 
 To specify a test file, use the `-t` option:

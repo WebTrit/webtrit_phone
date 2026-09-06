@@ -80,9 +80,8 @@ void main() {
     await $(callActionsVideoCallKey).tap();
     await pumpFor(const Duration(seconds: 2), $);
     expect($(callFrontCameraPreviewKey), findsOneWidget, reason: 'Front camera frame should appear');
-    final rtcRenderersWithData = $(
-      RTCVideoView,
-    ).which((RTCVideoView widget) => widget.videoRenderer.videoValue.renderVideo == true);
+    final rtcRenderersWithData = $(RTCVideoView)
+        .which((RTCVideoView widget) => widget.videoRenderer.videoValue.renderVideo == true);
     expect(rtcRenderersWithData, findsOneWidget, reason: 'Check video renderer');
 
     // Hangup call and check if it is done.

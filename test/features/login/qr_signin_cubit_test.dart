@@ -61,9 +61,8 @@ void main() {
       test('a permanently denied request flips the settings flag', () async {
         final cubit = buildCubit(cameraStatus: PermissionStatus.denied);
         await pumpEventQueue();
-        when(
-          () => appPermissions.requestCameraPermission(),
-        ).thenAnswer((_) async => PermissionStatus.permanentlyDenied);
+        when(() => appPermissions.requestCameraPermission())
+            .thenAnswer((_) async => PermissionStatus.permanentlyDenied);
 
         await cubit.requestPermission();
 

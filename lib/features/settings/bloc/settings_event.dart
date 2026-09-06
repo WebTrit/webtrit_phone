@@ -14,12 +14,3 @@ class SettingsLogouted extends SettingsEvent {
 class SettingsAccountDeleted extends SettingsEvent {
   const SettingsAccountDeleted();
 }
-
-class SettingsUnreadVoicemailCountChanged extends SettingsEvent {
-  const SettingsUnreadVoicemailCountChanged(this.count);
-
-  final int count;
-
-  @override
-  List<Object?> get props => [count];
-}

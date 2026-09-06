@@ -7,6 +7,13 @@ linter:
 analyzer:
   exclude:
     - "**/*.g.dart"
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   errors:
     # TODO: remove this suppression and strip the spurious `@override`
     # annotations from factory constructors in

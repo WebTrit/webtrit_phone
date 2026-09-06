@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart' as services;
 
 import 'package:logging/logging.dart';
@@ -8,7 +10,7 @@ import 'package:webtrit_phone/common/common.dart';
 
 final Logger _logger = Logger('AppInfo');
 
-class AppInfo {
+class AppInfo implements Disposable {
   static Future<AppInfo> init(AppIdProvider appIdProvider) async {
     final id = await appIdProvider.getId();
 
@@ -62,12 +64,14 @@ class AppInfo {
   static const String _localCallkeepVersion = 'local';
 
   AppInfo._(this.appInfo, this._identifier, this._appVersion, this._callkeepVersion) {
-    appInfo.onIdChange.listen((String id) {
+    _idChangeSubscription = appInfo.onIdChange.listen((String id) {
       _identifier = id;
     });
   }
 
-  AppIdProvider appInfo;
+  final AppIdProvider appInfo;
+
+  late final StreamSubscription<String> _idChangeSubscription;
 
   String _identifier;
 
@@ -80,4 +84,13 @@ class AppInfo {
   Version get version => _appVersion;
 
   String get callkeepVersion => _callkeepVersion;
+
+  @override
+  Future<void> dispose() async {
+    await _idChangeSubscription.cancel();
+    final appIdProvider = appInfo;
+    if (appIdProvider case final Disposable disposable) {
+      await disposable.dispose();
+    }
+  }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webtrit_phone/common/common.dart';
 
 /// A class that observes and handles changes in the application's lifecycle state.
 /// Across different instances, it can either be in
 ///   - master mode for main isolate
 ///   - slave mode for background isolate.
-class AppLifecycle with WidgetsBindingObserver {
+class AppLifecycle with WidgetsBindingObserver implements Disposable {
   AppLifecycle._(this._sharedPreferences, this.masterMode) {
     if (masterMode) {
       WidgetsBinding.instance.addObserver(this);
@@ -35,6 +36,15 @@ class AppLifecycle with WidgetsBindingObserver {
   static Future<AppLifecycle> initSlave() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     return AppLifecycle._(sharedPreferences, false);
+  }
+
+  /// Stops observing the application lifecycle. Only master-mode instances
+  /// registered an observer, so this is a no-op for the background ones.
+  @override
+  Future<void> dispose() async {
+    if (masterMode) {
+      WidgetsBinding.instance.removeObserver(this);
+    }
   }
 
   AppLifecycleState? getLifecycleState() {

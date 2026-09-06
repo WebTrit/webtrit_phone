@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:country_code_picker/country_code_picker.dart';
 
+import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
+
+import 'number_dropdown.dart';
 
 class MatcherAddingForm extends StatefulWidget {
   const MatcherAddingForm({
@@ -26,6 +30,18 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
   String prefix = '';
   String number = '';
 
+  /// Country behind [prefix]. The picker shows a flag and a dial code, so
+  /// this is the only thing that can tell a screen reader which country the
+  /// rule ended up on.
+  String country = '';
+
+  void _onCountryChanged(CountryCode? value) {
+    setState(() {
+      prefix = value?.dialCode ?? '';
+      country = value?.name ?? '';
+    });
+  }
+
   bool get prefixInUse => widget.addedPrefixes.contains(prefix);
   bool get isValid => prefix.isNotEmpty && number.isNotEmpty && !prefixInUse;
 
@@ -37,7 +53,7 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surfaceBright,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: colorScheme.shadow.withAlpha(25), blurRadius: 32, offset: const Offset(8, 8))],
       ),
@@ -51,35 +67,39 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
                   color: colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: CountryCodePicker(
-                  padding: EdgeInsets.zero,
-                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  boxDecoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-                  initialSelection: 'US',
-                  onChanged: (country) => setState(() => prefix = country.dialCode ?? ''),
-                  onInit: (value) => prefix = value?.dialCode ?? '',
+                // On its own the picker announces nothing but the code it
+                // currently shows - the name says what choosing one does.
+                child: SemanticAction(
+                  label: l10n.callerId_SemanticsLabel_matchPrefix(country),
+                  identifier: callerIdMatchPrefixId,
+                  child: CountryCodePicker(
+                    padding: EdgeInsets.zero,
+                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    boxDecoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                    initialSelection: 'US',
+                    onChanged: _onCountryChanged,
+                    // The picker reports its starting country while the form
+                    // is still building, so the rebuild waits for the frame.
+                    onInit: (value) => WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) _onCountryChanged(value);
+                    }),
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: DropdownMenu<String>(
-                  width: double.infinity,
-                  hintText: l10n.settings_callerId_number_hint,
-                  menuStyle: MenuStyle(
-                    backgroundColor: WidgetStateProperty.all(colorScheme.surfaceContainerLow),
-                    shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                // The hint names the chooser only while it is empty; once a
+                // number is picked the field would go nameless.
+                child: SemanticAction(
+                  label: l10n.callerId_SemanticsLabel_matchNumber,
+                  identifier: callerIdMatchNumberId,
+                  child: NumberDropdown<String>(
+                    width: double.infinity,
+                    hintText: l10n.settings_callerId_number_hint,
+                    value: number.isEmpty ? null : number,
+                    entries: [for (final n in widget.numbers) DropdownMenuEntry<String>(value: n, label: n)],
+                    onSelected: (value) => setState(() => number = value ?? ''),
                   ),
-                  textStyle: TextStyle(color: colorScheme.onSurface, fontSize: 14),
-                  inputDecorationTheme: InputDecorationTheme(
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                    filled: true,
-                    fillColor: colorScheme.surfaceContainerLow,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    isCollapsed: true,
-                  ),
-                  dropdownMenuEntries: [for (final n in widget.numbers) DropdownMenuEntry<String>(value: n, label: n)],
-                  onSelected: (value) => setState(() => number = value ?? ''),
                 ),
               ),
             ],
@@ -90,7 +110,7 @@ class _MatcherAddingFormState extends State<MatcherAddingForm> {
               padding: const EdgeInsets.only(top: 8),
               child: Text(
                 l10n.settings_callerId_duplicate_dialcode_error,
-                style: const TextStyle(color: Colors.red, fontSize: 12),
+                style: TextStyle(color: colorScheme.error, fontSize: 12),
               ),
             ),
           Row(

@@ -15,22 +15,13 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BorderConfig {
 
-/// Border type:
-/// - [`BorderTypeConfig.underline`]
-/// - [`BorderTypeConfig.outline`]
-/// - [`BorderTypeConfig.none`]
- BorderTypeConfig get type;/// Corner radius for outline borders.
- double? get borderRadius;/// Border color (hex string, e.g. `#000000`).
- String? get borderColor;/// Stroke width of the border.
- double? get borderWidth;
+ BorderTypeConfig get type; double? get borderRadius; String? get borderColor; double? get borderWidth;
 /// Create a copy of BorderConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $BorderConfigCopyWith<BorderConfig> get copyWith => _$BorderConfigCopyWithImpl<BorderConfig>(this as BorderConfig, _$identity);
 
-  /// Serializes this BorderConfig to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -73,7 +64,7 @@ class _$BorderConfigCopyWithImpl<$Res>
 /// Create a copy of BorderConfig
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? borderRadius = freezed,Object? borderColor = freezed,Object? borderWidth = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(BorderConfig(
 type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as BorderTypeConfig,borderRadius: freezed == borderRadius ? _self.borderRadius : borderRadius // ignore: cast_nullable_to_non_nullable
 as double?,borderColor: freezed == borderColor ? _self.borderColor : borderColor // ignore: cast_nullable_to_non_nullable
@@ -99,11 +90,10 @@ extension BorderConfigPatterns on BorderConfig {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _BorderConfig value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _BorderConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return orElse();
 
 }
@@ -121,11 +111,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _BorderConfig value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _BorderConfig():
-return $default(_that);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -142,11 +131,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _BorderConfig value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _BorderConfig() when $default != null:
-return $default(_that);case _:
+case _:
   return null;
 
 }
@@ -163,10 +151,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( BorderTypeConfig type,  double? borderRadius,  String? borderColor,  double? borderWidth)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _BorderConfig() when $default != null:
-return $default(_that.type,_that.borderRadius,_that.borderColor,_that.borderWidth);case _:
+case _:
   return orElse();
 
 }
@@ -184,10 +171,9 @@ return $default(_that.type,_that.borderRadius,_that.borderColor,_that.borderWidt
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( BorderTypeConfig type,  double? borderRadius,  String? borderColor,  double? borderWidth)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _BorderConfig():
-return $default(_that.type,_that.borderRadius,_that.borderColor,_that.borderWidth);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,96 +190,13 @@ return $default(_that.type,_that.borderRadius,_that.borderColor,_that.borderWidt
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( BorderTypeConfig type,  double? borderRadius,  String? borderColor,  double? borderWidth)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _BorderConfig() when $default != null:
-return $default(_that.type,_that.borderRadius,_that.borderColor,_that.borderWidth);case _:
+case _:
   return null;
 
 }
 }
-
-}
-
-/// @nodoc
-@JsonSerializable()
-
-class _BorderConfig implements BorderConfig {
-  const _BorderConfig({this.type = BorderTypeConfig.underline, this.borderRadius, this.borderColor, this.borderWidth});
-  factory _BorderConfig.fromJson(Map<String, dynamic> json) => _$BorderConfigFromJson(json);
-
-/// Border type:
-/// - [`BorderTypeConfig.underline`]
-/// - [`BorderTypeConfig.outline`]
-/// - [`BorderTypeConfig.none`]
-@override@JsonKey() final  BorderTypeConfig type;
-/// Corner radius for outline borders.
-@override final  double? borderRadius;
-/// Border color (hex string, e.g. `#000000`).
-@override final  String? borderColor;
-/// Stroke width of the border.
-@override final  double? borderWidth;
-
-/// Create a copy of BorderConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$BorderConfigCopyWith<_BorderConfig> get copyWith => __$BorderConfigCopyWithImpl<_BorderConfig>(this, _$identity);
-
-@override
-Map<String, dynamic> toJson() {
-  return _$BorderConfigToJson(this, );
-}
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BorderConfig&&(identical(other.type, type) || other.type == type)&&(identical(other.borderRadius, borderRadius) || other.borderRadius == borderRadius)&&(identical(other.borderColor, borderColor) || other.borderColor == borderColor)&&(identical(other.borderWidth, borderWidth) || other.borderWidth == borderWidth));
-}
-
-@JsonKey(includeFromJson: false, includeToJson: false)
-@override
-int get hashCode => Object.hash(runtimeType,type,borderRadius,borderColor,borderWidth);
-
-@override
-String toString() {
-  return 'BorderConfig(type: $type, borderRadius: $borderRadius, borderColor: $borderColor, borderWidth: $borderWidth)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$BorderConfigCopyWith<$Res> implements $BorderConfigCopyWith<$Res> {
-  factory _$BorderConfigCopyWith(_BorderConfig value, $Res Function(_BorderConfig) _then) = __$BorderConfigCopyWithImpl;
-@override @useResult
-$Res call({
- BorderTypeConfig type, double? borderRadius, String? borderColor, double? borderWidth
-});
-
-
-
-
-}
-/// @nodoc
-class __$BorderConfigCopyWithImpl<$Res>
-    implements _$BorderConfigCopyWith<$Res> {
-  __$BorderConfigCopyWithImpl(this._self, this._then);
-
-  final _BorderConfig _self;
-  final $Res Function(_BorderConfig) _then;
-
-/// Create a copy of BorderConfig
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? type = null,Object? borderRadius = freezed,Object? borderColor = freezed,Object? borderWidth = freezed,}) {
-  return _then(_BorderConfig(
-type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as BorderTypeConfig,borderRadius: freezed == borderRadius ? _self.borderRadius : borderRadius // ignore: cast_nullable_to_non_nullable
-as double?,borderColor: freezed == borderColor ? _self.borderColor : borderColor // ignore: cast_nullable_to_non_nullable
-as String?,borderWidth: freezed == borderWidth ? _self.borderWidth : borderWidth // ignore: cast_nullable_to_non_nullable
-as double?,
-  ));
-}
-
 
 }
 

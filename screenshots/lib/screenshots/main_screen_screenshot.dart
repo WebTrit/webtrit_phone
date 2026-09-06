@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import 'package:webtrit_phone/data/data.dart';
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/features/voicemail/widgets/voicemail_flavor_overlay.dart';
+import 'package:webtrit_phone/features/voicemail/models/voicemail_screen_context.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
@@ -22,10 +25,15 @@ class MainScreenScreenshot extends StatefulWidget {
     super.key,
     this.keypadDialing = false,
     this.interactive = false,
+    this.pullableCallDialogs = const [],
   });
 
   final MainFlavor flavor;
   final Widget? title;
+
+  /// Calls active on other devices; a non-empty list puts the call pull badge
+  /// into the app bar.
+  final List<DialogInfo> pullableCallDialogs;
 
   /// When the keypad flavor is shown, pre-fill it with a dialed number and resolved contact.
   /// Ignored when [interactive] is true (the live keypad starts empty and reacts to input).
@@ -40,7 +48,10 @@ class MainScreenScreenshot extends StatefulWidget {
 }
 
 class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
-  late MainFlavor _flavor = widget.flavor;
+  /// Selected by position, not by kind: two embedded sections share one
+  /// flavor, and remembering the flavor would highlight the first of them
+  /// whichever one was pressed.
+  int? _selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +60,13 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
     final featureAccess = context.read<FeatureAccess?>();
 
     final configTabs = featureAccess?.bottomMenuConfig.tabs;
-    final tabs = (configTabs != null && configTabs.length >= 2) ? configTabs : _defaultTabs(context);
+    // Demo tabs stand in only when there is no configuration to show at all.
+    // A real config keeps its own tabs whatever their count: substituting the
+    // demo menu for a one-tab config made the preview show five sections the
+    // app would never render.
+    final tabs = (configTabs != null && configTabs.isNotEmpty) ? configTabs : _defaultTabs(context);
 
-    return MultiProvider(
+    Widget screen = MultiProvider(
       providers: [
         // TODO(Vladislav): Replace workaround with ContactsRepository in _ContactInfoBuilderState.
         Provider<ContactsRepository>(create: (c) => MockContactsRepository()),
@@ -59,29 +74,87 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
       child: MultiBlocProvider(
         providers: _createMockBlocProviders(),
         child: Builder(
-          builder: (context) => MainScreen(
-            body: AppBarParams(
+          builder: (context) {
+            final flavorIndex = tabs.indexWhere((tab) => tab.flavor == widget.flavor);
+            // A capture asks for a section by name; silently substituting
+            // another would produce differently-named screenshots of one and
+            // the same screen. An interactive preview may start anywhere.
+            assert(
+              widget.interactive || flavorIndex >= 0,
+              'the configured menu has no ${widget.flavor} section to capture',
+            );
+            // Clamped rather than trusted: the remembered position can outlive
+            // a config change that shrank the tabs list.
+            final selectedIndex = (_selectedIndex ?? (flavorIndex < 0 ? 0 : flavorIndex)).clamp(0, tabs.length - 1);
+            final body = AppBarParams(
               systemNotificationsEnabled: true,
-              pullableCallDialogs: const [],
-              child: _buildFlavorWidget(context, _flavor, featureAccess),
-            ),
-            bottomNavigationBar: _buildBottomNavigationBar(context, tabs),
-          ),
+              pullableCallDialogs: widget.pullableCallDialogs,
+              child: _buildFlavorWidget(context, tabs[selectedIndex].flavor, featureAccess),
+            );
+            // MainScreen itself drops the bar for a single-section menu - the
+            // preview inherits the rule instead of restating it.
+            return MainScreen(
+              // The mock unread state below backs this the way the shell does
+              // in the app.
+              decorateTabIcon: composeTabIconDecorators([MessagingFlavorOverlay.forTab, VoicemailFlavorOverlay.forTab]),
+              body: body,
+              tabs: tabs,
+              currentIndex: selectedIndex,
+              onTabSelected: widget.interactive ? _selectTab : null,
+            );
+          },
         ),
       ),
     );
+
+    if (widget.pullableCallDialogs.isNotEmpty) {
+      // The call pull badge wobbles on a timer, which a snapshot cannot capture
+      // deterministically; the badge holds still when animations are disabled.
+      screen = MediaQuery(data: MediaQuery.of(context).copyWith(disableAnimations: true), child: screen);
+    }
+
+    return screen;
   }
 
   List<BlocProvider> _createMockBlocProviders() {
     return [
       BlocProvider<CallBloc>(create: (_) => MockCallBloc.mainScreen()),
       BlocProvider<CallRoutingCubit>(create: (_) => MockCallRoutingCubit.initial()),
-      BlocProvider<SessionStatusCubit>(create: (_) => MockSessionStatusCubit.initial()),
+      // The app bar renders the call pull badge only on a ready session, so the
+      // badge preview needs a connected one; the other states keep the default
+      // "Connecting..." look.
+      BlocProvider<SessionStatusCubit>(
+        create: (_) =>
+            widget.pullableCallDialogs.isNotEmpty ? MockSessionStatusCubit.ready() : MockSessionStatusCubit.initial(),
+      ),
       BlocProvider<UserInfoCubit>(create: (_) => MockUserInfoCubit.initial()),
       BlocProvider<SystemNotificationsCounterCubit>(create: (_) => MockSystemNotificationCounterCubit.withDefaults()),
       BlocProvider<MicrophoneStatusBloc>(create: (_) => MockMicrophoneStatusBloc.initial(isGranted: true)),
+      // One unread-count cubit serves both the bar's badge and the messaging
+      // body, the way production provides it. The static messaging capture
+      // carries real counts and the other captures stay badge-free, but the
+      // interactive preview always has them: it is created with whatever tab
+      // is first, and the messaging screen the user taps into afterwards must
+      // demonstrate its counters, not a menu that happens to be empty.
+      BlocProvider<UnreadCountCubit>(
+        create: (_) => widget.interactive || widget.flavor == MainFlavor.messaging
+            ? MockUnreadCountCubit.withUnreadMessages()
+            : MockUnreadCountCubit.initial(),
+      ),
     ];
   }
+
+  /// What the contacts section shows when nothing configures it. The
+  /// screenshots app runs standalone as well as inside the editor, and a
+  /// contacts screen with no address book in it is a preview of nothing.
+  static final _defaultContactsTab = ContactsBottomMenuTab(
+    enabled: true,
+    initial: false,
+    titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
+    icon: Icons.people,
+    contactSourceTypes: const [ContactSourceType.local, ContactSourceType.external],
+    layout: const ContactsTabbedLayout(),
+  );
 
   List<BottomMenuTab> _defaultTabs(BuildContext context) {
     return [
@@ -98,13 +171,7 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
         icon: Icons.history,
         supportsCallHistory: false,
       ),
-      ContactsBottomMenuTab(
-        enabled: true,
-        initial: false,
-        titleL10n: 'main_BottomNavigationBarItemLabel_contacts',
-        icon: Icons.people,
-        contactSourceTypes: [],
-      ),
+      _defaultContactsTab,
       const KeypadBottomMenuTab(
         enabled: true,
         initial: false,
@@ -120,26 +187,9 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
     ];
   }
 
-  BottomNavigationBar _buildBottomNavigationBar(BuildContext context, List<BottomMenuTab> tabs) {
-    final textTheme = Theme.of(context).textTheme;
-
-    final selectedIndex = tabs.indexWhere((tab) => tab.flavor == _flavor);
-
-    return BottomNavigationBar(
-      currentIndex: selectedIndex < 0 ? 0 : selectedIndex,
-      type: BottomNavigationBarType.fixed,
-      selectedLabelStyle: textTheme.bodySmall,
-      unselectedLabelStyle: textTheme.bodySmall,
-      onTap: widget.interactive ? (index) => _selectTab(tabs[index].flavor) : null,
-      items: tabs
-          .map((tab) => BottomNavigationBarItem(icon: Icon(tab.icon), label: context.parseL10n(tab.titleL10n)))
-          .toList(),
-    );
-  }
-
-  void _selectTab(MainFlavor flavor) {
-    if (flavor == _flavor) return;
-    setState(() => _flavor = flavor);
+  void _selectTab(int index) {
+    if (index == _selectedIndex) return;
+    setState(() => _selectedIndex = index);
   }
 
   Widget _buildFlavorWidget(BuildContext context, MainFlavor flavor, FeatureAccess? featureAccess) {
@@ -188,14 +238,36 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
           ),
         );
       case MainFlavor.contacts:
-        return BlocProvider<ContactsBloc>(
-          create: (_) => MockContactsSearchBloc.mainScreen(),
-          child: ContactsScreen(
-            sourceTypes: const [ContactSourceType.local, ContactSourceType.external],
-            sourceTypeWidgetBuilder: _buildContactSourceTypeWidget,
-            title: widget.title,
+        // The two arrangements are two screens in the app, chosen by the tab's
+        // layout the same way `AppRouter` chooses between them. Building one of
+        // them unconditionally is what made the arrangement, the address book
+        // switches and the favourites entry all read as ignored in the preview.
+        final contactsTab =
+            featureAccess?.bottomMenuConfig.getTabEnabled<ContactsBottomMenuTab>() ?? _defaultContactsTab;
+        return switch (contactsTab.layout) {
+          ContactsUnifiedLayout() => MultiBlocProvider(
+            providers: [
+              BlocProvider<ContactsBloc>(create: (_) => MockContactsSearchBloc.mainScreen()),
+              // Above the screen, not inside its body: the rearrange button in
+              // the scaffold reads the same list.
+              BlocProvider<FavoritesBloc>(create: (_) => MockFavoritesBloc.mainScreen()),
+            ],
+            child: ContactsFilterScreen(
+              selections: contactsTab.listSelections,
+              sourceTypeWidgetBuilder: _buildContactSourceTypeWidget,
+              favoritesWidgetBuilder: _buildFavoritesWidget,
+              title: widget.title,
+            ),
           ),
-        );
+          ContactsTabbedLayout() => BlocProvider<ContactsBloc>(
+            create: (_) => MockContactsSearchBloc.mainScreen(),
+            child: ContactsScreen(
+              sourceTypes: contactsTab.contactSourceTypes,
+              sourceTypeWidgetBuilder: _buildContactSourceTypeWidget,
+              title: widget.title,
+            ),
+          ),
+        };
       case MainFlavor.keypad:
         return BlocProvider<KeypadCubit>(
           create: (context) => widget.interactive
@@ -223,38 +295,81 @@ class _MainScreenScreenshotState extends State<MainScreenScreenshot> {
             pageInjectionStrategyBuilder: () => DefaultPayloadInjectionStrategy(),
           ),
         );
+      case MainFlavor.voicemail:
+        // The same provider set the standalone voicemail preview builds; the
+        // tiles resolve the playback controller through it.
+        return MultiProvider(
+          providers: [
+            Provider<VoicemailScreenContext>(
+              create: (_) => VoicemailScreenContext(
+                mediaCacheBasePath: '/tmp/screenshots_cache',
+                dateFormat: DateFormat.yMMMd().add_Hm(),
+                mediaHeaders: const {},
+              ),
+            ),
+            BlocProvider<VoicemailCubit>(create: (_) => MockVoicemailCubit.withItems()),
+            ChangeNotifierProvider(create: (_) => VoicemailPlaybackController()),
+          ],
+          child: const VoicemailTabScreen(),
+        );
       case MainFlavor.messaging:
         return MultiBlocProvider(
           providers: [
             BlocProvider<MessagingBloc>(create: (_) => MockMessagingBloc.initial()),
             BlocProvider<ChatConversationsCubit>(create: (_) => MockChatConversationsCubit.withMockData()),
             BlocProvider<SmsConversationsCubit>(create: (_) => MockSmsConversationsCubit.withConversations()),
-            BlocProvider<UnreadCountCubit>(create: (_) => MockUnreadCountCubit.withUnreadMessages()),
           ],
           child: ConversationsScreen(
             title: Text(EnvironmentConfig.APP_NAME),
             // Dual tabs expose the chat/sms tab bar (its TabController is local, so switching
             // works) for the interactive preview; the snapshot stays chat-only.
             initialTabsState: widget.interactive
-                ? const DualTabState(TabType.chat, true)
-                : const SingleTabState(TabType.chat, true),
+                ? const DualTabState(ConversationsTab.chat, true)
+                : const SingleTabState(ConversationsTab.chat, true),
           ),
         );
     }
   }
 
-  Widget _buildContactSourceTypeWidget(BuildContext context, ContactSourceType sourceType) {
+  /// `markFavorites` is optional so this serves both screens: the tabbed one
+  /// asks for two positional arguments, the unified one passes the flag when a
+  /// list is shown beside the favourites entry.
+  Widget _buildContactSourceTypeWidget(
+    BuildContext context,
+    ContactSourceType sourceType, {
+    bool markFavorites = false,
+  }) {
     switch (sourceType) {
       case ContactSourceType.local:
         return BlocProvider<ContactsLocalTabBloc>(
           create: (_) => MockContactsLocalTabBloc.mainScreen(),
-          child: const ContactsLocalTab(),
+          child: ContactsLocalTab(markFavorites: markFavorites),
         );
       case ContactSourceType.external:
         return BlocProvider<ContactsExternalTabBloc>(
           create: (_) => MockContactsExternalTabBloc.mainScreen(),
-          child: const ContactsExternalTab(),
+          child: ContactsExternalTab(markFavorites: markFavorites),
         );
     }
+  }
+
+  /// The favourites entry of the unified chooser, with the same call
+  /// capabilities the favourites section itself is previewed with.
+  Widget _buildFavoritesWidget(
+    BuildContext context, {
+    bool reorderMode = false,
+    void Function(int index)? onReorderStart,
+    void Function(int index)? onReorderEnd,
+  }) {
+    return FavoritesList(
+      reorderMode: reorderMode,
+      onReorderStart: onReorderStart,
+      onReorderEnd: onReorderEnd,
+      transferEnabled: false,
+      videoEnabled: true,
+      chatsEnabled: false,
+      smssEnabled: false,
+      cdrsEnabled: false,
+    );
   }
 }

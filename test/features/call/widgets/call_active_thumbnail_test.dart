@@ -6,6 +6,7 @@ import 'package:webtrit_phone/features/call/call.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../helpers/helpers.dart';
 
@@ -74,6 +75,35 @@ void main() {
       expect(returns, 1);
       await teardown(tester);
       semantics.dispose();
+    });
+
+    // The window is 9:16 and stretches what fills it; the avatar standing in for the
+    // missing video is a circle, and a circle handed a 9:16 box is an ellipse with the
+    // contact photo cropped to match.
+    testWidgets('the avatar standing in for the video stays a circle in the 9:16 window', (tester) async {
+      await tester.pumpWidget(
+        wrap(CallActiveThumbnail(activeCall: _acceptedCall(), orientation: Orientation.portrait)),
+      );
+      await tester.pump();
+
+      // 90 wide by default, less the 8 of padding on each side.
+      final size = tester.getSize(find.byType(LeadingAvatar));
+      expect(size.width, size.height);
+      expect(size.width, 74.0);
+
+      await teardown(tester);
+    });
+
+    testWidgets('a window narrower than its own padding leaves the avatar at nothing, not below it', (tester) async {
+      await tester.pumpWidget(
+        wrap(CallActiveThumbnail(activeCall: _acceptedCall(), orientation: Orientation.portrait, smallerSide: 10)),
+      );
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(LeadingAvatar)), Size.zero);
+
+      await teardown(tester);
     });
   });
 }

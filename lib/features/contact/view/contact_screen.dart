@@ -142,7 +142,7 @@ class _ContactScreenState extends State<ContactScreen> {
                               child: LeadingAvatar(
                                 username: contact.displayTitle,
                                 thumbnail: contact.thumbnail,
-                                thumbnailUrl: contact.thumbnailUrl ?? gravatarThumbnailUrl(email),
+                                thumbnailUrl: contact.thumbnailUrl ?? GravatarUrl.forEmail(email),
                                 radius: 50,
                               ),
                             ),

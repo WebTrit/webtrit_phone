@@ -2,12 +2,16 @@ import 'package:equatable/equatable.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 class CoreInfo with EquatableMixin {
-  CoreInfo({required this.version});
+  CoreInfo({required this.version, this.iceServersConfigured = false});
 
   final Version version;
 
+  /// Whether the deployment bundles its own STUN/TURN servers, which the app
+  /// then loads from the core instead of falling back to a public STUN server.
+  final bool iceServersConfigured;
+
   @override
-  List<Object?> get props => [version];
+  List<Object?> get props => [version, iceServersConfigured];
 
   @override
   bool get stringify => true;

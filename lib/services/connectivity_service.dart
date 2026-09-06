@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:webtrit_phone/common/common.dart';
 
 import 'package:webtrit_phone/utils/utils.dart';
 
-abstract class ConnectivityService {
+abstract class ConnectivityService implements Disposable {
   /// Last seen `ConnectivityResult` from any source (initial platform read or
   /// subsequent change event). Always non-null after the service is created.
   ConnectivityResult get currentConnectivityResult;
@@ -26,7 +27,8 @@ abstract class ConnectivityService {
   /// One-shot online check: OS state + HTTP probe.
   Future<bool> checkConnection();
 
-  void dispose();
+  @override
+  Future<void> dispose();
 }
 
 class ConnectivityServiceImpl implements ConnectivityService {
@@ -93,7 +95,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
     _disposed = true;
     _connectivityChecker.dispose();
     _connectivitySubscription.cancel();

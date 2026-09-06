@@ -46,9 +46,8 @@ void main() {
       });
 
       test('defaults to Level.INFO when SupportedLoggingConfig has unknown logLevel string', () {
-        when(
-          () => mockAppConfig.supported,
-        ).thenReturn([const SupportedFeature.loggingConfig(logLevel: 'UNKNOWN_LEVEL')]);
+        when(() => mockAppConfig.supported)
+            .thenReturn([const SupportedFeature.loggingConfig(logLevel: 'UNKNOWN_LEVEL')]);
         const overrides = FeatureOverrides();
 
         final config = LoggingMapper.map(mockAppConfig, overrides);

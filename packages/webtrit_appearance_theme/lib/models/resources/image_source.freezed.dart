@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ImageSource {
 
- String? get id; String? get uri; String get ref; ImageRenderSpec? get render; Metadata get metadata;
+ String? get id; String? get uri; String get refType; ImageRenderSpec? get render; Metadata get metadata;
 /// Create a copy of ImageSource
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $ImageSourceCopyWith<ImageSource> get copyWith => _$ImageSourceCopyWithImpl<Imag
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImageSource&&(identical(other.id, id) || other.id == id)&&(identical(other.uri, uri) || other.uri == uri)&&(identical(other.ref, ref) || other.ref == ref)&&(identical(other.render, render) || other.render == render)&&(identical(other.metadata, metadata) || other.metadata == metadata));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImageSource&&(identical(other.id, id) || other.id == id)&&(identical(other.uri, uri) || other.uri == uri)&&(identical(other.refType, refType) || other.refType == refType)&&(identical(other.render, render) || other.render == render)&&(identical(other.metadata, metadata) || other.metadata == metadata));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,uri,ref,render,metadata);
+int get hashCode => Object.hash(runtimeType,id,uri,refType,render,metadata);
 
 @override
 String toString() {
-  return 'ImageSource(id: $id, uri: $uri, ref: $ref, render: $render, metadata: $metadata)';
+  return 'ImageSource(id: $id, uri: $uri, refType: $refType, render: $render, metadata: $metadata)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $ImageSourceCopyWith<$Res>  {
   factory $ImageSourceCopyWith(ImageSource value, $Res Function(ImageSource) _then) = _$ImageSourceCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? uri,@JsonKey(name: r'$ref') String ref, ImageRenderSpec? render, Metadata metadata
+ String? id, String? uri, String refType, ImageRenderSpec? render, Metadata metadata
 });
 
 
@@ -63,11 +63,11 @@ class _$ImageSourceCopyWithImpl<$Res>
 
 /// Create a copy of ImageSource
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? uri = freezed,Object? ref = null,Object? render = freezed,Object? metadata = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? uri = freezed,Object? refType = null,Object? render = freezed,Object? metadata = null,}) {
   return _then(ImageSource(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,uri: freezed == uri ? _self.uri : uri // ignore: cast_nullable_to_non_nullable
-as String?,ref: null == ref ? _self.ref : ref // ignore: cast_nullable_to_non_nullable
+as String?,refType: null == refType ? _self.refType : refType // ignore: cast_nullable_to_non_nullable
 as String,render: freezed == render ? _self.render : render // ignore: cast_nullable_to_non_nullable
 as ImageRenderSpec?,metadata: null == metadata ? _self.metadata : metadata // ignore: cast_nullable_to_non_nullable
 as Metadata,

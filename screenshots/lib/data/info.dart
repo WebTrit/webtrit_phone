@@ -2,6 +2,7 @@ import 'package:webtrit_phone/repositories/repositories.dart';
 
 const userInfo = UserInfo(
   balance: Balance(amount: 100, currency: 'USD', balanceType: BalanceType.prepaid),
+  email: 'd.serdun@webtrit.com',
   firstName: 'Agent',
   lastName: 'Smith',
   companyName: 'WebTrit',

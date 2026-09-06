@@ -23,7 +23,7 @@ mixin ContactsDriftMapper on PresenceInfoDriftMapper, DialogInfoDriftMapper {
     List<SipSubscriptionData> sipSubscriptions = const [],
   }) {
     final email = emails.firstOrNull?.address;
-    final gravatarUrl = gravatarThumbnailUrl(email);
+    final gravatarUrl = GravatarUrl.forEmail(email);
 
     return Contact(
       id: contactData.id,

@@ -50,7 +50,7 @@ class FakeConnectivityService implements ConnectivityService {
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
     _controller.close();
     _resultController.close();
   }

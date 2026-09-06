@@ -61,9 +61,8 @@ void main() {
 
   group('QR sign-in tab gating', () {
     test('offered after the backend types when enabled and password sign-in is supported', () async {
-      when(
-        () => authRepository.getSystemInfo(any(), any()),
-      ).thenAnswer((_) async => _systemInfo(supported: ['otpSignin', 'passwordSignin']));
+      when(() => authRepository.getSystemInfo(any(), any()))
+          .thenAnswer((_) async => _systemInfo(supported: ['otpSignin', 'passwordSignin']));
 
       final cubit = buildCubit(qrSigninConfig: QrSigninConfig(enabled: true));
       await submitCoreUrl(cubit);
@@ -81,9 +80,8 @@ void main() {
     });
 
     test('not offered when the backend has no password sign-in', () async {
-      when(
-        () => authRepository.getSystemInfo(any(), any()),
-      ).thenAnswer((_) async => _systemInfo(supported: ['otpSignin']));
+      when(() => authRepository.getSystemInfo(any(), any()))
+          .thenAnswer((_) async => _systemInfo(supported: ['otpSignin']));
 
       final cubit = buildCubit(qrSigninConfig: QrSigninConfig(enabled: true));
       await submitCoreUrl(cubit);
@@ -92,9 +90,8 @@ void main() {
     });
 
     test('a backend-advertised qrSignin is ignored: it must not bypass the config gate', () async {
-      when(
-        () => authRepository.getSystemInfo(any(), any()),
-      ).thenAnswer((_) async => _systemInfo(supported: ['passwordSignin', 'qrSignin']));
+      when(() => authRepository.getSystemInfo(any(), any()))
+          .thenAnswer((_) async => _systemInfo(supported: ['passwordSignin', 'qrSignin']));
 
       final cubit = buildCubit();
       await submitCoreUrl(cubit);
@@ -103,9 +100,8 @@ void main() {
     });
 
     test('a backend-advertised qrSignin does not duplicate the enabled tab', () async {
-      when(
-        () => authRepository.getSystemInfo(any(), any()),
-      ).thenAnswer((_) async => _systemInfo(supported: ['passwordSignin', 'qrSignin']));
+      when(() => authRepository.getSystemInfo(any(), any()))
+          .thenAnswer((_) async => _systemInfo(supported: ['passwordSignin', 'qrSignin']));
 
       final cubit = buildCubit(qrSigninConfig: QrSigninConfig(enabled: true));
       await submitCoreUrl(cubit);

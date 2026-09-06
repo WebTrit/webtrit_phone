@@ -17,7 +17,7 @@ mixin SystemInfoApiMapper {
   }
 
   CoreInfo coreInfoFromApi(api.CoreInfo coreInfo) {
-    return CoreInfo(version: coreInfo.version);
+    return CoreInfo(version: coreInfo.version, iceServersConfigured: coreInfo.iceServersConfigured ?? false);
   }
 
   AdapterInfo adapterInfoFromApi(api.AdapterInfo adapterInfo) {

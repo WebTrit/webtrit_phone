@@ -199,6 +199,12 @@ these futures only after the actual operation finishes, so the native side waits
 creates a placeholder `ActiveCall(status: incomingFromPush)` and later merges the signaling
 offer into it when `IncomingCallEvent` arrives, instead of creating a duplicate entry.
 
+**ICE servers** — a peer connection's STUN/TURN servers come from `DefaultPeerConnectionFactory`,
+which resolves them per connection through `IceServersRepository` rather than holding a fixed list,
+so a deployment's bundled coturn and its short-lived TURN credentials are picked up without
+rebuilding the BLoC. The renewal rule and the public-STUN fallback:
+[`../ice_servers.md`](../ice_servers.md).
+
 **Disposal barrier** — `PeerConnectionManager` tracks pending disposal futures. Creating a new
 `RTCPeerConnection` for a call ID waits until the previous one is fully disposed, preventing
 resource races on rapid call sequences.

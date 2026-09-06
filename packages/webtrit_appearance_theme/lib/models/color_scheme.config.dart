@@ -26,193 +26,197 @@ class ColorSchemeConfig with _$ColorSchemeConfig {
 @freezed
 @JsonSerializable(explicitToJson: true)
 class ColorSchemeOverride with _$ColorSchemeOverride {
-  /// Creates a [ColorSchemeOverride] that defines all color roles for the app theme.
+  /// Creates a [ColorSchemeOverride].
+  ///
+  /// A theme names only the roles it wants different. Every role left out is
+  /// generated from the seed colour, which is what the seed is for - giving
+  /// each one a fixed fallback here would make the seed decide nothing.
   const ColorSchemeOverride({
-    this.primary = '#5CACE3',
-    this.onPrimary = '#FFFFFF',
-    this.primaryContainer = '#B9E3F9',
-    this.onPrimaryContainer = '#123752',
-    this.primaryFixed = '#A5C6E4',
-    this.primaryFixedDim = '#75A1C5',
-    this.onPrimaryFixed = '#092D4A',
-    this.onPrimaryFixedVariant = '#A5C6E4',
-    this.secondary = '#123752',
-    this.onSecondary = '#FFFFFF',
-    this.secondaryContainer = '#EEF3F6',
-    this.onSecondaryContainer = '#1F618F',
-    this.secondaryFixed = '#848581',
-    this.secondaryFixedDim = '#4C4D4A',
-    this.onSecondaryFixed = '#30302F',
-    this.onSecondaryFixedVariant = '#848581',
-    this.tertiary = '#75B943',
-    this.onTertiary = '#FFFFFF',
-    this.tertiaryContainer = '#E1F7C1',
-    this.onTertiaryContainer = '#2E5200',
-    this.tertiaryFixed = '#B8E078',
-    this.tertiaryFixedDim = '#8CC14E',
-    this.onTertiaryFixed = '#224400',
-    this.onTertiaryFixedVariant = '#B8E078',
-    this.error = '#E74C3C',
-    this.onError = '#FFFFFF',
-    this.errorContainer = '#F5B7B1',
-    this.onErrorContainer = '#8B1E13',
-    this.outline = '#4C4D4A',
-    this.outlineVariant = '#CDCFC9',
-    this.surface = '#EEF3F6',
-    this.onSurface = '#30302F',
-    this.surfaceDim = '#DDE0E3',
-    this.surfaceBright = '#FFFFFF',
-    this.surfaceContainerLowest = '#F8FBFD',
-    this.surfaceContainerLow = '#F0F3F5',
-    this.surfaceContainer = '#EEF3F6',
-    this.surfaceContainerHigh = '#E2E6E9',
-    this.surfaceContainerHighest = '#DDE0E3',
-    this.onSurfaceVariant = '#848581',
-    this.inverseSurface = '#30302F',
-    this.onInverseSurface = '#EEF3F6',
-    this.inversePrimary = '#1F618F',
-    this.shadow = '#000000',
-    this.scrim = '#000000',
-    this.surfaceTint = '#F95A14',
+    this.primary,
+    this.onPrimary,
+    this.primaryContainer,
+    this.onPrimaryContainer,
+    this.primaryFixed,
+    this.primaryFixedDim,
+    this.onPrimaryFixed,
+    this.onPrimaryFixedVariant,
+    this.secondary,
+    this.onSecondary,
+    this.secondaryContainer,
+    this.onSecondaryContainer,
+    this.secondaryFixed,
+    this.secondaryFixedDim,
+    this.onSecondaryFixed,
+    this.onSecondaryFixedVariant,
+    this.tertiary,
+    this.onTertiary,
+    this.tertiaryContainer,
+    this.onTertiaryContainer,
+    this.tertiaryFixed,
+    this.tertiaryFixedDim,
+    this.onTertiaryFixed,
+    this.onTertiaryFixedVariant,
+    this.error,
+    this.onError,
+    this.errorContainer,
+    this.onErrorContainer,
+    this.outline,
+    this.outlineVariant,
+    this.surface,
+    this.onSurface,
+    this.surfaceDim,
+    this.surfaceBright,
+    this.surfaceContainerLowest,
+    this.surfaceContainerLow,
+    this.surfaceContainer,
+    this.surfaceContainerHigh,
+    this.surfaceContainerHighest,
+    this.onSurfaceVariant,
+    this.inverseSurface,
+    this.onInverseSurface,
+    this.inversePrimary,
+    this.shadow,
+    this.scrim,
+    this.surfaceTint,
   });
 
   @override
-  final String primary;
+  final String? primary;
 
   @override
-  final String onPrimary;
+  final String? onPrimary;
 
   @override
-  final String primaryContainer;
+  final String? primaryContainer;
 
   @override
-  final String onPrimaryContainer;
+  final String? onPrimaryContainer;
 
   @override
-  final String primaryFixed;
+  final String? primaryFixed;
 
   @override
-  final String primaryFixedDim;
+  final String? primaryFixedDim;
 
   @override
-  final String onPrimaryFixed;
+  final String? onPrimaryFixed;
 
   @override
-  final String onPrimaryFixedVariant;
+  final String? onPrimaryFixedVariant;
 
   @override
-  final String secondary;
+  final String? secondary;
 
   @override
-  final String onSecondary;
+  final String? onSecondary;
 
   @override
-  final String secondaryContainer;
+  final String? secondaryContainer;
 
   @override
-  final String onSecondaryContainer;
+  final String? onSecondaryContainer;
 
   @override
-  final String secondaryFixed;
+  final String? secondaryFixed;
 
   @override
-  final String secondaryFixedDim;
+  final String? secondaryFixedDim;
 
   @override
-  final String onSecondaryFixed;
+  final String? onSecondaryFixed;
 
   @override
-  final String onSecondaryFixedVariant;
+  final String? onSecondaryFixedVariant;
 
   @override
-  final String tertiary;
+  final String? tertiary;
 
   @override
-  final String onTertiary;
+  final String? onTertiary;
 
   @override
-  final String tertiaryContainer;
+  final String? tertiaryContainer;
 
   @override
-  final String onTertiaryContainer;
+  final String? onTertiaryContainer;
 
   @override
-  final String tertiaryFixed;
+  final String? tertiaryFixed;
 
   @override
-  final String tertiaryFixedDim;
+  final String? tertiaryFixedDim;
 
   @override
-  final String onTertiaryFixed;
+  final String? onTertiaryFixed;
 
   @override
-  final String onTertiaryFixedVariant;
+  final String? onTertiaryFixedVariant;
 
   @override
-  final String error;
+  final String? error;
 
   @override
-  final String onError;
+  final String? onError;
 
   @override
-  final String errorContainer;
+  final String? errorContainer;
 
   @override
-  final String onErrorContainer;
+  final String? onErrorContainer;
 
   @override
-  final String outline;
+  final String? outline;
 
   @override
-  final String outlineVariant;
+  final String? outlineVariant;
 
   @override
-  final String surface;
+  final String? surface;
 
   @override
-  final String onSurface;
+  final String? onSurface;
 
   @override
-  final String surfaceDim;
+  final String? surfaceDim;
 
   @override
-  final String surfaceBright;
+  final String? surfaceBright;
 
   @override
-  final String surfaceContainerLowest;
+  final String? surfaceContainerLowest;
 
   @override
-  final String surfaceContainerLow;
+  final String? surfaceContainerLow;
 
   @override
-  final String surfaceContainer;
+  final String? surfaceContainer;
 
   @override
-  final String surfaceContainerHigh;
+  final String? surfaceContainerHigh;
 
   @override
-  final String surfaceContainerHighest;
+  final String? surfaceContainerHighest;
 
   @override
-  final String onSurfaceVariant;
+  final String? onSurfaceVariant;
 
   @override
-  final String inverseSurface;
+  final String? inverseSurface;
 
   @override
-  final String onInverseSurface;
+  final String? onInverseSurface;
 
   @override
-  final String inversePrimary;
+  final String? inversePrimary;
 
   @override
-  final String shadow;
+  final String? shadow;
 
   @override
-  final String scrim;
+  final String? scrim;
 
   @override
-  final String surfaceTint;
+  final String? surfaceTint;
 
   factory ColorSchemeOverride.fromJson(Map<String, Object?> json) => _$ColorSchemeOverrideFromJson(json);
 

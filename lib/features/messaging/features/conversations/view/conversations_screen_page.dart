@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:webtrit_phone/environment_config.dart';
 import 'package:webtrit_phone/features/features.dart';
+import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 
 @RoutePage()
@@ -47,9 +48,9 @@ class ConversationsScreenPage extends StatelessWidget {
       child: ConversationsScreen(
         title: screenTitle,
         initialTabsState: switch ((chatsEnabled, smsEnabled)) {
-          (true, true) => DualTabState(TabType.chat, groupChatsEnabled),
-          (true, false) => SingleTabState(TabType.chat, groupChatsEnabled),
-          (false, true) => SingleTabState(TabType.sms, false),
+          (true, true) => DualTabState(ConversationsTab.chat, groupChatsEnabled),
+          (true, false) => SingleTabState(ConversationsTab.chat, groupChatsEnabled),
+          (false, true) => SingleTabState(ConversationsTab.sms, false),
           (false, false) => throw Exception('At least one tab must be enabled, check screen page logic above'),
         },
       ),

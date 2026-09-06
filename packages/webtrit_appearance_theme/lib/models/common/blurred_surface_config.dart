@@ -8,17 +8,23 @@ part 'blurred_surface_config.g.dart';
 ///
 /// Maps to [BlurredSurface] widget parameters: color, sigmaX, sigmaY.
 @freezed
-abstract class BlurredSurfaceConfig with _$BlurredSurfaceConfig {
-  const factory BlurredSurfaceConfig({
-    /// Overlay color (hex string, e.g. `#000000`).
-    String? color,
+@JsonSerializable(explicitToJson: true)
+class BlurredSurfaceConfig with _$BlurredSurfaceConfig {
+  const BlurredSurfaceConfig({this.color, this.sigmaX, this.sigmaY});
 
-    /// Horizontal gaussian blur sigma.
-    double? sigmaX,
+  /// Overlay color (hex string, e.g. `#000000`).
+  @override
+  final String? color;
 
-    /// Vertical gaussian blur sigma.
-    double? sigmaY,
-  }) = _BlurredSurfaceConfig;
+  /// Horizontal gaussian blur sigma.
+  @override
+  final double? sigmaX;
 
-  factory BlurredSurfaceConfig.fromJson(Map<String, dynamic> json) => _$BlurredSurfaceConfigFromJson(json);
+  /// Vertical gaussian blur sigma.
+  @override
+  final double? sigmaY;
+
+  factory BlurredSurfaceConfig.fromJson(Map<String, Object?> json) => _$BlurredSurfaceConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$BlurredSurfaceConfigToJson(this);
 }

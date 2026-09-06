@@ -9,12 +9,29 @@ part of 'page_background.dart';
 PageBackgroundSolid _$PageBackgroundSolidFromJson(Map<String, dynamic> json) =>
     PageBackgroundSolid(
       color: json['color'] as String,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'solid',
     );
 
 Map<String, dynamic> _$PageBackgroundSolidToJson(
   PageBackgroundSolid instance,
-) => <String, dynamic>{'color': instance.color, 'type': instance.$type};
+) => <String, dynamic>{'color': instance.color, 'type': instance.type};
+
+const _$PageBackgroundSolidJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'color': {
+      'type': 'string',
+      'description': 'The colour to fill with (hex string, e.g. `#3A6EA5`).',
+    },
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `solid`.',
+      'default': 'solid',
+    },
+  },
+  'required': ['color'],
+};
 
 PageBackgroundGradient _$PageBackgroundGradientFromJson(
   Map<String, dynamic> json,
@@ -24,12 +41,12 @@ PageBackgroundGradient _$PageBackgroundGradientFromJson(
       (json['stops'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList() ??
-      const [0.0, 1.0],
+      const <double>[],
   beginX: (json['beginX'] as num?)?.toDouble() ?? 0.0,
   beginY: (json['beginY'] as num?)?.toDouble() ?? 0.0,
   endX: (json['endX'] as num?)?.toDouble() ?? 1.0,
   endY: (json['endY'] as num?)?.toDouble() ?? 1.0,
-  $type: json['type'] as String?,
+  type: json['type'] as String? ?? 'gradient',
 );
 
 Map<String, dynamic> _$PageBackgroundGradientToJson(
@@ -41,7 +58,36 @@ Map<String, dynamic> _$PageBackgroundGradientToJson(
   'beginY': instance.beginY,
   'endX': instance.endX,
   'endY': instance.endY,
-  'type': instance.$type,
+  'type': instance.type,
+};
+
+const _$PageBackgroundGradientJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'colors': {
+      'type': 'array',
+      'items': {'type': 'string'},
+      'description': 'The colours to run between (hex strings).',
+    },
+    'stops': {
+      'type': 'array',
+      'items': {'type': 'number'},
+      'description':
+          'Where each colour sits, `0.0` to `1.0`. Empty means an even spread.',
+      'default': [],
+    },
+    'beginX': {'type': 'number', 'default': 0.0},
+    'beginY': {'type': 'number', 'default': 0.0},
+    'endX': {'type': 'number', 'default': 1.0},
+    'endY': {'type': 'number', 'default': 1.0},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `gradient`.',
+      'default': 'gradient',
+    },
+  },
+  'required': ['colors'],
 };
 
 PageBackgroundImage _$PageBackgroundImageFromJson(Map<String, dynamic> json) =>
@@ -51,7 +97,7 @@ PageBackgroundImage _$PageBackgroundImageFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$BoxFitConfigEnumMap, json['fit']) ??
           BoxFitConfig.cover,
       opacity: (json['opacity'] as num?)?.toDouble() ?? 1.0,
-      $type: json['type'] as String?,
+      type: json['type'] as String? ?? 'image',
     );
 
 Map<String, dynamic> _$PageBackgroundImageToJson(
@@ -60,7 +106,26 @@ Map<String, dynamic> _$PageBackgroundImageToJson(
   'imageUrl': instance.imageUrl,
   'fit': _$BoxFitConfigEnumMap[instance.fit]!,
   'opacity': instance.opacity,
-  'type': instance.$type,
+  'type': instance.type,
+};
+
+const _$PageBackgroundImageJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'imageUrl': {'type': 'string'},
+    'fit': {
+      'type': 'object',
+      'description': 'How the image is fitted into the page.',
+    },
+    'opacity': {'type': 'number', 'default': 1.0},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `image`.',
+      'default': 'image',
+    },
+  },
+  'required': ['imageUrl'],
 };
 
 const _$BoxFitConfigEnumMap = {

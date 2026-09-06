@@ -71,6 +71,7 @@ class MainShellBlocs extends StatelessWidget {
             return PushTokensBloc(
               pushTokensRepository: context.read<PushTokensRepository>(),
               secureStorage: context.read<SecureStorage>(),
+              appPreferences: context.read<AppPreferences>(),
               firebaseMessaging: context.read<FirebaseMessaging>(),
               callkeep: callkeep,
               pushEnvironment: context.read<PushEnvironment>(),
@@ -167,6 +168,11 @@ class MainShellBlocs extends StatelessWidget {
             final cdrsSyncWorker = context.readOrNull<CdrsSyncWorker>();
 
             final peerConnectionManager = PeerConnectionManager(
+              // The deployment's own STUN/TURN servers, resolved per connection so
+              // a renewed TURN credential is picked up without rebuilding the bloc.
+              factory: DefaultPeerConnectionFactory(
+                iceServersResolver: context.read<IceServersRepository>().resolveIceServers,
+              ),
               retrieveTimeout: kPeerConnectionRetrieveTimeout,
               monitorCheckInterval: monitorInterval,
               monitorDelegatesFactory: (callId, logger) => [LoggingRtpTrafficMonitorDelegate(logger: logger)],
@@ -261,6 +267,14 @@ class MainShellBlocs extends StatelessWidget {
           },
         ),
         BlocProvider(create: (_) => ChatsForwardingCubit()),
+        // Eager: the counter is what a badge reads, and a badge that starts
+        // counting only once someone opens the screen it sits on is of no use
+        // there. The messaging counter beside it is read by the navigation bar
+        // on the first frame, so it is eager in effect already.
+        BlocProvider<VoicemailUnreadCubit>(
+          lazy: false,
+          create: (context) => VoicemailUnreadCubit(repository: context.read<VoicemailRepository>())..init(),
+        ),
       ],
       child: Builder(
         builder: (context) {

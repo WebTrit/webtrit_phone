@@ -1,7 +1,7 @@
 # AGENTS.md
 
 WebTrit Phone — Flutter VoIP app, Melos monorepo.
-Flutter 3.44.0 (stable), Android SDK 35.0.1.
+Flutter 3.47.1 (stable), Android SDK 35.0.1.
 
 ## Toolchain
 
@@ -29,6 +29,11 @@ yet, so type them:
 ```bash
 flutter build web --dart-define-from-file=dart_define.json --no-tree-shake-icons
 ```
+
+Android APK/AAB builds need no `--flavor` - the project has no build flavors. Two features are
+optional at the manifest level (deep links, SMS call trigger) and follow the dart-defines the build
+already carries, so `dart_define.json` alone decides them; the build prints which ones it resolved.
+Background: [`docs/optional_features.md`](docs/optional_features.md).
 
 Before any build, run the cheap checks — `dart format` → `analyze` → `test`. Which check for which
 change, measured costs, and how to drive a long build without wasted retries:
@@ -70,6 +75,10 @@ Full guide, wrapper choice and the traps: [`docs/accessibility.md`](docs/accessi
 - Every screen with controls has a `*_semantics_test.dart`: `expectTapTargetSemantics` per
   control, activation via `tapViaSemantics` (never `tester.tap` - a pointer tap passes while the
   semantics path is broken), and `meetsGuideline(labeledTapTargetGuideline)` over the screen.
+- A pre-push gate (`tool/scripts/semantics-gate.sh`) fails the push when a diff adds a raw
+  `GestureDetector`/`InkWell`/`InkResponse`/`IconButton` in a file whose added lines wire no
+  semantics at all. A control that genuinely needs none takes a trailing
+  `// semantics-exempt: <reason>` - an opt-out is a review item, not a loophole.
 - After renaming anything in `keys.dart`, grep `patrol_test/` and `integration_test/`:
   `patrol_test/**` is excluded from analysis, so `analyze` stays green and the E2E run breaks.
 
@@ -91,6 +100,12 @@ packages/   → shared libs (must NOT import from lib/)
   when the closure is evaluated lazily (after construction). Do NOT call `context.l10n` synchronously
   inside `BlocProvider.create` — it uses `dependOnInheritedWidgetOfExactType` which throws
   "Tried to listen to InheritedWidget in a life-cycle that will never be called again" there.
+- Dependency lifetime: everything process-long is built by `bootstrap()` and handed to the
+  `AppDependenciesBuilder` right there - `share` for what screens read, `keep` for what only has to keep
+  running - and released only by `AppDependencies.dispose()`, which `RootApp` runs when it leaves the
+  tree. There is no lookup by type; a provider disposes only what its own `create:` built
+  (`main_shell_services.dart` is the reference) and never performs a process-wide teardown. See
+  `docs/dependency_ownership.md`.
 - DB: DAOs only — never `AppDatabase` directly; Drift-generated classes stay in repo layer.
 - Theme: never raw `Colors.xxx` or `TextStyle` in widgets; `Theme.of(context).extension<T>()`.
 - Widgets: `StatelessWidget` always (not helper methods); dumb widgets in `features/*/view/widgets/`.

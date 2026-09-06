@@ -9,7 +9,7 @@ class MockAboutBloc extends MockBloc<AboutEvent, AboutState> implements AboutBlo
   // Single source of truth for the default/base state
   static AboutState _defaultState({bool progress = false, Version? coreVersion}) => AboutState(
     progress: false,
-    embeddedLinks: const [],
+    embeddedResources: const [],
     packageName: 'com.webtrit.phone',
     userAgent: 'WebTrit/0.0.0 (Pixel 9; Android: 16)',
     appInfo: 'WebTrit/0.0.0',

@@ -7,7 +7,7 @@ class EmbeddedRequestErrorStyle with Diagnosticable {
 
   final ThemeSvgAsset? picture;
 
-  EmbeddedRequestErrorStyle copyWith({final ThemeSvgAsset? picture}) {
+  EmbeddedRequestErrorStyle copyWith({ThemeSvgAsset? picture}) {
     return EmbeddedRequestErrorStyle(picture: picture ?? this.picture);
   }
 

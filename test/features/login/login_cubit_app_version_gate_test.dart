@@ -61,9 +61,8 @@ void main() {
   }
 
   test('blocks login when the app is older than min_supported_app_version', () async {
-    when(
-      () => authRepository.getSystemInfo(any(), any()),
-    ).thenAnswer((_) async => _systemInfo(minSupportedAppVersion: Version(2, 0, 0)));
+    when(() => authRepository.getSystemInfo(any(), any()))
+        .thenAnswer((_) async => _systemInfo(minSupportedAppVersion: Version(2, 0, 0)));
 
     final cubit = buildCubit('1.15.3', storeVersion: '4.4.9', storeBuildNumber: '449000002');
     await submitCoreUrl(cubit);
@@ -82,9 +81,8 @@ void main() {
   });
 
   test('proceeds when the app satisfies min_supported_app_version', () async {
-    when(
-      () => authRepository.getSystemInfo(any(), any()),
-    ).thenAnswer((_) async => _systemInfo(minSupportedAppVersion: Version(1, 0, 0)));
+    when(() => authRepository.getSystemInfo(any(), any()))
+        .thenAnswer((_) async => _systemInfo(minSupportedAppVersion: Version(1, 0, 0)));
 
     final cubit = buildCubit('1.15.3');
     await submitCoreUrl(cubit);
@@ -96,9 +94,8 @@ void main() {
   });
 
   test('proceeds when the backend declares no minimum (null)', () async {
-    when(
-      () => authRepository.getSystemInfo(any(), any()),
-    ).thenAnswer((_) async => _systemInfo(minSupportedAppVersion: null));
+    when(() => authRepository.getSystemInfo(any(), any()))
+        .thenAnswer((_) async => _systemInfo(minSupportedAppVersion: null));
 
     final cubit = buildCubit('1.15.3');
     await submitCoreUrl(cubit);

@@ -214,6 +214,22 @@ class AppRouter extends RootStackRouter {
                       ],
                       path: '',
                     ),
+                    // The same tab, arranged for a deployment that offers
+                    // favourites as a filter. A sibling rather than a second
+                    // router: everything a contact leads to - the card, the
+                    // call log - is the same from either.
+                    AutoRoute(
+                      page: ContactsFilterScreenPageRoute.page,
+                      guards: [
+                        AutoRouteGuard.redirect(
+                          (resolver) => ContactsFilterScreenPage.getPageRouteInfo(
+                            resolver.route,
+                            () => _bottomMenuFeature.getTabEnabled<ContactsBottomMenuTab>()?.listSelections ?? [],
+                          ),
+                        ),
+                      ],
+                      path: ContactsBottomMenuTab.unifiedSegment,
+                    ),
                     AutoRoute(page: ContactScreenPageRoute.page, path: 'contact'),
                     AutoRoute(page: CallLogScreenPageRoute.page, path: 'call_log'),
                     AutoRoute(page: NumberCdrsScreenPageRoute.page, path: 'number_cdrs'),
@@ -223,6 +239,16 @@ class AppRouter extends RootStackRouter {
                 // Embedded flavors
                 AutoRoute(page: EmbeddedTabPageRoute.page, path: 'embedded/:id', usesPathAsKey: true),
                 AutoRoute(page: ConversationsScreenPageRoute.page, path: MainFlavor.messaging.name),
+                AutoRoute(
+                  page: VoicemailTabPageRoute.page,
+                  path: MainFlavor.voicemail.name,
+                  guards: [
+                    FeatureGuard(
+                      shouldAllow: () => _featureChecker.isEnabled(FeatureFlag.voicemail),
+                      onDenied: UndefinedScreenPageRoute(undefinedType: UndefinedType.stackScreenNotSupported),
+                    ),
+                  ],
+                ),
               ],
             ),
             AutoRoute(page: ChatConversationScreenPageRoute.page, path: 'chat_conversation'),
@@ -456,17 +482,19 @@ class AppRouter extends RootStackRouter {
         MainScreenPageRoute(
           children: [
             switch (_mainInitialTab) {
-              // Recents tab can be either with CDRs or standard
-              RecentsBottomMenuTab(supportsCallHistory: true) => const RecentCdrsRouterPageRoute(),
-              RecentsBottomMenuTab() => const RecentsRouterPageRoute(),
-              // Contacts tab
-              ContactsBottomMenuTab() => const ContactsRouterPageRoute(),
+              // Recents and contacts each come in more than one arrangement,
+              // and which one a tab leads to is answered in one place - see
+              // the helpers below - because it is also asked when the tab set
+              // itself is built.
+              final RecentsBottomMenuTab tab => recentsRouteOf(tab),
+              final ContactsBottomMenuTab tab => contactsRouteOf(tab),
               // Embedded tab
               EmbeddedBottomMenuTab(id: final id) => EmbeddedTabPageRoute(id: id),
               // Other standard tabs
               FavoritesBottomMenuTab() => const FavoritesRouterPageRoute(),
               KeypadBottomMenuTab() => const KeypadScreenPageRoute(),
               MessagingBottomMenuTab() => const ConversationsScreenPageRoute(),
+              VoicemailBottomMenuTab() => const VoicemailTabPageRoute(),
             },
           ],
         ),
@@ -533,6 +561,32 @@ class AppRouter extends RootStackRouter {
 
     return DeepLink.defaultPath;
   }
+}
+
+/// Where a configured bottom-menu tab leads.
+///
+/// Stated once per tab because each answer is asked in two places - when the
+/// tab set is built and when the app opens straight onto one of them - and the
+/// two disagreeing is invisible until someone runs the app and lands on the
+/// wrong screen.
+PageRouteInfo<dynamic> contactsRouteOf(ContactsBottomMenuTab tab) {
+  // Naming the screen is what makes the answer an answer: this tab's router
+  // has a default child, so a route built without children silently lands on
+  // it - which is the wrong screen for half the deployments.
+  return ContactsRouterPageRoute(
+    children: [
+      switch (tab.layout) {
+        ContactsUnifiedLayout() => ContactsFilterScreenPageRoute(selections: tab.listSelections),
+        ContactsTabbedLayout() => ContactsScreenPageRoute(sourceTypes: tab.contactSourceTypes),
+      },
+    ],
+  );
+}
+
+/// Where a recents tab leads: the two arrangements are routers of their own,
+/// so picking the router is the whole of it.
+PageRouteInfo<dynamic> recentsRouteOf(RecentsBottomMenuTab tab) {
+  return tab.supportsCallHistory ? const RecentCdrsRouterPageRoute() : const RecentsRouterPageRoute();
 }
 
 Object _onNavigationLoggerMessage(String callbackName, NavigationResolver resolver) {

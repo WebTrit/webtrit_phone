@@ -1,10 +1,9 @@
 export 'about_screen_style_factory.dart';
 export 'action_pad_style_factory.dart';
 export 'app_icon_style_factory.dart';
-export 'call_actions_style_factory.dart';
 export 'call_screen_style_factory.dart';
 export 'call_status_style_factory.dart';
-export 'confirm__dialog_style_factory.dart';
+export 'confirm_dialog_style_factory.dart';
 export 'contacts_screen_style_factory.dart';
 export 'elevated_button_style_factory.dart';
 export 'embedded_request_error_dialog_factory.dart';
@@ -26,4 +25,3 @@ export 'outlined_button_style_factory.dart';
 export 'registered_status_style_factory.dart';
 export 'settings_screen_style_factory.dart';
 export 'snack_bar_style_factory.dart';
-export 'text_button_style_factory.dart';

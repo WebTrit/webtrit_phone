@@ -322,6 +322,42 @@ abstract class AppLocalizations {
   /// **'Video call {name}'**
   String callTile_SemanticsLabel_videoCall(String name);
 
+  /// Accessibility name of the button that opens the form for a new dial code match on the caller ID screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a dial code match'**
+  String get callerId_SemanticsLabel_addMatch;
+
+  /// Accessibility name of the number chooser in the form that adds a dial code rule; its hint disappears once a number is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Number to show for this dial code'**
+  String get callerId_SemanticsLabel_matchNumber;
+
+  /// Accessibility name of the chooser of the number outgoing calls show; the caption beside it is a node of its own.
+  ///
+  /// In en, this message translates to:
+  /// **'Number to call from by default'**
+  String get callerId_SemanticsLabel_defaultNumber;
+
+  /// Accessibility name of the country chooser in the form that adds a dial code rule; on its own it announces only the dial code, never which country was picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Dial code to match, currently {country}'**
+  String callerId_SemanticsLabel_matchPrefix(String country);
+
+  /// Accessibility name of the button that deletes one dial code match on the caller ID screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the match for {dialCode}'**
+  String callerId_SemanticsLabel_removeMatch(String dialCode);
+
+  /// The whole caller id rule read as one sentence: which dial code it matches and which number is shown for it.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls to {dialCode} show {number}'**
+  String callerId_SemanticsLabel_matchRule(String dialCode, String number);
+
   /// No description provided for @call_CallActionsTooltip_accept.
   ///
   /// In en, this message translates to:
@@ -844,6 +880,24 @@ abstract class AppLocalizations {
   /// **'Transfer current call to {number}'**
   String contact_SemanticsLabel_transfer(String number);
 
+  /// No description provided for @contacts_ContactsScreen_emptyFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites among your contacts yet.\nAdd one from a contact card using the star icon'**
+  String get contacts_ContactsScreen_emptyFavorites;
+
+  /// No description provided for @contacts_ContactsScreen_searchSemanticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search contacts'**
+  String get contacts_ContactsScreen_searchSemanticsLabel;
+
+  /// No description provided for @contacts_ContactsScreen_sourceSemanticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact source'**
+  String get contacts_ContactsScreen_sourceSemanticsLabel;
+
   /// No description provided for @contacts_agreement_button_text.
   ///
   /// In en, this message translates to:
@@ -940,6 +994,12 @@ abstract class AppLocalizations {
   /// **'There are no permissions to get your phone contacts'**
   String get contacts_LocalTabText_permissionFailure;
 
+  /// No description provided for @contactsSourceFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get contactsSourceFavorites;
+
   /// No description provided for @contactsSourceExternal.
   ///
   /// In en, this message translates to:
@@ -951,12 +1011,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your phone'**
   String get contactsSourceLocal;
-
-  /// No description provided for @contacts_Text_blingTransferInitiated.
-  ///
-  /// In en, this message translates to:
-  /// **'Performing blind transfer'**
-  String get contacts_Text_blingTransferInitiated;
 
   /// No description provided for @contacts_DialogsInfoView_title.
   ///
@@ -1768,12 +1822,6 @@ abstract class AppLocalizations {
   /// **'{name} deleted'**
   String favorites_SnackBar_deleted(String name);
 
-  /// No description provided for @favorites_Text_blingTransferInitiated.
-  ///
-  /// In en, this message translates to:
-  /// **'Performing blind transfer'**
-  String get favorites_Text_blingTransferInitiated;
-
   /// Formats phone number based on presence of main number and extension, covering four scenarios: both, main only, extension only, and neither.
   ///
   /// In en, this message translates to:
@@ -2308,6 +2356,12 @@ abstract class AppLocalizations {
   /// **'Chats'**
   String get main_BottomNavigationBarItemLabel_chats;
 
+  /// No description provided for @main_Text_blindTransferInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Performing blind transfer'**
+  String get main_Text_blindTransferInitiated;
+
   /// No description provided for @main_BottomNavigationBarItemLabel_contacts.
   ///
   /// In en, this message translates to:
@@ -2331,6 +2385,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recents'**
   String get main_BottomNavigationBarItemLabel_recents;
+
+  /// No description provided for @main_BottomNavigationBarItemLabel_voicemail.
+  ///
+  /// In en, this message translates to:
+  /// **'Voicemail'**
+  String get main_BottomNavigationBarItemLabel_voicemail;
 
   /// No description provided for @main_CompatibilityIssueDialogActions_logout.
   ///
@@ -2418,24 +2478,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose contact:'**
   String get messaging_ChooseContact_title;
-
-  /// No description provided for @messaging_ConfirmDialog_ask.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure?'**
-  String get messaging_ConfirmDialog_ask;
-
-  /// No description provided for @messaging_ConfirmDialog_cancel.
-  ///
-  /// In en, this message translates to:
-  /// **'No'**
-  String get messaging_ConfirmDialog_cancel;
-
-  /// No description provided for @messaging_ConfirmDialog_confirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Yes'**
-  String get messaging_ConfirmDialog_confirm;
 
   /// No description provided for @messaging_ConversationBuilders_back.
   ///
@@ -2671,6 +2713,18 @@ abstract class AppLocalizations {
   /// **'You'**
   String get messaging_Conversations_tile_you;
 
+  /// What deleting a conversation from the list actually does, shown under the title.
+  ///
+  /// In en, this message translates to:
+  /// **'It will be removed from this device and from the account.'**
+  String get messaging_DeleteConversationDialog_content;
+
+  /// Title of the confirmation shown when a conversation is swiped away in the list.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this conversation?'**
+  String get messaging_DeleteConversationDialog_title;
+
   /// No description provided for @messaging_DialogInfo_deleteAsk.
   ///
   /// In en, this message translates to:
@@ -2724,6 +2778,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Group members'**
   String get messaging_GroupInfo_groupMembersHeadline;
+
+  /// What leaving a group actually does, as opposed to deleting the conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'You will stop receiving its messages. The conversation stays for everyone else.'**
+  String get messaging_LeaveGroupDialog_content;
+
+  /// Title of the confirmation shown when a group conversation is swiped away by someone who does not own it.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this group?'**
+  String get messaging_LeaveGroupDialog_title;
 
   /// No description provided for @messaging_GroupInfo_leaveAndDeleteAsk.
   ///
@@ -3403,6 +3469,36 @@ abstract class AppLocalizations {
   /// **'On vacation'**
   String get presence_activity_vacation_name;
 
+  /// No description provided for @presence_badge_state_available.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get presence_badge_state_available;
+
+  /// No description provided for @presence_badge_state_onCall.
+  ///
+  /// In en, this message translates to:
+  /// **'On a call'**
+  String get presence_badge_state_onCall;
+
+  /// No description provided for @presence_badge_state_registered.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered'**
+  String get presence_badge_state_registered;
+
+  /// No description provided for @presence_badge_state_unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get presence_badge_state_unavailable;
+
+  /// No description provided for @presence_badge_state_unregistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Not registered'**
+  String get presence_badge_state_unregistered;
+
   /// No description provided for @presence_infoView_activity.
   ///
   /// In en, this message translates to:
@@ -3744,12 +3840,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} deleted'**
   String recents_snackBar_deleted(String name);
-
-  /// No description provided for @recents_Text_blingTransferInitiated.
-  ///
-  /// In en, this message translates to:
-  /// **'Performing blind transfer'**
-  String get recents_Text_blingTransferInitiated;
 
   /// No description provided for @recentsVisibilityFilter_all.
   ///
@@ -4122,6 +4212,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My account'**
   String get settings_AppBarTitle_myAccount;
+
+  /// Accessibility name of the pencil button next to the account details on the settings screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit account details'**
+  String get settings_SemanticsLabel_editAccount;
 
   /// No description provided for @settings_audioProcessing_Section_AGC_title.
   ///
@@ -6349,11 +6445,35 @@ abstract class AppLocalizations {
   /// **'Scroll to top'**
   String get common_SemanticsLabel_scrollToTop;
 
+  /// Spoken after the name of whatever carries an unread counter - a tab, a settings row, a conversation. Names no noun on purpose: the name of that thing was just spoken.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unread'**
+  String common_SemanticsValue_unreadCount(int count);
+
+  /// Spoken after the name of whatever carries a plain counter - active sessions, members of a group. Names no noun on purpose: the name of that thing was just spoken.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} total'**
+  String common_SemanticsValue_totalCount(int count);
+
+  /// Spoken after the name of a control that acts on a selection - how many items it would act on. Names no noun on purpose: the name of that control was just spoken.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String common_SemanticsValue_selectedCount(int count);
+
   /// Accessibility name of the button that empties the contact search field.
   ///
   /// In en, this message translates to:
   /// **'Clear search'**
   String get contacts_SemanticsLabel_clearSearch;
+
+  /// Accessibility name of the same button once the contact search field is empty, where pressing it leaves the search.
+  ///
+  /// In en, this message translates to:
+  /// **'Close search'**
+  String get contacts_SemanticsLabel_closeSearch;
 
   /// Accessibility name of the button that starts a new chat conversation.
   ///
@@ -6445,11 +6565,125 @@ abstract class AppLocalizations {
   /// **'Forward the message'**
   String get messaging_SemanticsLabel_sendForward;
 
+  /// Accessibility name of the badge in the top bar that opens the list of calls in progress elsewhere, when there is one such call.
+  ///
+  /// In en, this message translates to:
+  /// **'Take over the call with {name}'**
+  String callPull_SemanticsLabel_badge(String name);
+
+  /// Accessibility name of the same badge when several calls are in progress elsewhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Take over one of {count} calls'**
+  String callPull_SemanticsLabel_badgeSeveral(int count);
+
+  /// Accessibility name of the button that takes over one call from the list; the name keeps the rows apart.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up the call with {name}'**
+  String callPull_SemanticsLabel_pickup(String name);
+
   /// Accessibility name of the button that repeats the network check on the diagnostics screen.
   ///
   /// In en, this message translates to:
   /// **'Run the network test again'**
   String get diagnosticNetworkTest_SemanticsLabel_refresh;
+
+  /// Hint of the field that searches the icons in the status icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Search icons'**
+  String get presence_settings_statusIcon_searchHint;
+
+  /// Accessibility name of the button that explains one option of the presence status.
+  ///
+  /// In en, this message translates to:
+  /// **'What {option} means'**
+  String presenceSettings_SemanticsLabel_optionInfo(String option);
+
+  /// Accessibility name of the control that picks a ready-made presence status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status preset'**
+  String get presenceSettings_SemanticsLabel_preset;
+
+  /// Accessibility name of the button that opens the icon picker of the presence status.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a status icon'**
+  String get presenceSettings_SemanticsLabel_pickStatusIcon;
+
+  /// Accessibility name of the button that takes the icon off the presence status.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the status icon'**
+  String get presenceSettings_SemanticsLabel_clearStatusIcon;
+
+  /// Accessibility name of the button that opens the search of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Search icons'**
+  String get presenceSettings_SemanticsLabel_searchIcons;
+
+  /// Accessibility name of the button that leaves the search of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop searching icons'**
+  String get presenceSettings_SemanticsLabel_stopSearchingIcons;
+
+  /// Accessibility name of the recently used category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently used'**
+  String get presenceSettings_SemanticsLabel_iconCategoryRecent;
+
+  /// Accessibility name of the smileys category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Smileys and people'**
+  String get presenceSettings_SemanticsLabel_iconCategorySmileys;
+
+  /// Accessibility name of the animals category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Animals and nature'**
+  String get presenceSettings_SemanticsLabel_iconCategoryAnimals;
+
+  /// Accessibility name of the food category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Food and drink'**
+  String get presenceSettings_SemanticsLabel_iconCategoryFoods;
+
+  /// Accessibility name of the activities category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Activities'**
+  String get presenceSettings_SemanticsLabel_iconCategoryActivities;
+
+  /// Accessibility name of the travel category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel and places'**
+  String get presenceSettings_SemanticsLabel_iconCategoryTravel;
+
+  /// Accessibility name of the objects category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Objects'**
+  String get presenceSettings_SemanticsLabel_iconCategoryObjects;
+
+  /// Accessibility name of the symbols category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbols'**
+  String get presenceSettings_SemanticsLabel_iconCategorySymbols;
+
+  /// Accessibility name of the flags category of the icon picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Flags'**
+  String get presenceSettings_SemanticsLabel_iconCategoryFlags;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -60,9 +60,8 @@ void main() {
       await tester.tap(find.text('Subscribe to active calls via SIP (BLF/Dialogs)'));
       await tester.pump();
 
-      verify(
-        () => harness.contactBloc.add(const ContactSipSubscriptionToggled(true, SipSubscriptionType.blf)),
-      ).called(1);
+      verify(() => harness.contactBloc.add(const ContactSipSubscriptionToggled(true, SipSubscriptionType.blf)))
+          .called(1);
     });
 
     testWidgets('a press on a row already on turns it off', (tester) async {
@@ -82,9 +81,8 @@ void main() {
       await tester.tap(find.byType(Checkbox));
       await tester.pump();
 
-      verify(
-        () => harness.contactBloc.add(const ContactSipSubscriptionToggled(false, SipSubscriptionType.blf)),
-      ).called(1);
+      verify(() => harness.contactBloc.add(const ContactSipSubscriptionToggled(false, SipSubscriptionType.blf)))
+          .called(1);
     });
 
     testWidgets('the row is tall enough to be hit', (tester) async {

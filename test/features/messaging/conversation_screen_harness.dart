@@ -65,9 +65,8 @@ class ConversationScreenHarness {
   }
 
   void withSmsConversation() {
-    when(
-      () => smsConversationCubit.state,
-    ).thenReturn(const SCSInit((firstNumber: '111', secondNumber: '222', recipientId: null)));
+    when(() => smsConversationCubit.state)
+        .thenReturn(const SCSInit((firstNumber: '111', secondNumber: '222', recipientId: null)));
   }
 
   Widget wrap(Widget screen) {

@@ -14,7 +14,7 @@ part 'image_source.g.dart';
 /// # Typical fields
 /// - [id]: backend asset ID, mandatory for server-side references.
 /// - [uri]: unified location for the resource, can be `asset://`, `https://`, `file://`, etc.
-/// - [ref]: semantic type of reference (defaults to "asset").
+/// - [refType]: semantic type of reference (defaults to "asset").
 /// - [metadata]: freeform map for build-time/tooling hints (CLI, pipelines, etc.).
 ///
 /// # Use cases:
@@ -50,7 +50,13 @@ class ImageSource with _$ImageSource {
     this.uri,
 
     /// Semantic type of reference (default = "asset").
-    @JsonKey(name: r'$ref') this.ref = 'asset',
+    ///
+    /// Named `refType` on the wire rather than `$ref`. `$ref` is a JSON Schema
+    /// keyword, and a property carrying it reads as a reference to resolve
+    /// rather than as a field to validate - legal, because the keyword only
+    /// means that as a key of a schema object, and confusing to every tool
+    /// that walks a document looking for one.
+    this.refType = 'asset',
 
     /// Optional rendering specification (scale, padding, etc.).
     this.render,
@@ -69,7 +75,7 @@ class ImageSource with _$ImageSource {
 
   /// Semantic type of reference (default = "asset").
   @override
-  final String ref;
+  final String refType;
 
   /// Rendering specification (scale, padding, etc.).
   @override

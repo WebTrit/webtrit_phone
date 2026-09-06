@@ -594,7 +594,6 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
     this.userIconColor,
     this.logoutIconColor,
     this.groupTitleListTile,
-    this.showSeparators = true,
     this.separator,
     this.background,
     this.itemTextStyle,
@@ -618,12 +617,6 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
   @override
   final GroupTitleListTileWidgetConfig? groupTitleListTile;
 
-  /// Deprecated: visibility now lives in [separator] (`separator.enabled`).
-  /// Kept for backward compatibility with themes saved before [separator] existed.
-  @Deprecated('Use separator.enabled instead')
-  @override
-  final bool showSeparators;
-
   /// Style of the divider lines between setting items (visibility + color).
   @override
   final SeparatorStyleConfig? separator;
@@ -640,20 +633,7 @@ class SettingsPageConfig with _$SettingsPageConfig implements BasePageConfig {
   @override
   final AppBarConfig? appBarStyle;
 
-  factory SettingsPageConfig.fromJson(Map<String, Object?> json) {
-    // TODO: Migration workaround — themes saved before `separator` existed expressed separator
-    // visibility through the boolean `showSeparators`. Fold it into the new `separator` style
-    // (visibility kept, default color) when `separator` is absent, so those themes keep working.
-    // Remove this block and the deprecated `showSeparators` field in a future major release once
-    // all stored themes carry `separator`.
-    if (json['separator'] == null && json['showSeparators'] != null) {
-      json = {
-        ...json,
-        'separator': <String, Object?>{'enabled': json['showSeparators']},
-      };
-    }
-    return _$SettingsPageConfigFromJson(json);
-  }
+  factory SettingsPageConfig.fromJson(Map<String, Object?> json) => _$SettingsPageConfigFromJson(json);
 
   Map<String, Object?> toJson() => _$SettingsPageConfigToJson(this);
 }

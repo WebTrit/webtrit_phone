@@ -1,0 +1,153 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:webtrit_phone/app/constants.dart';
+import 'package:webtrit_phone/app/keys.dart';
+import 'package:webtrit_phone/widgets/widgets.dart';
+
+import '../helpers/helpers.dart';
+
+void main() {
+  /// The shape the four main screens build: the app bar reserves a row, the
+  /// gap sits under it, and the strip takes the rest.
+  Widget wrap({required TabController controller, List<Widget>? tabs}) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(kMainAppBarBottomTabHeight),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: kMainAppBarBottomPaddingGap),
+              child: ExtTabBar(
+                controller: controller,
+                height: kMainAppBarBottomControlHeight,
+                tabs:
+                    tabs ??
+                    const [
+                      ExtTab(identifier: contactsTabLocalId, text: 'Phone'),
+                      ExtTab(identifier: contactsTabExtId, text: 'Directory'),
+                    ],
+              ),
+            ),
+          ),
+        ),
+        body: TabBarView(controller: controller, children: const [Text('local'), Text('external')]),
+      ),
+    );
+  }
+
+  testWidgets('each tab carries its id on the node that says its name and answers the press', (tester) async {
+    final handle = tester.ensureSemantics();
+    final controller = TabController(length: 2, vsync: const TestVSync());
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(wrap(controller: controller));
+
+    // The captions are translated and the two tabs sit on the same screen, so
+    // a flow can only address them by id - and the id is of no use unless it
+    // lands on the node that can actually be pressed.
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(contactsTabLocalId),
+      label: 'Tab 1 of 2\nPhone',
+      identifier: contactsTabLocalId,
+    );
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(contactsTabExtId),
+      label: 'Tab 2 of 2\nDirectory',
+      identifier: contactsTabExtId,
+    );
+
+    handle.dispose();
+  });
+
+  testWidgets('pressing a tab through semantics switches to it', (tester) async {
+    final handle = tester.ensureSemantics();
+    final controller = TabController(length: 2, vsync: const TestVSync());
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(wrap(controller: controller));
+
+    await tapViaSemantics(tester, find.bySemanticsIdentifier(contactsTabExtId));
+    await tester.pumpAndSettle();
+
+    expect(controller.index, 1);
+
+    handle.dispose();
+  });
+
+  testWidgets('a tab of the app bar strip is big enough to be hit', (tester) async {
+    final controller = TabController(length: 2, vsync: const TestVSync());
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(wrap(controller: controller));
+
+    // The ink well is what answers the press. The merged semantics node
+    // inherits the whole subtree's rectangle and would measure large even if
+    // the pressable area shrank (Trap 1 of docs/accessibility.md), and the
+    // Tab widget reports its own preferred height, which is neither.
+    final press = tester.getSize(find.descendant(of: find.byType(ExtTabBar), matching: find.byType(InkWell)).first);
+    expect(press.height, greaterThanOrEqualTo(kMinInteractiveDimension));
+    expect(press.width, greaterThanOrEqualTo(kMinInteractiveDimension));
+  });
+
+  testWidgets('a tab that draws a badge keeps the count out of its name', (tester) async {
+    // The conversations tabs put an unread badge beside the caption. Inside
+    // the merged tab node a raw glyph is read out as part of the name, so it
+    // is excluded and what it stood for is spoken as the tab's state.
+    final handle = tester.ensureSemantics();
+    final controller = TabController(length: 2, vsync: const TestVSync());
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      wrap(
+        controller: controller,
+        tabs: [
+          ExtTab.child(
+            identifier: conversationsTabChatId,
+            // The shape the conversations screen builds: caption plus the
+            // badge, which keeps itself out of what is spoken, plus the phrase
+            // that says what the badge counted.
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Chats'),
+                const SizedBox(width: 4),
+                Semantics(label: '3 unread', child: const CountBadge(count: 3, size: 14, onAccent: true)),
+              ],
+            ),
+          ),
+          const ExtTab(identifier: conversationsTabSmsId, text: 'Messages'),
+        ],
+      ),
+    );
+
+    // The whole spoken name, not a containment check: a caption that drifted
+    // onto a node above the press would still "contain" the word.
+    // The count comes last, after the tab has named itself. It is part of the
+    // name rather than the node's value on purpose: Android composes what it
+    // speaks as value, then label, so a value would be read out ahead of the
+    // name it belongs to.
+    expectTapTargetSemantics(
+      tester,
+      find.bySemanticsIdentifier(conversationsTabChatId),
+      label: 'Tab 1 of 2\nChats\n3 unread',
+      identifier: conversationsTabChatId,
+    );
+
+    handle.dispose();
+  });
+
+  testWidgets('the tab bar leaves no unnamed press target behind', (tester) async {
+    final handle = tester.ensureSemantics();
+    final controller = TabController(length: 2, vsync: const TestVSync());
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(wrap(controller: controller));
+
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+
+    handle.dispose();
+  });
+}

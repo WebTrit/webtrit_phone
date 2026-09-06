@@ -27,11 +27,6 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
   messaging: json['messaging'] == null
       ? const AppConfigMessaging()
       : AppConfigMessaging.fromJson(json['messaging'] as Map<String, dynamic>),
-  localization: json['localization'] == null
-      ? const AppConfigLocalization()
-      : AppConfigLocalization.fromJson(
-          json['localization'] as Map<String, dynamic>,
-        ),
   supported:
       (json['supported'] as List<dynamic>?)
           ?.map((e) => SupportedFeature.fromJson(e as Map<String, dynamic>))
@@ -46,8 +41,272 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
   'callConfig': instance.callConfig.toJson(),
   'contacts': instance.contacts.toJson(),
   'messaging': instance.messaging.toJson(),
-  'localization': instance.localization.toJson(),
   'supported': instance.supported.map((e) => e.toJson()).toList(),
+};
+
+const _$AppConfigJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'loginConfig': {r'$ref': r'#/$defs/AppConfigLogin'},
+    'mainConfig': {r'$ref': r'#/$defs/AppConfigMain'},
+    'settingsConfig': {r'$ref': r'#/$defs/AppConfigSettings'},
+    'callConfig': {r'$ref': r'#/$defs/AppConfigCall'},
+    'contacts': {r'$ref': r'#/$defs/AppConfigContacts'},
+    'messaging': {r'$ref': r'#/$defs/AppConfigMessaging'},
+    'supported': {
+      'type': 'array',
+      'items': {r'$ref': r'#/$defs/SupportedFeature'},
+      'default': [],
+    },
+  },
+  r'$defs': {
+    'AppConfigLoginCommon': {
+      'type': 'object',
+      'properties': {
+        'fullScreenLaunchEmbeddedResourceId': {'type': 'string'},
+      },
+    },
+    'AppConfigModeSelectAction': {
+      'type': 'object',
+      'properties': {
+        'enabled': {'type': 'boolean'},
+        'type': {'type': 'string'},
+        'titleL10n': {'type': 'string'},
+        'embeddedId': {'type': 'string'},
+      },
+      'required': ['enabled', 'type', 'titleL10n'],
+    },
+    'AppConfigLoginModeSelect': {
+      'type': 'object',
+      'properties': {
+        'greetingL10n': {'type': 'string'},
+        'actions': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/AppConfigModeSelectAction'},
+          'default': [],
+        },
+      },
+    },
+    'AppConfigLoginQrFormat': {
+      'type': 'object',
+      'properties': {
+        'type': {
+          'type': 'string',
+          'description': 'Decoder name (`uri`, `json`).',
+        },
+        'schemes': {
+          'type': 'array',
+          'items': {'type': 'string'},
+          'description':
+              '`uri` only: accepted scheme names, matched case-insensitively.',
+        },
+      },
+      'required': ['type'],
+    },
+    'AppConfigLoginQr': {
+      'type': 'object',
+      'properties': {
+        'enabled': {
+          'type': 'boolean',
+          'description': 'Whether the QR-code sign-in tab is available at all.',
+          'default': false,
+        },
+        'formats': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/AppConfigLoginQrFormat'},
+          'description':
+              'Accepted payload formats with their per-format options, probed in this\norder.',
+          'default': [],
+        },
+        'expectedHost': {
+          'type': 'string',
+          'description':
+              'Expected host (cloud id) of the code, shared by all formats. When set,\ncodes issued for a different host are rejected; null accepts any host.',
+        },
+      },
+    },
+    'AppConfigLogin': {
+      'type': 'object',
+      'properties': {
+        'common': {r'$ref': r'#/$defs/AppConfigLoginCommon'},
+        'modeSelect': {r'$ref': r'#/$defs/AppConfigLoginModeSelect'},
+        'signinOrder': {
+          'type': 'array',
+          'items': {'type': 'string'},
+          'description':
+              'Order of the sign-in tabs on the login switch screen, by login type name\n(passwordSignin, otpSignin, signup, qrSignin). Only the types advertised by\nthe backend are shown; this controls their order and which one is selected\nby default. Unknown or omitted names are placed last.',
+          'default': [],
+        },
+        'qr': {r'$ref': r'#/$defs/AppConfigLoginQr'},
+      },
+    },
+    'BottomMenuTabScheme': {'type': 'object', 'properties': {}},
+    'AppConfigBottomMenu': {
+      'type': 'object',
+      'properties': {
+        'cacheSelectedTab': {'type': 'boolean', 'default': true},
+        'tabs': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/BottomMenuTabScheme'},
+          'default': [],
+        },
+      },
+    },
+    'AppConfigMain': {
+      'type': 'object',
+      'properties': {
+        'bottomMenu': {r'$ref': r'#/$defs/AppConfigBottomMenu'},
+      },
+    },
+    'AppConfigSettingsItem': {
+      'type': 'object',
+      'properties': {
+        'enabled': {'type': 'boolean', 'default': true},
+        'titleL10n': {'type': 'string'},
+        'type': {'type': 'string'},
+        'icon': {'type': 'string'},
+        'iconColor': {'type': 'string'},
+        'embeddedResourceId': {'type': 'string'},
+      },
+      'required': ['titleL10n', 'type', 'icon'],
+    },
+    'AppConfigSettingsSection': {
+      'type': 'object',
+      'properties': {
+        'titleL10n': {'type': 'string'},
+        'enabled': {'type': 'boolean', 'default': true},
+        'items': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/AppConfigSettingsItem'},
+          'default': [],
+        },
+      },
+      'required': ['titleL10n'],
+    },
+    'AppConfigSettings': {
+      'type': 'object',
+      'properties': {
+        'sections': {
+          'type': 'array',
+          'items': {r'$ref': r'#/$defs/AppConfigSettingsSection'},
+          'default': [],
+        },
+      },
+    },
+    'AppConfigTransfer': {
+      'type': 'object',
+      'properties': {
+        'enableBlindTransfer': {'type': 'boolean', 'default': true},
+        'enableAttendedTransfer': {'type': 'boolean', 'default': true},
+      },
+    },
+    'EncodingDefaultPresetOverride': {
+      'type': 'object',
+      'properties': {
+        'audioBitrate': {'type': 'integer'},
+        'videoBitrate': {'type': 'integer'},
+        'ptime': {'type': 'integer'},
+        'maxptime': {'type': 'integer'},
+        'opusSamplingRate': {'type': 'integer'},
+        'opusBitrate': {'type': 'integer'},
+        'opusStereo': {'type': 'boolean'},
+        'opusDtx': {'type': 'boolean'},
+        'removeStaticAudioRtpMaps': {'type': 'boolean'},
+        'remapTE8payloadTo101': {'type': 'boolean'},
+        'removeREMBFeedback': {'type': 'boolean'},
+        'removeTWCCFeedback': {'type': 'boolean'},
+        'removeExtmaps': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+      },
+    },
+    'AppConfigEncoding': {
+      'type': 'object',
+      'properties': {
+        'bypassConfig': {'type': 'boolean', 'default': false},
+        'defaultPresetOverride': {
+          r'$ref': r'#/$defs/EncodingDefaultPresetOverride',
+        },
+      },
+    },
+    'AppConfigNegotiationSettingsOverride': {
+      'type': 'object',
+      'properties': {
+        'includeInactiveVideoInOfferAnswer': {
+          'type': 'boolean',
+          'default': false,
+        },
+      },
+    },
+    'AppConfigPeerConnection': {
+      'type': 'object',
+      'properties': {
+        'negotiation': {
+          r'$ref': r'#/$defs/AppConfigNegotiationSettingsOverride',
+        },
+      },
+    },
+    'AppConfigCall': {
+      'type': 'object',
+      'properties': {
+        'videoEnabled': {'type': 'boolean', 'default': true},
+        'transfer': {r'$ref': r'#/$defs/AppConfigTransfer'},
+        'encoding': {r'$ref': r'#/$defs/AppConfigEncoding'},
+        'peerConnection': {r'$ref': r'#/$defs/AppConfigPeerConnection'},
+      },
+    },
+    'AppConfigContactDetailsActions': {
+      'type': 'object',
+      'properties': {
+        'appBar': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+        'phoneTile': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+        'emailTile': {
+          'type': 'array',
+          'items': {'type': 'string'},
+        },
+      },
+    },
+    'AppConfigContactDetails': {
+      'type': 'object',
+      'properties': {
+        'actions': {r'$ref': r'#/$defs/AppConfigContactDetailsActions'},
+      },
+    },
+    'AppConfigContacts': {
+      'type': 'object',
+      'properties': {
+        'details': {r'$ref': r'#/$defs/AppConfigContactDetails'},
+      },
+    },
+    'ChatContactInfo': {
+      'type': 'object',
+      'properties': {
+        'showVideoButtonAction': {'type': 'boolean', 'default': true},
+      },
+    },
+    'AppConfigChats': {
+      'type': 'object',
+      'properties': {
+        'groupChatButtonEnabled': {'type': 'boolean', 'default': true},
+        'contactInfo': {r'$ref': r'#/$defs/ChatContactInfo'},
+      },
+    },
+    'AppConfigMessaging': {
+      'type': 'object',
+      'properties': {
+        'chats': {r'$ref': r'#/$defs/AppConfigChats'},
+      },
+    },
+    'SupportedFeature': {'type': 'object', 'properties': {}},
+  },
 };
 
 AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
@@ -66,7 +325,7 @@ AppConfigLogin _$AppConfigLoginFromJson(Map<String, dynamic> json) =>
           (json['signinOrder'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const ['passwordSignin', 'otpSignin', 'signup'],
+          const [],
       qr: json['qr'] == null
           ? const AppConfigLoginQr()
           : AppConfigLoginQr.fromJson(json['qr'] as Map<String, dynamic>),
@@ -90,10 +349,7 @@ AppConfigLoginQr _$AppConfigLoginQrFromJson(Map<String, dynamic> json) =>
                     AppConfigLoginQrFormat.fromJson(e as Map<String, dynamic>),
               )
               .toList() ??
-          const [
-            AppConfigLoginQrFormat(type: 'uri', schemes: ['csc']),
-            AppConfigLoginQrFormat(type: 'json'),
-          ],
+          const [],
       expectedHost: json['expectedHost'] as String?,
     );
 
@@ -142,13 +398,7 @@ AppConfigLoginModeSelect _$AppConfigLoginModeSelectFromJson(
                 AppConfigModeSelectAction.fromJson(e as Map<String, dynamic>),
           )
           .toList() ??
-      const [
-        AppConfigModeSelectAction(
-          enabled: true,
-          type: 'login',
-          titleL10n: 'login_Button_signUpToDemoInstance',
-        ),
-      ],
+      const [],
 );
 
 Map<String, dynamic> _$AppConfigLoginModeSelectToJson(
@@ -219,15 +469,10 @@ AppConfigMain _$AppConfigMainFromJson(Map<String, dynamic> json) =>
           : AppConfigBottomMenu.fromJson(
               json['bottomMenu'] as Map<String, dynamic>,
             ),
-      systemNotificationsEnabled:
-          json['systemNotificationsEnabled'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$AppConfigMainToJson(AppConfigMain instance) =>
-    <String, dynamic>{
-      'bottomMenu': instance.bottomMenu.toJson(),
-      'systemNotificationsEnabled': instance.systemNotificationsEnabled,
-    };
+    <String, dynamic>{'bottomMenu': instance.bottomMenu.toJson()};
 
 AppConfigBottomMenu _$AppConfigBottomMenuFromJson(Map<String, dynamic> json) =>
     AppConfigBottomMenu(
@@ -370,6 +615,305 @@ Map<String, dynamic> _$EncodingDefaultPresetOverrideToJson(
   'removeExtmaps': instance.removeExtmaps,
 };
 
+FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
+    FavoritesTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      type: json['type'] as String? ?? 'favorites',
+    );
+
+Map<String, dynamic> _$FavoritesTabSchemeToJson(FavoritesTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.type,
+    };
+
+const _$FavoritesTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `favorites`.',
+      'default': 'favorites',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
+RecentsTabScheme _$RecentsTabSchemeFromJson(Map<String, dynamic> json) =>
+    RecentsTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      supportsCallHistory:
+          _readRecentsSupportsCallHistory(json, 'supportsCallHistory')
+              as bool? ??
+          true,
+      type: json['type'] as String? ?? 'recents',
+    );
+
+Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'supportsCallHistory': instance.supportsCallHistory,
+      'type': instance.type,
+    };
+
+const _$RecentsTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'supportsCallHistory': {
+      'type': 'boolean',
+      'description':
+          'Local opt-in for remote call history (CDRs). Resolved against the server\n`callHistory` adapter capability in feature_access - both must be true.\n\nReads the `supportsCallHistory` key and falls back to the legacy `useCdrs`\nkey so existing configs keep their value.',
+      'default': true,
+    },
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `recents`.',
+      'default': 'recents',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
+ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
+    ContactsTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      contactSourceTypes:
+          (json['contactSourceTypes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
+      layout:
+          $enumDecodeNullable(
+            _$ContactsLayoutSchemeEnumMap,
+            json['layout'],
+            unknownValue: ContactsLayoutScheme.tabbed,
+          ) ??
+          ContactsLayoutScheme.tabbed,
+      favorites: json['favorites'] as bool? ?? true,
+      type: json['type'] as String? ?? 'contacts',
+    );
+
+Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'contactSourceTypes': instance.contactSourceTypes,
+      'layout': _$ContactsLayoutSchemeEnumMap[instance.layout]!,
+      'favorites': instance.favorites,
+      'type': instance.type,
+    };
+
+const _$ContactsTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'contactSourceTypes': {
+      'type': 'array',
+      'items': {'type': 'string'},
+      'default': [],
+    },
+    'layout': {
+      'type': 'object',
+      'description':
+          'How the section is arranged. A deployment that says nothing keeps the\narrangement it already has.\n\nRead leniently: a configurator may offer an arrangement before an\ninstalled app knows how to draw it, and such a build has to fall back\nto the one it does know rather than fail to read its own settings.',
+    },
+    'favorites': {
+      'type': 'boolean',
+      'description':
+          "Whether the favourites are one of the lists the chooser offers.\n\nThe list behind that entry is the favourites section's own - the same\nrows, in the order a person arranged them - not this section's list\nnarrowed down. Read only where the arrangement has a chooser, which is\nthe unified one; on by default, because a deployment picking that\narrangement is picking the one favourites live in.",
+      'default': true,
+    },
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `contacts`.',
+      'default': 'contacts',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
+const _$ContactsLayoutSchemeEnumMap = {
+  ContactsLayoutScheme.tabbed: 'tabbed',
+  ContactsLayoutScheme.unified: 'unified',
+};
+
+KeypadTabScheme _$KeypadTabSchemeFromJson(Map<String, dynamic> json) =>
+    KeypadTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      type: json['type'] as String? ?? 'keypad',
+    );
+
+Map<String, dynamic> _$KeypadTabSchemeToJson(KeypadTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.type,
+    };
+
+const _$KeypadTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `keypad`.',
+      'default': 'keypad',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
+MessagingTabScheme _$MessagingTabSchemeFromJson(Map<String, dynamic> json) =>
+    MessagingTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      type: json['type'] as String? ?? 'messaging',
+    );
+
+Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.type,
+    };
+
+const _$MessagingTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `messaging`.',
+      'default': 'messaging',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
+VoicemailTabScheme _$VoicemailTabSchemeFromJson(Map<String, dynamic> json) =>
+    VoicemailTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      type: json['type'] as String? ?? 'voicemail',
+    );
+
+Map<String, dynamic> _$VoicemailTabSchemeToJson(VoicemailTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'type': instance.type,
+    };
+
+const _$VoicemailTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `voicemail`.',
+      'default': 'voicemail',
+    },
+  },
+  'required': ['titleL10n', 'icon'],
+};
+
+EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
+    EmbeddedTabScheme(
+      enabled: json['enabled'] as bool? ?? true,
+      initial: json['initial'] as bool? ?? false,
+      titleL10n: json['titleL10n'] as String,
+      icon: json['icon'] as String,
+      embeddedResourceId: json['embeddedResourceId'] as String,
+      type: json['type'] as String? ?? 'embedded',
+    );
+
+Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'initial': instance.initial,
+      'titleL10n': instance.titleL10n,
+      'icon': instance.icon,
+      'embeddedResourceId': instance.embeddedResourceId,
+      'type': instance.type,
+    };
+
+const _$EmbeddedTabSchemeJsonSchema = {
+  r'$schema': 'https://json-schema.org/draft/2020-12/schema',
+  'type': 'object',
+  'properties': {
+    'enabled': {'type': 'boolean', 'default': true},
+    'initial': {'type': 'boolean', 'default': false},
+    'titleL10n': {'type': 'string'},
+    'icon': {'type': 'string'},
+    'embeddedResourceId': {
+      'type': 'string',
+      'description': 'Names the [EmbeddedResource] this tab shows.',
+    },
+    'type': {
+      'type': 'string',
+      'description': 'The discriminator. Always `embedded`.',
+      'default': 'embedded',
+    },
+  },
+  'required': ['titleL10n', 'icon', 'embeddedResourceId'],
+};
+
 AppConfigSettings _$AppConfigSettingsFromJson(Map<String, dynamic> json) =>
     AppConfigSettings(
       sections:
@@ -380,57 +924,7 @@ AppConfigSettings _$AppConfigSettingsFromJson(Map<String, dynamic> json) =>
                 ),
               )
               .toList() ??
-          const [
-            AppConfigSettingsSection(
-              titleL10n: 'settings_ListViewTileTitle_settings',
-              enabled: true,
-              items: [
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'network',
-                  titleL10n: 'settings_ListViewTileTitle_network',
-                  icon: '0xe424',
-                ),
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'mediaSettings',
-                  titleL10n: 'settings_ListViewTileTitle_mediaSettings',
-                  icon: '0xf1cf',
-                ),
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'language',
-                  titleL10n: 'settings_ListViewTileTitle_language',
-                  icon: '0xe366',
-                ),
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'terms',
-                  titleL10n: 'settings_ListViewTileTitle_termsConditions',
-                  icon: '0xeedf',
-                  embeddedResourceId: '0',
-                ),
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'about',
-                  titleL10n: 'settings_ListViewTileTitle_about',
-                  icon: '0xe140',
-                ),
-              ],
-            ),
-            AppConfigSettingsSection(
-              titleL10n: 'settings_ListViewTileTitle_toolbox',
-              enabled: true,
-              items: [
-                AppConfigSettingsItem(
-                  enabled: true,
-                  type: 'log',
-                  titleL10n: 'settings_ListViewTileTitle_logRecordsConsole',
-                  icon: '0xee79',
-                ),
-              ],
-            ),
-          ],
+          const [],
     );
 
 Map<String, dynamic> _$AppConfigSettingsToJson(AppConfigSettings instance) =>
@@ -468,9 +962,7 @@ AppConfigSettingsItem _$AppConfigSettingsItemFromJson(
   type: json['type'] as String,
   icon: json['icon'] as String,
   iconColor: json['iconColor'] as String?,
-  embeddedResourceId: const IntToStringOptionalConverter().fromJson(
-    json['embeddedResourceId'],
-  ),
+  embeddedResourceId: json['embeddedResourceId'] as String?,
 );
 
 Map<String, dynamic> _$AppConfigSettingsItemToJson(
@@ -481,16 +973,11 @@ Map<String, dynamic> _$AppConfigSettingsItemToJson(
   'type': instance.type,
   'icon': instance.icon,
   'iconColor': instance.iconColor,
-  'embeddedResourceId': const IntToStringOptionalConverter().toJson(
-    instance.embeddedResourceId,
-  ),
+  'embeddedResourceId': instance.embeddedResourceId,
 };
 
 AppConfigContacts _$AppConfigContactsFromJson(Map<String, dynamic> json) =>
     AppConfigContacts(
-      list: json['list'] == null
-          ? const AppConfigContactList()
-          : AppConfigContactList.fromJson(json['list'] as Map<String, dynamic>),
       details: json['details'] == null
           ? const AppConfigContactDetails()
           : AppConfigContactDetails.fromJson(
@@ -499,18 +986,7 @@ AppConfigContacts _$AppConfigContactsFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$AppConfigContactsToJson(AppConfigContacts instance) =>
-    <String, dynamic>{
-      'list': instance.list.toJson(),
-      'details': instance.details.toJson(),
-    };
-
-AppConfigContactList _$AppConfigContactListFromJson(
-  Map<String, dynamic> json,
-) => AppConfigContactList();
-
-Map<String, dynamic> _$AppConfigContactListToJson(
-  AppConfigContactList instance,
-) => <String, dynamic>{};
+    <String, dynamic>{'details': instance.details.toJson()};
 
 AppConfigContactDetails _$AppConfigContactDetailsFromJson(
   Map<String, dynamic> json,
@@ -548,25 +1024,13 @@ Map<String, dynamic> _$AppConfigContactDetailsActionsToJson(
 
 AppConfigMessaging _$AppConfigMessagingFromJson(Map<String, dynamic> json) =>
     AppConfigMessaging(
-      sms: json['sms'] == null
-          ? const AppConfigSms()
-          : AppConfigSms.fromJson(json['sms'] as Map<String, dynamic>),
       chats: json['chats'] == null
           ? const AppConfigChats()
           : AppConfigChats.fromJson(json['chats'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AppConfigMessagingToJson(AppConfigMessaging instance) =>
-    <String, dynamic>{
-      'sms': instance.sms.toJson(),
-      'chats': instance.chats.toJson(),
-    };
-
-AppConfigSms _$AppConfigSmsFromJson(Map<String, dynamic> json) =>
-    AppConfigSms();
-
-Map<String, dynamic> _$AppConfigSmsToJson(AppConfigSms instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{'chats': instance.chats.toJson()};
 
 AppConfigChats _$AppConfigChatsFromJson(Map<String, dynamic> json) =>
     AppConfigChats(
@@ -591,142 +1055,3 @@ ChatContactInfo _$ChatContactInfoFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ChatContactInfoToJson(ChatContactInfo instance) =>
     <String, dynamic>{'showVideoButtonAction': instance.showVideoButtonAction};
-
-AppConfigLocalization _$AppConfigLocalizationFromJson(
-  Map<String, dynamic> json,
-) => AppConfigLocalization(
-  enabledLanguages:
-      (json['enabledLanguages'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList() ??
-      const [],
-);
-
-Map<String, dynamic> _$AppConfigLocalizationToJson(
-  AppConfigLocalization instance,
-) => <String, dynamic>{'enabledLanguages': instance.enabledLanguages};
-
-FavoritesTabScheme _$FavoritesTabSchemeFromJson(Map<String, dynamic> json) =>
-    FavoritesTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      $type: json['type'] as String?,
-    );
-
-Map<String, dynamic> _$FavoritesTabSchemeToJson(FavoritesTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'type': instance.$type,
-    };
-
-RecentsTabScheme _$RecentsTabSchemeFromJson(Map<String, dynamic> json) =>
-    RecentsTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      supportsCallHistory:
-          _readRecentsSupportsCallHistory(json, 'supportsCallHistory')
-              as bool? ??
-          true,
-      $type: json['type'] as String?,
-    );
-
-Map<String, dynamic> _$RecentsTabSchemeToJson(RecentsTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'supportsCallHistory': instance.supportsCallHistory,
-      'type': instance.$type,
-    };
-
-ContactsTabScheme _$ContactsTabSchemeFromJson(Map<String, dynamic> json) =>
-    ContactsTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      contactSourceTypes:
-          (json['contactSourceTypes'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const <String>[],
-      $type: json['type'] as String?,
-    );
-
-Map<String, dynamic> _$ContactsTabSchemeToJson(ContactsTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'contactSourceTypes': instance.contactSourceTypes,
-      'type': instance.$type,
-    };
-
-KeypadTabScheme _$KeypadTabSchemeFromJson(Map<String, dynamic> json) =>
-    KeypadTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      $type: json['type'] as String?,
-    );
-
-Map<String, dynamic> _$KeypadTabSchemeToJson(KeypadTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'type': instance.$type,
-    };
-
-MessagingTabScheme _$MessagingTabSchemeFromJson(Map<String, dynamic> json) =>
-    MessagingTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      $type: json['type'] as String?,
-    );
-
-Map<String, dynamic> _$MessagingTabSchemeToJson(MessagingTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'type': instance.$type,
-    };
-
-EmbeddedTabScheme _$EmbeddedTabSchemeFromJson(Map<String, dynamic> json) =>
-    EmbeddedTabScheme(
-      enabled: json['enabled'] as bool? ?? true,
-      initial: json['initial'] as bool? ?? false,
-      titleL10n: json['titleL10n'] as String,
-      icon: json['icon'] as String,
-      embeddedResourceId: const IntToStringConverter().fromJson(
-        json['embeddedResourceId'],
-      ),
-      $type: json['type'] as String?,
-    );
-
-Map<String, dynamic> _$EmbeddedTabSchemeToJson(EmbeddedTabScheme instance) =>
-    <String, dynamic>{
-      'enabled': instance.enabled,
-      'initial': instance.initial,
-      'titleL10n': instance.titleL10n,
-      'icon': instance.icon,
-      'embeddedResourceId': const IntToStringConverter().toJson(
-        instance.embeddedResourceId,
-      ),
-      'type': instance.$type,
-    };

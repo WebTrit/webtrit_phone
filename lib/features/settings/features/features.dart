@@ -11,4 +11,3 @@ export 'presence/presence.dart';
 export 'self_config/self_config.dart';
 export 'sessions/sessions.dart';
 export 'theme_mode/theme_mode.dart';
-export 'voicemail/voicemail.dart';

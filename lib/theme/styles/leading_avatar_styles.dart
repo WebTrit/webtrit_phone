@@ -7,6 +7,16 @@ class LeadingAvatarStyles extends ThemeExtension<LeadingAvatarStyles> {
 
   final LeadingAvatarStyle? primary;
 
+  /// Avatar appearance for this context: what the theme says on top of the
+  /// app's own values, so widgets never carry appearance of their own.
+  static LeadingAvatarStyle of(BuildContext context) {
+    final theme = Theme.of(context);
+    return LeadingAvatarStyle.merge(
+      LeadingAvatarStyle.defaults(theme.colorScheme),
+      theme.extension<LeadingAvatarStyles>()?.primary,
+    );
+  }
+
   @override
   ThemeExtension<LeadingAvatarStyles> copyWith({LeadingAvatarStyle? primary}) {
     return LeadingAvatarStyles(primary: primary ?? this.primary);

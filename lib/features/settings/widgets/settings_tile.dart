@@ -14,6 +14,7 @@ class SettingsTile extends StatelessWidget {
     required this.onTap,
     this.iconColor,
     this.trailing,
+    this.trailingLabel,
     this.textStyle,
     this.showSeparator = true,
     this.separatorColor,
@@ -26,6 +27,15 @@ class SettingsTile extends StatelessWidget {
   final IconData icon;
   final Color? iconColor;
   final Widget? trailing;
+
+  /// What a badge in [trailing] stands for, spoken after the row's title.
+  ///
+  /// A tile merges into a single node whose name is assembled in the order its
+  /// parts are drawn, and the trailing slot is drawn last - which is what puts
+  /// this behind the title instead of ahead of it. Anything the trailing widget
+  /// draws by itself would be read out inside the title.
+  final String? trailingLabel;
+
   final TextStyle? textStyle;
   final bool showSeparator;
   final Color? separatorColor;
@@ -35,12 +45,22 @@ class SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final trailingLabel = this.trailingLabel;
+    final trailing = this.trailing;
+
+    // On the trailing widget rather than around the tile: a name given to the
+    // tile itself would be assembled before everything the tile draws, and so
+    // spoken ahead of the title it is meant to follow.
+    final spokenTrailing = trailingLabel == null || trailing == null
+        ? trailing
+        : Semantics(label: trailingLabel, child: trailing);
+
     final tile = Opacity(
       opacity: opacity,
       child: ListTile(
         leading: Icon(icon, color: iconColor),
         title: Text(title, style: textStyle),
-        trailing: trailing,
+        trailing: spokenTrailing,
         onTap: onTap,
         enabled: enabled,
       ),

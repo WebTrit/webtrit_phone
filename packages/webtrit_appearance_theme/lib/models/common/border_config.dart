@@ -11,23 +11,30 @@ part 'border_config.g.dart';
 /// Mirrors Flutter's [InputBorder] types such as [UnderlineInputBorder]
 /// and [OutlineInputBorder].
 @freezed
-abstract class BorderConfig with _$BorderConfig {
-  const factory BorderConfig({
-    /// Border type:
-    /// - [`BorderTypeConfig.underline`]
-    /// - [`BorderTypeConfig.outline`]
-    /// - [`BorderTypeConfig.none`]
-    @Default(BorderTypeConfig.underline) BorderTypeConfig type,
+@JsonSerializable(explicitToJson: true)
+class BorderConfig with _$BorderConfig {
+  const BorderConfig({this.type = BorderTypeConfig.underline, this.borderRadius, this.borderColor, this.borderWidth});
 
-    /// Corner radius for outline borders.
-    double? borderRadius,
+  /// Border type:
+  /// - [`BorderTypeConfig.underline`]
+  /// - [`BorderTypeConfig.outline`]
+  /// - [`BorderTypeConfig.none`]
+  @override
+  final BorderTypeConfig type;
 
-    /// Border color (hex string, e.g. `#000000`).
-    String? borderColor,
+  /// Corner radius for outline borders.
+  @override
+  final double? borderRadius;
 
-    /// Stroke width of the border.
-    double? borderWidth,
-  }) = _BorderConfig;
+  /// Border color (hex string, e.g. `#000000`).
+  @override
+  final String? borderColor;
 
-  factory BorderConfig.fromJson(Map<String, dynamic> json) => _$BorderConfigFromJson(json);
+  /// Stroke width of the border.
+  @override
+  final double? borderWidth;
+
+  factory BorderConfig.fromJson(Map<String, Object?> json) => _$BorderConfigFromJson(json);
+
+  Map<String, Object?> toJson() => _$BorderConfigToJson(this);
 }

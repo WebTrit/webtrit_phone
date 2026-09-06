@@ -11,7 +11,8 @@ Last reviewed: 2026-08-13
     - `cubit/sessions_cubit.dart` - `SessionsCubit` + `SessionsState`.
     - `view/sessions_screen_page.dart` - `@RoutePage`; refreshes the shared
       cubit on open and passes the `DateFormat` taken from `AppTime`.
-    - `view/sessions_screen.dart` - app bar, pull-to-refresh list, placeholders.
+    - `view/sessions_screen.dart` - app bar, pull-to-refresh list, placeholders
+      (how every list refreshes: [`../data_refresh.md`](../data_refresh.md)).
     - `widgets/session_tile.dart` - one session row.
 - `lib/features/settings/view/settings_router_page.dart` - owns the
   `SessionsCubit`, above both the settings screen and the sessions screen.
@@ -71,11 +72,12 @@ name there, so the value is dropped rather than sent.
 
 ## Entry point and version gate
 
-The row sits in the fixed group at the top of the settings screen, directly
-above logout, and is deliberately NOT a configurable settings item: there is no
-`sessions` type in `app.config.json` and no `SettingsFlavor` for it. It carries
-an `UnreadBadge` with the number of active sessions, which stays blank until the
-list has loaded.
+The row sits in the fixed group at the top of the settings screen and is
+deliberately NOT a configurable settings item: there is no `sessions` type in
+`app.config.json` and no `SettingsFlavor` for it. It carries a `CountBadge` with
+the number of active sessions, which stays blank until the list has loaded, and
+the count is spoken after the row's own name. Logging out is not next to it any
+more - it is an action in the app bar of that screen.
 
 Both endpoints are core endpoints with no adapter involvement, so there is no
 capability flag to advertise them. Availability is decided by the core version

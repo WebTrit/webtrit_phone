@@ -5,8 +5,7 @@
 # Usage:
 #   tool/scripts/browserstack_upload.sh <path-to-app>    upload the given file
 #   tool/scripts/browserstack_upload.sh                  upload the newest apk from build output
-#   tool/scripts/browserstack_upload.sh --build [flavor] build a debug apk first, then upload
-#                                                        (default flavor: deeplinksDisabledSmsReceiverDisabled)
+#   tool/scripts/browserstack_upload.sh --build         build a debug apk first, then upload
 #   tool/scripts/browserstack_upload.sh --list           list recent App Live uploads and exit
 #
 # Options:
@@ -24,7 +23,6 @@ ENV_FILE="$REPO_ROOT/.env"
 API="https://api-cloud.browserstack.com/app-live"
 APK_DIR="$REPO_ROOT/build/app/outputs/flutter-apk"
 CUSTOM_ID="webtrit_phone"
-DEFAULT_FLAVOR="deeplinksDisabledSmsReceiverDisabled"
 
 die() { echo "error: $*" >&2; exit 1; }
 
@@ -43,7 +41,6 @@ pretty() { python3 -m json.tool 2>/dev/null || cat; }
 
 APP_FILE=""
 DO_BUILD=0
-FLAVOR="$DEFAULT_FLAVOR"
 BUILD_MODE="--debug"
 
 while [ $# -gt 0 ]; do
@@ -54,14 +51,13 @@ while [ $# -gt 0 ]; do
       ;;
     --build)
       DO_BUILD=1
-      if [ $# -gt 1 ] && [[ "$2" != --* ]]; then FLAVOR="$2"; shift; fi
       ;;
     --release) BUILD_MODE="--release" ;;
     --custom-id)
       [ $# -gt 1 ] || die "--custom-id needs a value"
       CUSTOM_ID="$2"; shift
       ;;
-    --help|-h) sed -n '2,19p' "$0"; exit 0 ;;
+    --help|-h) sed -n '2,18p' "$0"; exit 0 ;;
     -*) die "unknown option: $1" ;;
     *) APP_FILE="$1" ;;
   esac
@@ -73,9 +69,9 @@ if [ "$DO_BUILD" = 1 ]; then
   # app_version + an hourly date code so uploads are distinguishable in App Live.
   BUILD_NAME="$(grep -E '^app_version:' "$REPO_ROOT/pubspec.yaml" | cut -d ' ' -f2 | cut -d '+' -f1)"
   BUILD_NUMBER="$(date -u +%y%m%d%H)"
-  echo "building $BUILD_MODE apk, flavor $FLAVOR, version ${BUILD_NAME:-0.0.0}+$BUILD_NUMBER ..."
+  echo "building $BUILD_MODE apk, version ${BUILD_NAME:-0.0.0}+$BUILD_NUMBER ..."
   (cd "$REPO_ROOT" && flutter build apk --dart-define-from-file=dart_define.json \
-    --no-tree-shake-icons "$BUILD_MODE" --flavor "$FLAVOR" \
+    --no-tree-shake-icons "$BUILD_MODE" \
     ${BUILD_NAME:+--build-name="$BUILD_NAME"} --build-number="$BUILD_NUMBER")
 fi
 

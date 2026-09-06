@@ -7,6 +7,10 @@ import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
+/// Size of the star that marks a favourite in a row: smaller than the name it
+/// follows, so it reads as a mark on the name rather than as a control.
+const _favoriteMarkSize = 16.0;
+
 class ContactTile extends StatelessWidget {
   const ContactTile({
     super.key,
@@ -30,6 +34,8 @@ class ContactTile extends StatelessWidget {
     this.onCallLogPressed,
     this.onCallFrom,
     this.copyNumber,
+    this.favorite = false,
+    this.markFavorite = false,
   });
 
   final String displayName;
@@ -54,6 +60,12 @@ class ContactTile extends StatelessWidget {
   final void Function(String)? onCallFrom;
   final String? copyNumber;
 
+  /// Whether this contact is a favourite.
+  final bool favorite;
+
+  /// Whether to draw the star for [favorite] at all.
+  final bool markFavorite;
+
   @override
   Widget build(BuildContext context) {
     final presenceParams = PresenceViewParams.of(context);
@@ -65,8 +77,10 @@ class ContactTile extends StatelessWidget {
 
     String? subName;
 
-    if (presenceParams.blfViaSipSupport && (dialogInfo ?? []).isNotEmpty) {
-      final dialog = dialogInfo!.first;
+    final establishedCall = (dialogInfo ?? const <DialogInfo>[]).established;
+
+    if (presenceParams.blfViaSipSupport && establishedCall != null) {
+      final dialog = establishedCall;
 
       String? destination;
       if (dialog.remoteDisplayName != null && dialog.remoteNumber != null) {
@@ -89,14 +103,19 @@ class ContactTile extends StatelessWidget {
     }
 
     return CallTile(
+      // A star beside the name, so a filter that keeps only these people is
+      // understandable from the unfiltered list too. Off on the screen that
+      // keeps favourites in a section of their own, where the star would say
+      // nothing that screen does not already say.
+      nameTrailing: markFavorite && favorite
+          ? Icon(Icons.star, size: _favoriteMarkSize, color: Theme.of(context).colorScheme.tertiary)
+          : null,
       leading: LeadingAvatar(
         username: displayName,
         thumbnail: thumbnail,
         thumbnailUrl: thumbnailUrl,
-        registered: registered,
         smart: smart,
-        presenceInfo: presenceInfo,
-        dialogInfo: dialogInfo,
+        badge: AvatarStatusBadge.maybe(registered: registered, presenceInfo: presenceInfo, dialogInfo: dialogInfo),
       ),
       name: title,
       subName: subName,

@@ -92,9 +92,8 @@ void main() {
     blocTest<ExternalContactsSyncBloc, ExternalContactsSyncState>(
       'filters out current user contact and syncs the rest when repository emits contacts',
       build: () {
-        when(
-          () => externalContactsRepository.contacts(),
-        ).thenAnswer((_) => Stream.value([_contactSelf, _contactOther]));
+        when(() => externalContactsRepository.contacts())
+            .thenAnswer((_) => Stream.value([_contactSelf, _contactOther]));
 
         return ExternalContactsSyncBloc(
           userRepository: userRepository,

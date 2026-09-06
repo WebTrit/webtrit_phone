@@ -7,7 +7,7 @@ import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/theme/theme.dart';
 
 void main() {
-  Widget wrap({String? identifier, String? clearIdentifier, String? initialValue}) {
+  Widget wrap({String? identifier, String? clearIdentifier, String? initialValue, VoidCallback? onDismissed}) {
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -21,6 +21,7 @@ void main() {
           identifier: identifier,
           clearButtonIdentifier: clearIdentifier,
           initialValue: initialValue,
+          onDismissed: onDismissed,
         ),
       ),
     );
@@ -69,6 +70,33 @@ void main() {
 
     expect(find.bySemanticsIdentifier(contactsSearchInputId), findsNothing);
     expect(find.byType(TextField), findsOneWidget);
+
+    handle.dispose();
+  });
+
+  testWidgets('the cross is named for what pressing it will do', (tester) async {
+    // On a screen where the box is something you leave, one control does two
+    // jobs: it empties a search, and on an empty box it leaves the search.
+    // Announcing the second as "clear" sends someone listening straight past
+    // the only way out.
+    final handle = tester.ensureSemantics();
+
+    await tester.pumpWidget(
+      wrap(clearIdentifier: contactsSearchInputClearId, initialValue: 'branch', onDismissed: () {}),
+    );
+
+    expect(
+      tester.getSemantics(find.bySemanticsIdentifier(contactsSearchInputClearId)),
+      isSemantics(label: 'Clear search'),
+    );
+
+    await tester.tap(find.bySemanticsIdentifier(contactsSearchInputClearId));
+    await tester.pump();
+
+    expect(
+      tester.getSemantics(find.bySemanticsIdentifier(contactsSearchInputClearId)),
+      isSemantics(label: 'Close search'),
+    );
 
     handle.dispose();
   });

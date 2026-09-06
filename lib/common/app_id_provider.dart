@@ -7,6 +7,8 @@ import 'package:firebase_app_installations/firebase_app_installations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 
+import 'disposable.dart';
+
 const _appIdKey = 'app_id_key';
 
 final Logger _logger = Logger('AppIdProvider');
@@ -20,8 +22,9 @@ abstract class AppIdProvider {
 
 /// Implementation of AppIdProvider using Firebase installations service.
 /// This provider retrieves the Firebase installation ID and handles changes in the ID.
-class FirebaseAppIdProvider implements AppIdProvider {
+class FirebaseAppIdProvider implements AppIdProvider, Disposable {
   final _idChangeController = StreamController<String>.broadcast();
+  late final StreamSubscription<String> _idChangeSubscription;
 
   FirebaseAppIdProvider() {
     _initializeIdListener();
@@ -49,7 +52,7 @@ class FirebaseAppIdProvider implements AppIdProvider {
   void _initializeIdListener() {
     // Persist a rotated installation id and republish it to listeners; onError
     // keeps a transient stream error from escaping to the zone.
-    FirebaseInstallations.instance.onIdChange.listen((id) async {
+    _idChangeSubscription = FirebaseInstallations.instance.onIdChange.listen((id) async {
       await _saveIdToSharedPreferences(id);
       _idChangeController.add(id);
       _logger.info('Firebase ID changed: $id');
@@ -83,8 +86,10 @@ class FirebaseAppIdProvider implements AppIdProvider {
     return String.fromCharCodes(List.generate(length, (index) => random.nextInt(26) + 97));
   }
 
-  void dispose() {
-    _idChangeController.close();
+  @override
+  Future<void> dispose() async {
+    await _idChangeSubscription.cancel();
+    await _idChangeController.close();
   }
 }
 

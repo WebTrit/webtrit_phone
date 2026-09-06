@@ -35,10 +35,12 @@ Map<String, dynamic> _$SystemInfoToJson(SystemInfo instance) =>
 
 CoreInfo _$CoreInfoFromJson(Map<String, dynamic> json) => CoreInfo(
   version: const VersionConverter().fromJson(json['version'] as String),
+  iceServersConfigured: json['ice_servers_configured'] as bool?,
 );
 
 Map<String, dynamic> _$CoreInfoToJson(CoreInfo instance) => <String, dynamic>{
   'version': const VersionConverter().toJson(instance.version),
+  'ice_servers_configured': instance.iceServersConfigured,
 };
 
 PostgresInfo _$PostgresInfoFromJson(Map<String, dynamic> json) =>

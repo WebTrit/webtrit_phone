@@ -184,21 +184,17 @@ void main() {
       when(
         () => metadataProvider.logLabels,
       ).thenReturn({'app': 'WebTrit', 'appVersion': '1.16.0+6', 'authorization': 'authorized', 'tenantId': 'tenant-a'});
-      when(
-        () => incomingCallTypeRepository.getIncomingCallType(defaultValue: any(named: 'defaultValue')),
-      ).thenReturn(IncomingCallType.socket);
+      when(() => incomingCallTypeRepository.getIncomingCallType(defaultValue: any(named: 'defaultValue')))
+          .thenReturn(IncomingCallType.socket);
       when(() => encodingPresetRepository.getEncodingPreset(defaultValue: any(named: 'defaultValue'))).thenReturn(null);
       when(() => encodingSettingsRepository.getEncodingSettings()).thenReturn(EncodingSettings.blank());
-      when(
-        () => audioProcessingSettingsRepository.getAudioProcessingSettings(),
-      ).thenReturn(AudioProcessingSettings.blank());
-      when(
-        () => videoCapturingSettingsRepository.getVideoCapturingSettings(),
-      ).thenReturn(VideoCapturingSettings.blank());
+      when(() => audioProcessingSettingsRepository.getAudioProcessingSettings())
+          .thenReturn(AudioProcessingSettings.blank());
+      when(() => videoCapturingSettingsRepository.getVideoCapturingSettings())
+          .thenReturn(VideoCapturingSettings.blank());
       when(() => iceSettingsRepository.getIceSettings()).thenReturn(IceSettings.blank());
-      when(
-        () => peerConnectionSettingsRepository.getPeerConnectionSettings(defaultValue: any(named: 'defaultValue')),
-      ).thenAnswer((invocation) => invocation.namedArguments[#defaultValue] as PeerConnectionSettings);
+      when(() => peerConnectionSettingsRepository.getPeerConnectionSettings(defaultValue: any(named: 'defaultValue')))
+          .thenAnswer((invocation) => invocation.namedArguments[#defaultValue] as PeerConnectionSettings);
     });
 
     test('seeds the metadata labels with the callkeep version and drops the session-scoped ones', () {
@@ -223,9 +219,8 @@ void main() {
     });
 
     test('logUserSettings re-reads the repositories, so a post-logout re-seed picks up the reset values', () {
-      when(
-        () => incomingCallTypeRepository.getIncomingCallType(defaultValue: any(named: 'defaultValue')),
-      ).thenReturn(IncomingCallType.pushNotification);
+      when(() => incomingCallTypeRepository.getIncomingCallType(defaultValue: any(named: 'defaultValue')))
+          .thenReturn(IncomingCallType.pushNotification);
 
       context.logUserSettings(defaultPeerConnectionSettings: PeerConnectionSettings.blank());
 
