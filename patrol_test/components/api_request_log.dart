@@ -5,11 +5,13 @@ import 'package:logging/logging.dart';
 
 /// One HTTP request observed through the api client's request log line.
 class ApiRequest {
-  ApiRequest(this.time, this.attempt, this.path);
+  ApiRequest(this.time, this.attempt, this.uri);
 
   final DateTime time;
   final int attempt;
-  final String path;
+  final Uri uri;
+
+  String get path => uri.path;
 }
 
 /// In-process request oracle: parses the api client's own request log line
@@ -33,7 +35,7 @@ class ApiRequestLog {
       clientRecordsSeen++;
       final match = _requestLine.firstMatch(record.message);
       if (match == null) return;
-      _requests.add(ApiRequest(record.time, int.parse(match.group(2)!), Uri.parse(match.group(3)!).path));
+      _requests.add(ApiRequest(record.time, int.parse(match.group(2)!), Uri.parse(match.group(3)!)));
     });
   }
 
