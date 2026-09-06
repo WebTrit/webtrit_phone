@@ -955,7 +955,7 @@ case _:
 /// @nodoc
 mixin _$BottomNavigationBarWidgetConfig {
 
- String? get backgroundColor; String? get selectedItemColor; String? get unSelectedItemColor;
+ String? get backgroundColor; double? get elevation; String? get selectedItemColor; String? get unSelectedItemColor; TextStyleConfig? get selectedLabelStyle; TextStyleConfig? get unselectedLabelStyle; IconThemeDataConfig? get selectedIconTheme; IconThemeDataConfig? get unselectedIconTheme; bool? get showSelectedLabels; bool? get showUnselectedLabels;
 /// Create a copy of BottomNavigationBarWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -966,16 +966,16 @@ $BottomNavigationBarWidgetConfigCopyWith<BottomNavigationBarWidgetConfig> get co
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BottomNavigationBarWidgetConfig&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.selectedItemColor, selectedItemColor) || other.selectedItemColor == selectedItemColor)&&(identical(other.unSelectedItemColor, unSelectedItemColor) || other.unSelectedItemColor == unSelectedItemColor));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BottomNavigationBarWidgetConfig&&(identical(other.backgroundColor, backgroundColor) || other.backgroundColor == backgroundColor)&&(identical(other.elevation, elevation) || other.elevation == elevation)&&(identical(other.selectedItemColor, selectedItemColor) || other.selectedItemColor == selectedItemColor)&&(identical(other.unSelectedItemColor, unSelectedItemColor) || other.unSelectedItemColor == unSelectedItemColor)&&(identical(other.selectedLabelStyle, selectedLabelStyle) || other.selectedLabelStyle == selectedLabelStyle)&&(identical(other.unselectedLabelStyle, unselectedLabelStyle) || other.unselectedLabelStyle == unselectedLabelStyle)&&(identical(other.selectedIconTheme, selectedIconTheme) || other.selectedIconTheme == selectedIconTheme)&&(identical(other.unselectedIconTheme, unselectedIconTheme) || other.unselectedIconTheme == unselectedIconTheme)&&(identical(other.showSelectedLabels, showSelectedLabels) || other.showSelectedLabels == showSelectedLabels)&&(identical(other.showUnselectedLabels, showUnselectedLabels) || other.showUnselectedLabels == showUnselectedLabels));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,backgroundColor,selectedItemColor,unSelectedItemColor);
+int get hashCode => Object.hash(runtimeType,backgroundColor,elevation,selectedItemColor,unSelectedItemColor,selectedLabelStyle,unselectedLabelStyle,selectedIconTheme,unselectedIconTheme,showSelectedLabels,showUnselectedLabels);
 
 @override
 String toString() {
-  return 'BottomNavigationBarWidgetConfig(backgroundColor: $backgroundColor, selectedItemColor: $selectedItemColor, unSelectedItemColor: $unSelectedItemColor)';
+  return 'BottomNavigationBarWidgetConfig(backgroundColor: $backgroundColor, elevation: $elevation, selectedItemColor: $selectedItemColor, unSelectedItemColor: $unSelectedItemColor, selectedLabelStyle: $selectedLabelStyle, unselectedLabelStyle: $unselectedLabelStyle, selectedIconTheme: $selectedIconTheme, unselectedIconTheme: $unselectedIconTheme, showSelectedLabels: $showSelectedLabels, showUnselectedLabels: $showUnselectedLabels)';
 }
 
 
@@ -986,7 +986,7 @@ abstract mixin class $BottomNavigationBarWidgetConfigCopyWith<$Res>  {
   factory $BottomNavigationBarWidgetConfigCopyWith(BottomNavigationBarWidgetConfig value, $Res Function(BottomNavigationBarWidgetConfig) _then) = _$BottomNavigationBarWidgetConfigCopyWithImpl;
 @useResult
 $Res call({
- String? backgroundColor, String? selectedItemColor, String? unSelectedItemColor
+ String? backgroundColor, double? elevation, String? selectedItemColor, String? unSelectedItemColor, TextStyleConfig? selectedLabelStyle, TextStyleConfig? unselectedLabelStyle, IconThemeDataConfig? selectedIconTheme, IconThemeDataConfig? unselectedIconTheme, bool? showSelectedLabels, bool? showUnselectedLabels
 });
 
 
@@ -1003,12 +1003,19 @@ class _$BottomNavigationBarWidgetConfigCopyWithImpl<$Res>
 
 /// Create a copy of BottomNavigationBarWidgetConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? backgroundColor = freezed,Object? selectedItemColor = freezed,Object? unSelectedItemColor = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? backgroundColor = freezed,Object? elevation = freezed,Object? selectedItemColor = freezed,Object? unSelectedItemColor = freezed,Object? selectedLabelStyle = freezed,Object? unselectedLabelStyle = freezed,Object? selectedIconTheme = freezed,Object? unselectedIconTheme = freezed,Object? showSelectedLabels = freezed,Object? showUnselectedLabels = freezed,}) {
   return _then(BottomNavigationBarWidgetConfig(
 backgroundColor: freezed == backgroundColor ? _self.backgroundColor : backgroundColor // ignore: cast_nullable_to_non_nullable
-as String?,selectedItemColor: freezed == selectedItemColor ? _self.selectedItemColor : selectedItemColor // ignore: cast_nullable_to_non_nullable
+as String?,elevation: freezed == elevation ? _self.elevation : elevation // ignore: cast_nullable_to_non_nullable
+as double?,selectedItemColor: freezed == selectedItemColor ? _self.selectedItemColor : selectedItemColor // ignore: cast_nullable_to_non_nullable
 as String?,unSelectedItemColor: freezed == unSelectedItemColor ? _self.unSelectedItemColor : unSelectedItemColor // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,selectedLabelStyle: freezed == selectedLabelStyle ? _self.selectedLabelStyle : selectedLabelStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,unselectedLabelStyle: freezed == unselectedLabelStyle ? _self.unselectedLabelStyle : unselectedLabelStyle // ignore: cast_nullable_to_non_nullable
+as TextStyleConfig?,selectedIconTheme: freezed == selectedIconTheme ? _self.selectedIconTheme : selectedIconTheme // ignore: cast_nullable_to_non_nullable
+as IconThemeDataConfig?,unselectedIconTheme: freezed == unselectedIconTheme ? _self.unselectedIconTheme : unselectedIconTheme // ignore: cast_nullable_to_non_nullable
+as IconThemeDataConfig?,showSelectedLabels: freezed == showSelectedLabels ? _self.showSelectedLabels : showSelectedLabels // ignore: cast_nullable_to_non_nullable
+as bool?,showUnselectedLabels: freezed == showUnselectedLabels ? _self.showUnselectedLabels : showUnselectedLabels // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
