@@ -92,6 +92,16 @@ void main() {
       expect(EnvironmentConfig.USER_REPOSITORY_POLLING_INTERVAL_SECONDS, 30);
     });
 
+    test('CDR polling interval is configurable and keeps its positive default', () {
+      const name = EnvironmentConfig.CDRS_REPOSITORY_POLLING_INTERVAL_SECONDS__NAME;
+
+      EnvironmentConfig.applyOverrides({name: '25'});
+      expect(EnvironmentConfig.CDRS_REPOSITORY_POLLING_INTERVAL_SECONDS, 25);
+
+      EnvironmentConfig.applyOverrides({name: '0'});
+      expect(EnvironmentConfig.CDRS_REPOSITORY_POLLING_INTERVAL_SECONDS, 10);
+    });
+
     test('APP_LINK_DOMAIN is trimmed, so it matches the host the build put in the manifest', () {
       const name = EnvironmentConfig.APP_LINK_DOMAIN__NAME;
 

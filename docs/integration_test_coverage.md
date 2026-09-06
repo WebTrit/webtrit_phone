@@ -292,6 +292,24 @@ and excludes the signed-in number.
 
 ---
 
+## Background Polling - CDR Pagination
+
+**File:** `patrol_test/cdr_sync_pagination_e2e_test.dart`
+
+**Verifies:** CDR sync is started by its app-owned polling registration and one
+finite incremental cycle drains all backend pages before updating local state.
+
+**Steps:**
+1. Seed one CDR in the local SIP adapter and log in through the local Core.
+2. Wait for the app-owned polling registration to fetch and persist it.
+3. Unregister that scheduled task to isolate the request-count oracle.
+4. Seed 120 incremental CDRs and run one worker cycle with a page size of 50.
+5. Assert exactly three requests for pages 1, 2, and 3 with one stable anchor.
+6. Verify all records from every page are stored in newest-first order and
+   rendered by the Recent Calls screen.
+
+---
+
 ## Call Transfers
 
 **File:** `patrol_test/call_transfers_test.dart`

@@ -65,6 +65,25 @@ disconnects a wireless ADB session before Patrol can restore the network. The
 connectivity-ordering guard needs no account credentials; it constructs the
 connectivity and polling services directly and uses the real platform stream.
 
+The CDR pagination guard additionally requires a local Core on port 4000 and a
+SIP adapter on port 3000 that exposes the `/debug/history` seed endpoint. The
+example local-stack account is `555001` / `test123`. Set
+`WEBTRIT_CDR_TEST_HOST` to the development machine's LAN address reachable from
+the device, then run:
+
+```bash
+WEBTRIT_CDR_TEST_HOST=192.168.0.3
+
+patrol test -t patrol_test/cdr_sync_pagination_e2e_test.dart \
+  --no-tree-shake-icons \
+  --dart-define-from-file=dart_define.json \
+  --dart-define-from-file=dart_define.integration_test.json \
+  --dart-define=WEBTRIT_APP_TEST_CUSTOM_CORE_URL=http://$WEBTRIT_CDR_TEST_HOST:4000 \
+  --dart-define=WEBTRIT_APP_DEMO_CORE_URL=http://$WEBTRIT_CDR_TEST_HOST:4000 \
+  --dart-define=WEBTRIT_APP_TEST_PASSWORD_USER_CREDENTIAL=555001 \
+  --dart-define=WEBTRIT_APP_TEST_PASSWORD_PASSWORD_CREDENTIAL=test123
+```
+
 ## Deploy to Firebase Test Lab
 
 Run from the `tool/scripts` directory:

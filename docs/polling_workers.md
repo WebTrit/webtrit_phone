@@ -314,13 +314,12 @@ worker directly.
 `PollingTaskStateSource` and `PollingTaskRunner`; the external Contacts tab
 calls `ContactsExternalTabBloc.refresh()` and has no polling dependency.
 
-### CDR migration in progress
+### CDR
 
-On `develop`, `CdrsSyncWorker` still owns its legacy loop. Its migration must
-use this same structure: `CdrsSyncWorker implements PollingWorker`, with
-`CdrsSync extends PollingWorkerOwner<CdrsSyncWorker>` as the lifecycle owner.
-CDR-specific post-call invalidation belongs on `CdrsSync`; task state and manual
-refresh reach consumers only through the narrow capabilities above.
+`CdrsSyncWorker` implements the finite paginated sync cycle and `CdrsSync`
+uses the standard owner. CDR-specific post-call invalidation belongs on
+`CdrsSync`; task state and manual refresh reach consumers only through the
+narrow capabilities above.
 
 ## Non-goals
 

@@ -2,7 +2,7 @@
 
 Which objects the startup path creates, which the widget tree creates, and who is
 allowed to shut each of them down.
-Last reviewed: 2026-08-20.
+Last reviewed: 2026-09-06.
 
 ## The rule
 
@@ -45,8 +45,10 @@ application, or it would be closed twice.
 
 **Subtree-long.** Created by a provider (`create:`) and released by the same
 provider (`dispose:`). `lib/app/router/main_shell_services.dart` is the
-reference shape: `PollingService` and `CdrsSyncWorker` are built and torn down
-in one place.
+reference shape: `PollingService` and feature polling owners are built and torn
+down in one place. `CdrsSync` and `ExternalContactsSync` own both their worker
+and the registration handle; disposing the owner unregisters the task before
+disposing the worker.
 
 Two consequences worth spelling out:
 
@@ -87,7 +89,7 @@ Two consequences worth spelling out:
 | `AppCompatibilityResolver`, `SignalingServiceFactory` | `RootApp.build`, both const | nothing to release |
 | `FirebaseMessaging` | `RootApp.build`, plugin singleton | nothing to release |
 | `AppDatabaseLifecycleHolder` and `AppDatabase` | `RootApp.build` | itself - it owns the client connection and its lifecycle observer |
-| `PollingService`, `CdrsSyncWorker`, `ExternalContactsSync`, session services | `main_shell_services.dart` | the same provider |
+| `PollingService`, `CdrsSync`, `ExternalContactsSync`, session services | `main_shell_services.dart` | the same provider; each sync owner releases its worker and task |
 | `PrivateGatewayRepository` | `main_shell_repositories.dart` | the same provider |
 | `SessionGuard` | `main_shell.dart` | the shell |
 
