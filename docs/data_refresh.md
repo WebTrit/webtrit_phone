@@ -88,6 +88,11 @@ Ending a call invalidates the same polling task with a one-second delay so the
 backend can publish the CDR. Repeated call-ended events use trailing-edge
 debounce, and the refresh cannot overlap the periodic cycle.
 
+An empty cache keeps its initial loader while the first remote cycle is
+pending. Because automatic polling deliberately does not invoke a worker while
+offline, the screen releases that loader after ten seconds even when no failed
+cycle event exists. A later successful sync still populates the list normally.
+
 ## Voicemail
 
 `lib/features/settings/features/voicemail/view/voicemail_screen.dart`

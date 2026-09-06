@@ -503,6 +503,12 @@ with a one-second publication delay. Repeated call-ended events therefore
 debounce, an active scheduled cycle cannot overlap them, and the normal
 periodic cadence is re-armed after the trailing refresh.
 
+When the app is already offline, `PollingService` correctly skips the worker,
+so there is no failed refresh event to release an empty Recent Calls screen.
+The CDR list presentation owns a ten-second initial-loading timeout for that
+case. This remains outside the worker and scheduler; later repository events
+still populate the list after reconnect.
+
 ## Non-goals
 
 `PollingService` does not:

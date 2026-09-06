@@ -10,12 +10,14 @@ import 'package:webtrit_phone/utils/utils.dart';
 
 part 'cdrs_list_state.dart';
 
+const _initialSyncWaitTimeout = Duration(seconds: 10);
+
 /// Base for the CDR list cubits (full, missed, per-number). Owns the shared
 /// lifecycle: the initial load with its loading gate (an empty cache only
-/// means "loading" until the first remote sync completes), the repository
-/// event handling, and the remote scan used by the filtered lists. Subclasses
-/// provide the local query and the event predicate, and may override the
-/// history fetching strategy.
+/// means "loading" while the first remote sync is pending, with a bounded
+/// offline fallback), the repository event handling, and the remote scan used
+/// by the filtered lists. Subclasses provide the local query and the event
+/// predicate, and may override the history fetching strategy.
 abstract class CdrsListCubit extends Cubit<CdrsListState> {
   CdrsListCubit(this.localRepository, this.remoteRepository, {this.pageSize = 50}) : super(const CdrsListState());
 
@@ -26,6 +28,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
   late final Logger logger = Logger(runtimeType.toString());
 
   StreamSubscription<CdrRecordsEvent>? _eventsSub;
+  Timer? _initialSyncTimer;
   bool _initialSyncHandled = false;
 
   /// Local query backing this list; [from] is the pagination watermark.
@@ -56,7 +59,11 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
         // if the initial sync completed in that window, resolve now.
         final syncedNow = await localRepository.getLastSyncTime() != null;
         if (isClosed) return;
-        if (syncedNow) await _onInitialSyncCompleted();
+        if (syncedNow) {
+          await _onInitialSyncCompleted();
+        } else if (!_initialSyncHandled && state.isLoading) {
+          _armInitialSyncTimeout();
+        }
       } else {
         _initialSyncHandled = true;
         if (fetchesOnShortInit && cached.length < pageSize) fetchHistory();
@@ -64,8 +71,18 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
     } catch (e, s) {
       logger.severe('Failed to initialize', e, s);
       // Resolve rather than spin forever on an unexpected local failure.
-      if (!isClosed) emit(state.copyWith(isLoading: false));
+      if (!isClosed) {
+        _initialSyncTimer?.cancel();
+        emit(state.copyWith(isLoading: false));
+      }
     }
+  }
+
+  void _armInitialSyncTimeout() {
+    _initialSyncTimer?.cancel();
+    // Polling deliberately skips the worker while offline, so there may be no
+    // failed cycle event to release an empty list's initial loading gate.
+    _initialSyncTimer = Timer(_initialSyncWaitTimeout, _releaseInitialLoading);
   }
 
   /// Runs once the initial remote sync has completed: brings the list up to
@@ -74,6 +91,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
   Future<void> _onInitialSyncCompleted() async {
     if (_initialSyncHandled) return;
     _initialSyncHandled = true;
+    _initialSyncTimer?.cancel();
     try {
       await resolveInitialLoad();
     } catch (e, s) {
@@ -83,11 +101,12 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
     emit(state.copyWith(isLoading: false));
   }
 
-  /// Resolves the loading state when a sync cycle fails before the initial
-  /// sync ever completed, so a permanently failing or offline backend shows
-  /// the empty state instead of an endless spinner. Nothing is latched: the
-  /// eventual successful cycle still triggers [resolveInitialLoad] once.
-  void _onInitialSyncFailed() {
+  /// Resolves the loading state after an initial failure or offline timeout,
+  /// so an unavailable backend shows the empty state instead of an endless
+  /// spinner. Nothing is latched: the eventual successful cycle still triggers
+  /// [resolveInitialLoad] once.
+  void _releaseInitialLoading() {
+    _initialSyncTimer?.cancel();
     if (state.isLoading) emit(state.copyWith(isLoading: false));
   }
 
@@ -164,6 +183,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
 
   void _handleEvent(CdrRecordsEvent event) {
     if (event is CdrRecordUpserted && matches(event.cdr)) {
+      _initialSyncTimer?.cancel();
       final records = state.records.mergeWithUpdate(event.cdr).toList();
       emit(state.copyWith(records: records, isLoading: false));
     }
@@ -171,7 +191,7 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
       _onInitialSyncCompleted();
     }
     if (event is CdrsInitialSyncFailed) {
-      _onInitialSyncFailed();
+      _releaseInitialLoading();
     }
     if (event is CdrRecordsWiped) {
       // A wipe clears the sync cursor as well, returning the store to its
@@ -179,11 +199,13 @@ abstract class CdrsListCubit extends Cubit<CdrsListState> {
       // loading gate until the next sync cycle reports the fresh state.
       _initialSyncHandled = false;
       emit(state.copyWith(records: const [], isLoading: true, historyEndReached: false));
+      _armInitialSyncTimeout();
     }
   }
 
   @override
   Future<void> close() async {
+    _initialSyncTimer?.cancel();
     await _eventsSub?.cancel();
     return super.close();
   }

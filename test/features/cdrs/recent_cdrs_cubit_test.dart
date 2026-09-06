@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mocktail/mocktail.dart';
@@ -130,6 +131,30 @@ void main() {
       expect(cubit.state.isLoading, isFalse);
       expect(cubit.state.records, isEmpty);
       await cubit.close();
+    });
+
+    test('an offline skipped cycle cannot leave the initial loader running forever', () {
+      fakeAsync((async) {
+        when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
+
+        final cubit = FullRecentCdrsCubit(local, remote);
+        var initialized = false;
+        cubit.init().then((_) => initialized = true);
+        async.flushMicrotasks();
+
+        expect(initialized, isTrue);
+        expect(cubit.state.isLoading, isTrue);
+
+        async.elapse(const Duration(seconds: 9, milliseconds: 999));
+        expect(cubit.state.isLoading, isTrue);
+
+        async.elapse(const Duration(milliseconds: 1));
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.records, isEmpty);
+
+        unawaited(cubit.close());
+        async.flushMicrotasks();
+      });
     });
 
     test('a sync success after an earlier failure still populates the list', () async {
