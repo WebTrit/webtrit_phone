@@ -159,7 +159,10 @@ class PollingService with WidgetsBindingObserver implements Disposable {
       config.scheduler.cancel();
     }
 
-    if (!_shouldRunTimers) return config.handle;
+    if (!_shouldRunTimers) {
+      if (_lastAppliedConnected == false) _markWaitingForConnectivity(config);
+      return config.handle;
+    }
 
     if (!existed) {
       // New listener: run group-leading once for all listeners (single reachability check).
@@ -251,6 +254,11 @@ class PollingService with WidgetsBindingObserver implements Disposable {
       unawaited(_runLeadingForAll(forceCheck: false));
     } else {
       _stopAllTimers();
+      if (!connected) {
+        for (final config in _pollingConfigs.values) {
+          _markWaitingForConnectivity(config);
+        }
+      }
     }
   }
 
@@ -300,7 +308,9 @@ class PollingService with WidgetsBindingObserver implements Disposable {
         return _nextDelay(config);
       }
 
-      if (reachable && config.inFlight == null) {
+      if (!reachable) {
+        _markWaitingForConnectivity(config);
+      } else if (config.inFlight == null) {
         try {
           await _runRefreshCycle(listener, config, trigger: _PollingTrigger.scheduled);
         } catch (_) {
@@ -319,6 +329,8 @@ class PollingService with WidgetsBindingObserver implements Disposable {
   /// It uses a known result [reachable] that was computed once for the entire leading cycle.
   void _triggerOnceWithKnownReachability(Refreshable listener, _PollingConfig config, bool reachable) {
     if (_disposed || _pollingConfigs[listener] != config) return;
+
+    if (!reachable) _markWaitingForConnectivity(config);
 
     // Cancel any pending schedule to avoid firing with an outdated cadence.
     config.scheduleEpoch++;
@@ -436,7 +448,11 @@ class PollingService with WidgetsBindingObserver implements Disposable {
       final invalidationEpoch = config.invalidationEpoch;
       final reachable = await _isReachable();
       if (!_isDueInvalidation(listener, config) || config.invalidationEpoch != invalidationEpoch) continue;
-      if (!_shouldRunTimers || !reachable) return;
+      if (!_shouldRunTimers) return;
+      if (!reachable) {
+        _markWaitingForConnectivity(config);
+        return;
+      }
       if (config.inFlight != null) continue;
 
       config.scheduleEpoch++;
@@ -550,6 +566,24 @@ class PollingService with WidgetsBindingObserver implements Disposable {
     config.invalidationDue = false;
     config.invalidationTimer?.cancel();
     config.invalidationTimer = null;
+  }
+
+  void _markWaitingForConnectivity(_PollingConfig config) {
+    final previous = config.handle.state;
+    if (!config.handle.isRegistered ||
+        previous.phase == PollingTaskPhase.running ||
+        previous.phase == PollingTaskPhase.waitingForConnectivity) {
+      return;
+    }
+
+    config.handle.emit(
+      PollingTaskState(
+        phase: PollingTaskPhase.waitingForConnectivity,
+        lastStartedAt: previous.lastStartedAt,
+        lastSuccessAt: previous.lastSuccessAt,
+        lastFailureAt: previous.lastFailureAt,
+      ),
+    );
   }
 
   /// Reachability check with TTL cache. When [force] is true, the cache is ignored.

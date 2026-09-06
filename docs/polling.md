@@ -16,8 +16,8 @@ This document describes the background polling contract implemented by:
 
 The service owns scheduling, connectivity checks, backoff, and task state. A
 repository owns the actual fetch and decides whether it is still active. A
-consumer that needs an on-demand refresh uses the task's `PollingTaskHandle`
-instead of starting another timer or calling the same `Refreshable.refresh()`
+consumer receives only the task capability it needs instead of the ownership
+handle, starting another timer, or calling the same `Refreshable.refresh()`
 through a parallel path.
 
 Most app registrations are still supplied through the `PollingService`
@@ -36,13 +36,16 @@ UI pull-to-refresh behavior is a separate concern. See
 | `Refreshable` | Provides `refresh()` and the permanent `isActive` opt-out | Repository-defined |
 | `PollingRegistration` | Binds one `Refreshable` instance to a base interval | Stored by `PollingService` |
 | `PollingService` | Owns connectivity, lifecycle, scheduling, single-flight, and backoff | Main shell subtree |
-| `PollingTaskHandle` | Exposes manual execution and observable state for one registration | Valid until unregister or service disposal |
+| `PollingTaskStateSource` | Exposes read-only, replaying state for one registration | Valid until unregister or service disposal |
+| `PollingTaskRunner` | Exposes manual execution without lifecycle control | Valid until unregister or service disposal |
+| `PollingTaskHandle` | Combines consumer capabilities with owner-only invalidation and teardown | Valid until unregister or service disposal |
 | `FixedDelayScheduler` | Arms the next tick after the current tick completes | One per registration |
 
 `MainShellServices` creates and disposes `PollingService` through the same
 provider. Individual handles do not dispose the service. A component may call
-`handle.unregister()` only when it owns that registration; an observer must not
-remove a task owned by the composition root. See
+`handle.unregister()` only when it owns that registration. Other components
+should receive `PollingTaskStateSource` or `PollingTaskRunner`, so they cannot
+remove or invalidate a task owned by the composition root. See
 [`dependency_ownership.md`](dependency_ownership.md) for the wider application
 lifetime rules.
 
@@ -129,9 +132,9 @@ Registering the same listener instance again returns the same handle.
 - Registration after `PollingService.dispose()`: throws `StateError`.
 
 Prefer retaining the handle when the registration is created. Do not make an
-unrelated screen re-register a repository only to discover its handle. Pass the
-handle, or a narrower application-specific refresh capability backed by it, to
-the BLoC or service that owns the manual action.
+unrelated screen re-register a repository only to discover its handle. Keep
+the full handle with the registration owner and pass `PollingTaskStateSource`,
+`PollingTaskRunner`, or a narrower application-specific capability to consumers.
 
 Constructor registrations are convenient when no consumer needs a handle:
 
@@ -181,12 +184,14 @@ cached connectivity state is wrong.
 
 ## Observable state
 
-`PollingTaskHandle.state` is available synchronously. `states` is replaying, so
-a new subscriber immediately receives the current value.
+`PollingTaskStateSource.state` is available synchronously. `states` is
+replaying, so a new subscriber immediately receives the current value,
+including a connectivity wait that began before that subscriber existed.
 
 | Phase | Meaning |
 |---|---|
 | `idle` | Registered but no refresh cycle has started |
+| `waitingForConnectivity` | Automatic work is paused because the latest connectivity or reachability evidence is offline |
 | `running` | One refresh cycle is in flight |
 | `succeeded` | The latest cycle completed successfully |
 | `failed` | The latest cycle failed; `error` and `stackTrace` describe it |
@@ -201,15 +206,23 @@ The state also retains:
 A typical sequence is:
 
 ```text
-idle -> running -> succeeded -> running -> failed -> running -> succeeded
-                                                        |
-                                                        +--> stopped
+idle -> waitingForConnectivity -> running -> succeeded -> running -> failed
+                 ^                                             |
+                 +---------------------------------------------+
+                                                               |
+                                                               +--> stopped
 ```
 
 `stopped` is terminal. It is emitted once and then the state stream closes.
 `isRegistered` becomes `false` immediately. If a repository request was already
 running, its future still completes for existing callers, but its late result is
 not published to the stopped handle.
+
+`waitingForConnectivity` is not a failed refresh and does not increment
+backoff. The phase is published when the service receives an offline transition
+or an automatic reachability check says that work cannot run. An active cycle
+stays `running` and publishes its own eventual result. A later reachable cycle
+moves a waiting task through `running` as usual.
 
 Do not infer data freshness from the phase alone. The repository remains the
 owner of cached data; the timestamps describe polling attempts, not the age of
@@ -349,8 +362,8 @@ Use this checklist:
 3. Override `isActive` only for a permanent end of useful polling.
 4. Add a positive environment interval when deployments need configuration.
 5. Register the same repository instance at the composition boundary.
-6. Retain and pass its handle if another component needs manual execution or
-   state.
+6. Retain its full handle with the owner and pass only `PollingTaskStateSource`
+   or `PollingTaskRunner` when another component needs state or manual execution.
 7. Remove parallel timers and direct refresh paths for the same action.
 8. Keep feature-specific loading and error presentation outside
    `PollingService`.
@@ -369,7 +382,7 @@ The deterministic unit contract lives in
 
 - boot, reconnect, resume, background pause, and offline recovery;
 - fixed delay, jitter, backoff, and stale timer invalidation;
-- stable handle identity and replaying state;
+- stable handle identity, replaying state, and offline availability;
 - manual single-flight success and failure;
 - manual versus automatic backoff ownership;
 - interval changes, inactive listeners, unregister, and disposal;
