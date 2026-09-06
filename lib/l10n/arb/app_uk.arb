@@ -387,6 +387,8 @@
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "Немає останніх дзвінків",
   "@cdrs_noRecentCalls_message": {},
+  "cdrs_refreshFailed_message": "Не вдалося оновити історію дзвінків - спробуйте ще раз",
+  "@cdrs_refreshFailed_message": {},
   "common_SemanticsLabel_loading": "Завантаження",
   "@common_SemanticsLabel_loading": {
     "description": "Accessibility name announced while a screen waits for a request to finish."

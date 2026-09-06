@@ -16,6 +16,7 @@ class RecentCdrsScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final featureAccess = context.read<FeatureAccess>();
+    final cdrsSync = context.read<CdrsSync>();
 
     return MultiBlocProvider(
       providers: [
@@ -23,14 +24,16 @@ class RecentCdrsScreenPage extends StatelessWidget {
           create: (context) => FullRecentCdrsCubit(
             context.read<CdrsLocalRepository>(),
             context.read<CdrsRemoteRepository>(),
-            context.read<CdrsSync>(),
+            cdrsSync,
+            cdrsSync,
           )..init(),
         ),
         BlocProvider(
           create: (context) => MissedRecentCdrsCubit(
             context.read<CdrsLocalRepository>(),
             context.read<CdrsRemoteRepository>(),
-            context.read<CdrsSync>(),
+            cdrsSync,
+            cdrsSync,
           )..init(),
         ),
       ],

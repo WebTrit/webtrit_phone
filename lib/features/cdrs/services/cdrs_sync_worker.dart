@@ -47,8 +47,9 @@ class CdrsSyncWorker implements PollingWorker {
   ///
   /// Initial sync stores the newest page. Incremental sync drains every page
   /// from the last locally known update, advancing the page number after each
-  /// full page. Failures are reported to initial-sync observers and rethrown so
-  /// the caller can apply retry or backoff policy.
+  /// full page. Failures are offered to the local repository, which notifies
+  /// initial-sync observers only while its durable sync cursor is absent, and
+  /// are rethrown so the caller can apply retry or backoff policy.
   @override
   Future<void> refresh() async {
     if (_disposed) {

@@ -387,6 +387,8 @@
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "ไม่มีการโทรล่าสุด",
   "@cdrs_noRecentCalls_message": {},
+  "cdrs_refreshFailed_message": "ไม่สามารถรีเฟรชประวัติการโทรได้ - โปรดลองอีกครั้ง",
+  "@cdrs_refreshFailed_message": {},
   "common_SemanticsLabel_loading": "กำลังโหลด",
   "@common_SemanticsLabel_loading": {
     "description": "Accessibility name announced while a screen waits for a request to finish."

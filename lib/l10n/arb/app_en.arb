@@ -411,6 +411,8 @@
   "@cdrs_noMissedCalls_message": {},
   "cdrs_noRecentCalls_message": "No recent calls",
   "@cdrs_noRecentCalls_message": {},
+  "cdrs_refreshFailed_message": "Could not refresh call history - please try again",
+  "@cdrs_refreshFailed_message": {},
   "common_SemanticsLabel_loading": "Loading",
   "@common_SemanticsLabel_loading": {
     "description": "Accessibility name announced while a screen waits for a request to finish."

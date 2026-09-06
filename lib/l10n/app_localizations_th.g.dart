@@ -443,6 +443,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'ไม่มีการโทรล่าสุด';
 
   @override
+  String get cdrs_refreshFailed_message => 'ไม่สามารถรีเฟรชประวัติการโทรได้ - โปรดลองอีกครั้ง';
+
+  @override
   String get common_SemanticsLabel_loading => 'กำลังโหลด';
 
   @override

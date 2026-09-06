@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:webtrit_phone/app/constants.dart';
 
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/recents/view/recents_screen_styles.dart';
+import 'package:webtrit_phone/l10n/l10n.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
-import '../widgets/missed_recent_cdrs_list.dart';
+import '../cubit/full_recent_cdrs_cubit.dart';
+import '../cubit/missed_recent_cdrs_cubit.dart';
 import '../widgets/full_recent_cdrs_list.dart';
+import '../widgets/missed_recent_cdrs_list.dart';
 
 class RecentCdrsScreen extends StatefulWidget {
   const RecentCdrsScreen({
@@ -24,7 +29,6 @@ class RecentCdrsScreen extends StatefulWidget {
   final bool videoEnabled;
   final bool chatsEnabled;
   final bool smssEnabled;
-
   final Widget? title;
 
   @override
@@ -98,7 +102,7 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
   /// The list a filter's tab opens. Built from the same [_filters] the tabs
   /// are, so the pairing is by value rather than by position.
   Widget _listOf(RecentsVisibilityFilter filter) {
-    return switch (filter) {
+    final list = switch (filter) {
       RecentsVisibilityFilter.missed => MissedRecentCdrsList(
         transferEnabled: widget.transferEnabled,
         videoEnabled: widget.videoEnabled,
@@ -114,5 +118,40 @@ class _RecentCdrsScreenState extends State<RecentCdrsScreen> with TickerProvider
         smssEnabled: widget.smssEnabled,
       ),
     };
+
+    final refresh = switch (filter) {
+      RecentsVisibilityFilter.missed => context.read<MissedRecentCdrsCubit>().refresh,
+      _ => context.read<FullRecentCdrsCubit>().refresh,
+    };
+
+    return _CdrsRefreshIndicator(onRefresh: refresh, child: list);
+  }
+}
+
+class _CdrsRefreshIndicator extends StatelessWidget {
+  const _CdrsRefreshIndicator({required this.onRefresh, required this.child});
+
+  final Future<void> Function() onRefresh;
+  final Widget child;
+
+  Future<void> _refresh(BuildContext context) async {
+    try {
+      await onRefresh();
+    } catch (_) {
+      // Cached records keep the list visible after a failed cycle, so the
+      // task-state failure does not replace the content with an error view.
+      if (context.mounted) {
+        context.showErrorSnackBar(context.l10n.cdrs_refreshFailed_message);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      edgeOffset: MediaQuery.of(context).padding.top,
+      onRefresh: () => _refresh(context),
+      child: child,
+    );
   }
 }

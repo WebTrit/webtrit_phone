@@ -448,6 +448,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'Nessuna chiamata recente';
 
   @override
+  String get cdrs_refreshFailed_message => 'Impossibile aggiornare la cronologia chiamate - riprova';
+
+  @override
   String get common_SemanticsLabel_loading => 'Caricamento';
 
   @override

@@ -444,6 +444,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cdrs_noRecentCalls_message => 'No recent calls';
 
   @override
+  String get cdrs_refreshFailed_message => 'Could not refresh call history - please try again';
+
+  @override
   String get common_SemanticsLabel_loading => 'Loading';
 
   @override
