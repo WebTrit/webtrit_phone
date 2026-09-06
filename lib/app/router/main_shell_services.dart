@@ -69,8 +69,8 @@ class MainShellServices extends StatelessWidget {
   /// Current registrations:
   /// - [UserRepository]: polled every 10 seconds to keep user data up to date.
   /// - [SystemInfoRepository]: polled every 5 minutes to refresh system information.
-  /// - [ExternalContactsSyncWorker]: registered separately so its stable task
-  ///   handle can be retained for manual refresh.
+  /// - [ExternalContactsSyncWorker]: registered through its standard owner so
+  ///   state and manual refresh share one task without exposing lifecycle control.
   /// - [VoicemailRepository]: polled every 5 minutes, but only if voicemail runs for this session
   ///   ([FeatureAccess.voicemailAvailable]) - whichever placement offers it.
   /// - [IceServersRepository]: polled every 5 minutes when the core bundles STUN/TURN servers.

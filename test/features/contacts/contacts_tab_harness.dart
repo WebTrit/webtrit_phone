@@ -12,7 +12,6 @@ import 'package:webtrit_phone/features/call_routing/call_routing.dart';
 import 'package:webtrit_phone/features/contacts/contacts.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
-import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../../helpers/feature_access_factories.dart';
@@ -26,8 +25,6 @@ class MockContactsLocalTabBloc extends MockBloc<ContactsLocalTabEvent, ContactsL
 class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
 
 class MockCallRoutingCubit extends MockCubit<CallRoutingState?> implements CallRoutingCubit {}
-
-class MockPollingTaskHandle extends Mock implements PollingTaskHandle {}
 
 /// A person in the list, favourite or not.
 ///
@@ -53,14 +50,13 @@ class ContactsTabHarness {
   ContactsTabHarness() {
     when(() => callBloc.state).thenReturn(const CallState());
     when(() => callRoutingCubit.state).thenReturn(null);
-    when(() => externalSyncTask.runNow()).thenAnswer((_) async {});
+    when(() => externalBloc.refresh()).thenAnswer((_) async => true);
   }
 
   final externalBloc = MockContactsExternalTabBloc();
   final localBloc = MockContactsLocalTabBloc();
   final callBloc = MockCallBloc();
   final callRoutingCubit = MockCallRoutingCubit();
-  final externalSyncTask = MockPollingTaskHandle();
 
   /// The status bar the hosted variant pretends to have. Any non-zero figure
   /// does; a spinner placed by the screen edge fails the same way at 20 as at
@@ -143,7 +139,7 @@ class ContactsTabHarness {
       _around(
         BlocProvider<ContactsExternalTabBloc>.value(
           value: externalBloc,
-          child: ContactsExternalTab(syncTask: externalSyncTask, markFavorites: markFavorites),
+          child: ContactsExternalTab(markFavorites: markFavorites),
         ),
         behindAppBarOfHeight: behindAppBarOfHeight,
       ),

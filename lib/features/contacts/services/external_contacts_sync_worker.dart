@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 
 import 'package:logging/logging.dart';
 
-import 'package:webtrit_phone/common/common.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
 import 'package:webtrit_phone/services/services.dart';
@@ -17,42 +16,20 @@ const _userInfoTimeout = Duration(seconds: 10);
 
 /// Owns the external-contacts worker and its polling registration.
 ///
-/// Feature consumers receive [task], so scheduled and manual refreshes share
-/// the same single-flight boundary and observable state.
-class ExternalContactsSync implements Disposable {
-  ExternalContactsSync({
-    required ExternalContactsSyncWorker worker,
-    required PollingService pollingService,
-    required Duration interval,
-  }) : _worker = worker,
-       task = pollingService.register(PollingRegistration(listener: worker, interval: interval));
-
-  final ExternalContactsSyncWorker _worker;
-
-  /// The task shared by automatic polling and feature-owned manual refreshes.
-  final PollingTaskHandle task;
-
-  bool _disposed = false;
-
-  @override
-  Future<void> dispose() async {
-    if (_disposed) {
-      return;
-    }
-
-    _disposed = true;
-    task.unregister();
-    await _worker.dispose();
-  }
+/// Feature consumers receive this owner through the narrow polling capability
+/// they need, so scheduled and manual refreshes share one registration without
+/// exposing its lifecycle handle.
+final class ExternalContactsSync extends PollingWorkerOwner<ExternalContactsSyncWorker> {
+  ExternalContactsSync({required super.worker, required super.pollingService, required super.interval});
 }
 
 /// Synchronizes the external contact list into the local contacts store.
 ///
 /// One [refresh] is the complete pipeline: fetch, filter out the current user,
 /// and merge into the local store. [PollingService] owns single-flight,
-/// scheduling, and observable state; feature consumers use the handle retained
-/// by [ExternalContactsSync].
-class ExternalContactsSyncWorker implements Refreshable, Disposable {
+/// scheduling, and observable state; feature consumers use the narrow
+/// capabilities exposed by [ExternalContactsSync].
+class ExternalContactsSyncWorker implements PollingWorker {
   ExternalContactsSyncWorker({
     required UserRepository userRepository,
     required ExternalContactsRepository externalContactsRepository,

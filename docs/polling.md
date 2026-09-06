@@ -9,21 +9,25 @@ This document describes the background polling contract implemented by:
 
 - `lib/services/polling_service.dart`;
 - `lib/services/polling_task_handle.dart`;
+- `lib/services/polling_worker.dart`;
 - `lib/services/connectivity_service.dart`;
 - `lib/common/refreshable.dart`;
 - `lib/utils/fixed_delay_scheduler.dart`;
 - `lib/app/router/main_shell_services.dart`.
 
 The service owns scheduling, connectivity checks, backoff, and task state. A
-repository owns the actual fetch and decides whether it is still active. A
-consumer receives only the task capability it needs instead of the ownership
-handle, starting another timer, or calling the same `Refreshable.refresh()`
-through a parallel path.
+registered `Refreshable` owns one complete attempt and decides whether it is
+still active. Feature orchestration that does not belong to one repository uses
+the standard worker and owner structure in
+[`polling_workers.md`](polling_workers.md). A consumer receives only the task
+capability it needs instead of the ownership handle, another timer, or a
+parallel call to the same work.
 
 Most app registrations are still supplied through the `PollingService`
-constructor because no consumer needs their handles. External Contacts is
-registered explicitly: `ExternalContactsSync` owns its worker and retains the
-handle used by the screen. The CDR migration is called out under
+constructor because no consumer needs their handles. External Contacts uses
+the worker pattern: `ExternalContactsSync` owns its worker and private handle,
+then exposes state and manual execution through narrow interfaces. The CDR
+migration is called out under
 [Migration in progress](#migration-in-progress); it is not current behavior.
 
 UI pull-to-refresh behavior is a separate concern. See
@@ -34,6 +38,8 @@ UI pull-to-refresh behavior is a separate concern. See
 | Component | Responsibility | Lifetime |
 |---|---|---|
 | `Refreshable` | Provides `refresh()` and the permanent `isActive` opt-out | Repository-defined |
+| `PollingWorker` | Defines one finite, disposable feature sync cycle | Owned by its feature owner |
+| `PollingWorkerOwner<W>` | Owns a worker registration and exposes narrow task capabilities | Feature subtree |
 | `PollingRegistration` | Binds one `Refreshable` instance to a base interval | Stored by `PollingService` |
 | `PollingService` | Owns connectivity, lifecycle, scheduling, single-flight, and backoff | Main shell subtree |
 | `PollingTaskStateSource` | Exposes read-only, replaying state for one registration | Valid until unregister or service disposal |
@@ -47,7 +53,8 @@ provider. Individual handles do not dispose the service. A component may call
 should receive `PollingTaskStateSource` or `PollingTaskRunner`, so they cannot
 remove or invalidate a task owned by the composition root. See
 [`dependency_ownership.md`](dependency_ownership.md) for the wider application
-lifetime rules.
+lifetime rules and [`polling_workers.md`](polling_workers.md) for the standard
+feature ownership boundary.
 
 ## Core invariants
 
@@ -76,7 +83,7 @@ All supported triggers converge on one refresh-cycle runner:
 ```text
 boot / reconnect / resume ----+
 periodic timer ---------------+--> one in-flight refresh --> state --> next schedule
-PollingTaskHandle.runNow() ----+
+PollingTaskRunner.runNow() ----+
 ```
 
 Only the cycle runner invokes `Refreshable.refresh()`. It publishes state,
@@ -105,19 +112,13 @@ error, and that scheduled failure still increments backoff.
 
 ## Registration and stable handles
 
-Register a repository with its base interval and retain the returned handle at
-the composition boundary:
+Low-level infrastructure can register a `Refreshable` with its base interval:
 
 ```dart
-final contactsWorker = ExternalContactsSyncWorker(
-  userRepository: userRepository,
-  externalContactsRepository: externalContactsRepository,
-  contactsRepository: contactsRepository,
-);
-final contactsPolling = pollingService.register(
+final task = pollingService.register(
   PollingRegistration(
-    listener: contactsWorker,
-    interval: const Duration(minutes: 1),
+    listener: repository,
+    interval: const Duration(minutes: 5),
   ),
 );
 ```
@@ -131,10 +132,33 @@ Registering the same listener instance again returns the same handle.
   endpoint.
 - Registration after `PollingService.dispose()`: throws `StateError`.
 
-Prefer retaining the handle when the registration is created. Do not make an
-unrelated screen re-register a repository only to discover its handle. Keep
-the full handle with the registration owner and pass `PollingTaskStateSource`,
-`PollingTaskRunner`, or a narrower application-specific capability to consumers.
+Do not make an unrelated screen re-register a listener only to discover its
+handle. Low-level code that creates a registration must keep the full handle at
+that ownership boundary and pass only `PollingTaskStateSource`,
+`PollingTaskRunner`, or a narrower application-specific capability to
+consumers.
+
+Feature workers use `PollingWorkerOwner` instead of retaining the handle by
+hand:
+
+```dart
+final contactsWorker = ExternalContactsSyncWorker(
+  userRepository: userRepository,
+  externalContactsRepository: externalContactsRepository,
+  contactsRepository: contactsRepository,
+);
+final contactsSync = ExternalContactsSync(
+  worker: contactsWorker,
+  pollingService: pollingService,
+  interval: const Duration(minutes: 1),
+);
+
+final PollingTaskStateSource stateSource = contactsSync;
+final PollingTaskRunner runner = contactsSync;
+```
+
+The owner registers the worker once, keeps the handle private, and owns both
+unregister and worker disposal.
 
 Constructor registrations are convenient when no consumer needs a handle:
 
@@ -151,16 +175,18 @@ final pollingService = PollingService(
 ```
 
 They follow the same execution rules, but their handles are not exposed by the
-constructor. Migrate a task to explicit `register()` at the
-composition boundary when another component needs on-demand control or state.
+constructor. Migrate a task to an explicit owner at the composition boundary
+when another component needs on-demand control or state.
 
 ## Manual refresh
 
 Use `runNow()` for an on-demand refresh of a registered task:
 
 ```dart
+final PollingTaskRunner contactsRunner = contactsSync;
+
 try {
-  await contactsPolling.runNow();
+  await contactsRunner.runNow();
 } catch (error, stackTrace) {
   // Map the repository error to the owning feature's UI or domain state.
 }
@@ -335,7 +361,7 @@ that behavior itself.
 polling tasks. Defaults come from `lib/environment_config.dart` and may be
 overridden by the matching dart-define.
 
-| Repository | Default interval | Condition |
+| Polling listener | Default interval | Condition |
 |---|---:|---|
 | `UserRepository` | 10 s | Always |
 | `SystemInfoRepository` | 300 s | Always |
@@ -357,18 +383,22 @@ rules, it only invokes the repository contract.
 
 Use this checklist:
 
-1. Implement `Refreshable` on the repository that owns the data fetch.
+1. Decide whether the cycle belongs naturally to one repository. If it does,
+   implement `Refreshable`; if it coordinates several dependencies, implement
+   the worker pattern from [`polling_workers.md`](polling_workers.md).
 2. Make `refresh()` return the real completion and error of one attempt.
 3. Override `isActive` only for a permanent end of useful polling.
 4. Add a positive environment interval when deployments need configuration.
-5. Register the same repository instance at the composition boundary.
-6. Retain its full handle with the owner and pass only `PollingTaskStateSource`
-   or `PollingTaskRunner` when another component needs state or manual execution.
-7. Remove parallel timers and direct refresh paths for the same action.
-8. Keep feature-specific loading and error presentation outside
+5. Register the same listener instance at the composition boundary.
+6. Keep the full handle inside low-level ownership code. A feature worker must
+   use `PollingWorkerOwner`.
+7. Pass only `PollingTaskStateSource` or `PollingTaskRunner` when another
+   component needs state or manual execution.
+8. Remove parallel timers and direct refresh paths for the same action.
+9. Keep feature-specific loading and error presentation outside
    `PollingService`.
-9. Add unit coverage for timing, failure, lifecycle, and ownership behavior.
-10. Add or update Patrol coverage when correctness depends on real app
+10. Add unit coverage for timing, failure, lifecycle, and ownership behavior.
+11. Add or update Patrol coverage when correctness depends on real app
     lifecycle, connectivity, login, or screen-mount behavior.
 
 Repository refresh should be safe to call again after completion. It may update
@@ -378,7 +408,8 @@ its own cache or stream, but it must not create an untracked periodic loop.
 
 The deterministic unit contract lives in
 `test/services/polling_service_test.dart` and
-`test/services/connectivity_service_test.dart`. It covers:
+`test/services/connectivity_service_test.dart`. Standard feature ownership is
+covered by `test/services/polling_worker_test.dart`. Together they cover:
 
 - boot, reconnect, resume, background pause, and offline recovery;
 - fixed delay, jitter, backoff, and stale timer invalidation;
@@ -386,15 +417,18 @@ The deterministic unit contract lives in
 - manual single-flight success and failure;
 - manual versus automatic backoff ownership;
 - interval changes, inactive listeners, unregister, and disposal;
-- late completion after a terminal stop.
+- late completion after a terminal stop;
 - out-of-order liveness probes across repeated transports, offline events, and
-  disposal.
+  disposal;
+- worker registration, capability delegation, safe invalidation, and ordered
+  idempotent teardown.
 
 Run them with:
 
 ```bash
 fvm flutter test --no-pub test/services/polling_service_test.dart
 fvm flutter test --no-pub test/services/connectivity_service_test.dart
+fvm flutter test --no-pub test/services/polling_worker_test.dart
 ```
 
 The on-device invariants live in:
@@ -423,9 +457,11 @@ local store. The worker is the polling listener; the remote repository is a
 fetch-only gateway and cannot start a second schedule.
 
 `ExternalContactsSync` owns the worker and its registration. The external tab
-receives the retained `PollingTaskHandle`: the BLoC maps task state to its
-loading/error state, and pull-to-refresh awaits `runNow()`. A pull during an
-automatic cycle therefore joins it instead of starting a second download.
+calls its feature BLoC refresh action. The BLoC receives
+`PollingTaskStateSource` and `PollingTaskRunner`, maps the cycle into feature
+state, and invokes `runNow()`. The full handle remains private to the standard
+owner. A pull during an automatic cycle therefore joins it instead of starting
+a second download.
 
 ## Migration in progress
 
@@ -433,8 +469,9 @@ automatic cycle therefore joins it instead of starting a second download.
 
 Recent-call synchronization is currently owned by `CdrsSyncWorker`, which has
 its own ten-second loop and is not a `PollingService` registration. A later
-migration can align it with the same execution and lifecycle contract, but this
-document does not describe that future design as current behavior.
+migration must align it with the worker and owner contract in
+[`polling_workers.md`](polling_workers.md), but this document does not describe
+that future design as current behavior.
 
 ## Non-goals
 

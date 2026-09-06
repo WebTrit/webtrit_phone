@@ -16,20 +16,36 @@ part 'contacts_external_tab_event.dart';
 part 'contacts_external_tab_state.dart';
 
 class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExternalTabState> {
-  ContactsExternalTabBloc({required this.contactsRepository, required this.contactsSearchBloc, required this.syncTask})
-    : super(const ContactsExternalTabState()) {
+  ContactsExternalTabBloc({
+    required this.contactsRepository,
+    required this.contactsSearchBloc,
+    required this.syncState,
+    required this.syncRunner,
+  }) : super(const ContactsExternalTabState()) {
     on<ContactsExternalTabStarted>(_onStarted, transformer: restartable());
+    on<_ContactsExternalTabRefreshRequested>(_onRefreshRequested);
   }
 
   final ContactsRepository contactsRepository;
   final ContactsBloc contactsSearchBloc;
-  final PollingTaskHandle syncTask;
+  final PollingTaskStateSource syncState;
+  final PollingTaskRunner syncRunner;
+
+  /// Requests a manual refresh and completes with its domain result.
+  ///
+  /// The private event routes state transitions through the BLoC, while the
+  /// returned future gives the refresh UI an exact completion boundary.
+  Future<bool> refresh() {
+    final event = _ContactsExternalTabRefreshRequested();
+    add(event);
+    return event.completed;
+  }
 
   Future<void> _onStarted(ContactsExternalTabStarted event, Emitter<ContactsExternalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.external),
       onData: (List<Contact> contacts) => state.copyWith(
-        status: _mapSyncPhase(syncTask.state.phase),
+        status: _mapSyncPhase(syncState.state.phase),
         contacts: contacts,
         searching: event.search.isNotEmpty,
       ),
@@ -41,11 +57,33 @@ class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExt
     );
 
     final syncStateForEachFuture = emit.forEach(
-      syncTask.states,
-      onData: (PollingTaskState syncState) => state.copyWith(status: _mapSyncPhase(syncState.phase)),
+      syncState.states,
+      onData: (PollingTaskState taskState) => state.copyWith(status: _mapSyncPhase(taskState.phase)),
     );
 
     await Future.wait([watchContactsForEachFuture, contactsSearchStateOnEachFuture, syncStateForEachFuture]);
+  }
+
+  Future<void> _onRefreshRequested(
+    _ContactsExternalTabRefreshRequested event,
+    Emitter<ContactsExternalTabState> emit,
+  ) async {
+    emit(state.copyWith(status: ContactsExternalTabStatus.inProgress));
+
+    var succeeded = false;
+    try {
+      await syncRunner.runNow();
+      succeeded = true;
+      if (!emit.isDone) {
+        emit(state.copyWith(status: ContactsExternalTabStatus.success));
+      }
+    } catch (_) {
+      if (!emit.isDone) {
+        emit(state.copyWith(status: ContactsExternalTabStatus.failure));
+      }
+    } finally {
+      event.complete(succeeded: succeeded);
+    }
   }
 
   ContactsExternalTabStatus _mapSyncPhase(PollingTaskPhase phase) {
