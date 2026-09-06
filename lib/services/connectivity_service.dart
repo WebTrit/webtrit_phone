@@ -102,7 +102,7 @@ class ConnectivityServiceImpl implements ConnectivityService {
       _resultController.add(next);
     }
     final connected = await _checkConnection(next);
-    if (!_disposed && probeGeneration == _probeGeneration && next == _lastResult) {
+    if (!_disposed && probeGeneration == _probeGeneration) {
       _onlineController.add(connected);
     }
   }
