@@ -1,7 +1,7 @@
 # Background polling
 
 `PollingService` coordinates periodic, lifecycle-triggered, and manual refreshes without overlapping work for the same registration.
-Last reviewed: 2026-09-06.
+Last reviewed: 2026-09-07.
 
 ## Scope and current status
 
@@ -78,13 +78,21 @@ service, or a second repository instance bypasses it.
 
 ## Execution model
 
-All supported triggers converge on one refresh-cycle runner:
+All supported triggers converge on one refresh-cycle runner. Automatic work
+passes through foreground and reachability gates; an explicit manual request
+does not:
 
 ```text
-boot / reconnect / resume ----+
-periodic timer ---------------+--> one in-flight refresh --> state --> next schedule
-PollingTaskRunner.runNow() ----+
-owner invalidation ------------+
+boot / reconnect / resume --+
+periodic timer -------------+--> automatic eligibility --+
+invalidation deadline ------+    (foreground + network)   |
+                                                           +--> one task single-flight
+manual runNow() -------------------------------------------+        |
+                                                                    v
+                                                         Refreshable.refresh()
+                                                                    |
+                                                                    v
+                                                   state result + next schedule
 ```
 
 Only the cycle runner invokes `Refreshable.refresh()`. It publishes state,
@@ -461,7 +469,8 @@ The on-device invariants live in:
 
 - `patrol_test/polling_connect_invariant_test.dart`;
 - `patrol_test/connectivity_probe_ordering_test.dart`;
-- `patrol_test/contacts_worker_sync_e2e_test.dart`.
+- `patrol_test/contacts_worker_sync_e2e_test.dart`;
+- `patrol_test/cdr_sync_pagination_e2e_test.dart`.
 
 The connectivity-ordering guard drives a real OS network flap, forces the older
 probe to finish last, and verifies that the periodic schedule survives. The
@@ -493,9 +502,9 @@ a second download.
 ### CDR
 
 `CdrsSyncWorker.refresh()` owns one finite sync cycle: it fetches the initial
-page or drains all incremental pages, then atomically updates the local call
-history and its completed-sync marker. It owns no timer or connectivity
-subscription.
+page or drains all incremental pages, persists the fetched records as one
+batch, and then writes its completed-sync marker when needed. It owns no timer
+or connectivity subscription.
 
 `CdrsSync` extends `PollingWorkerOwner<CdrsSyncWorker>` and owns the worker and
 its private polling registration. `CallBloc` receives a callback backed by
