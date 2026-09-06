@@ -65,15 +65,16 @@ Widget contactSourceTypeWidgetBuilder(
       );
       return provider;
     case ContactSourceType.external:
-      final syncTask = context.read<ExternalContactsSync>().task;
-      final widget = ContactsExternalTab(syncTask: syncTask, markFavorites: markFavorites);
+      final sync = context.read<ExternalContactsSync>();
+      final widget = ContactsExternalTab(markFavorites: markFavorites);
       final provider = BlocProvider(
         create: (context) {
           final contactsSearchBloc = context.read<ContactsBloc>();
           return ContactsExternalTabBloc(
             contactsRepository: context.read<ContactsRepository>(),
             contactsSearchBloc: contactsSearchBloc,
-            syncTask: syncTask,
+            syncState: sync,
+            syncRunner: sync,
           )..add(ContactsExternalTabStarted(search: contactsSearchBloc.state.search));
         },
         child: widget,

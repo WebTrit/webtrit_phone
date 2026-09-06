@@ -183,7 +183,9 @@ void main() {
 
     test('refresh after disposal is rejected before fetching', () async {
       await worker.dispose();
+      await worker.dispose();
 
+      expect(worker.isActive, isFalse);
       await expectLater(worker.refresh(), throwsStateError);
       verifyNever(() => externalContactsRepository.fetchContacts());
     });
@@ -202,7 +204,6 @@ void main() {
         interval: const Duration(minutes: 1),
       );
 
-      expect(sync.task, same(task));
       final registration = verify(() => pollingService.register(captureAny())).captured.single as PollingRegistration;
       expect(registration.listener, same(syncWorker));
       expect(registration.interval, const Duration(minutes: 1));

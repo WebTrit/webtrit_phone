@@ -55,9 +55,12 @@ button in its empty state instead. The local tab also has states where a fetch
 is not the answer at all (contacts permission denied, contacts agreement not
 accepted) - they lead to the settings or to the agreement.
 
-The external tab awaits its retained `PollingTaskHandle`. The pull therefore
-joins a scheduled Contacts cycle when one is already running, and a failed pull
-shows the same request-failed snack bar as the account screen.
+The external tab calls `ContactsExternalTabBloc.refresh()` and awaits its exact
+result. The BLoC receives `PollingTaskRunner` from the `ExternalContactsSync`
+owner, so the pull joins a scheduled Contacts cycle when one is already
+running. A failed pull shows the same request-failed snack bar as the account
+screen. The widget has no polling dependency, and the owner keeps invalidation
+and unregister capabilities private.
 
 Both lists sit behind a translucent app bar, so - as on the account screen -
 the indicator carries an `edgeOffset`, or the spinner is drawn behind the bar

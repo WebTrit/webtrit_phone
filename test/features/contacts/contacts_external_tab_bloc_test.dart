@@ -14,32 +14,38 @@ class MockContactsRepository extends Mock implements ContactsRepository {}
 
 class MockContactsBloc extends MockBloc<ContactsEvent, ContactsState> implements ContactsBloc {}
 
-class MockPollingTaskHandle extends Mock implements PollingTaskHandle {}
+class MockPollingTaskStateSource extends Mock implements PollingTaskStateSource {}
+
+class MockPollingTaskRunner extends Mock implements PollingTaskRunner {}
 
 void main() {
   late MockContactsRepository contactsRepository;
   late MockContactsBloc searchBloc;
-  late MockPollingTaskHandle syncTask;
+  late MockPollingTaskStateSource syncState;
+  late MockPollingTaskRunner syncRunner;
 
   setUp(() {
     contactsRepository = MockContactsRepository();
     searchBloc = MockContactsBloc();
-    syncTask = MockPollingTaskHandle();
+    syncState = MockPollingTaskStateSource();
+    syncRunner = MockPollingTaskRunner();
 
     when(() => contactsRepository.watchContacts('', ContactSourceType.external))
         .thenAnswer((_) => Stream.value(const <Contact>[]));
     when(() => searchBloc.state).thenReturn(const ContactsState(sourceType: ContactSourceType.external));
-    when(() => syncTask.states).thenAnswer((_) => const Stream.empty());
+    when(() => syncState.states).thenAnswer((_) => const Stream.empty());
+    when(() => syncRunner.runNow()).thenAnswer((_) async {});
   });
 
   ContactsExternalTabBloc build() => ContactsExternalTabBloc(
     contactsRepository: contactsRepository,
     contactsSearchBloc: searchBloc,
-    syncTask: syncTask,
+    syncState: syncState,
+    syncRunner: syncRunner,
   );
 
   void withSyncPhase(PollingTaskPhase phase) {
-    when(() => syncTask.state).thenReturn(PollingTaskState(phase: phase));
+    when(() => syncState.state).thenReturn(PollingTaskState(phase: phase));
   }
 
   blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
@@ -108,7 +114,7 @@ void main() {
     'polling state transitions arrive through the stream',
     setUp: () {
       withSyncPhase(PollingTaskPhase.running);
-      when(() => syncTask.states).thenAnswer(
+      when(() => syncState.states).thenAnswer(
         (_) => Stream.fromIterable(const [
           PollingTaskState(phase: PollingTaskPhase.running),
           PollingTaskState(phase: PollingTaskPhase.succeeded),
@@ -121,5 +127,28 @@ void main() {
       isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.inProgress),
       isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.success),
     ],
+  );
+
+  blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
+    'manual refresh runs through the polling registration',
+    build: build,
+    act: (bloc) async => expect(await bloc.refresh(), isTrue),
+    expect: () => [
+      isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.inProgress),
+      isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.success),
+    ],
+    verify: (_) => verify(() => syncRunner.runNow()).called(1),
+  );
+
+  blocTest<ContactsExternalTabBloc, ContactsExternalTabState>(
+    'manual refresh failure is mapped without escaping the BLoC',
+    setUp: () => when(() => syncRunner.runNow()).thenThrow(StateError('task was unregistered')),
+    build: build,
+    act: (bloc) async => expect(await bloc.refresh(), isFalse),
+    expect: () => [
+      isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.inProgress),
+      isA<ContactsExternalTabState>().having((s) => s.status, 'status', ContactsExternalTabStatus.failure),
+    ],
+    verify: (_) => verify(() => syncRunner.runNow()).called(1),
   );
 }

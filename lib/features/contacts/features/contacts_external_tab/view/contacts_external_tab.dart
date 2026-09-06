@@ -5,16 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/l10n/l10n.dart';
-import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/widgets/widgets.dart';
 
 import '../../../contacts.dart';
 
 class ContactsExternalTab extends StatefulWidget {
-  const ContactsExternalTab({required this.syncTask, this.markFavorites = false, super.key});
-
-  /// The polling registration shared by scheduled and user-driven refreshes.
-  final PollingTaskHandle syncTask;
+  const ContactsExternalTab({this.markFavorites = false, super.key});
 
   /// Whether a star marks the people with a favourite among their numbers.
   /// Only where favourites are reachable from this screen: a star that leads
@@ -33,13 +29,12 @@ class _ContactsExternalTabState extends State<ContactsExternalTab> {
   }
 
   Future<void> _refreshContacts() async {
-    // Await the registered task so a pull joins an active scheduled cycle and
-    // the indicator closes on that cycle's actual result.
     try {
-      await widget.syncTask.runNow();
+      final succeeded = await context.read<ContactsExternalTabBloc>().refresh();
+      if (!succeeded && mounted) {
+        context.showErrorSnackBar(context.l10n.contacts_ExternalTabSnackBar_requestFailed);
+      }
     } catch (_) {
-      // With cached items the status-driven failure placeholder is not built,
-      // so a failed pull needs an explicit notification.
       if (mounted) {
         context.showErrorSnackBar(context.l10n.contacts_ExternalTabSnackBar_requestFailed);
       }

@@ -5,4 +5,5 @@ export 'crashlytics_context/crashlytics_context.dart';
 export 'diagnostic/diagnostic.dart';
 export 'polling_service.dart';
 export 'polling_task_handle.dart';
+export 'polling_worker.dart';
 export 'remote_config_service.dart';

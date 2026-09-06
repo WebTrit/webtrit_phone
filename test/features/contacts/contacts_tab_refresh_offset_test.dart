@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:mocktail/mocktail.dart';
 
 import 'package:webtrit_phone/features/contacts/contacts.dart';
@@ -59,8 +60,8 @@ void main() {
   });
 
   testWidgets('the extensions list draws its spinner below the bar, not behind it', (tester) async {
-    final refresh = Completer<void>();
-    when(() => harness.externalSyncTask.runNow()).thenAnswer((_) => refresh.future);
+    final refresh = Completer<bool>();
+    when(() => harness.externalBloc.refresh()).thenAnswer((_) => refresh.future);
 
     await harness.pumpExternal(tester, contacts: people, behindAppBarOfHeight: tallBar);
 
@@ -68,7 +69,7 @@ void main() {
 
     expect(spinner, greaterThanOrEqualTo(barBottom));
 
-    refresh.complete();
+    refresh.complete(true);
     await tester.pumpAndSettle();
   });
 }
