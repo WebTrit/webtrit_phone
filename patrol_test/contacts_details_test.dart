@@ -4,13 +4,12 @@ import 'package:patrol/patrol.dart';
 
 import 'package:webtrit_phone/app/keys.dart';
 import 'package:webtrit_phone/bootstrap.dart';
-import 'package:webtrit_phone/extensions/extensions.dart';
 import 'package:webtrit_phone/features/call/view/call_active_scaffold.dart';
 import 'package:webtrit_phone/features/login/view/login_mode_select_screen.dart';
-import 'package:webtrit_phone/models/main_flavor.dart';
 
 import 'components/integration_test_environment_config.dart';
 import 'subsequences/login_by_method.dart';
+import 'subsequences/open_ext_contacts_tab.dart';
 import 'subsequences/logout.dart';
 import 'subsequences/pump_for.dart';
 import 'subsequences/pump_root_and_wait_until_visible.dart';
@@ -40,8 +39,16 @@ void main() {
       await pumpFor(const Duration(seconds: 5), $);
     }
 
-    await $(MainFlavor.contacts.toNavBarKey()).tap();
-    await $(contactsTabExtKey).tap().then((e) => $.pumpAndTrySettle());
+    await openExtContactsTab($);
+    await $.pumpAndTrySettle();
+
+    // The details screen this test walks exists on the classic multi-source
+    // layout; the filter-style single-source layout expands rows inline
+    // instead - skip cleanly there.
+    if (!$(contactsTabLocalKey).visible) {
+      markTestSkipped('needs the multi-source contacts layout with a details screen');
+      return;
+    }
 
     await _verifyContactDetails(
       $,
@@ -78,6 +85,7 @@ Future<void> _verifyContactDetails(
 }) async {
   final searchWasUsed = !$(contactsExtContactTileKey).containing(RegExp(contactName)).visible;
   if (searchWasUsed) {
+    await openContactsSearch($);
     await $(contactsSearchInputKey).enterText(contactName);
     await pumpFor(const Duration(seconds: 1), $);
   }

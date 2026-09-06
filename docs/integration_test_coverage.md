@@ -242,23 +242,28 @@ exactly one user-info request, without a retry or a back-to-back duplicate.
 4. Assert one `/user` request after recovery.
 
 This scenario stays focused on the user-info endpoint. Contacts has its own
-login and manual-refresh invariant below.
+worker-driven lifecycle scenario below.
 
 ---
 
-## Background Polling - Contacts Single Fetch
+## Background Polling - Contacts Worker Sync
 
-**File:** `patrol_test/polling_contacts_single_fetch_test.dart`
+**File:** `patrol_test/contacts_worker_sync_e2e_test.dart`
 
-**Verifies:** External Contacts uses one polling-owned request path for login
-and pull-to-refresh.
+**Verifies:** External Contacts uses one worker-owned request path across login,
+manual refresh, resume, failure, and recovery, while synced data reaches the UI
+and excludes the signed-in number.
 
 **Steps:**
-1. Bootstrap the app and start capturing API client request logs.
-2. Log in and wait for the main shell to settle.
-3. Assert exactly one `/user/contacts` request and no transport retry.
-4. Open External Contacts and pull the list down.
-5. Assert the refresh indicator closes and exactly one new request was made.
+1. Start from a fresh session, log in, and assert one `/user/contacts` request
+   with no transport retry.
+2. Open External Contacts and verify a configured contact reaches the screen.
+3. Search by number and verify the signed-in number is absent while the known
+   external contact remains discoverable.
+4. Pull the list down and assert one request and a completed refresh indicator.
+5. Background and reopen the app, then assert one request after resume.
+6. Pull while offline and verify the refresh indicator still completes.
+7. Restore connectivity and assert one recovery request.
 
 ---
 

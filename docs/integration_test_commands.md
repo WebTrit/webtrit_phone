@@ -47,14 +47,14 @@ patrol test -t patrol_test/polling_connect_invariant_test.dart \
   --dart-define-from-file=dart_define.json \
   --dart-define-from-file=dart_define.integration_test.json
 
-patrol test -t patrol_test/polling_contacts_single_fetch_test.dart \
+patrol test -t patrol_test/contacts_worker_sync_e2e_test.dart \
   --dart-define-from-file=dart_define.json \
   --dart-define-from-file=dart_define.integration_test.json
 ```
 
-The connect lifecycle guard disables and restores Wi-Fi and cellular service.
-On Android, use a USB-connected device for that scenario: disabling Wi-Fi also
-disconnects a wireless ADB session before Patrol can restore the network.
+Both guards disable and restore Wi-Fi and cellular service. On Android, use a
+USB-connected device for these scenarios: disabling Wi-Fi also disconnects a
+wireless ADB session before Patrol can restore the network.
 
 ## Deploy to Firebase Test Lab
 
