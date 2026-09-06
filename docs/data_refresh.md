@@ -8,9 +8,9 @@ carries no refresh control in its app bar.
 
 This page describes UI behavior. The shared scheduler, task handles, and the
 boundary between automatic and manual execution are documented in
-[`polling.md`](polling.md). A manual fetch for a repository that is also polled
-must eventually use the same task capability to avoid a parallel refresh path;
-the current migration status is recorded there.
+[`polling.md`](polling.md). A manual fetch for a data source that is also polled
+must use the same task capability to avoid a parallel refresh path. External
+Contacts follows this rule; the remaining migration status is recorded there.
 
 ## My account (settings)
 
@@ -54,6 +54,10 @@ scroll, so the gesture does nothing there. The external tab offers a text
 button in its empty state instead. The local tab also has states where a fetch
 is not the answer at all (contacts permission denied, contacts agreement not
 accepted) - they lead to the settings or to the agreement.
+
+The external tab awaits its retained `PollingTaskHandle`. The pull therefore
+joins a scheduled Contacts cycle when one is already running, and a failed pull
+shows the same request-failed snack bar as the account screen.
 
 Both lists sit behind a translucent app bar, so - as on the account screen -
 the indicator carries an `edgeOffset`, or the spinner is drawn behind the bar

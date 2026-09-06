@@ -19,14 +19,16 @@ when done (`git checkout pubspec.yaml pubspec.lock`).
 
 ## Run integration tests in dev mode
 
+Run direct Patrol commands from the repository root:
+
 ```bash
-patrol develop --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
+patrol develop --dart-define-from-file=dart_define.json --dart-define-from-file=dart_define.integration_test.json
 ```
 
 ## Build integration tests
 
 ```bash
-patrol build android/ios --dart-define-from-file=../dart_define.json --dart-define-from-file=dart_define.integration_test.json
+patrol build android/ios --dart-define-from-file=dart_define.json --dart-define-from-file=dart_define.integration_test.json
 ```
 
 To specify a test file, use the `-t` option:
@@ -34,6 +36,25 @@ To specify a test file, use the `-t` option:
 ```bash
 patrol build -t patrol_test/call_and_recent_test.dart ...
 ```
+
+## Run the polling guards
+
+From the repository root, run the connect lifecycle and Contacts request-path
+guards separately:
+
+```bash
+patrol test -t patrol_test/polling_connect_invariant_test.dart \
+  --dart-define-from-file=dart_define.json \
+  --dart-define-from-file=dart_define.integration_test.json
+
+patrol test -t patrol_test/polling_contacts_single_fetch_test.dart \
+  --dart-define-from-file=dart_define.json \
+  --dart-define-from-file=dart_define.integration_test.json
+```
+
+The connect lifecycle guard disables and restores Wi-Fi and cellular service.
+On Android, use a USB-connected device for that scenario: disabling Wi-Fi also
+disconnects a wireless ADB session before Patrol can restore the network.
 
 ## Deploy to Firebase Test Lab
 

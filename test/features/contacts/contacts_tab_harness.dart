@@ -12,6 +12,7 @@ import 'package:webtrit_phone/features/call_routing/call_routing.dart';
 import 'package:webtrit_phone/features/contacts/contacts.dart';
 import 'package:webtrit_phone/l10n/app_localizations.g.dart';
 import 'package:webtrit_phone/models/models.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../../helpers/feature_access_factories.dart';
@@ -25,6 +26,8 @@ class MockContactsLocalTabBloc extends MockBloc<ContactsLocalTabEvent, ContactsL
 class MockCallBloc extends MockBloc<CallEvent, CallState> implements CallBloc {}
 
 class MockCallRoutingCubit extends MockCubit<CallRoutingState?> implements CallRoutingCubit {}
+
+class MockPollingTaskHandle extends Mock implements PollingTaskHandle {}
 
 /// A person in the list, favourite or not.
 ///
@@ -50,12 +53,14 @@ class ContactsTabHarness {
   ContactsTabHarness() {
     when(() => callBloc.state).thenReturn(const CallState());
     when(() => callRoutingCubit.state).thenReturn(null);
+    when(() => externalSyncTask.runNow()).thenAnswer((_) async {});
   }
 
   final externalBloc = MockContactsExternalTabBloc();
   final localBloc = MockContactsLocalTabBloc();
   final callBloc = MockCallBloc();
   final callRoutingCubit = MockCallRoutingCubit();
+  final externalSyncTask = MockPollingTaskHandle();
 
   /// The status bar the hosted variant pretends to have. Any non-zero figure
   /// does; a spinner placed by the screen edge fails the same way at 20 as at
@@ -127,9 +132,7 @@ class ContactsTabHarness {
     /// real screens do. Null keeps the bare host the older tests expect.
     double? behindAppBarOfHeight,
 
-    /// What the bloc emits after the pump. Empty by default; a test that
-    /// triggers a refresh needs at least one state, because the tab awaits the
-    /// next one before it lets the spinner go.
+    /// What the mocked bloc emits after the pump.
     Stream<ContactsExternalTabState>? states,
   }) async {
     final initialState = ContactsExternalTabState(status: status, contacts: contacts);
@@ -140,7 +143,7 @@ class ContactsTabHarness {
       _around(
         BlocProvider<ContactsExternalTabBloc>.value(
           value: externalBloc,
-          child: ContactsExternalTab(markFavorites: markFavorites),
+          child: ContactsExternalTab(syncTask: externalSyncTask, markFavorites: markFavorites),
         ),
         behindAppBarOfHeight: behindAppBarOfHeight,
       ),

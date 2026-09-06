@@ -4,9 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 
-import 'package:webtrit_phone/blocs/blocs.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 import 'package:webtrit_phone/utils/utils.dart';
 
 import '../../../contacts.dart';
@@ -16,62 +16,44 @@ part 'contacts_external_tab_event.dart';
 part 'contacts_external_tab_state.dart';
 
 class ContactsExternalTabBloc extends Bloc<ContactsExternalTabEvent, ContactsExternalTabState> {
-  ContactsExternalTabBloc({
-    required this.contactsRepository,
-    required this.contactsSearchBloc,
-    required this.externalContactsSyncBloc,
-  }) : super(const ContactsExternalTabState()) {
+  ContactsExternalTabBloc({required this.contactsRepository, required this.contactsSearchBloc, required this.syncTask})
+    : super(const ContactsExternalTabState()) {
     on<ContactsExternalTabStarted>(_onStarted, transformer: restartable());
-    on<ContactsExternalTabRefreshed>(_onRefreshed, transformer: droppable());
   }
 
   final ContactsRepository contactsRepository;
   final ContactsBloc contactsSearchBloc;
-  final ExternalContactsSyncBloc externalContactsSyncBloc;
+  final PollingTaskHandle syncTask;
 
   Future<void> _onStarted(ContactsExternalTabStarted event, Emitter<ContactsExternalTabState> emit) async {
     final watchContactsForEachFuture = emit.forEach(
       contactsRepository.watchContacts(event.search, ContactSourceType.external),
       onData: (List<Contact> contacts) => state.copyWith(
-        status: _mapExternalContactsSyncStateToStatus(externalContactsSyncBloc.state),
+        status: _mapSyncPhase(syncTask.state.phase),
         contacts: contacts,
         searching: event.search.isNotEmpty,
       ),
     );
 
-    final contactsSearchSateOnEachFuture = emit.onEach(
+    final contactsSearchStateOnEachFuture = emit.onEach(
       contactsSearchBloc.stream,
-      onData: (state) {
-        add(ContactsExternalTabStarted(search: state.search));
-      },
+      onData: (state) => add(ContactsExternalTabStarted(search: state.search)),
     );
 
-    final externalContactsSyncStateForEachFuture = emit.forEach(
-      externalContactsSyncBloc.stream,
-      onData: (ExternalContactsSyncState externalContactsSyncState) =>
-          state.copyWith(status: _mapExternalContactsSyncStateToStatus(externalContactsSyncState)),
+    final syncStateForEachFuture = emit.forEach(
+      syncTask.states,
+      onData: (PollingTaskState syncState) => state.copyWith(status: _mapSyncPhase(syncState.phase)),
     );
 
-    await Future.wait([
-      watchContactsForEachFuture,
-      contactsSearchSateOnEachFuture,
-      externalContactsSyncStateForEachFuture,
-    ]);
+    await Future.wait([watchContactsForEachFuture, contactsSearchStateOnEachFuture, syncStateForEachFuture]);
   }
 
-  Future<void> _onRefreshed(ContactsExternalTabRefreshed event, Emitter<ContactsExternalTabState> emit) async {
-    externalContactsSyncBloc.add(const ExternalContactsSyncRefreshed());
-  }
-
-  ContactsExternalTabStatus _mapExternalContactsSyncStateToStatus(ExternalContactsSyncState externalContactsSyncState) {
-    if (externalContactsSyncState is ExternalContactsSyncSuccess) {
-      return ContactsExternalTabStatus.success;
-    } else if (externalContactsSyncState is ExternalContactsSyncFailure) {
-      return ContactsExternalTabStatus.failure;
-    } else {
-      // Initial (sync not finished yet) and RefreshInProgress both mean the first
-      // remote fetch is still running, so keep the loading state until it resolves.
-      return ContactsExternalTabStatus.inProgress;
-    }
+  ContactsExternalTabStatus _mapSyncPhase(PollingTaskPhase phase) {
+    return switch (phase) {
+      // Idle still precedes the first leading cycle, so an empty cache remains loading.
+      PollingTaskPhase.idle || PollingTaskPhase.running => ContactsExternalTabStatus.inProgress,
+      PollingTaskPhase.succeeded => ContactsExternalTabStatus.success,
+      PollingTaskPhase.failed || PollingTaskPhase.stopped => ContactsExternalTabStatus.failure,
+    };
   }
 }

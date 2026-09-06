@@ -241,9 +241,8 @@ exactly one user-info request, without a retry or a back-to-back duplicate.
 3. Disable Wi-Fi and cellular connectivity, restore them, and wait for polling recovery.
 4. Assert one `/user` request after recovery.
 
-The test deliberately does not apply the same invariant to Contacts while its
-screen-owned fetch still overlaps the leading polling cycle. See
-[`polling.md`](polling.md#migration-in-progress).
+This scenario stays focused on the user-info endpoint. Contacts has its own
+login and manual-refresh invariant below.
 
 ---
 
@@ -251,16 +250,15 @@ screen-owned fetch still overlaps the leading polling cycle. See
 
 **File:** `patrol_test/polling_contacts_single_fetch_test.dart`
 
-**Verifies:** The intended end state is one external-contacts request after a
-fresh login.
+**Verifies:** External Contacts uses one polling-owned request path for login
+and pull-to-refresh.
 
 **Steps:**
 1. Bootstrap the app and start capturing API client request logs.
 2. Log in and wait for the main shell to settle.
 3. Assert exactly one `/user/contacts` request and no transport retry.
-
-This is an in-progress migration guard. It remains red until the Contacts
-screen-owned and leading polling paths are deduplicated.
+4. Open External Contacts and pull the list down.
+5. Assert the refresh indicator closes and exactly one new request was made.
 
 ---
 

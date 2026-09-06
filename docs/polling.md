@@ -19,10 +19,11 @@ consumer that needs an on-demand refresh uses the task's `PollingTaskHandle`
 instead of starting another timer or calling the same `Refreshable.refresh()`
 through a parallel path.
 
-The handle API is available, but the current app composition still supplies its
-initial registrations through the `PollingService` constructor and does not
-retain their handles. The Contacts and CDR migrations are called out under
-[Migration in progress](#migration-in-progress); they are not current behavior.
+Most app registrations are still supplied through the `PollingService`
+constructor because no consumer needs their handles. External Contacts is
+registered explicitly: `ExternalContactsSync` owns its worker and retains the
+handle used by the screen. The CDR migration is called out under
+[Migration in progress](#migration-in-progress); it is not current behavior.
 
 UI pull-to-refresh behavior is a separate concern. See
 [`data_refresh.md`](data_refresh.md) for the screens and gestures that expose it.
@@ -102,9 +103,14 @@ Register a repository with its base interval and retain the returned handle at
 the composition boundary:
 
 ```dart
+final contactsWorker = ExternalContactsSyncWorker(
+  userRepository: userRepository,
+  externalContactsRepository: externalContactsRepository,
+  contactsRepository: contactsRepository,
+);
 final contactsPolling = pollingService.register(
   PollingRegistration(
-    listener: externalContactsRepository,
+    listener: contactsWorker,
     interval: const Duration(minutes: 1),
   ),
 );
@@ -309,7 +315,7 @@ overridden by the matching dart-define.
 |---|---:|---|
 | `UserRepository` | 10 s | Always |
 | `SystemInfoRepository` | 300 s | Always |
-| `ExternalContactsRepository` | 60 s | Core supports extensions |
+| `ExternalContactsSyncWorker` | 60 s | Core supports extensions |
 | `VoicemailRepository` | 300 s | Voicemail is available for the session |
 | `CallerIdSettingsRepository` | 300 s | Remote implementation is active |
 | `FavoritesRepository` | 300 s | Syncable implementation is active |
@@ -369,25 +375,27 @@ The on-device invariants live in:
 - `patrol_test/polling_contacts_single_fetch_test.dart`.
 
 The first asserts one user-info request for login, resume, and network recovery.
-The second pins the intended one-fetch Contacts behavior and remains an
-in-progress migration guard until the screen and polling paths are deduplicated.
+The second protects the one-fetch Contacts behavior for both login and manual
+pull-to-refresh.
 See [`integration_test_commands.md`](integration_test_commands.md) for setup and
 commands, and [`integration_test_coverage.md`](integration_test_coverage.md) for
 the scenario index.
 
-## Migration in progress
+## Feature integrations
 
 ### Contacts
 
-`ExternalContactsRepository` is already registered for automatic polling. Some
-screen-owned fetch paths still run independently, so they are outside the
-service's single-flight boundary and can duplicate the leading request. The
-target migration is to retain the registration handle at composition time and
-route the feature's on-demand refresh through that capability.
+`ExternalContactsSyncWorker.refresh()` owns one full cycle: fetch through the
+remote gateway, filter out the current user, and merge changed data into the
+local store. The worker is the polling listener; the remote repository is a
+fetch-only gateway and cannot start a second schedule.
 
-Until that migration lands, do not claim that every Contacts fetch is globally
-deduplicated. The red Patrol guard described above records the intended end
-state.
+`ExternalContactsSync` owns the worker and its registration. The external tab
+receives the retained `PollingTaskHandle`: the BLoC maps task state to its
+loading/error state, and pull-to-refresh awaits `runNow()`. A pull during an
+automatic cycle therefore joins it instead of starting a second download.
+
+## Migration in progress
 
 ### CDR
 
