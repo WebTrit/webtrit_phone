@@ -1,7 +1,7 @@
 # Background polling
 
 `PollingService` coordinates periodic, lifecycle-triggered, and manual refreshes without overlapping work for the same registration.
-Last reviewed: 2026-09-05.
+Last reviewed: 2026-09-06.
 
 ## Scope and current status
 
@@ -9,6 +9,7 @@ This document describes the background polling contract implemented by:
 
 - `lib/services/polling_service.dart`;
 - `lib/services/polling_task_handle.dart`;
+- `lib/services/connectivity_service.dart`;
 - `lib/common/refreshable.dart`;
 - `lib/utils/fixed_delay_scheduler.dart`;
 - `lib/app/router/main_shell_services.dart`.
@@ -47,7 +48,7 @@ lifetime rules.
 
 ## Core invariants
 
-The contract has five invariants:
+The contract has six invariants:
 
 1. One `Refreshable` object identity maps to one registration and one stable
    handle inside a service.
@@ -56,7 +57,9 @@ The contract has five invariants:
    tick completes, not at a fixed wall-clock rate.
 4. Connectivity and app lifecycle control automatic work. `runNow()` is an
    explicit caller request and does not perform a reachability preflight.
-5. Unregister and service disposal are terminal for a handle. Late completion
+5. Only the newest OS connectivity event may publish its liveness result. A
+   probe started by an older event cannot overwrite newer evidence.
+6. Unregister and service disposal are terminal for a handle. Late completion
    of an already-running refresh cannot move it out of `stopped`.
 
 The single-flight guarantee only covers calls routed through the same
@@ -252,6 +255,14 @@ the structural stale-tick guard; there is no time-window duplicate suppression.
 `PollingService` listens to `ConnectivityService.connectionStream` and performs
 an initial connectivity probe.
 
+`ConnectivityService` may receive another OS event while the HTTP liveness
+probe for the previous event is still in flight. It assigns a monotonically
+increasing generation to every event and publishes a probe result only while
+that generation is still current. Comparing only transport values is not
+enough: `wifi -> none -> wifi` repeats the same value and would otherwise let
+the first Wi-Fi probe publish after the second one. This latest-event-wins rule
+is owned by the producer so every stream consumer receives ordered evidence.
+
 - An offline transition cancels automatic schedules.
 - An online transition starts a group-leading cycle.
 - Repeated reports of the same connectivity state do not start another leading
@@ -353,7 +364,8 @@ its own cache or stream, but it must not create an untracked periodic loop.
 ## Testing
 
 The deterministic unit contract lives in
-`test/services/polling_service_test.dart`. It covers:
+`test/services/polling_service_test.dart` and
+`test/services/connectivity_service_test.dart`. It covers:
 
 - boot, reconnect, resume, background pause, and offline recovery;
 - fixed delay, jitter, backoff, and stale timer invalidation;
@@ -362,21 +374,28 @@ The deterministic unit contract lives in
 - manual versus automatic backoff ownership;
 - interval changes, inactive listeners, unregister, and disposal;
 - late completion after a terminal stop.
+- out-of-order liveness probes across repeated transports, offline events, and
+  disposal.
 
-Run it with:
+Run them with:
 
 ```bash
 fvm flutter test --no-pub test/services/polling_service_test.dart
+fvm flutter test --no-pub test/services/connectivity_service_test.dart
 ```
 
 The on-device invariants live in:
 
 - `patrol_test/polling_connect_invariant_test.dart`;
+- `patrol_test/connectivity_probe_ordering_test.dart`;
 - `patrol_test/contacts_worker_sync_e2e_test.dart`.
 
-The first asserts one user-info request for login, resume, and network recovery.
-The second covers the worker-driven Contacts flow from login through UI data,
-self-filtering, manual refresh, resume, offline failure, and network recovery.
+The connectivity-ordering guard drives a real OS network flap, forces the older
+probe to finish last, and verifies that the periodic schedule survives. The
+connect invariant asserts one user-info request for login, resume, and network
+recovery. The Contacts test covers the worker-driven flow from login through UI
+data, self-filtering, manual refresh, resume, offline failure, and network
+recovery.
 See [`integration_test_commands.md`](integration_test_commands.md) for setup and
 commands, and [`integration_test_coverage.md`](integration_test_coverage.md) for
 the scenario index.

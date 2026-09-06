@@ -33,9 +33,11 @@ abstract class ConnectivityService implements Disposable {
 
 class ConnectivityServiceImpl implements ConnectivityService {
   ConnectivityServiceImpl._({
+    required Connectivity connectivity,
     required ConnectivityChecker connectivityChecker,
     required ConnectivityResult initialResult,
-  }) : _connectivityChecker = connectivityChecker,
+  }) : _connectivity = connectivity,
+       _connectivityChecker = connectivityChecker,
        _lastResult = initialResult {
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_handleConnectivityChange);
   }
@@ -51,18 +53,30 @@ class ConnectivityServiceImpl implements ConnectivityService {
   /// negligible next to heavier inits such as the DB isolate spawn. An empty
   /// platform result is treated as `ConnectivityResult.none` rather than
   /// throwing, so startup is never blocked by a missing entry.
-  static Future<ConnectivityServiceImpl> create({required ConnectivityChecker connectivityChecker}) async {
-    final initialResult = (await Connectivity().checkConnectivity()).firstOrNull ?? ConnectivityResult.none;
-    return ConnectivityServiceImpl._(connectivityChecker: connectivityChecker, initialResult: initialResult);
+  ///
+  /// [connectivity] is an injection seam for deterministic tests. Production
+  /// callers use the default platform plugin instance.
+  static Future<ConnectivityServiceImpl> create({
+    required ConnectivityChecker connectivityChecker,
+    Connectivity? connectivity,
+  }) async {
+    final connectivitySource = connectivity ?? Connectivity();
+    final initialResult = (await connectivitySource.checkConnectivity()).firstOrNull ?? ConnectivityResult.none;
+    return ConnectivityServiceImpl._(
+      connectivity: connectivitySource,
+      connectivityChecker: connectivityChecker,
+      initialResult: initialResult,
+    );
   }
 
-  final Connectivity _connectivity = Connectivity();
+  final Connectivity _connectivity;
   final ConnectivityChecker _connectivityChecker;
   final StreamController<bool> _onlineController = StreamController<bool>.broadcast();
   final StreamController<ConnectivityResult> _resultController = StreamController<ConnectivityResult>.broadcast();
   late final StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   ConnectivityResult _lastResult;
+  int _probeGeneration = 0;
   bool _disposed = false;
 
   @override
@@ -78,13 +92,17 @@ class ConnectivityServiceImpl implements ConnectivityService {
   Future<bool> checkConnection() => _checkConnection(_lastResult);
 
   Future<void> _handleConnectivityChange(List<ConnectivityResult> result) async {
+    // Transport values can repeat across a flap (wifi -> none -> wifi), so
+    // value equality alone cannot distinguish an old wifi probe from the
+    // current one. Every event supersedes all probes started before it.
+    final probeGeneration = ++_probeGeneration;
     final next = result.firstOrNull ?? ConnectivityResult.none;
     if (next != _lastResult) {
       _lastResult = next;
       _resultController.add(next);
     }
     final connected = await _checkConnection(next);
-    if (!_disposed && next == _lastResult) {
+    if (!_disposed && probeGeneration == _probeGeneration) {
       _onlineController.add(connected);
     }
   }
