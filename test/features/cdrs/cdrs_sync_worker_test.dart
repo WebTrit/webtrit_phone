@@ -251,5 +251,33 @@ void main() {
       verify(() => task.unregister()).called(1);
       verify(() => syncWorker.dispose()).called(1);
     });
+
+    test('ignores a late call-ended refresh after disposal', () async {
+      final syncWorker = MockCdrsSyncWorker();
+      final pollingService = MockPollingService();
+      final task = MockPollingTaskHandle();
+      when(() => syncWorker.dispose()).thenAnswer((_) async {});
+      when(() => pollingService.register(any())).thenReturn(task);
+      final sync = CdrsSync(worker: syncWorker, pollingService: pollingService, interval: const Duration(seconds: 10));
+
+      await sync.dispose();
+
+      expect(sync.requestPostCallRefresh, returnsNormally);
+      verifyNever(() => task.invalidate(after: const Duration(seconds: 1)));
+    });
+
+    test('ignores a refresh request after the polling service unregisters the task', () async {
+      final syncWorker = MockCdrsSyncWorker();
+      final pollingService = MockPollingService();
+      final task = MockPollingTaskHandle();
+      when(() => syncWorker.dispose()).thenAnswer((_) async {});
+      when(() => pollingService.register(any())).thenReturn(task);
+      when(() => task.isRegistered).thenReturn(false);
+      final sync = CdrsSync(worker: syncWorker, pollingService: pollingService, interval: const Duration(seconds: 10));
+
+      expect(sync.requestPostCallRefresh, returnsNormally);
+      verifyNever(() => task.invalidate(after: const Duration(seconds: 1)));
+      await sync.dispose();
+    });
   });
 }

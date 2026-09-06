@@ -20,12 +20,18 @@ class RecentCdrsScreenPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) =>
-              FullRecentCdrsCubit(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
+          create: (context) => FullRecentCdrsCubit(
+            context.read<CdrsLocalRepository>(),
+            context.read<CdrsRemoteRepository>(),
+            context.read<CdrsSync>(),
+          )..init(),
         ),
         BlocProvider(
-          create: (context) =>
-              MissedRecentCdrsCubit(context.read<CdrsLocalRepository>(), context.read<CdrsRemoteRepository>())..init(),
+          create: (context) => MissedRecentCdrsCubit(
+            context.read<CdrsLocalRepository>(),
+            context.read<CdrsRemoteRepository>(),
+            context.read<CdrsSync>(),
+          )..init(),
         ),
       ],
       child: RecentCdrsScreen(

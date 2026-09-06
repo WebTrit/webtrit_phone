@@ -8,10 +8,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:webtrit_phone/features/cdrs/cdrs.dart';
 import 'package:webtrit_phone/models/models.dart';
 import 'package:webtrit_phone/repositories/repositories.dart';
+import 'package:webtrit_phone/services/services.dart';
 
 class MockCdrsLocalRepository extends Mock implements CdrsLocalRepository {}
 
 class MockCdrsRemoteRepository extends Mock implements CdrsRemoteRepository {}
+
+class MockPollingTaskStateSource extends Mock implements PollingTaskStateSource {}
 
 CdrRecord _record(String id, {CdrStatus status = CdrStatus.accepted}) => CdrRecord(
   callId: id,
@@ -30,18 +33,27 @@ CdrRecord _record(String id, {CdrStatus status = CdrStatus.accepted}) => CdrReco
 void main() {
   late MockCdrsLocalRepository local;
   late MockCdrsRemoteRepository remote;
+  late MockPollingTaskStateSource sync;
   late StreamController<CdrRecordsEvent> events;
+  late StreamController<PollingTaskState> syncStates;
 
   setUp(() {
     local = MockCdrsLocalRepository();
     remote = MockCdrsRemoteRepository();
+    sync = MockPollingTaskStateSource();
     events = StreamController<CdrRecordsEvent>.broadcast();
+    syncStates = StreamController<PollingTaskState>.broadcast();
 
     when(() => local.events).thenAnswer((_) => events.stream);
     when(() => local.getLastSyncTime()).thenAnswer((_) async => null);
+    when(() => sync.state).thenReturn(const PollingTaskState(phase: PollingTaskPhase.idle));
+    when(() => sync.states).thenAnswer((_) => syncStates.stream);
   });
 
-  tearDown(() => events.close());
+  tearDown(() async {
+    await events.close();
+    await syncStates.close();
+  });
 
   group('FullRecentCdrsCubit.init', () {
     test('empty cache without a sync cursor stays loading until the sync completes', () async {
@@ -51,7 +63,7 @@ void main() {
         return call == 1 ? <CdrRecord>[] : [_record('a')];
       });
 
-      final cubit = FullRecentCdrsCubit(local, remote);
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
       await cubit.init();
 
       expect(cubit.state.isLoading, isTrue);
@@ -68,7 +80,7 @@ void main() {
       when(() => local.getLastSyncTime()).thenAnswer((_) async => DateTime(2026, 1, 1));
       when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
 
-      final cubit = FullRecentCdrsCubit(local, remote);
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
       await cubit.init();
 
       expect(cubit.state.isLoading, isFalse);
@@ -79,7 +91,7 @@ void main() {
     test('non-empty cache resolves immediately regardless of the sync cursor', () async {
       when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => [_record('a')]);
 
-      final cubit = FullRecentCdrsCubit(local, remote);
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
       await cubit.init();
 
       expect(cubit.state.isLoading, isFalse);
@@ -90,7 +102,7 @@ void main() {
     test('an upsert event resolves loading even before the sync-completed event', () async {
       when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
 
-      final cubit = FullRecentCdrsCubit(local, remote);
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
       await cubit.init();
       expect(cubit.state.isLoading, isTrue);
 
@@ -111,7 +123,7 @@ void main() {
       });
       when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
 
-      final cubit = FullRecentCdrsCubit(local, remote);
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
       await cubit.init();
 
       expect(cubit.state.isLoading, isFalse);
@@ -121,7 +133,7 @@ void main() {
     test('a failed initial sync resolves loading to the empty state instead of spinning forever', () async {
       when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
 
-      final cubit = FullRecentCdrsCubit(local, remote);
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
       await cubit.init();
       expect(cubit.state.isLoading, isTrue);
 
@@ -133,24 +145,52 @@ void main() {
       await cubit.close();
     });
 
-    test('an offline skipped cycle cannot leave the initial loader running forever', () {
+    test('a replayed offline polling state resolves the initial loader immediately', () async {
+      when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
+      when(() => sync.state).thenReturn(const PollingTaskState(phase: PollingTaskPhase.waitingForConnectivity));
+
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
+      await cubit.init();
+
+      expect(cubit.state.isLoading, isFalse);
+      expect(cubit.state.records, isEmpty);
+      await cubit.close();
+    });
+
+    test('an offline polling transition releases an active initial loader', () async {
+      when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
+
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
+      await cubit.init();
+      expect(cubit.state.isLoading, isTrue);
+
+      syncStates.add(const PollingTaskState(phase: PollingTaskPhase.waitingForConnectivity));
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      expect(cubit.state.isLoading, isFalse);
+      expect(cubit.state.records, isEmpty);
+      await cubit.close();
+    });
+
+    test('a slow online initial sync keeps loading beyond the polling interval', () {
       fakeAsync((async) {
         when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
+        when(() => sync.state).thenReturn(const PollingTaskState(phase: PollingTaskPhase.running));
 
-        final cubit = FullRecentCdrsCubit(local, remote);
-        var initialized = false;
-        cubit.init().then((_) => initialized = true);
+        final cubit = FullRecentCdrsCubit(local, remote, sync);
+        unawaited(cubit.init());
         async.flushMicrotasks();
 
-        expect(initialized, isTrue);
+        async.elapse(const Duration(minutes: 10));
         expect(cubit.state.isLoading, isTrue);
 
-        async.elapse(const Duration(seconds: 9, milliseconds: 999));
-        expect(cubit.state.isLoading, isTrue);
+        syncStates.add(const PollingTaskState(phase: PollingTaskPhase.succeeded));
+        async.flushMicrotasks();
+        expect(cubit.state.isLoading, isTrue, reason: 'task success is committed through the repository cursor event');
 
-        async.elapse(const Duration(milliseconds: 1));
+        events.add(CdrsInitialSyncCompleted());
+        async.flushMicrotasks();
         expect(cubit.state.isLoading, isFalse);
-        expect(cubit.state.records, isEmpty);
 
         unawaited(cubit.close());
         async.flushMicrotasks();
@@ -160,7 +200,7 @@ void main() {
     test('a sync success after an earlier failure still populates the list', () async {
       when(() => local.getHistory(limit: any(named: 'limit'))).thenAnswer((_) async => <CdrRecord>[]);
 
-      final cubit = FullRecentCdrsCubit(local, remote);
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
       await cubit.init();
 
       events.add(CdrsInitialSyncFailed());
@@ -183,7 +223,7 @@ void main() {
         return call == 1 ? [_record('a')] : <CdrRecord>[];
       });
 
-      final cubit = FullRecentCdrsCubit(local, remote);
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
       await cubit.init();
       expect(cubit.state.isLoading, isFalse);
       expect(cubit.state.records, [_record('a')]);
@@ -210,7 +250,7 @@ void main() {
         return <CdrRecord>[];
       });
 
-      final cubit = FullRecentCdrsCubit(local, remote);
+      final cubit = FullRecentCdrsCubit(local, remote, sync);
       final initFuture = cubit.init();
       await cubit.close();
 
@@ -245,7 +285,7 @@ void main() {
     });
 
     test('empty cache without a sync cursor stays loading until the sync completes and the scan runs', () async {
-      final cubit = MissedRecentCdrsCubit(local, remote);
+      final cubit = MissedRecentCdrsCubit(local, remote, sync);
       await cubit.init();
 
       expect(cubit.state.isLoading, isTrue);
@@ -261,7 +301,7 @@ void main() {
     test('empty cache with an existing sync cursor resolves and scans immediately', () async {
       when(() => local.getLastSyncTime()).thenAnswer((_) async => DateTime(2026, 1, 1));
 
-      final cubit = MissedRecentCdrsCubit(local, remote);
+      final cubit = MissedRecentCdrsCubit(local, remote, sync);
       await cubit.init();
 
       expect(cubit.state.isLoading, isFalse);
@@ -271,7 +311,7 @@ void main() {
     });
 
     test('a missed-call upsert resolves loading before the sync-completed event', () async {
-      final cubit = MissedRecentCdrsCubit(local, remote);
+      final cubit = MissedRecentCdrsCubit(local, remote, sync);
       await cubit.init();
       expect(cubit.state.isLoading, isTrue);
 
@@ -284,7 +324,7 @@ void main() {
     });
 
     test('a failed initial sync resolves loading; a later success still runs the scan', () async {
-      final cubit = MissedRecentCdrsCubit(local, remote);
+      final cubit = MissedRecentCdrsCubit(local, remote, sync);
       await cubit.init();
       expect(cubit.state.isLoading, isTrue);
 
@@ -339,7 +379,7 @@ void main() {
     });
 
     test('empty cache without a sync cursor stays loading until the sync completes and the scan runs', () async {
-      final cubit = NumberCdrsLogCubit('2000', local, remote);
+      final cubit = NumberCdrsLogCubit('2000', local, remote, sync);
       await cubit.init();
 
       expect(cubit.state.isLoading, isTrue);

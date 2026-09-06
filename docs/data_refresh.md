@@ -89,9 +89,11 @@ backend can publish the CDR. Repeated call-ended events use trailing-edge
 debounce, and the refresh cannot overlap the periodic cycle.
 
 An empty cache keeps its initial loader while the first remote cycle is
-pending. Because automatic polling deliberately does not invoke a worker while
-offline, the screen releases that loader after ten seconds even when no failed
-cycle event exists. A later successful sync still populates the list normally.
+pending. When automatic polling cannot run offline, the CDR task publishes a
+replaying `waitingForConnectivity` state and the screen immediately resolves to
+the empty state. A screen opened after the offline transition receives the same
+retained state. A slow online sync remains loading instead of being mistaken
+for offline, and a later successful sync still populates the list normally.
 
 ## Voicemail
 

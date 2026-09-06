@@ -212,11 +212,12 @@ cached connectivity state is wrong.
 
 ## Deferred invalidation
 
-Use `invalidate(after:)` when a domain event means that cached data is stale,
-but the backend may need a short publication delay:
+Low-level task owners use `invalidate(after:)` when a domain event means that
+cached data is stale, but the backend may need a short publication delay.
+Feature owners expose that through a domain method:
 
 ```dart
-cdrsPolling.invalidate(after: const Duration(seconds: 1));
+cdrsSync.requestPostCallRefresh();
 ```
 
 Invalidation is automatic work, not a manual request. It respects connectivity
@@ -504,10 +505,12 @@ debounce, an active scheduled cycle cannot overlap them, and the normal
 periodic cadence is re-armed after the trailing refresh.
 
 When the app is already offline, `PollingService` correctly skips the worker,
-so there is no failed refresh event to release an empty Recent Calls screen.
-The CDR list presentation owns a ten-second initial-loading timeout for that
-case. This remains outside the worker and scheduler; later repository events
-still populate the list after reconnect.
+and publishes `waitingForConnectivity` for the CDR polling task. `CdrsSync`
+exposes that replaying state to every CDR list. An empty list releases its
+initial loader immediately on that state, including when the screen subscribes
+after the offline transition. A slow online cycle remains `running`, so it does
+not incorrectly flash an empty state. The next successful repository cycle
+still resolves and renders the records.
 
 ## Non-goals
 
