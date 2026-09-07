@@ -181,9 +181,12 @@ void main() {
         crashKeysWriter: writer,
       );
 
-      when(
-        () => metadataProvider.logLabels,
-      ).thenReturn({'app': 'WebTrit', 'appVersion': '1.16.0+6', 'authorization': 'authorized', 'tenantId': 'tenant-a'});
+      when(() => metadataProvider.logLabels).thenReturn({
+        'app': 'PortaPhone',
+        'appVersion': '1.16.0+6',
+        'authorization': 'authorized',
+        'tenantId': 'tenant-a',
+      });
       when(() => incomingCallTypeRepository.getIncomingCallType(defaultValue: any(named: 'defaultValue')))
           .thenReturn(IncomingCallType.socket);
       when(() => encodingPresetRepository.getEncodingPreset(defaultValue: any(named: 'defaultValue'))).thenReturn(null);
@@ -201,7 +204,7 @@ void main() {
       context.logStartup(defaultPeerConnectionSettings: PeerConnectionSettings.blank());
 
       final labels = writer.batches.first;
-      expect(labels['app'], 'WebTrit');
+      expect(labels['app'], 'PortaPhone');
       expect(labels['appVersion'], '1.16.0+6');
       expect(labels['callkeepVersion'], '1.3.0');
       expect(labels, isNot(contains('authorization')));

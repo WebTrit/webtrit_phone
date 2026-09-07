@@ -215,7 +215,7 @@ patrol:
   android:
     package_name: com.webtrit.phone
   ios:
-    bundle_id: com.webtrit.app
+    bundle_id: com.webtrit.phone
 
 melos:
   useRootAsPackage: true

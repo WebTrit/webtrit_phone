@@ -81,7 +81,7 @@ class LoginState with _$LoginState {
   final UrlInput coreUrlInput;
 
   /// Failure of the last Core URL submit meaning the entered address does not
-  /// host a reachable WebTrit service; rendered inline under the URL field.
+  /// host a reachable Cloud Backend; rendered inline under the URL field.
   @override
   final Object? coreUrlAssignError;
 

@@ -1945,7 +1945,7 @@ abstract class AppLocalizations {
   /// No description provided for @login_ButtonTooltip_signInToYourInstance.
   ///
   /// In en, this message translates to:
-  /// **'Sign in to your WebTrit Cloud Backend'**
+  /// **'Sign in to your Cloud Backend'**
   String get login_ButtonTooltip_signInToYourInstance;
 
   /// Shown during login when the app detects that the backend instance version is incompatible. Context: user tries to sign in. Condition: provided backend version does not match the supported version range (actual: {actual}, supported: {supportedConstraint}).
@@ -2044,10 +2044,10 @@ abstract class AppLocalizations {
   /// **'User not found'**
   String get login_RequestFailureUserNotFoundError;
 
-  /// Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup.
+  /// Shown during login or signup when the app's bundle identifier is not configured or supported by the Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup.
   ///
   /// In en, this message translates to:
-  /// **'The app is not supported by your WebTrit Cloud Backend'**
+  /// **'The app is not supported by your Cloud Backend'**
   String get login_RequestFailureUnconfiguredBundleIdError;
 
   /// Accessibility name of the button that hides the typed password again.
@@ -2062,28 +2062,28 @@ abstract class AppLocalizations {
   /// **'Show password'**
   String get login_SemanticsLabel_showPassword;
 
-  /// Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods.
+  /// Shown during login or signup when the Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods.
   ///
   /// In en, this message translates to:
-  /// **'The current WebTrit Cloud Backend does not support any login types compatible with this app'**
+  /// **'The current Cloud Backend does not support any login types compatible with this app'**
   String get login_SupportedLoginTypeMissedExceptionError;
 
   /// No description provided for @login_Text_coreUrlAssignPostDescription.
   ///
   /// In en, this message translates to:
-  /// **'If you do not yet have your own WebTrit Cloud Backend - contact sales team {email}.'**
+  /// **'If you do not yet have your own Cloud Backend - contact sales team {email}.'**
   String login_Text_coreUrlAssignPostDescription(Object email);
 
   /// No description provided for @login_Text_coreUrlAssignPreDescription.
   ///
   /// In en, this message translates to:
-  /// **'In order to make calls via your own VoIP system please enter the URL of WebTrit Cloud Backend (as it was provided to you by your account manager) below.'**
+  /// **'In order to make calls via your own VoIP system please enter the URL of your Cloud Backend (as it was provided to you by your account manager) below.'**
   String get login_Text_coreUrlAssignPreDescription;
 
   /// No description provided for @login_TextFieldLabelText_coreUrlAssign.
   ///
   /// In en, this message translates to:
-  /// **'Enter your WebTrit Cloud Backend URL'**
+  /// **'Enter your Cloud Backend URL'**
   String get login_TextFieldLabelText_coreUrlAssign;
 
   /// No description provided for @login_TextFieldLabelText_otpSigninCode.
@@ -2290,16 +2290,16 @@ abstract class AppLocalizations {
   /// **'Sign up'**
   String get loginType_signup;
 
-  /// Shown when the user enters an invalid URL in the WebTrit Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format.
+  /// Shown when the user enters an invalid URL in the Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format.
   ///
   /// In en, this message translates to:
   /// **'Please enter a valid URL'**
   String get login_validationCoreUrlError;
 
-  /// Shown inline under the WebTrit Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a WebTrit service (connection failure, non-JSON response, or an HTTP error without a WebTrit error payload).
+  /// Shown inline under the Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a service (connection failure, non-JSON response, or an HTTP error without an error payload).
   ///
   /// In en, this message translates to:
-  /// **'Cannot reach WebTrit service at this address'**
+  /// **'Cannot reach the service at this address'**
   String get login_validationCoreUrlUnreachableError;
 
   /// Shown when the user enters an invalid email address in the email field during login or signup. Condition: the input does not match the required email format.
@@ -2416,10 +2416,10 @@ abstract class AppLocalizations {
   /// **'Update'**
   String get main_CompatibilityIssueDialogActions_update;
 
-  /// Shown in the compatibility issue dialog when the app detects that the WebTrit Cloud Backend version is incompatible. Condition: the actual backend version does not match the supported version range. Placeholders: {actual} for the current instance version, {supportedConstraint} for the supported version range.
+  /// Shown in the compatibility issue dialog when the app detects that the Cloud Backend version is incompatible. Condition: the actual backend version does not match the supported version range. Placeholders: {actual} for the current instance version, {supportedConstraint} for the supported version range.
   ///
   /// In en, this message translates to:
-  /// **'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
+  /// **'Incompatible Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n{actual}\n\nSupported version:\n{supportedConstraint}'**
   String main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError(
     String actual,
     String supportedConstraint,
@@ -3037,13 +3037,13 @@ abstract class AppLocalizations {
   /// **'Your application is online'**
   String get notifications_errorSnackBar_appOnline;
 
-  /// Shown in a notification or snackbar (call screen or global) when the app is disconnected from the WebTrit core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings.
+  /// Shown in a notification or snackbar (call screen or global) when the app is disconnected from the core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings.
   ///
   /// In en, this message translates to:
-  /// **'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
+  /// **'Sorry, your application is currently disconnected from the core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection'**
   String get notifications_errorSnackBar_appUnregistered;
 
-  /// Shown in a notification or snackbar (call screen or global) when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Condition: signaling connection to the core could not be established due to network issues, server unreachability, or transient backend problems; user may need to check network or backend availability.
+  /// Shown in a notification or snackbar (call screen or global) when the app fails to connect to the core and is attempting automatic reconnection. Condition: signaling connection to the core could not be established due to network issues, server unreachability, or transient backend problems; user may need to check network or backend availability.
   ///
   /// In en, this message translates to:
   /// **'Connecting to the core failed, trying to reconnect'**
@@ -3067,13 +3067,13 @@ abstract class AppLocalizations {
   /// **'Cannot make the call right now because the line is busy. Please try again later.'**
   String get notifications_errorSnackBar_callServiceBusyLine;
 
-  /// Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability.
+  /// Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability.
   ///
   /// In en, this message translates to:
   /// **'Cannot initiate the call, please check the connection status'**
   String get notifications_errorSnackBar_callSignalingClientNotConnect;
 
-  /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closed the session.
+  /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP 401 Unauthorized), or the signaling server closed the session.
   ///
   /// In en, this message translates to:
   /// **'Authentication error, please re-login'**
@@ -3121,19 +3121,19 @@ abstract class AppLocalizations {
   /// **'Your account was not found. It may have been deactivated or removed. Please contact your administrator.'**
   String get notifications_errorSnackBar_accountNotFound;
 
-  /// Shown in a notification or snackbar when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists.
+  /// Shown in a notification or snackbar when the app fails to connect to the core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Connecting to the core failed, trying to reconnect'**
   String get notifications_errorSnackBar_SignalingConnectFailed;
 
-  /// Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a disconnect code is available. Context: occurs when the signaling/WebSocket connection is closed with a known reason (e.g. protocol error, auth failure, server-initiated disconnect). Suggest the user check their network or reauthenticate if the issue persists.
+  /// Shown in a notification or snackbar when the app is disconnected from the core and a disconnect code is available. Context: occurs when the signaling/WebSocket connection is closed with a known reason (e.g. protocol error, auth failure, server-initiated disconnect). Suggest the user check their network or reauthenticate if the issue persists.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core with the code: {codeName}'**
   String notifications_errorSnackBar_signalingDisconnectWithCodeName(String codeName);
 
-  /// Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.
+  /// Shown in a notification or snackbar when the app is disconnected from the core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.
   ///
   /// In en, this message translates to:
   /// **'Disconnected from the core due to the following reason: {reason}'**
@@ -3151,7 +3151,7 @@ abstract class AppLocalizations {
   /// **'Open dialer'**
   String get notifications_errorSnackBarAction_emergencyNumber;
 
-  /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality.
+  /// Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality.
   ///
   /// In en, this message translates to:
   /// **'Authentication error, please re-login'**
@@ -4180,7 +4180,7 @@ abstract class AppLocalizations {
   /// No description provided for @settings_AboutText_CoreVersion.
   ///
   /// In en, this message translates to:
-  /// **'WebTrit Cloud Backend version'**
+  /// **'Cloud Backend version'**
   String get settings_AboutText_CoreVersion;
 
   /// No description provided for @settings_AboutText_CoreVersionUndefined.

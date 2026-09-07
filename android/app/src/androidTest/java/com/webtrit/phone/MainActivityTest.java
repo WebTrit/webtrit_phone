@@ -1,6 +1,4 @@
-package com.webtrit.app;
-
-import com.webtrit.phone.MainActivity;
+package com.webtrit.phone;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Test;

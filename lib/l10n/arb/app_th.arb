@@ -929,7 +929,7 @@
       }
     }
   },
-  "login_ButtonTooltip_signInToYourInstance": "เข้าสู่ระบบ WebTrit Cloud Backend ของคุณ",
+  "login_ButtonTooltip_signInToYourInstance": "เข้าสู่ระบบ Cloud Backend ของคุณ",
   "@login_ButtonTooltip_signInToYourInstance": {},
   "login_CoreVersionUnsupportedExceptionError": "เวอร์ชันอินสแตนซ์ที่ระบุไม่รองรับ โปรดติดต่อผู้ดูแลระบบของคุณ (ปัจจุบัน: {actual}, ที่รองรับ: {supportedConstraint})",
   "@login_CoreVersionUnsupportedExceptionError": {
@@ -1011,9 +1011,9 @@
   "@login_RequestFailureUserNotFoundError": {
     "description": "Shown during password login when the provided user reference does not exist. Condition: the backend returns user_not_found in response to POST /session."
   },
-  "login_RequestFailureUnconfiguredBundleIdError": "WebTrit Cloud Backend ของคุณไม่รองรับแอปนี้",
+  "login_RequestFailureUnconfiguredBundleIdError": "Cloud Backend ของคุณไม่รองรับแอปนี้",
   "@login_RequestFailureUnconfiguredBundleIdError": {
-    "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
+    "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
   },
   "login_SemanticsLabel_hidePassword": "ซ่อนรหัสผ่าน",
   "@login_SemanticsLabel_hidePassword": {
@@ -1023,15 +1023,15 @@
   "@login_SemanticsLabel_showPassword": {
     "description": "Accessibility name of the button that reveals the typed password."
   },
-  "login_SupportedLoginTypeMissedExceptionError": "WebTrit Cloud Backend ปัจจุบันไม่รองรับประเภทการเข้าสู่ระบบใด ๆ ที่ใช้งานได้กับแอปนี้",
+  "login_SupportedLoginTypeMissedExceptionError": "Cloud Backend ปัจจุบันไม่รองรับประเภทการเข้าสู่ระบบใด ๆ ที่ใช้งานได้กับแอปนี้",
   "@login_SupportedLoginTypeMissedExceptionError": {
-    "description": "Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods."
+    "description": "Shown during login or signup when the Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods."
   },
-  "login_Text_coreUrlAssignPostDescription": "หากคุณยังไม่มี WebTrit Cloud Backend ของคุณเอง โปรดติดต่อทีมขาย {email}",
+  "login_Text_coreUrlAssignPostDescription": "หากคุณยังไม่มี Cloud Backend ของคุณเอง โปรดติดต่อทีมขาย {email}",
   "@login_Text_coreUrlAssignPostDescription": {},
-  "login_Text_coreUrlAssignPreDescription": "หากต้องการโทรผ่านระบบ VoIP ของคุณเอง โปรดป้อน URL ของ WebTrit Cloud Backend (ตามที่ผู้จัดการบัญชีของคุณให้มา) ด้านล่าง",
+  "login_Text_coreUrlAssignPreDescription": "หากต้องการโทรผ่านระบบ VoIP ของคุณเอง โปรดป้อน URL ของ Cloud Backend (ตามที่ผู้จัดการบัญชีของคุณให้มา) ด้านล่าง",
   "@login_Text_coreUrlAssignPreDescription": {},
-  "login_TextFieldLabelText_coreUrlAssign": "ป้อน URL ของ WebTrit Cloud Backend ของคุณ",
+  "login_TextFieldLabelText_coreUrlAssign": "ป้อน URL ของ Cloud Backend ของคุณ",
   "@login_TextFieldLabelText_coreUrlAssign": {},
   "login_TextFieldLabelText_otpSigninCode": "กรอกรหัสยืนยัน",
   "@login_TextFieldLabelText_otpSigninCode": {},
@@ -1127,11 +1127,11 @@
   "@loginType_signup": {},
   "login_validationCoreUrlError": "กรุณากรอก URL ที่ถูกต้อง",
   "@login_validationCoreUrlError": {
-    "description": "Shown when the user enters an invalid URL in the WebTrit Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format."
+    "description": "Shown when the user enters an invalid URL in the Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format."
   },
-  "login_validationCoreUrlUnreachableError": "ไม่สามารถเชื่อมต่อกับบริการ WebTrit ตามที่อยู่นี้ได้",
+  "login_validationCoreUrlUnreachableError": "ไม่สามารถเชื่อมต่อกับบริการตามที่อยู่นี้ได้",
   "@login_validationCoreUrlUnreachableError": {
-    "description": "Shown inline under the WebTrit Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a WebTrit service (connection failure, non-JSON response, or an HTTP error without a WebTrit error payload)."
+    "description": "Shown inline under the Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a service (connection failure, non-JSON response, or an HTTP error without an error payload)."
   },
   "login_validationEmailError": "กรุณากรอกอีเมลที่ถูกต้อง",
   "@login_validationEmailError": {
@@ -1186,9 +1186,9 @@
   "@main_CompatibilityIssueDialogActions_logout": {},
   "main_CompatibilityIssueDialogActions_update": "อัปเดต",
   "@main_CompatibilityIssueDialogActions_update": {},
-  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "เวอร์ชัน WebTrit Cloud Backend ไม่รองรับ กรุณาติดต่อผู้ดูแลระบบของคุณ\n\nเวอร์ชันของอินสแตนซ์:\n{actual}\n\nเวอร์ชันที่รองรับ:\n{supportedConstraint}",
+  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "เวอร์ชัน Cloud Backend ไม่รองรับ กรุณาติดต่อผู้ดูแลระบบของคุณ\n\nเวอร์ชันของอินสแตนซ์:\n{actual}\n\nเวอร์ชันที่รองรับ:\n{supportedConstraint}",
   "@main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": {
-    "description": "Shown in the compatibility issue dialog when the app detects that the WebTrit Cloud Backend version is incompatible. Condition: the actual backend version does not match the supported version range. Placeholders: {actual} for the current instance version, {supportedConstraint} for the supported version range.",
+    "description": "Shown in the compatibility issue dialog when the app detects that the Cloud Backend version is incompatible. Condition: the actual backend version does not match the supported version range. Placeholders: {actual} for the current instance version, {supportedConstraint} for the supported version range.",
     "placeholders": {
       "actual": {
         "type": "String"
@@ -1456,13 +1456,13 @@
   "@notifications_errorSnackBar_appOnline": {
     "description": "Shown in a notification or snackbar when the application successfully reconnects and is online. Condition: the app transitions from offline/disconnected to an online state."
   },
-  "notifications_errorSnackBar_appUnregistered": "ขออภัย ขณะนี้แอปพลิเคชันของคุณถูกตัดการเชื่อมต่อจากเซิร์ฟเวอร์หลักของ WebTrit จึงไม่สามารถโทรออกได้ในตอนนี้ กรุณาไปที่หน้าตั้งค่า แล้วปิดและเปิดสวิตช์สถานะออนไลน์อีกครั้งเพื่อเชื่อมต่อใหม่",
+  "notifications_errorSnackBar_appUnregistered": "ขออภัย ขณะนี้แอปพลิเคชันของคุณถูกตัดการเชื่อมต่อจากเซิร์ฟเวอร์หลัก จึงไม่สามารถโทรออกได้ในตอนนี้ กรุณาไปที่หน้าตั้งค่า แล้วปิดและเปิดสวิตช์สถานะออนไลน์อีกครั้งเพื่อเชื่อมต่อใหม่",
   "@notifications_errorSnackBar_appUnregistered": {
-    "description": "Shown in a notification or snackbar (call screen or global) when the app is disconnected from the WebTrit core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings."
+    "description": "Shown in a notification or snackbar (call screen or global) when the app is disconnected from the core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings."
   },
   "notifications_errorSnackBar_callConnect": "เชื่อมต่อกับ core ล้มเหลว กำลังพยายามเชื่อมต่อใหม่",
   "@notifications_errorSnackBar_callConnect": {
-    "description": "Shown in a notification or snackbar (call screen or global) when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Condition: signaling connection to the core could not be established due to network issues, server unreachability, or transient backend problems; user may need to check network or backend availability."
+    "description": "Shown in a notification or snackbar (call screen or global) when the app fails to connect to the core and is attempting automatic reconnection. Condition: signaling connection to the core could not be established due to network issues, server unreachability, or transient backend problems; user may need to check network or backend availability."
   },
   "notifications_errorSnackBar_callNegotiationTimeout": "ไม่สามารถเชื่อมต่อสายได้ กรุณาลองใหม่อีกครั้งภายหลัง",
   "@notifications_errorSnackBar_callNegotiationTimeout": {
@@ -1478,11 +1478,11 @@
   },
   "notifications_errorSnackBar_callSignalingClientNotConnect": "ไม่สามารถเริ่มการโทรได้ โปรดตรวจสอบสถานะการเชื่อมต่อ",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
-    "description": "Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability."
+    "description": "Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability."
   },
   "notifications_errorSnackBar_callSignalingClientSessionMissed": "เกิดข้อผิดพลาดในการยืนยันตัวตน กรุณาเข้าสู่ระบบใหม่",
   "@notifications_errorSnackBar_callSignalingClientSessionMissed": {
-    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closed the session."
+    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP 401 Unauthorized), or the signaling server closed the session."
   },
   "notifications_errorSnackBar_callUndefinedLine": "ไม่มีสายว่างสำหรับเริ่มการโทร",
   "@notifications_errorSnackBar_callUndefinedLine": {
@@ -1514,11 +1514,11 @@
   },
   "notifications_errorSnackBar_SignalingConnectFailed": "การเชื่อมต่อกับ core ล้มเหลว กำลังพยายามเชื่อมต่อใหม่",
   "@notifications_errorSnackBar_SignalingConnectFailed": {
-    "description": "Shown in a notification or snackbar when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists."
+    "description": "Shown in a notification or snackbar when the app fails to connect to the core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists."
   },
   "notifications_errorSnackBar_signalingDisconnectWithCodeName": "ถูกตัดการเชื่อมต่อจาก core ด้วยรหัส: {codeName}",
   "@notifications_errorSnackBar_signalingDisconnectWithCodeName": {
-    "description": "Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a disconnect code is available. Context: occurs when the signaling/WebSocket connection is closed with a known reason (e.g. protocol error, auth failure, server-initiated disconnect). Suggest the user check their network or reauthenticate if the issue persists.",
+    "description": "Shown in a notification or snackbar when the app is disconnected from the core and a disconnect code is available. Context: occurs when the signaling/WebSocket connection is closed with a known reason (e.g. protocol error, auth failure, server-initiated disconnect). Suggest the user check their network or reauthenticate if the issue persists.",
     "placeholders": {
       "codeName": {
         "type": "String"
@@ -1527,7 +1527,7 @@
   },
   "notifications_errorSnackBar_signalingDisconnectWithSystemReason": "ตัดการเชื่อมต่อจาก core เนื่องจากสาเหตุต่อไปนี้: {reason}",
   "@notifications_errorSnackBar_signalingDisconnectWithSystemReason": {
-    "description": "Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.",
+    "description": "Shown in a notification or snackbar when the app is disconnected from the core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.",
     "placeholders": {
       "reason": {
         "type": "String"
@@ -1549,7 +1549,7 @@
   },
   "notifications_errorSnackBar_SignalingSessionMissed": "เกิดข้อผิดพลาดในการยืนยันตัวตน โปรดเข้าสู่ระบบใหม่",
   "@notifications_errorSnackBar_SignalingSessionMissed": {
-    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality."
+    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality."
   },
   "notifications_errorSnackBar_sipRegistrationFailed_Unavailable": "การลงทะเบียนกับระบบ VoIP ระยะไกลล้มเหลว บริการไม่พร้อมใช้งาน",
   "@notifications_errorSnackBar_sipRegistrationFailed_Unavailable": {
@@ -1976,7 +1976,7 @@
   "@settings_AboutText_BundleVersion": {},
   "settings_AboutText_CallkeepVersion": "เวอร์ชัน CallKeep",
   "@settings_AboutText_CallkeepVersion": {},
-  "settings_AboutText_CoreVersion": "เวอร์ชัน WebTrit Cloud Backend",
+  "settings_AboutText_CoreVersion": "เวอร์ชัน Cloud Backend",
   "@settings_AboutText_CoreVersion": {},
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {},

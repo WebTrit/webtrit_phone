@@ -1,2 +1,5 @@
-WEBTRIT_APP_LINK_DOMAIN=app.webtrit.com
-WEBTRIT_APP_NAME=WebTrit
+// Fallbacks for a checkout without a generated Environment.xcconfig. The link domain lands
+// verbatim in Runner.entitlements as `applinks:$(WEBTRIT_APP_LINK_DOMAIN)`, so it has to stay a
+// syntactically valid host - a placeholder rather than an empty value or a brand's real domain.
+WEBTRIT_APP_LINK_DOMAIN=app.example.com
+WEBTRIT_APP_NAME=PortaPhone

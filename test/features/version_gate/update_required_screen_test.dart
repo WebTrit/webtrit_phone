@@ -27,10 +27,10 @@ class _FakePackageInfo implements PackageInfo {
   final String buildNumber;
 
   @override
-  String get appName => 'WebTrit';
+  String get appName => 'PortaPhone';
 
   @override
-  String get packageName => 'com.webtrit.app';
+  String get packageName => 'com.webtrit.phone';
 }
 
 AppState _appState(AppCompatibility compatibility) => AppState(

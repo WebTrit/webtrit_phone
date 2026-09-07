@@ -929,7 +929,7 @@
       }
     }
   },
-  "login_ButtonTooltip_signInToYourInstance": "Увійти до свого WebTrit Cloud Backend",
+  "login_ButtonTooltip_signInToYourInstance": "Увійти до свого Cloud Backend",
   "@login_ButtonTooltip_signInToYourInstance": {},
   "login_CoreVersionUnsupportedExceptionError": "Непідтримувана версія екземпляра, будь ласка, зверніться до адміністратора вашої системи (фактична: {actual}, підтримувана: {supportedConstraint})",
   "@login_CoreVersionUnsupportedExceptionError": {
@@ -1013,7 +1013,7 @@
   },
   "login_RequestFailureUnconfiguredBundleIdError": "Помилка конфігурації сервера застосунку - сповістіть свого постачальника послуг",
   "@login_RequestFailureUnconfiguredBundleIdError": {
-    "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the WebTrit Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
+    "description": "Shown during login or signup when the app's bundle identifier is not configured or supported by the Cloud Backend. Condition: the backend does not recognize the app, typically due to missing or incorrect bundle ID setup."
   },
   "login_SemanticsLabel_hidePassword": "Сховати пароль",
   "@login_SemanticsLabel_hidePassword": {
@@ -1023,15 +1023,15 @@
   "@login_SemanticsLabel_showPassword": {
     "description": "Accessibility name of the button that reveals the typed password."
   },
-  "login_SupportedLoginTypeMissedExceptionError": "Поточний WebTrit Cloud Backend не підтримує жодного типу входу, сумісного з цим застосунком",
+  "login_SupportedLoginTypeMissedExceptionError": "Поточний Cloud Backend не підтримує жодного типу входу, сумісного з цим застосунком",
   "@login_SupportedLoginTypeMissedExceptionError": {
-    "description": "Shown during login or signup when the WebTrit Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods."
+    "description": "Shown during login or signup when the Cloud Backend does not support any login types compatible with the app. Condition: the backend instance is missing required configuration for supported authentication methods."
   },
-  "login_Text_coreUrlAssignPostDescription": "Якщо у вас ще немає власного екземпляра WebTrit Cloud Backend, зв'яжіться з відділом продажів за адресою {email}.",
+  "login_Text_coreUrlAssignPostDescription": "Якщо у вас ще немає власного екземпляра Cloud Backend, зв'яжіться з відділом продажів за адресою {email}.",
   "@login_Text_coreUrlAssignPostDescription": {},
-  "login_Text_coreUrlAssignPreDescription": "Щоб робити дзвінки через вашу власну систему VoIP, будь ласка, введіть URL WebTrit Cloud Backend (як це було надано вашим менеджером) нижче.",
+  "login_Text_coreUrlAssignPreDescription": "Щоб робити дзвінки через вашу власну систему VoIP, будь ласка, введіть URL Cloud Backend (як це було надано вашим менеджером) нижче.",
   "@login_Text_coreUrlAssignPreDescription": {},
-  "login_TextFieldLabelText_coreUrlAssign": "Введіть URL вашого WebTrit Cloud Backend",
+  "login_TextFieldLabelText_coreUrlAssign": "Введіть URL вашого Cloud Backend",
   "@login_TextFieldLabelText_coreUrlAssign": {},
   "login_TextFieldLabelText_otpSigninCode": "Введіть код підтвердження",
   "@login_TextFieldLabelText_otpSigninCode": {},
@@ -1127,11 +1127,11 @@
   "@loginType_signup": {},
   "login_validationCoreUrlError": "Будь ласка, введіть правильний URL",
   "@login_validationCoreUrlError": {
-    "description": "Shown when the user enters an invalid URL in the WebTrit Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format."
+    "description": "Shown when the user enters an invalid URL in the Cloud Backend URL field during login or setup. Condition: the input does not match the required URL format."
   },
-  "login_validationCoreUrlUnreachableError": "Не вдалося з'єднатися з сервісом WebTrit за цією адресою",
+  "login_validationCoreUrlUnreachableError": "Не вдалося з'єднатися з сервісом за цією адресою",
   "@login_validationCoreUrlUnreachableError": {
-    "description": "Shown inline under the WebTrit Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a WebTrit service (connection failure, non-JSON response, or an HTTP error without a WebTrit error payload)."
+    "description": "Shown inline under the Cloud Backend URL field after submit. Condition: the entered address cannot be reached or does not respond like a service (connection failure, non-JSON response, or an HTTP error without an error payload)."
   },
   "login_validationEmailError": "Будь ласка, введіть правильну електронну пошту",
   "@login_validationEmailError": {
@@ -1186,9 +1186,9 @@
   "@main_CompatibilityIssueDialogActions_logout": {},
   "main_CompatibilityIssueDialogActions_update": "Оновити",
   "@main_CompatibilityIssueDialogActions_update": {},
-  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "Несумісна версія WebTrit Cloud Backend, будь ласка, зв'яжіться з адміністратором вашої системи.\n\nВерсія екземпляру:\n{actual}\n\nПідтримувана версія:\n{supportedConstraint}\n",
+  "main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": "Несумісна версія Cloud Backend, будь ласка, зв'яжіться з адміністратором вашої системи.\n\nВерсія екземпляру:\n{actual}\n\nПідтримувана версія:\n{supportedConstraint}\n",
   "@main_CompatibilityIssueDialog_contentCoreVersionUnsupportedExceptionError": {
-    "description": "Shown in the compatibility issue dialog when the app detects that the WebTrit Cloud Backend version is incompatible. Condition: the actual backend version does not match the supported version range. Placeholders: {actual} for the current instance version, {supportedConstraint} for the supported version range.",
+    "description": "Shown in the compatibility issue dialog when the app detects that the Cloud Backend version is incompatible. Condition: the actual backend version does not match the supported version range. Placeholders: {actual} for the current instance version, {supportedConstraint} for the supported version range.",
     "placeholders": {
       "actual": {
         "type": "String"
@@ -1456,13 +1456,13 @@
   "@notifications_errorSnackBar_appOnline": {
     "description": "Shown in a notification or snackbar when the application successfully reconnects and is online. Condition: the app transitions from offline/disconnected to an online state."
   },
-  "notifications_errorSnackBar_appUnregistered": "Вибачте, ваш застосунок наразі відключений від серверів WebTrit і не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань і перемкніть вимикач стану онлайн у вимкнуте та знову в увімкнуте положення, щоб відновити з'єднання.",
+  "notifications_errorSnackBar_appUnregistered": "Вибачте, ваш застосунок наразі відключений від серверів і не може здійснювати дзвінки. Будь ласка, перейдіть на сторінку налаштувань і перемкніть вимикач стану онлайн у вимкнуте та знову в увімкнуте положення, щоб відновити з'єднання.",
   "@notifications_errorSnackBar_appUnregistered": {
-    "description": "Shown in a notification or snackbar (call screen or global) when the app is disconnected from the WebTrit core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings."
+    "description": "Shown in a notification or snackbar (call screen or global) when the app is disconnected from the core servers and cannot place calls. Condition: registration with the core is lost due to network/connectivity issues, authentication failure (e.g. SIP 401 Unauthorized), signaling timeout (e.g. SIP 408 Request Timeout) or server-side errors (e.g. SIP 503 Service Unavailable); user may need to reauthenticate or toggle the online status in settings."
   },
   "notifications_errorSnackBar_callConnect": "Підключення до ядра не вдалося, спроба з'єднання",
   "@notifications_errorSnackBar_callConnect": {
-    "description": "Shown in a notification or snackbar (call screen or global) when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Condition: signaling connection to the core could not be established due to network issues, server unreachability, or transient backend problems; user may need to check network or backend availability."
+    "description": "Shown in a notification or snackbar (call screen or global) when the app fails to connect to the core and is attempting automatic reconnection. Condition: signaling connection to the core could not be established due to network issues, server unreachability, or transient backend problems; user may need to check network or backend availability."
   },
   "notifications_errorSnackBar_callNegotiationTimeout": "Не вдається здійснити виклик, спробуйте пізніше",
   "@notifications_errorSnackBar_callNegotiationTimeout": {
@@ -1478,11 +1478,11 @@
   },
   "notifications_errorSnackBar_callSignalingClientNotConnect": "Не вдається ініціювати дзвінок, перевірте статус з'єднання",
   "@notifications_errorSnackBar_callSignalingClientNotConnect": {
-    "description": "Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the WebTrit core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability."
+    "description": "Shown in a notification or snackbar when the app cannot initiate a call because the signaling client is not connected to the core. Context: occurs at call start when the signaling/WebSocket connection is absent or closed; typical causes include network connectivity issues, connection refused/timeouts, TLS/socket handshake failures, authentication/token errors (e.g. 401), or core server unavailability."
   },
   "notifications_errorSnackBar_callSignalingClientSessionMissed": "Помилка автентифікації, будь ласка увійдіть знову",
   "@notifications_errorSnackBar_callSignalingClientSessionMissed": {
-    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closed the session."
+    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP 401 Unauthorized), or the signaling server closed the session."
   },
   "notifications_errorSnackBar_callUndefinedLine": "Немає вільних ліній для ініціювання дзвінка",
   "@notifications_errorSnackBar_callUndefinedLine": {
@@ -1514,11 +1514,11 @@
   },
   "notifications_errorSnackBar_SignalingConnectFailed": "Підключення до ядра не вдалося, спроба з'єднання",
   "@notifications_errorSnackBar_SignalingConnectFailed": {
-    "description": "Shown in a notification or snackbar when the app fails to connect to the WebTrit core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists."
+    "description": "Shown in a notification or snackbar when the app fails to connect to the core and is attempting automatic reconnection. Context: occurs when the signaling/WebSocket connection cannot be established due to network outages, server unreachability, TLS/handshake failures, authentication errors (expired/invalid tokens), or firewall/VPN restrictions. Suggest the user check their network, retry, or reauthenticate if the problem persists."
   },
   "notifications_errorSnackBar_signalingDisconnectWithCodeName": "Від’єднано від ядра за кодом: {codeName}",
   "@notifications_errorSnackBar_signalingDisconnectWithCodeName": {
-    "description": "Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a disconnect code is available. Context: occurs when the signaling/WebSocket connection is closed with a known reason (e.g. protocol error, auth failure, server-initiated disconnect). Suggest the user check their network or reauthenticate if the issue persists.",
+    "description": "Shown in a notification or snackbar when the app is disconnected from the core and a disconnect code is available. Context: occurs when the signaling/WebSocket connection is closed with a known reason (e.g. protocol error, auth failure, server-initiated disconnect). Suggest the user check their network or reauthenticate if the issue persists.",
     "placeholders": {
       "codeName": {
         "type": "String"
@@ -1527,7 +1527,7 @@
   },
   "notifications_errorSnackBar_signalingDisconnectWithSystemReason": "Від’єднано від ядра з причини: {reason}",
   "@notifications_errorSnackBar_signalingDisconnectWithSystemReason": {
-    "description": "Shown in a notification or snackbar when the app is disconnected from the WebTrit core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.",
+    "description": "Shown in a notification or snackbar when the app is disconnected from the core and a system-provided reason string is available. Context: occurs when the signaling/WebSocket connection is closed with a system-level reason (e.g. network error, TLS/handshake failure, server-initiated disconnect). Advise the user to check their network, retry, or reauthenticate if the problem persists.",
     "placeholders": {
       "reason": {
         "type": "String"
@@ -1546,7 +1546,7 @@
   "@notifications_errorSnackBarAction_emergencyNumber": {},
   "notifications_errorSnackBar_SignalingSessionMissed": "Помилка автентифікації, будь ласка увійдіть знову",
   "@notifications_errorSnackBar_SignalingSessionMissed": {
-    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP/WebTrit 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality."
+    "description": "Shown in a notification or snackbar when the app's signaling session for the signed-in user is lost or rejected and re-authentication is required. Typical causes: expired or revoked access/refresh tokens, failed token refresh, authentication rejected by the core (e.g. SIP 401 Unauthorized), or the signaling server closing the session. Advise the user to sign in again to restore full functionality."
   },
   "notifications_errorSnackBar_sipRegistrationFailed_Unavailable": "Помилка реєстрації у віддаленій системі VoIP, послуга недоступна",
   "@notifications_errorSnackBar_sipRegistrationFailed_Unavailable": {
@@ -1973,7 +1973,7 @@
   "@settings_AboutText_BundleVersion": {},
   "settings_AboutText_CallkeepVersion": "Версія CallKeep",
   "@settings_AboutText_CallkeepVersion": {},
-  "settings_AboutText_CoreVersion": "Версія WebTrit Cloud Backend",
+  "settings_AboutText_CoreVersion": "Версія Cloud Backend",
   "@settings_AboutText_CoreVersion": {},
   "settings_AboutText_CoreVersionUndefined": "?.?.?",
   "@settings_AboutText_CoreVersionUndefined": {},

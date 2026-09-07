@@ -50,7 +50,7 @@ void main() {
     when(() => bloc.state).thenReturn(
       AboutState(
         embeddedResources: resources,
-        packageName: 'com.webtrit.app',
+        packageName: 'com.webtrit.phone',
         appIdentifier: 'app-identifier',
         coreUrl: Uri.parse('https://core.webtrit.com'),
         userAgent: 'user-agent',

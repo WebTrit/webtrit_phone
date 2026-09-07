@@ -24,7 +24,7 @@ AppUpdateInfo _info({
     flexibleAllowedPreconditions: null,
     availableVersionCode: availableVersionCode,
     installStatus: installStatus,
-    packageName: 'com.webtrit.app',
+    packageName: 'com.webtrit.phone',
     clientVersionStalenessDays: null,
     updatePriority: updatePriority,
   );

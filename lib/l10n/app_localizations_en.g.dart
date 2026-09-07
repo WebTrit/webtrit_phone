@@ -1066,7 +1066,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get login_ButtonTooltip_signInToYourInstance => 'Sign in to your WebTrit Cloud Backend';
+  String get login_ButtonTooltip_signInToYourInstance => 'Sign in to your Cloud Backend';
 
   @override
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
@@ -1124,7 +1124,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_RequestFailureUserNotFoundError => 'User not found';
 
   @override
-  String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your WebTrit Cloud Backend';
+  String get login_RequestFailureUnconfiguredBundleIdError => 'The app is not supported by your Cloud Backend';
 
   @override
   String get login_SemanticsLabel_hidePassword => 'Hide password';
@@ -1134,19 +1134,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login_SupportedLoginTypeMissedExceptionError =>
-      'The current WebTrit Cloud Backend does not support any login types compatible with this app';
+      'The current Cloud Backend does not support any login types compatible with this app';
 
   @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
-    return 'If you do not yet have your own WebTrit Cloud Backend - contact sales team $email.';
+    return 'If you do not yet have your own Cloud Backend - contact sales team $email.';
   }
 
   @override
   String get login_Text_coreUrlAssignPreDescription =>
-      'In order to make calls via your own VoIP system please enter the URL of WebTrit Cloud Backend (as it was provided to you by your account manager) below.';
+      'In order to make calls via your own VoIP system please enter the URL of your Cloud Backend (as it was provided to you by your account manager) below.';
 
   @override
-  String get login_TextFieldLabelText_coreUrlAssign => 'Enter your WebTrit Cloud Backend URL';
+  String get login_TextFieldLabelText_coreUrlAssign => 'Enter your Cloud Backend URL';
 
   @override
   String get login_TextFieldLabelText_otpSigninCode => 'Enter the verification code';
@@ -1266,7 +1266,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_validationCoreUrlError => 'Please enter a valid URL';
 
   @override
-  String get login_validationCoreUrlUnreachableError => 'Cannot reach WebTrit service at this address';
+  String get login_validationCoreUrlUnreachableError => 'Cannot reach the service at this address';
 
   @override
   String get login_validationEmailError => 'Please enter a valid email';
@@ -1333,7 +1333,7 @@ class AppLocalizationsEn extends AppLocalizations {
     String actual,
     String supportedConstraint,
   ) {
-    return 'Incompatible WebTrit Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
+    return 'Incompatible Cloud Backend version, please contact the administrator of your system.\n\nInstance version:\n$actual\n\nSupported version:\n$supportedConstraint';
   }
 
   @override
@@ -1657,7 +1657,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_appUnregistered =>
-      'Sorry, your application is currently disconnected from the WebTrit core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
+      'Sorry, your application is currently disconnected from the core servers and hence can\'t call right now. Please go to the settings page, and slide the online status toggle switch off and on again to reestablish the connection';
 
   @override
   String get notifications_errorSnackBar_callConnect => 'Connecting to the core failed, trying to reconnect';
@@ -2281,7 +2281,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_AboutText_CallkeepVersion => 'CallKeep version';
 
   @override
-  String get settings_AboutText_CoreVersion => 'WebTrit Cloud Backend version';
+  String get settings_AboutText_CoreVersion => 'Cloud Backend version';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';

@@ -73,10 +73,10 @@ void main() {
       expect(EnvironmentConfig.APP_NAME, 'Custom');
 
       EnvironmentConfig.applyOverrides({EnvironmentConfig.APP_NAME__NAME: ''});
-      expect(EnvironmentConfig.APP_NAME, 'WebTrit');
+      expect(EnvironmentConfig.APP_NAME, 'PortaPhone');
 
       EnvironmentConfig.clearOverrides();
-      expect(EnvironmentConfig.APP_NAME, 'WebTrit');
+      expect(EnvironmentConfig.APP_NAME, 'PortaPhone');
     });
 
     test('a non-positive polling-interval override falls back to the default', () {
@@ -105,8 +105,8 @@ void main() {
     test('APP_LINK_DOMAIN is trimmed, so it matches the host the build put in the manifest', () {
       const name = EnvironmentConfig.APP_LINK_DOMAIN__NAME;
 
-      EnvironmentConfig.applyOverrides({name: '  app.webtrit.com  '});
-      expect(EnvironmentConfig.APP_LINK_DOMAIN, 'app.webtrit.com');
+      EnvironmentConfig.applyOverrides({name: '  app.example.com  '});
+      expect(EnvironmentConfig.APP_LINK_DOMAIN, 'app.example.com');
 
       // Whitespace only leaves deep links off here too, matching a build that declares no filter.
       EnvironmentConfig.applyOverrides({name: '   '});

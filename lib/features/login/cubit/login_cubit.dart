@@ -237,7 +237,7 @@ class LoginCubit extends Cubit<LoginState> {
       coreUrlInputValue,
       defaultTenantId,
       onError: (error, stackTrace) {
-        // On this step an unreachable or non-WebTrit address is an expected
+        // On this step an unreachable or unrecognised address is an expected
         // user mistake: surface it inline under the URL field instead of the
         // generic error path (which stays silent for such failures).
         if (_isCoreUnreachableError(error)) {
@@ -251,8 +251,8 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   /// Whether [error] means the entered address does not host a reachable
-  /// WebTrit service: a transport failure, a non-JSON payload, or an HTTP
-  /// error without a structured WebTrit error body (e.g. a bare ingress 404
+  /// Cloud Backend: a transport failure, a non-JSON payload, or an HTTP
+  /// error without a structured error body (e.g. a bare ingress 404
   /// while the backend restarts).
   static bool _isCoreUnreachableError(Object error) {
     if (error is RequestFailure) return error.error == null;

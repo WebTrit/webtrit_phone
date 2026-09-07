@@ -23,7 +23,7 @@ void main() {
     deviceInfo = _MockDeviceInfo();
     appInfo = _MockAppInfo();
 
-    when(() => packageInfo.appName).thenReturn('WebTrit');
+    when(() => packageInfo.appName).thenReturn('PortaPhone');
     when(() => appInfo.version).thenReturn(Version(1, 8, 2));
     when(() => deviceInfo.model).thenReturn('iPhone14,3');
     when(() => deviceInfo.systemName).thenReturn('iOS');
@@ -33,7 +33,7 @@ void main() {
   test('buildUserAgent names the app build and the device', () {
     expect(
       DefaultAppMetadataProvider.buildUserAgent(packageInfo, appInfo, deviceInfo),
-      equals('WebTrit/1.8.2 (iPhone14,3; iOS: 17.4)'),
+      equals('PortaPhone/1.8.2 (iPhone14,3; iOS: 17.4)'),
     );
   });
 

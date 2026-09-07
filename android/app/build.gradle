@@ -44,8 +44,7 @@ if (project.hasProperty('dart-defines')) {
     println("No dart defines proovided")
 }
 
-def dartDefine = [WEBTRIT_APP_LINK_DOMAIN: projectPropertyDartDefines['WEBTRIT_APP_LINK_DOMAIN'] ?: 'app.webtrit.com',
-                  WEBTRIT_APP_NAME       : projectPropertyDartDefines['WEBTRIT_APP_NAME'] ?: 'WebTrit',]
+def dartDefine = [WEBTRIT_APP_NAME: projectPropertyDartDefines['WEBTRIT_APP_NAME'] ?: 'PortaPhone',]
 
 def envDefine = [WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH: projectPropertyDartDefines['WEBTRIT_ANDROID_RELEASE_UPLOAD_KEYSTORE_PATH'] ?: '',
                  WEBTRIT_HTTP_ALLOWED_DOMAINS        : projectPropertyDartDefines['WEBTRIT_HTTP_ALLOWED_DOMAINS'] ?: '',]

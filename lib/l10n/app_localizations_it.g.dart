@@ -1073,7 +1073,7 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get login_ButtonTooltip_signInToYourInstance => 'Accedi al tuo WebTrit Cloud Backend';
+  String get login_ButtonTooltip_signInToYourInstance => 'Accedi al tuo Cloud Backend';
 
   @override
   String login_CoreVersionUnsupportedExceptionError(String actual, String supportedConstraint) {
@@ -1142,19 +1142,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get login_SupportedLoginTypeMissedExceptionError =>
-      'L\'attuale Backend Cloud di WebTrit non supporta nessun tipo di accesso compatibile con questa app';
+      'L\'attuale Backend Cloud non supporta nessun tipo di accesso compatibile con questa app';
 
   @override
   String login_Text_coreUrlAssignPostDescription(Object email) {
-    return 'Se non hai ancora il tuo proprio WebTrit Cloud Backend, contatta il team vendite all\'indirizzo $email';
+    return 'Se non hai ancora il tuo proprio Cloud Backend, contatta il team vendite all\'indirizzo $email';
   }
 
   @override
   String get login_Text_coreUrlAssignPreDescription =>
-      'Per effettuare chiamate tramite il tuo sistema VoIP, inserisci l\'URL di WebTrit Cloud Backend (come fornito dal tuo account manager) di seguito.';
+      'Per effettuare chiamate tramite il tuo sistema VoIP, inserisci l\'URL di Cloud Backend (come fornito dal tuo account manager) di seguito.';
 
   @override
-  String get login_TextFieldLabelText_coreUrlAssign => 'Inserisci l\'URL del tuo WebTrit Cloud Backend';
+  String get login_TextFieldLabelText_coreUrlAssign => 'Inserisci l\'URL del tuo Cloud Backend';
 
   @override
   String get login_TextFieldLabelText_otpSigninCode => 'Inserisci il codice di verifica';
@@ -1274,8 +1274,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get login_validationCoreUrlError => 'Prego inserisci un URL valido';
 
   @override
-  String get login_validationCoreUrlUnreachableError =>
-      'Impossibile raggiungere il servizio WebTrit a questo indirizzo';
+  String get login_validationCoreUrlUnreachableError => 'Impossibile raggiungere il servizio a questo indirizzo';
 
   @override
   String get login_validationEmailError => 'Inserire un indirizzo di email valido';
@@ -1347,7 +1346,7 @@ class AppLocalizationsIt extends AppLocalizations {
     String actual,
     String supportedConstraint,
   ) {
-    return 'Versione di WebTrit Cloud Backend incompatibile, si prega di contattare l\'amministratore del sistema.\n\nVersione dell\'istanza:\n$actual\n\nVersione supportata:\n$supportedConstraint\n';
+    return 'Versione di Cloud Backend incompatibile, si prega di contattare l\'amministratore del sistema.\n\nVersione dell\'istanza:\n$actual\n\nVersione supportata:\n$supportedConstraint\n';
   }
 
   @override
@@ -1673,7 +1672,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get notifications_errorSnackBar_appUnregistered =>
-      'Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali WebTrit e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l\'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione';
+      'Siamo spiacenti, la tua applicazione è attualmente disconnessa dai server principali e quindi non è possibile chiamare in questo momento. Vai alla pagina delle impostazioni e fai scorrere l\'interruttore dello stato online ( a OFF e poi ancora ad ON) per ristabilire la connessione';
 
   @override
   String get notifications_errorSnackBar_callConnect =>
@@ -2307,7 +2306,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_AboutText_CallkeepVersion => 'Versione di CallKeep';
 
   @override
-  String get settings_AboutText_CoreVersion => 'Versione WebTrit Cloud Backend';
+  String get settings_AboutText_CoreVersion => 'Versione Cloud Backend';
 
   @override
   String get settings_AboutText_CoreVersionUndefined => '?.?.?';
