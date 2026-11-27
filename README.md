@@ -1,5 +1,24 @@
 # WebTrit Phone
 
+> [!IMPORTANT]
+> **This repository is no longer maintained.** Development of the application continues in
+> [`portaone/porta-phone-mobile-app`, directory `phone/`](https://github.com/portaone/porta-phone-mobile-app/tree/master/phone), as PortaPhone.
+> Issues and pull requests opened here are not reviewed.
+
+## New location
+
+| What | Where |
+| --- | --- |
+| Repository overview | [`README.md`](https://github.com/portaone/porta-phone-mobile-app/blob/master/README.md) |
+| Application source and docs | [`phone/`](https://github.com/portaone/porta-phone-mobile-app/tree/master/phone) |
+| Call plugin (was `WebTrit/webtrit_callkeep`) | [`callkeep/`](https://github.com/portaone/porta-phone-mobile-app/tree/master/callkeep) |
+| CLI tools (was `WebTrit/webtrit_phone_tools`) | [`tools/`](https://github.com/portaone/porta-phone-mobile-app/tree/master/tools) |
+
+The last release published here is `1.15.3`. The branches and tags of this repository stay in
+place, but they receive no fixes. The text below describes the last state of this repository.
+
+---
+
 WebTrit Phone is a feature-rich application designed for seamless communication.
 
 ## Flutter Project Environment Setup
